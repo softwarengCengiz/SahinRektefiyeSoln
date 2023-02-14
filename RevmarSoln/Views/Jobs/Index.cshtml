@@ -1,0 +1,49 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Jobs.JobsListPageModel
+@{
+	ViewBag.Title = "Index";
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Stok Kartı Arama", pagePermission = "XXXXX" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<table class="w3-table w3-table-all w3-margin-top">
+			<thead>
+				<tr>
+					<th>Job İsmi</th>
+					<th>Job Açıklaması</th>
+					<th>En Son Çalışma Durumu</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var job in Model.isler)
+				{
+					<tr class="w3-blue">
+						<td>@job.JobName</td>
+						<td colspan="2">@job.JobDesc</td>
+						<td>@(job.JobDetails.OrderByDescending(x => x.ExecutionDate).FirstOrDefault().isFault == true ? "Hata Aldı" : "Çalıştı")</td>
+						<td></td>
+					</tr>
+					foreach (var detail in job.JobDetails.OrderByDescending(x=>x.ExecutionDate))
+					{
+					<tr class="w3-light-gray">
+						<td>@detail.ExecutionDate </td>
+						<td>
+							Durum : <i class="fa @(detail.isFault== true ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i> 
+							
+						</td>
+						<td>
+							<a href="/Jobs/JobDetails?JobDetailId=@detail.JobDetailId">
+								<i class="fa fa-download" aria-hidden="true"></i> Dosyayı görüntüle
+							</a>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+

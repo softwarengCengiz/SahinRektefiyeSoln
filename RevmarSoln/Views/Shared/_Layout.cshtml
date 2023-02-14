@@ -1,0 +1,555 @@
+﻿@using SahinRektefiyeSoln.Helpers
+@{
+	Layout = null;
+	string UserName = Convert.ToString(Session["UserName"]);
+	bool isSideBarOpen = Convert.ToBoolean(Session["isSideBarOpen"]);
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>@ViewBag.Title</title>
+	<meta charset="UTF-8">
+	<link runat="server" rel="shortcut icon" href="~/logo.ico" type="image/x-icon" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="~/Styles/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+	@*<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+	<script src="~/Scripts/jquery.mask.js"></script>
+	<script src="~/Scripts/jquery.blockUI.js"></script>
+
+	<!--Toaster-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+
+	<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+
+	<script>
+		$(document).ready(function () {
+			//var sidebarValue = getCookie("sideBarOpen");
+
+			//if (sidebarValue == '') { // Boş ise Cookie Set Et
+			//	document.cookie = "sideBarOpen=1";
+			//} else {
+			//	// Cokkie dolu ise Açık ise açtır kapalı ise kaptır.
+			//	if (sidebarValue == "1") {
+			//		openNav();
+			//	} else {
+			//		closeNav();
+			//	}
+			//}
+
+			$('.uppercase').keyup(function () {
+				this.value = $.trim(this.value.toUpperCase());
+			});
+			// Vereyon Alert Message
+
+			$("[role=alert]").addClass('w3-leftbar w3-padding'); // w3-border-blue w3-panel
+
+			var alertInfo = $('.alert-info');
+			var alertWarning = $('.alert-warning');
+			var alertSuccess = $('.alert-success');
+
+			if (alertInfo.length > 0) {
+				$("[role=alert]").addClass('w3-border-blue w3-panel');
+			}
+
+			if (alertWarning.length > 0) {
+				$("[role=alert]").addClass('w3-border-red w3-panel');
+			}
+
+			if (alertSuccess.length > 0) {
+				$("[role=alert]").addClass('w3-border-green w3-panel');
+			}
+			$('.close').remove();
+
+			// Vereyon Alert Message
+
+			$('.date').mask('00/00/0000');
+			$('.time').mask('00:00:00');
+			$('.date_time').mask('00/00/0000 00:00:00');
+			$('.cep').mask('00000-000');
+			$('.phone').mask('0(000) 000 00 00');
+			$('.phone_with_ddd').mask('(00) 0000-0000');
+			$('.phone_us').mask('(000) 000-0000');
+			$('.mixed').mask('AAA 000-S0S');
+			$('.cpf').mask('000.000.000-00', { reverse: true });
+			$('.cnpj').mask('00.000.000/0000-00', { reverse: true });
+			$('.money').mask('000.000.000.000.000,00', { reverse: true });
+			$('.money2').mask("#.##0,00", { reverse: true });
+			$('.km').mask("000.000", { reverse: true });
+			$('.ip_address').mask('0ZZ.0ZZ.0ZZ.0ZZ', {
+				translation: {
+					'Z': {
+						pattern: /[0-9]/, optional: true
+					}
+				}
+			});
+			$('.ip_address').mask('099.099.099.099');
+			$('.percent').mask('##0,00%', { reverse: true });
+			$('.clear-if-not-match').mask("00/00/0000", { clearIfNotMatch: true });
+			$('.placeholder').mask("00/00/0000", { placeholder: "__/__/____" });
+			$('.fallback').mask("00r00r0000", {
+				translation: {
+					'r': {
+						pattern: /[\/]/,
+						fallback: '/'
+					},
+					placeholder: "__/__/____"
+				}
+			});
+			$('.selectonfocus').mask("00/00/0000", { selectOnFocus: true });
+
+			$('.onlylettersTurkish').bind('keyup blur', function () {
+				$(this).val($(this).val().replace(/[^A-Za-zığüşöçİĞÜŞÖÇ ]/g, ''))
+			});
+
+			$('.onlyletters').bind('keyup blur', function () {
+				$(this).val($(this).val().replace(/[^A-Za-z]/g, ''))
+			});
+
+			$('.onlynumeric').bind('keyup blur', function () {
+				$(this).val($(this).val().replace(/[^0123456789,]/g, ''))
+			});
+
+
+			$('#btnModalMenu').click(function () {
+
+				$('#MenuModalContent').load('@Url.Action("GetMenuForUserMobile", "Home")');
+
+				document.getElementById('MenuModal').style.display = 'block';
+
+			return false;
+			});
+
+		});
+
+		function isNumberKey(evt) {
+			var charCode = (evt.which) ? evt.which : evt.keyCode;
+			if (charCode != 46 && charCode > 31
+				&& (charCode < 48 || charCode > 57))
+				return false;
+
+			return true;
+		}
+
+		function GetCurreny(curreny) {
+			return parseFloat(curreny.replace(/(.*){1}/, '0$1').replace(/[^\d]/g, '').replace(/(\d\d?)$/, '.$1')).toFixed(2);
+		}
+
+
+	</script>
+
+	<style>
+
+		html, body, h1, h2, h3, h4, h5 {
+			/*font-family: "Raleway", sans-serif;*/
+			font-family: Arial ;
+		}
+
+		.openbtn {
+			font-size: 18px;
+			cursor: pointer;
+			background-color: #000;
+			color: white;
+			padding: 10px 15px;
+			border: none;
+		}
+	</style>
+	<style>
+		.ul.pagination {
+			display: inline-block;
+			padding: 0;
+			margin: 0;
+		}
+
+		ul.pagination li {
+			display: inline;
+		}
+
+			ul.pagination li a {
+				color: black;
+				float: left;
+				padding: 8px 16px;
+				text-decoration: none;
+				transition: background-color .3s;
+			}
+
+				ul.pagination li a.active {
+					background-color: #4CAF50;
+					color: white;
+				}
+
+				ul.pagination li a:hover:not(.active) {
+					background-color: #ddd;
+				}
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-9">
+</head>
+<body class="w3-white">
+	<!-- Top container -->
+	<div class="w3-bar w3-top w3-gray w3-large" style="z-index:4">
+
+		@*<button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" type="submit" onclick="w3_open();"<i class="fa fa-bars"></i> Menü</button>*@
+
+		<a href="/Home/Index" style="text-decoration:none;" class="w3-left">
+			<img src="~/Images/logo.png" class=" w3-margin-right" style="width:142px">
+		</a>
+		@*<a class="openbtn w3-hide-medium w3-hide-small w3-button w3-bar-item" onclick="toogleSideBar()" id="btnSideToggle">☰ Menü Kapat</a>*@
+		<div class="w3-bar-item w3-gray" style="padding-top: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;">
+			@using (Html.BeginForm("ChangeMenuPreference", "Home", FormMethod.Post))
+			{
+				<button class="openbtn w3-hide-medium w3-hide-small w3-gray" id="btnSideToggle" type="submit">☰ Menü @(isSideBarOpen == true ? "Kapat" : "Aç")</button>//onclick="toogleSideBar()"
+			}
+		</div>
+		<div class="w3-bar-item w3-hide-large w3-hide-medium w3-right w3-medium w3-gray" style="padding-bottom: 4px;padding-top: 4px;">
+			<button class="w3-btn w3-gray" id="btnModalMenu" type="submit">☰ Menü</button>
+		</div>
+
+		<div class="w3-bar-item w3-hide-small w3-right w3-medium" style="padding-bottom: 4px;padding-top: 4px;">
+			@Html.Action("GetHizliArama", "Home")
+			@*@using (Html.BeginForm("HizliArama", "Home", FormMethod.Post))
+				{
+					<a href="#" class="w3-bar-item w3-button w3-green w3-right">Ara</a>
+					<input type="text" class="w3-bar-item w3-input w3-right" placeholder="Plaka veya İş Emri No.." name="txtplakaOrSase">
+				}*@
+		</div>
+
+		@*<a href="/Home/Index"><span class="w3-bar-item w3-right">Revmer</span></a>*@
+
+
+		@*
+			  <input type="text" class="w3-bar-item w3-input w3-white w3-hide-small" placeholder="Input" style="width:35%">
+				<a href="#" class="w3-bar-item w3-button w3-green">Go</a>
+			<a href="#" class="w3-bar-item w3-button w3-green">Go</a>
+
+		*@
+
+	</div>
+	<!-- Sidebar/menu -->
+	<nav class="w3-sidebar w3-collapse w3-white sidebar " style="z-index:3;@(isSideBarOpen == true ? "width:275px;" : "display:none!important")" id="mySidebar">
+		@*width:275px;*@
+		<br>
+		<div class="w3-container w3-row">
+			<div class="w3-col s4">
+				@if (Session["UserProfilePhoto"] != null)
+				{
+					<img src="@Session["UserProfilePhoto"].ToString()" class="w3-circle w3-margin-right" style="width:56px;height:60px">
+				}
+				else
+				{
+					<img src="~/Images/user-512.png" class="w3-circle w3-margin-right" style="width:46px">
+				}
+
+
+			</div>
+			<div class="w3-col s8 w3-bar">
+				<span>
+					Merhaba <strong>
+						@if (Session["UserName"] != null)
+						{
+							<label>@Session["UserName"].ToString()</label>
+						}
+					</strong>
+				</span><br>
+
+				@if (UserName == "fiatmerkez" || UserName == "fiatbayi" || UserName == "fordmerkez")
+				{
+
+				}
+				else
+				{
+					@Html.Action("GetMailButton", "Home");
+
+				}
+
+
+				<a href="/Admin/EditProfile" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+				<a href="/Admin/SignOut" class="w3-bar-item w3-button">
+					<i class="fa fa-sign-out"></i>
+				</a>
+				@*<a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>*@
+			</div>
+		</div>
+		<hr>
+		<div class="w3-container">
+			<h5>Panel</h5>
+		</div>
+		<div class="w3-bar-block" id="mySidebar">
+			<a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i> Menü'yü kapat</a>
+			@Html.Action("GetMenuForUser", "Home")
+		</div>
+	</nav>
+	<!-- Overlay effect when opening sidebar on small screens -->
+	<div class="w3-overlay w3-hide-large w3-animate-opacity w3-hide" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+	<!-- !PAGE CONTENT! -->
+	<div class="w3-main  w3-white" id="main" style="margin-top:43px;@(isSideBarOpen == true ? "margin-left:275px;" : "")">
+		@*margin-left:275px;*@
+		
+        <div class="w3-bar w3-light-grey ">
+            <a href="javascript:void(0)" class="w3-bar-item w3-button">Şahin Rektefiye</a>
+            @*<a href="javascript:void(0)" class="w3-bar-item w3-button w3-hide-small">Link 1</a>*@
+            <div class="w3-dropdown-hover">
+                <button class="w3-button">
+                    Talep <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
+                    <a href="/Ticket/Open" class="w3-bar-item w3-button w3-text-black">Talep Aç</a>
+                    <a href="/Ticket/Tickets" class="w3-bar-item w3-button w3-text-black">Talepler </a>
+                </div>
+            </div>
+            <div class="w3-dropdown-hover">
+                <button class="w3-button">
+                    Müşteri <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
+                    <a href="/Musteri/Create" class="w3-bar-item w3-button w3-text-black">Müşteri Ekle</a>
+                    <a href="/Musteri/MusteriAra" class="w3-bar-item w3-button w3-text-black">Müşteriler</a>
+                </div>
+            </div>
+            @*<div class="w3-dropdown-hover">
+                <button class="w3-button">
+                    İş Emri <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
+                    <a href="/IsEmri/IsEmriOlustur" class="w3-bar-item w3-button w3-text-black">İş Emri Aç</a>
+                    <a href="/IsEmri/IsEmirleri" class="w3-bar-item w3-button w3-text-black">İş Emirleri</a>
+                </div>
+            </div>*@
+            @*<div class="w3-dropdown-hover">
+                <button class="w3-button">
+                    Araç <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
+                    <a href="/Vehicle/Create" class="w3-bar-item w3-button w3-text-black">Araç Ekle</a>
+                    <a href="/Vehicle/AracSorgula" class="w3-bar-item w3-button w3-text-black">Araçlar</a>
+                </div>
+            </div>
+            <div class="w3-dropdown-hover">
+                <button class="w3-button">
+                    Stok Kart  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
+                    <a href="/Stok/StokKartiTanim" class="w3-bar-item w3-button w3-text-black">Stok Kartı Ekle</a>
+                    <a href="/Stok/StokKartiTanimlariV2" class="w3-bar-item w3-button w3-text-black">Stok Kartları</a>
+                </div>
+            </div>
+            <div class="w3-dropdown-hover">
+                <button class="w3-button">
+                    Servis Ayarları  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="w3-dropdown-content w3-bar-block w3-white w3-card-4">
+                    <a href="/Service/Iscilikler" class="w3-bar-item w3-button w3-text-black">İşçilikler</a>
+                    <a href="/Service/IscilikTipleri" class="w3-bar-item w3-button w3-text-black">İşçilik Tipleri</a>
+                    <a href="/Service/Danismanlar" class="w3-bar-item w3-button w3-text-black">Danışmanlar</a>
+                    <a href="/Service/Renkler" class="w3-bar-item w3-button w3-text-black">Araç Renkleri</a>
+                    <a href="/Service/AracGruplari" class="w3-bar-item w3-button w3-text-black">Araç Grupları</a>
+                    <a href="/Service/YakitTipleri" class="w3-bar-item w3-button w3-text-black">Araç Yakıt Tipleri</a>
+                    <a href="/Service/AktarmaTipleri" class="w3-bar-item w3-button w3-text-black">Aktarma Tipleri</a>
+                    <a href="/Service/AracCinsleri" class="w3-bar-item w3-button w3-text-black">Araç Cinsi</a>
+                    <a href="/Service/VitesTipleri" class="w3-bar-item w3-button w3-text-black">Vites Tipleri</a>
+                    <a href="/Service/Meslekler" class="w3-bar-item w3-button w3-text-black">Meslekler</a>
+                    <a href="/Service/KurumTipleri" class="w3-bar-item w3-button w3-text-black">Kurum tipleri</a>
+                </div>
+            </div>*@
+            @*<a href="javascript:void(0)" class="w3-bar-item w3-button w3-right"><i class="fa fa-search"></i></a>*@
+        </div>
+		
+
+		@RenderBody()
+		@if (!string.IsNullOrWhiteSpace(ViewBag.Message))
+		{
+			<div class="w3-display-container" style="height:50px;">
+				<div class="w3-display-topright w3-margin-right">
+					<div class="w3-panel @(ViewBag.IsSuccess==null ? "" : ViewBag.IsSuccess) w3-animate-right w3-round w3-card">
+						<h3>@(ViewBag.HeaderMesaj == null ? "Uyarı!" : @Html.Raw(ViewBag.HeaderMesaj))</h3>
+						<p>@Html.Raw(ViewBag.Message)</p>
+					</div>
+				</div>
+			</div>
+
+		}
+		@(TempData["ErrorMessage"] = null)
+		@(TempData["ErrorMessage"] = null)
+		@(TempData["HeaderMassage"] = null)
+		@(TempData["IsSuccess"] = null)
+
+	</div>
+	@if (ViewBag.Result != null)
+	{
+		if (ViewBag.Result == 1)
+		{
+			<div class="w3-display-container" style="height:400px;">
+				<div class="w3-display-topright w3-margin-right">
+					<div class="w3-panel w3-green w3-animate-right w3-round w3-card">
+						<h3>Başarılı!</h3>
+						<p>İşlem Gerçekleşti.</p>
+					</div>
+				</div>
+			</div>
+		}
+		else if (ViewBag.Result == 0)
+		{
+			<div class="w3-display-container" style="height:400px;">
+				<div class="w3-display-topright w3-margin-right">
+					<div class="w3-panel w3-red w3-animate-right w3-round w3-card">
+						<h3>İşlem Gerçekleşmedi!</h3>
+						<p>@(ViewBag.ModalMessage != null ? Html.Raw(ViewBag.ModalMessage) : "Sistem geliştiriciniz ile iletişime geçin.")</p>
+					</div>
+				</div>
+			</div>
+		}
+	}
+	<script>
+		//// Get the Sidebar
+		////      var mySidebar = $("#mySidebar");
+
+		////       Get the DIV with overlay effect
+		////      var overlayBg = $("#myOverlay");
+
+		////      // Toggle between showing and hiding the sidebar, and add overlay effect
+		////function w3_open() {
+		////	if (mySidebar.hasClass('w3-show')) { //=== 'block'
+		////		$('#mySidebar').removeClass('w3-hide').addClass('w3-show').addClass('w3-collapse');
+		////		$('#myOverlay').removeClass('w3-hide').addClass('w3-show').addClass('w3-collapse');
+		////              mySidebar.style.display = 'none';
+		////              overlayBg.style.display = "none";
+		////	} else {
+		////		$('#mySidebar').removeClass('w3-show').removeClass('w3-collapse').addClass('w3-hide');
+		////		$('#myOverlay').removeClass('w3-show').removeClass('w3-collapse').addClass('w3-hide');
+		////              mySidebar.style.display = 'block';
+		////              overlayBg.style.display = "block";
+		////          }
+		////      }
+
+		////       Close the sidebar with the close button
+		////function w3_close() {
+		////	$('#mySidebar').removeClass('w3-hide').addClass('w3-show');
+		////	$('#myOverlay').removeClass('w3-hide').addClass('w3-show');
+		////          mySidebar.style.display = "none";
+		////          overlayBg.style.display = "none";
+		////}
+
+		function openNav() {
+			document.getElementById("mySidebar").style.width = "270px";
+			document.getElementById("main").style.marginLeft = "270px";
+			document.getElementById("btnSideToggle").innerText = "☰ Menü Kapat";
+			setCookie('sideBarOpen', 1, 1);
+		}
+
+		function closeNav() {
+			document.getElementById("mySidebar").style.width = "0";
+			document.getElementById("main").style.marginLeft = "0";
+			document.getElementById("btnSideToggle").innerText = "☰ Menü Aç";
+			setCookie('sideBarOpen', 0, 1);
+		}
+
+		//function toogleSideBar() {
+
+		//	var sideBarValue = getCookie('sideBarOpen');
+
+		//	console.log('SideBarValue = ' + sideBarValue);
+
+		//	if (sideBarValue == "1") {
+		//		closeNav();
+		//	} else {
+		//		openNav();
+		//	}
+
+		//	console.log('SideBarValue = ' + sideBarValue);
+		//}
+
+		function getCookie(cname) {
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+
+		function setCookie(cname, cvalue, exdays) {
+			var d = new Date();
+			d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+			var expires = "expires=" + d.toUTCString();
+			document.cookie = cname + "=" + cvalue + ";" + expires + ";";
+		}
+
+	</script>
+	<script>
+
+    $(function () {
+
+		toastr.options = {
+			"closeButton": true,
+			"debug": false,
+			"newestOnTop": true,
+			"progressBar": true,
+			"positionClass": "toast-top-right",
+			"preventDuplicates": false,
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "5000",
+			"extendedTimeOut": "1000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		};
+
+		function showToaster(resultType, body, header) {
+			if (resultType == "Error") {
+				toastr.error(body, header);
+			}
+			else if (resultType == "Success") {
+				toastr.success(body, header);
+			}
+			else if (resultType == "Info") {
+				toastr.info(body, header);
+			}
+			else if (resultType == "Warning") {
+				toastr.warning(body, header);
+			}
+
+        }
+    @{
+		if (TempData["OperationResult"] != null)
+		{
+			var operationResult = (ToasterHelper)TempData["OperationResult"];
+
+			 @: showToaster("@operationResult.resultType", "@operationResult.bodyText", "@operationResult.headerText");
+
+
+		}
+	}
+    });
+	</script>
+	<div id="MenuModal" class="w3-modal w3-animate-opacity">
+		<div class="w3-modal-content w3-card-4">
+			<header class="w3-container w3-teal">
+				<span onclick="document.getElementById('MenuModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+				<h5>Menüler</h5>
+			</header>
+			<div class="w3-container">
+				<div class="w3-row w3-margin" id="MenuModalContent">
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

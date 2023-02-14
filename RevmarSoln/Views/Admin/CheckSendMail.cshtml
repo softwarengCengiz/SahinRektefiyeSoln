@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewBag.Title = "CheckSendMail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section>
+	<div class="w3-container w3-light-gray">
+
+		<div class="w3-row w3-margin-top">
+			<h3>Mail Atma </h3>
+			<div class="w3-half">
+				@using (Html.BeginForm())
+	{
+			<label>Mail</label>
+			<input type="text" class="w3-input w3-margin-top" value="siparis@revmer.com" name="mail" placeholder="Mail" />
+			<label>Şifre</label>
+			<input type="text" class="w3-input" value="" name="sifre" placeholder="Şifre" />
+			<label>Sunucu</label>
+			<input type="text" class="w3-input" value="smtp.office365.com" name="host" placeholder="Host (smtp)" />
+			<label>Port</label>
+			<input type="text" class="w3-input" value="587" name="port" placeholder="Port" />
+			<label>İçerik</label>
+			<input type="text" class="w3-input" value="Bu bir mail gönderme denemesidir." name="konu" placeholder="" />
+			<button class="w3-btn w3-blue w3-right w3-margin-top" type="submit" value="">Gönder</button>
+}
+
+			<div class="w3-row">
+				<h2>CheckSendMail Exception</h2>
+
+				<p>EXCEPTION : @ViewBag.Exception</p>
+
+			</div>
+				
+
+
+			</div>
+		</div>
+	</div>
+</section>
+
+

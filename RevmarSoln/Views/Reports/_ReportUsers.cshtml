@@ -1,0 +1,29 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model SahinRektefiyeSoln.Models.ViewModels.Reports.DenemeTableViewModel
+
+<table>
+	<tr>
+		<th>@Html.Label("UserName")</th>
+		<th>@Html.Label("PhoneNumber")</th>
+	</tr>
+	@foreach (var item in Model.kullanicilar)
+	{
+		<tr>
+			<td>@item.UserName</td>
+			<td>@item.PhoneNumber</td>
+		</tr>
+	}
+</table>
+<div class="pagination">
+	Page @(Model.kullanicilar.PageCount < Model.kullanicilar.PageNumber ? 0 : Model.kullanicilar.PageNumber) of @Model.kullanicilar.PageCount
+	@Html.PagedListPager(Model.kullanicilar, page => Url.Action("DenemeTable",
+							   new
+							   {
+								   filterModel = Model.filter,
+								   page
+							   }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+							   {
+								   UpdateTargetId = "datatable-users"
+							   }))
+</div>

@@ -1,0 +1,184 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.IsEmriParcaEkleViewModel
+@{
+	Layout = null;
+}
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.sortElements.js"></script>
+<script src="~/Scripts/Table2Excel/jquery.table2excel.js"></script>
+
+<style>
+	.fontDuzgun {
+		font-family: tahoma;
+	}
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 60px;
+		height: 34px;
+	}
+
+		.switch input {
+			display: none;
+		}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+	}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 26px;
+			width: 26px;
+			left: 4px;
+			bottom: 4px;
+			background-color: white;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+	input:checked + .slider {
+		background-color: #2196F3;
+	}
+
+	input:focus + .slider {
+		box-shadow: 0 0 1px #2196F3;
+	}
+
+	input:checked + .slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+	}
+
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 34px;
+	}
+
+		.slider.round:before {
+			border-radius: 50%;
+		}
+</style>
+<script type="text/javascript">
+	$(document).ready(function () {
+		var selectedIds = [];
+	});
+
+	function btnParcaEkle_click(string, el) {
+		debugger;
+		//console.log(string, el);
+
+		var stokKartId = $(el)[0].getAttribute('stokKart');
+		var isEmriId = @ViewBag.IsEmriId;
+		var parcaAdet = $('#stokKartId-' + stokKartId).val();
+		var parcaSatisFiyat = $('#stokKartIdSatisFiyat-' + stokKartId).val();
+
+		if (parcaAdet == "") {
+			alert('Lütfen Adet Giriniz!');
+			return false;
+		}
+
+		var BelirtiKodu = $('#BelirtiKodu').val();
+		console.log('stokKartId : ' + stokKartId);
+		console.log('isEmriId : ' + isEmriId);
+		console.log('parcaAdet : ' + parcaAdet);
+		console.log('parca Satis Fiyat : ' + parcaSatisFiyat);
+
+		WaitBlockUI(2000, 'Parça ekleniyor...');
+
+		var urlParcaEkle = '@Url.Action("IsEmriParcaEkleme", "IsEmri")';
+
+			var data = {
+				IsEmriId: isEmriId ,
+				StokKartId: stokKartId,
+				parcaAdet: parcaAdet,
+				parcaSatisFiyat: parcaSatisFiyat,
+				BelirtiKodu: BelirtiKodu
+			};
+
+			$.ajax({
+				type: "POST",
+				url: urlParcaEkle,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,//JSON.stringify(),
+				success: function (d) {
+					if (d.result == 1)
+						//alert(d.responseText);
+
+						WaitBlockUI(750, 'Parça Ekledi');
+
+					else {
+						setTimeout(function () {
+							alert(d.message);
+						}, 1500);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);// TODO: Show error
+				}
+			});
+
+	}
+</script>
+
+<div class="w3-row">
+	<div class="w3-padding">
+		@using (Ajax.BeginForm("SayimParcaSec", "Sayim", FormMethod.Post, new AjaxOptions { OnSuccess = "loadStokKart" }, new { name = "theForm" }))
+		{
+			<div class="w3-row w3-padding-top">
+				<div class="w3-third w3-padding-right">
+					<label>
+						Parça Tipi
+					</label>
+					@Html.DropDownList("ParcaTipiId", (SelectList)ViewBag.BelirtiKodlari, "Parça Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "ParcaTipiId", name = "ParcaTipiId" })
+				</div>
+				<div class="w3-third w3-padding-right">
+					<label>
+						Parça No
+					</label>
+					@Html.TextBoxFor(model => Model.ParcaNo, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "ParcaNo" })
+				</div>
+				<div class="w3-third w3-padding-right">
+					<label>
+						Parça Adı
+					</label>
+					@Html.TextBoxFor(model => Model.ParcaAdi, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "ParcaAdi" })
+				</div>
+				<div class="w3-hide">
+
+					<div class="w3-right w3-padding-right">
+						<br />
+						<button class="w3-btn w3-ripple w3-blue w3-left w3-round w3-block" type="submit" id="btnSubmitStokKartAra">Sorgula</button>
+					</div>
+				</div>
+
+			</div>
+
+		}
+		<div id="datatable-loadStokKart">
+			@Html.Partial("_GridSayimParcaEkle", Model)
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script>
+	function loadStokKart(result) {
+		debugger;
+		$('#datatable-loadStokKart').html(result);
+	}
+</script>

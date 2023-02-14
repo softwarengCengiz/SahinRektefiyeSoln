@@ -1,0 +1,252 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Services.IrsaliyeFilterPageModel
+@{
+	ViewBag.Title = "Irsaliyeler";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	int counter = 1;
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İrsaliyeler", pagePermission = "XXXXX" })
+@using Vereyon.Web;
+
+<script>
+	$(document).ready(function () {
+
+		var statu = '@ViewBag.IsReadOnly';
+
+		if (statu == 'True') {
+			$('#btnNewIrsaliye').addClass('w3-hide');
+        }
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#tblIrsaliyeler').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+	});
+</script>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding">
+			@Html.RenderFlashMessages()
+		</div>
+		<div class="w3-row w3-padding w3-margin-top">
+			<a href="/Service/IrsaliyeTanim" class="w3-btn w3-ripple w3-green w3-round" id="btnNewIrsaliye"><i class="fa fa-industry fa-fw"></i>&nbsp; İrsaliye Oluştur</a>
+		</div>
+		@using (Html.BeginForm())
+		{
+			<div class="w3-row">
+				<div class="w3-half">
+					<div class="w3-half w3-padding">
+						<label>Göderim Tarihi Baslangıç</label>
+						@Html.EditorFor(model => model.Filter.GonderimTarihiBaslangic, new { htmlAttributes = new { @class = "w3-input w3-border w3-round date", id = "GonderimTarihiBaslangic", autocomplete = "off" } })
+					</div>
+					<div class="w3-half w3-padding">
+						<label>Göderim Tarihi Bitiş</label>
+						@Html.EditorFor(model => model.Filter.GonderimTarihiBitis, new { htmlAttributes = new { @class = "w3-input w3-border w3-round date", id = "FaturaTaihiBitis", autocomplete = "off" } })
+					</div>
+				</div>
+				<div class="w3-half">
+					<div class="w3-third w3-padding">
+						<label>Fatura No</label>
+						@Html.EditorFor(model => model.Filter.FaturaNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "16", autocomplete = "off" } })
+					</div>
+					@*<div class="w3-third w3-padding">
+							<label>Tedarikci</label>
+							@Html.DropDownListFor(model => model.Filter.TedarikciId, (SelectList)ViewBag.Tedarikciler, "Tedarikçi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "TedarikciId" })
+						</div>//  *@
+					<div class="w3-third w3-padding">
+						<label>İrsaliye Statu</label>
+						@Html.DropDownListFor(model => model.Filter.IrsaliyeStatu, (SelectList)ViewBag.IrsaliyeStatu, "Statu Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IrsaliyeStatu" })
+					</div>
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-half">
+					<div class="w3-half w3-padding">
+						<label>Fatura Tarihi Baslangıç</label>
+						@Html.EditorFor(model => model.Filter.FaturaTarihiBaslangic, new { htmlAttributes = new { @class = "w3-input w3-border w3-round date", id = "FaturaTarihiBaslangic", autocomplete = "off" } })
+					</div>
+					<div class="w3-half w3-padding">
+						<label>Fatura Tarihi Bitiş</label>
+						@Html.EditorFor(model => model.Filter.FaturaTaihiBitis, new { htmlAttributes = new { @class = "w3-input w3-border w3-round date", id = "GonderimTarihiBitis", autocomplete = "off" } })
+					</div>
+				</div>
+				<div class="w3-half w3-padding">
+					<br>
+					<button class="w3-btn w3-ripple w3-blue w3-right w3-round">Ara</button>
+				</div>
+			</div>
+
+		}
+		<div class="w3-row w3-padding">
+			<table class="w3-table-all w3-margin-top w3-margin-bottom" id="tblIrsaliyeler">
+				<thead>
+					<tr>
+						<th>Sıra</th>
+						<th>Düzenle</th>
+						<th>Durum</th>
+						<th>Fatura / E-Fatura Numarası</th>
+						<th>Tedarikci Adı</th>
+						<th>Vade</th>
+						<th>Fatura Tarihi</th>
+						<th>Giriş Tarihi</th>
+						<th>Toplam Tutar</th>
+						<th>İşlemler</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model.Irsaliyeler)
+					{
+						<tr>
+							<td>@counter</td>
+							<td>
+								<a href="/Service/IrsaliyeTanim?irsaliyeId=@item.IrsaliyeId" class="w3-btn w3-ripple w3-blue w3-round">
+									<i class="fa fa-cop"></i>&nbsp;
+									@if (item.IrsaliyeStatu == 0)
+									{
+										<span title="İrsaliyeyi düzenlemek için tıklayınız">Düzenle</span>
+									}
+									else
+									{
+										<span title="İrsaliyeyi detayını görmek için tıklayınız">Detay</span>
+									}
+								</a>
+							</td>
+							<td>
+								@switch (item.IrsaliyeStatu)
+								{
+									case 0:
+										<span>Taslak</span>
+										break;
+									case 1:
+										<span>Tamamlandı</span>
+										break;
+									case 2:
+										<span>İptal</span>
+										break;
+									case 3:
+										<span>İade</span>
+										break;
+									default:
+										<span>Hata Var</span>
+										break;
+								}
+							</td>
+							<td>@item.FaturaNo</td>
+							<td>
+								@if (item.Musteri != null)
+								{
+									if (item.Musteri.MusteriTipi == "B")
+									{
+										<label>@item.Musteri.MusteriAdi @item.Musteri.MusteriSoyadi</label>
+									}
+									else
+									{
+										<label>@item.Musteri.KurumAdi</label>
+									}
+								}
+								else
+								{
+									<label></label>
+								}
+
+
+							</td>
+							@*  <td>@item.Tedarikci.Adi</td>// *@
+							<td>@item.Vade</td>
+							<td>@item.FaturaTarihi.ToShortDateString()</td>
+							<td>@item.KayitTarihi.ToShortDateString()</td>
+							<td>@item.ToplamTutar</td>
+							<td>
+								@if (item.IrsaliyeStatu == 0)
+								{
+									if (!ViewBag.IsReadOnly)
+									{
+										<a href="/Service/IrsaliyeSil?irsaliyeId=@item.IrsaliyeId" class="w3-btn w3-ripple w3-red"><i class="fa fa-cop"></i>&nbsp;Taslağı Sil </a>
+									}
+
+								}
+								else if (item.IrsaliyeStatu == 1)
+								{
+									@*<a href="/Service/IrsaliyeIade?irsaliyeId=@item.IrsaliyeId" class="w3-btn w3-ripple w3-red"><i class="fa fa-cop"></i>&nbsp;İptal Et </a>*@
+									@*Test için Eklendi silinicek*@
+									@*<a href="/Service/IrsaliyeIade?irsaliyeId=@item.IrsaliyeId&test=false" class="w3-btn w3-ripple w3-red"><i class="fa fa-cop"></i>&nbsp;İptal Et </a>
+										<a href="/Service/IrsaliyeIade?irsaliyeId=@item.IrsaliyeId&test=true" class="w3-btn w3-ripple w3-red"><i class="fa fa-cop"></i>&nbsp;İade Et </a>*@
+									@*Test için Eklendi silinicek*@
+								}
+
+							</td>
+						</tr>
+						counter++;
+					}
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>
+

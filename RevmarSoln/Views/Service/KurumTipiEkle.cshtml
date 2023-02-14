@@ -1,0 +1,38 @@
+﻿@model SahinRektefiyeSoln.Models.KurumTipleri
+@{
+	ViewBag.Title = "Kurum Tipi Ekle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using Vereyon.Web;
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Kurum Tipi Ekleme Ekranı", pagePermission = "XXXXX" })
+
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+		@using (Html.BeginForm("KurumTipiEkle", "Service", FormMethod.Post))
+		{
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Kurum Tipi Açıklaması</label>
+					@Html.EditorFor(model => model.Aciklamasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", @required = "required", autocomplete = "off", maxlength = "54" } })
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding-right w3-left">
+					<a href="~/Service/KurumTipleri" class=" w3-margin w3-green w3-btn w3-left w3-round">Geri</a>
+				</div>
+				<div class="w3-quarter w3-padding w3-right">
+					<button type="submit" class=" w3-margin w3-green w3-btn w3-right w3-round">Ekle</button>
+				</div>
+			</div>
+		}
+
+	</div>
+</div>
+
+

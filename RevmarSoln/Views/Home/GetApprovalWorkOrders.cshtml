@@ -1,0 +1,215 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.GetApprovalWorkOrderPageModelcs
+@{
+	Layout = null;
+}
+<script>
+	$(document).ready(function () {
+		$('.approvalWorkOrder').click(function () {
+
+			var isEmriId = $(this).attr('IsEmriId');
+			var workOrderId = $(this).attr('workOrderId');
+
+			//var data = {
+			//	WorkOrderId: workOrderId
+			//};
+
+			//var data = {
+			//	IsEmriId: isEmriId
+			//};
+			debugger;
+			var data;
+			var approveWorkOrderUrl
+
+			if (workOrderId != undefined) {
+				data = {
+					WorkOrderId: workOrderId
+				};
+				approveWorkOrderUrl= '@Url.Action("ApproveWorkOrderSingle", "WorkOrder")';
+			}
+			else {
+				data = {
+					IsEmriId: isEmriId
+				};
+
+				approveWorkOrderUrl= '@Url.Action("ApproveIsEmriSingle", "WorkOrder")';
+			}
+
+
+			//approveWorkOrderUrl = '@Url.Action("ApproveWorkOrderSingle", "WorkOrder")';
+
+			WaitBlockUI(1000, 'İş Emri Onaylanıyor...');
+			$.ajax({
+				type: "POST",
+				url: approveWorkOrderUrl,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function (d) {
+					if (d.success == 1) {
+						$('#ApprovalWorkOrderModalContent').load('@Url.Action("GetApprovalWorkOrders", "Home")');
+						showToaster('Success', 'İş Emri Başarıyla Onaylandı.', 'Başarılı');
+					}
+					else if (d.success == 0) {
+						showToaster('Error', 'İş Emri onaylanamadı.', 'HATA');
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+	});
+	function WaitBlockUI(milisaniye, message) {
+
+		$.blockUI({
+			css: {
+				border: 'none',
+				padding: '15px',
+				backgroundColor: '#000',
+				'-webkit-border-radius': '10px',
+				'-moz-border-radius': '10px',
+				opacity: .5,
+				color: '#fff'
+			},
+			message: message
+		});
+
+		setTimeout($.unblockUI, milisaniye);
+
+	}
+	function showToaster(resultType, body, header) {
+		if (resultType == "Error") {
+			toastr.error(body, header);
+		}
+		else if (resultType == "Success") {
+			toastr.success(body, header);
+		}
+		else if (resultType == "Info") {
+			toastr.info(body, header);
+		}
+		else if (resultType == "Warning") {
+			toastr.warning(body, header);
+		}
+
+	}
+</script>
+<div class="w3-row">
+	@if (Model.approvalWorkOrdersServis.Any() || Model.approvalWorkOrders.Any())
+	{
+		<table id="approvalWorkorders" class="w3-table-all w3-hoverable">
+			<thead>
+				<tr>
+					<th>Tipi </th>
+					<th>İş Emir No</th>
+					<th>Giriş Tarihi</th>
+					<th>Servis</th>
+					<th>Araç Marka-Model</th>
+					<th>Plaka</th>
+					<th>Onay Tipi</th>
+					<th>#</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="8" class="w3-center w3-blue"><b>Günlük İşler Modülü</b></td>
+				</tr>
+				@if (Model.approvalWorkOrders.Any())
+				{
+					foreach (var item in Model.approvalWorkOrders)
+					{
+						<tr>
+							<td>Günlük</td>
+							<td>@(item.NoWorkOrder != null ? item.NoWorkOrder : item.WorkOrderId.ToString())</td>
+							<td>@Convert.ToDateTime(item.CreatedDate).ToString("dd/MM/yyyy")</td>
+							<td>@item.Services.Name</td>
+							<td>@item.Vehicles.Companies.Name -  @item.Vehicles.Name</td>
+							<td>@item.Plate</td>
+							<td>
+								@switch (item.Statu)
+								{
+									case 33:
+										<label>İade</label>
+										break;
+									case 34:
+										<label>İptal</label>
+										break;
+								}
+							</td>
+							<td>
+								<button workOrderId="@item.WorkOrderId" class="w3-btn  w3-round w3-blue approvalWorkOrder">Onayla</button>
+							</td>
+
+						</tr>
+						<tr>
+							<td colspan="8"><b>Talep Açıklaması </b> @item.IadeIptalAciklamasi</td>
+						</tr>
+					}
+				}
+				else
+				{
+					<tr>
+						<td colspan="8" class="w3-center"><b>Günlük İşler modülü iptal / iade talebi bulunmamaktadır.</b></td>
+					</tr>
+				}
+
+
+
+				<tr>
+					<td colspan="8" class="w3-center w3-blue"><b>Servis Modülü</b></td>
+				</tr>
+				@if (Model.approvalWorkOrdersServis.Any())
+				{
+					foreach (var isEmri in Model.approvalWorkOrdersServis)
+					{
+						<tr>
+							<td>Servis</td>
+							<td>@(String.Format("{0:000000}", isEmri.IsEmriId))</td>
+							<td>@(isEmri.IsEmriTarihi != null ? isEmri.IsEmriTarihi.Value.ToShortDateString() : "")</td>
+							<td>@(isEmri.Musteri.MusteriTipi == "B" ? (isEmri.Musteri.MusteriAdi.ToString() + " " + isEmri.Musteri.MusteriSoyadi.ToString()) : isEmri.Musteri.KurumAdi.ToString())</td>
+							<td>@(isEmri.Arac?.Companies == null ? "": isEmri.Arac?.Companies.Name  )-  @(isEmri.Arac?.Vehicles == null ? "": isEmri.Arac?.Vehicles.Name)</td>
+							<td>@(isEmri.Arac?.Plaka)</td>
+							<td>
+								@switch (isEmri.IsEmriStatuId)
+								{
+									case 5:
+										<label>İade</label>
+										break;
+									case 6:
+										<label>İptal</label>
+										break;
+									case 8:
+										<label>Bedelsiz</label>
+										break;
+								}
+							</td>
+							<td>
+								<button IsEmriId="@isEmri.IsEmriId" class="w3-btn  w3-round w3-blue approvalWorkOrder">Onayla</button>
+							</td>
+
+						</tr>
+						<tr>
+							<td colspan="8">
+							<b>Talep Açıklaması </b> @isEmri.IptalNedeni | @isEmri.BedelsizAciklamasi</td>
+						</tr>
+					}
+				}
+				else
+				{
+					<tr>
+						<td colspan="8" class="w3-center"><b>Servis modülü iptal / iade talebi bulunmamaktadır.</b></td>
+					</tr>
+				}
+
+			</tbody>
+		</table>
+	}
+	else
+	{
+		<div class="w3-panel w3-green w3-round">
+			<p><i class="fa fa-check" aria-hidden="true"></i> Onayınızda bekleyen iş emri bulunmamaktadır..</p>
+		</div>
+	}
+
+</div>
+

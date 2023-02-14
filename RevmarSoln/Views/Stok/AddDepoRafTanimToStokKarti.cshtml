@@ -1,0 +1,145 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.StokDepoRafTanim.AddDepoRafTanimToStokKartiPageModel
+@{
+
+	Layout = null;
+
+}
+
+@using (Html.BeginForm("AddDepoRafTanimToStokKarti", "Stok", FormMethod.Post, new { id = "myFrom" }))
+{
+	<input type="hidden" id="DepoIds" name="DepoIds" />
+	<input type="hidden" value="@Model.StokKartiId" name="StokKartiId" />
+
+	<div class="w3-quarter w3-padding">
+		<label>Depo Sırası</label>
+		@Html.DropDownList("DepoSiraId", Enumerable.Empty<SelectListItem>(), "Depo Sırası Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "DepoSiraId", @onchange = "onChangeDepoSirasi();" })
+	</div>
+	<div class="w3-quarter w3-padding">
+		<label>Depo Rafı</label>
+		@Html.DropDownList("DepoRafId", Enumerable.Empty<SelectListItem>(), "Model Rafı Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "DepoRafId", @onchange = "onChangeDepoRafi();" })
+	</div>
+	<div class="w3-quarter w3-padding">
+		<label>Depo Hücresi</label>
+		@Html.DropDownList("DepoHucreId", Enumerable.Empty<SelectListItem>(), "Model Hücresi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "DepoHucreId" })
+	</div>
+	<div class="w3-quarter w3-padding">
+		<br />
+		<button class="w3-btn w3-ripple w3-green w3-left" id="btnDepoRafEkle" onclick="onClickDepoRafEkle(); return false;">Ekle</button>
+	</div>
+}
+<div class="w3-row w3-padding">
+	<table class="w3-table-all w3-margin-top w3-margin-bottom" id="tableDepoRaf">
+		<tbody>
+			<tr>
+				<th>Depo Sırası</th>
+				<th>Depo Rafı</th>
+				<th>Depo Hücresi</th>
+				<th></th>
+			</tr>
+		</tbody>
+		<tbody>
+			@foreach (var item in Model.StokKarti.DepoRafStoklari)
+			{
+				<tr>
+					<td>@item.DepoRafTanim.DepoSirasi</td>
+					<td>@item.DepoRafTanim.DepoRafi</td>
+					<td>@item.DepoRafTanim.DepoHucresi</td>
+					<td><a class="w3-button w3-red" href="/Stok/DepoRafStoklariSil?StokKartId=@item.StokKartId&DepoRafStokId=@item.DepoRafStokId"> <i class="fa fa-times"></i>Sil</a></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+<script>
+	$(document).ready(function () {
+		$("#DepoSiraId").combobox({
+			select: function (event, ui) {
+				$('#DepoSiraId').val(ui.item.value);
+				$('#DepoSiraId').trigger("change");
+			}
+		});
+
+		var url = '@Url.Action("GetStokSirasi", "Stok")';
+
+		$.getJSON(url, { DepoSirasi: 1 }, function (response) {
+			$("#DepoSiraId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#DepoSiraId").append(p);
+			});
+		});
+
+
+	});
+
+	function onClickDepoRafEkle() {
+		    var depoSirasi = $('#DepoSiraId').val();
+			var depoRafi = $('#DepoRafId').val();
+			var depoHucresi = $('#DepoHucreId').val();
+
+		var url = '@Url.Action("GetDepoRafTanimId", "Stok")';
+
+		$.ajax(
+			{
+				type: 'GET',
+				url: url,
+				data: "depoSirasi=" + depoSirasi + "&depoRafi=" + depoRafi + "&depoHucresi=" + depoHucresi,
+				success: function (data) {
+					if (data == '') {
+						alert('Seçtiğiniz depo hücresi bulunamadı!');
+						return false;
+					} else {
+						$('#DepoIds').val(data);
+						document.getElementById("myFrom").submit();
+						return true;
+					}
+
+
+				}
+			}
+		);
+	}
+
+	function onChangeDepoSirasi(){
+		var url = '@Url.Action("GetStokRafi", "Stok")';
+
+		var ODD = $("#DepoSiraId").val();
+
+		$("#DepoRafId").attr('disabled', 'disabled');
+		$("#DepoRafId").val('');
+		$('#DepoRafId').trigger("change");
+
+
+		$("#DepoHucreId").attr('disabled', 'disabled');
+		$("#DepoHucreId").val(' ');
+		$('#DepoHucreId').trigger("change");
+
+		$.getJSON(url, { DepoSirasi: ODD , selectedId : null}, function (response) {
+			$("#DepoRafId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#DepoRafId").append(p);
+			});
+			$("#DepoRafId").removeAttr('disabled', 'disabled');
+			$("#DepoHucreId").removeAttr('disabled', 'disabled');
+		});
+
+	}
+
+	function onChangeDepoRafi()
+	{
+		var url = '@Url.Action("GetStokHucresi", "Stok")';
+
+		var depoSirasi = $("#DepoSiraId").val();
+		var depoRafi = $("#DepoRafId").val();
+
+		$.getJSON(url, { DepoSirasi: depoSirasi, DepoRafi: depoRafi}, function (response) {
+			$("#DepoHucreId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#DepoHucreId").append(p);
+			});
+		});
+
+	}
+</script>

@@ -1,0 +1,240 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.IsEmriKalemleri>
+@{
+	Layout = null;
+
+	int IsEmriId = Model.First().IsEmriId;
+
+
+
+}
+<style>
+	tr.group,
+	tr.group:hover {
+		background-color: #ddd !important;
+	}
+</style>
+<script>
+	$(document).ready(function () {
+
+		//$('#BelirtiKodu').val('@ViewBag.BelirtiKodu')
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+			'locale-compare-asc': function (a, b) {
+				return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+			},
+			'locale-compare-desc': function (a, b) {
+				return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+			}
+		})
+
+		jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+			return NeutralizeAccent(data);
+		}
+
+		function NeutralizeAccent(data) {
+			return !data
+				? ''
+				: typeof data === 'string'
+					? data
+						.replace(/\n/g, ' ')
+						.replace(/[éÉěĚèêëÈÊË]/g, 'e')
+						.replace(/[šŠ]/g, 's')
+						.replace(/[čČ]/g, 'c')
+						.replace(/[řŘ]/g, 'r')
+						.replace(/[žŽ]/g, 'z')
+						.replace(/[ýÝ]/g, 'y')
+						.replace(/[áÁâàÂÀ]/g, 'a')
+						.replace(/[íÍîïÎİÏ]/g, 'i')
+						.replace(/[ťŤ]/g, 't')
+						.replace(/[ďĎ]/g, 'd')
+						.replace(/[ňŇ]/g, 'n')
+						.replace(/[óÓ]/g, 'o')
+						.replace(/[úÚůŮ]/g, 'u')
+					: data
+		}
+
+		$('#tableIsEmriStokAl').DataTable({
+			"processing": true,
+			"filter": true,
+			"order": [[3, "asc"]],
+			"language": {
+
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+
+				"sSearch": "",
+
+				"selectAll": "Tümünü Seç",
+
+				"sSearchPlaceholder": "Filtrele",
+
+				"sLengthMenu": "_MENU_",
+
+				"sLoadingRecords": "Yükleniyor...",
+
+				"sProcessing": "İşleniyor...",
+
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+
+				"sInfoEmpty": "Kayıt Yok",
+
+				"sInfoPostFix": "",
+
+				"sInfoThousands": ".",
+
+				"sDecimal": ","
+
+			},
+			columnDefs: [
+				{ targets: 0, type: 'locale-compare' },
+			]
+		});
+
+		$("input[type='search']").keyup(function () {
+			table.search(
+				jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+			)
+				.draw()
+
+		});
+
+
+
+	});
+
+	function btnStokAl_click(el) {
+		debugger;
+		// Kalem Id'yi bulmam lazım
+		var isEmriKalemId = $(el)[0].getAttribute('IsEmriKalemId');
+		// Kalem için hangi parça geldiğinin bulunması gerek
+		var parcaNumarasi = $('#ParcaNo-' + isEmriKalemId).val();
+
+		if (parcaNumarasi == "") {
+			alert("Lüften konsinye parça için parça numarası belirtiniz !");
+			return false;
+		}
+
+		console.log('isEmriKalemId : ' + isEmriKalemId);
+		console.log('parcaNumarasi : ' + parcaNumarasi);
+
+
+		WaitBlockUI(1000, "Parça stok'a alınıyor, lütfen bekleyiniz...");
+
+		var urlParcaStokAl = '@Url.Action("IsEmriStokAl", "IsEmri")';
+
+		var data = {
+			isEmriKalemId: isEmriKalemId ,
+			parcaNumarasi: parcaNumarasi
+		};
+
+		$.ajax({
+			type: "POST",
+			url: urlParcaStokAl,
+			content: "application/json; charset=utf-8",
+			dataType: "json",
+			data: data,
+			success: function (d) {
+				if (d.result == 1) {
+					setTimeout(function () {
+						WaitBlockUI(1000, "Parça faturalanırken stok'a alınacak.");
+					}, 1500);
+					$('#divStokAl').load('@Url.Action("IsEmriStokAl", "IsEmri", new { IsEmriId  = IsEmriId })');
+				}
+				else {
+					setTimeout(function () {
+						alert(d.message);
+					}, 1500);
+				}
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				alert('Error2 \n' + data);// TODO: Show error
+			}
+		});
+
+	}
+
+	function btnStokAlKalemSifirla_click(el) {
+	
+		// Kalem Id'yi bulmam lazım
+		var isEmriKalemId = $(el)[0].getAttribute('IsEmriKalemId');
+		// Kalem için hangi parça geldiğinin bulunması gerek
+	
+		console.log('isEmriKalemId : ' + isEmriKalemId);
+		
+		WaitBlockUI(1000, "Kalem için işlem sıfırlanıyor....");
+
+		var urlParcaStokAl = '@Url.Action("IsEmriStokAlSifirla", "IsEmri")';
+
+		var data = {
+			isEmriKalemId: isEmriKalemId 
+		};
+
+		$.ajax({
+			type: "POST",
+			url: urlParcaStokAl,
+			content: "application/json; charset=utf-8",
+			dataType: "json",
+			data: data,
+			success: function (d) {
+				if (d.result == 1) {
+					setTimeout(function () {
+						WaitBlockUI(2000, "Parça stok alma işlemi sıfırlandı.");
+					}, 1500);
+					$('#divStokAl').load('@Url.Action("IsEmriStokAl", "IsEmri", new { IsEmriId  = IsEmriId })');
+				}
+				else {
+					setTimeout(function () {
+						alert(d.message);
+					}, 1500);
+				}
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				alert('Error2 \n' + data);// TODO: Show error
+			}
+		});
+
+	}
+</script>
+<div class="w3-row">
+	<div class="w3-panel w3-red w3-text-white">
+		<b>DİKKAT ! </b> Konsinye olarak gönderilen parçanın karşısındaki <b>Gelen Parça Numarası</b> doldurulduğunda, konsinye olarak gönderilen parça <u><b>ÜCRETLENDİRİLMEYECEKTİR.</b></u>
+	</div>
+</div>
+
+<table id="tableIsEmriStokAl">
+	<thead>
+		<tr>
+			<th>Parça No</th>
+			<th>Parça Adı</th>
+			<th title="Bu Parça Stok'da olmalı !">Gelen Parça Numarası</th>
+			<th>#</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var kalem in Model.Where(x => x.KalepTipi == "P" && x.IsKonsinye))
+		{
+			<tr>
+				<td>@kalem.StokKarti.ParcaNo</td>
+				<td>@kalem.StokKarti.ParcaAdi</td>
+				<td>
+					<input type="text" class="w3-input w3-border w3-round" id="ParcaNo-@kalem.IsEmriKalemId" value="@kalem.KonsinyeIcinGelenParcaKodu" />
+				</td>
+				<td>
+					<button class="btn-login w3-blue w3-btn " title="Stok Al" IsEmriKalemId="@kalem.IsEmriKalemId" onclick="btnStokAl_click(this)">
+						<i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Stok Al
+					</button>
+					<button class="btn-login w3-blue w3-btn " title="Stok Al" IsEmriKalemId="@kalem.IsEmriKalemId" onclick="btnStokAlKalemSifirla_click(this)">
+						<i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Sıfırla
+					</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+

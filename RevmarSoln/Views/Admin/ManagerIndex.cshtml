@@ -1,0 +1,156 @@
+﻿
+@{
+	ViewBag.Title = "ManagerIndex";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/countUp.min.js"></script>
+<script src="~/Scripts/ChartScripts/highcharts.js"></script>
+<script src="~/Scripts/ChartScripts/data.js"></script>
+<script src="~/Scripts/ChartScripts/exporting.js"></script>
+<script src="~/Scripts/ChartScripts/export-data.js"></script>
+<script src="~/Scripts/ChartScripts/drilldown.js"></script>
+<div class="w3-container">
+	<div class="w3-row-padding w3-margin-bottom w3-margin-top">
+		<div class="w3-quarter">
+			@*<a href="\Admin\Users" style="text-decoration:none;">*@
+			<div class="w3-container w3-orange w3-text-white w3-padding-16 w3-hover-shadow">
+				<div class="w3-left"><i class="fa fa-try w3-xxxlarge"></i></div>
+				<div class="w3-right">
+					<h4 id="counter"></h4>
+				</div>
+				<div class="w3-clear"></div>
+				<h4>Kdvsiz Toplam Gelir</h4><h5></h5>
+			</div>
+			@*</a>*@
+		</div>
+		<div id="container" class="w3-half" ></div>
+	</div>
+	@*<h1>Kdv li : @ViewBag.Kdvli </h1>
+		<h1>Kdvsiz: @ViewBag.Kdvsiz </h1>
+		<h1>SadeceKdv li : @ViewBag.SadeceKdv </h1>*@
+</div>
+
+<script type="text/javascript">
+		var options = {
+			  useEasing: true,
+			  useGrouping: true,
+			  separator: ',',
+			  decimal: '.',
+			  prefix: '',
+			  suffix: ''
+		};
+		var demo = new CountUp("counter", 0, @ViewBag.Kdvsiz , 2, 0,8, options);
+	demo.start();
+
+
+	// Create the chart
+	Highcharts.chart('container', {
+		lang: {
+			drillUpText: 'Parçalar'
+		},
+		chart: {
+			type: 'pie'
+		},
+		title: {
+			text: 'Fiat Bayi Stok'
+		},
+		subtitle: {
+			text: '<a href="@Request.Url.GetLeftPart(UriPartial.Authority)/SupplierCompany/SupplierParts" target="_blank">Stok Arama Sayfasına gitmek için tıklayınız </a>'
+		},
+		plotOptions: {
+			series: {
+				dataLabels: {
+					enabled: true,
+					format: '{point.name}: {point.y} Adet'
+				}
+			}
+		},
+		tooltip: {
+			headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+			pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> Adet<br/>'
+		},
+		"series": [
+			{
+				"name": "Browsers",
+				"colorByPoint": true,
+				"data": @Html.Raw(ViewBag.FiatPartCountByWorkType)
+			}
+		],
+		"drilldown": {
+			"series": [
+				{
+					"name": "Alternatör",
+					"id": "Alternatör",
+					"data": [
+						[
+							"52003517",
+							12
+						],
+						[
+							"51984055",
+							115
+						],
+						[
+							"52003507",
+							33
+						],
+						[
+							"51944878",
+							35
+						],
+						[
+							"504385133",
+							1
+						],
+						[
+							"52003532",
+							5
+						],
+						[
+							"55003517",
+							1
+						],
+						[
+							"52003506",
+							1
+						],
+						[
+							"52003615",
+							1
+						],
+						[
+							"52003512",
+							2
+						],
+						[
+							"52003518",
+							4
+						],
+						[
+							"52003511",
+							1
+						],
+						[
+							"51684055",
+							1
+						]
+					]
+				},
+				{
+					"name": "Marş Motoru",
+					"id": "Marş Motoru",
+					"data": [
+						[
+							"51787218",
+							5
+						],
+						[
+							"51880229",
+							5
+						]]
+				}
+			]
+		}
+	});
+</script>
+

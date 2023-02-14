@@ -1,0 +1,685 @@
+﻿@model SahinRektefiyeSoln.Models.FilterModels.WorkOrderFilter
+
+@{
+	ViewBag.Title = "İş Emri Ara";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	int? orderStatu = Model != null ? Model.OrderStatu : 0;
+}
+
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.sortElements.js"></script>
+
+<style>
+	table {
+		font-size: 1em;
+	}
+
+	.ui-draggable, .ui-droppable {
+		background-position: top;
+	}
+
+	.workordergreenlight {
+		height: 27px !important;
+		width: 27px !important;
+	}
+
+	.workorderredlight {
+		height: 27px !important;
+		width: 27px !important;
+	}
+
+	#tableWorkOrder th {
+		cursor: pointer;
+	}
+</style>
+
+<script>
+	$(document).ready(function () {
+		$('#dtWorkOrderBegin').datepicker({
+			dateFormat: "dd-mm-yy",
+			monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+			dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+			firstDay: 1
+		});
+
+		$('#dtWorkOrderEnd').datepicker({
+			dateFormat: "dd-mm-yy",
+			monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+			dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+			firstDay: 1
+		});
+
+
+		//** Custom AutoComp begin **//
+
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tümünü Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.css('margin-right', 3)
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				var i = 0;
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text))) {
+						i += 1;
+						if (i <= 5) {
+							return {
+								label: text,
+								value: text,
+								option: this
+							};
+						}
+
+					}
+
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				// Remove invalid value
+				this.input
+					.val("")
+					.attr("title", value + " seçilmedi.")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			},
+
+			change: function () {
+				debugger;
+				 alert(' ');
+			 }
+		});
+
+		$("#ServiceId").combobox({
+			select: function (event, ui) {
+				//console.log(event);
+				//console.log(ui.item.value);
+				$('#ServiceId').val(ui.item.value);
+				$('#ServiceId').trigger("change");
+			}
+		});
+		$("#toggle").on("click", function () {
+			$("#ServiceId").toggle();
+		});
+
+		$("#VehicleId").combobox({
+			select: function (event, ui) {
+				//console.log(event);
+				//console.log(ui.item.value);
+				$('#VehicleId').val(ui.item.value);
+				$('#VehicleId').trigger("change");
+			}
+		});
+		$("#toggle").on("click", function () {
+			$("#VehicleId").toggle();
+		});
+
+		//** Custom AutoComp end **//
+		debugger;
+		if ($('#CompanyId').val() != "") {
+			var url = '@Url.Action("Vehicles", "WorkOrder")';
+			var PDD = $("#VehicleId");
+			var ODD = $("#CompanyId").val();
+
+			$.getJSON(url, { CompanyId: ODD, selectedId: @(ViewBag.VehicleId == null ? 0 : ViewBag.VehicleId )}, function (response) {
+				$("#VehicleId").empty();
+				$.each(response, function (index, item) {
+					var p = new Option(item.Text, item.Value,item.Selected);
+					$("#VehicleId").append(p);
+					if (item.Selected == true) {
+						$("#VehicleId").val(@(ViewBag.VehicleId == null ? 0 : ViewBag.VehicleId )).attr('selected', 'selected');
+						$('#VehicleId').val(item.Value);
+						$('#VehicleId').trigger("change");
+					}
+
+				});
+			});
+			url = '@Url.Action("Services", "WorkOrder")';
+			PDD = $("#ServiceId");
+			$.getJSON(url, { CompanyId: ODD, selectedId: @(ViewBag.ServiceId == null ? 0 : ViewBag.ServiceId ) }, function (response) {
+				$("#ServiceId").empty();
+				$.each(response, function (index, item) {
+					var p = new Option(item.Text, item.Value, item.Selected);
+					$("#ServiceId").append(p);
+					if (item.Selected == true) {
+						$("#ServiceId").val(@(ViewBag.ServiceId == null ? @"0" : ViewBag.ServiceId )).attr('selected', 'selected');
+						$('#ServiceId').trigger("change");
+					}
+				});
+			});
+
+		};
+
+		$('#Plate').keyup(function () {
+			this.value = $.trim(this.value.toUpperCase());
+		});
+
+		var table = $('#tableWorkOrder');
+
+		if (@(Model  != null ? 1:0)) {
+			console.log('model dolu.');
+			@*$("#OrderStatu").val(@orderStatu).change();*@
+		}
+
+
+		//$('#thWorkOrderNo,#thCreatedDate,#thService,#thContact,#thVehicle,#thPlate,#thKm,#thSerialNo,#thStatu')
+		//	.wrapInner('<span title="Kolonu sırala"/>')
+		//	.each(function () {
+
+		//		var th = $(this),
+		//			thIndex = th.index(),
+		//			inverse = false;
+
+		//		th.click(function () {
+
+		//			table.find('td').filter(function () {
+
+		//				return $(this).index() === thIndex;
+
+		//			}).sortElements(function (a, b) {
+
+		//				//return $.text([a]) > $.text([b]) ?
+		//				//	inverse ? -1 : 1
+		//				//	: inverse ? 1 : -1;
+		//				var strDate = $.text([a]);
+		//				var dateParts = strDate.split("/");
+		//				var date = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+		//				var a1 = date.getTime();
+		//				strDate = $.text([b]);
+		//				dateParts = strDate.split("/");
+		//				date = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+		//				b1 = date.getTime();
+
+		//				return a1 > b1 ?
+		//					inverse ? -1 : 1
+		//					: inverse ? 1 : -1;
+
+		//			}, function () {
+
+		//				// parentNode is the element we want to move
+		//				return this.parentNode;
+
+		//			});
+
+		//			inverse = !inverse;
+
+		//		});
+
+		//	});
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#tableWorkOrder').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+		var orderStatu = '@(Model != null ? Model.OrderStatu : -1)';
+
+		if (orderStatu != '-1') {
+			$("#OrderStatu").val(orderStatu).change();
+		}
+
+	});
+	function onChangeCompany()
+	{
+		var url = '@Url.Action("Vehicles", "WorkOrder")';
+		var PDD = $("#VehicleId");
+		var ODD = $("#CompanyId").val();
+
+		$.getJSON(url, { CompanyId: ODD , selectedId : null}, function (response) {
+			$("#VehicleId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#VehicleId").append(p);
+			});
+		});
+		url = '@Url.Action("Services", "WorkOrder")';
+		PDD = $("#ServiceId");
+		$.getJSON(url, { CompanyId: ODD }, function (response) {
+			$("#ServiceId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#ServiceId").append(p);
+			});
+		});
+	}
+
+</script>
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İş Emri Arama", pagePermission = "EMP_02" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		@using (Html.BeginForm())
+		{
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Firma</label>
+					@Html.DropDownList("CompanyId", (SelectList)ViewBag.Companies, "Marka Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "CompanyId", @onchange = "onChangeCompany();" })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Arac Model</label>
+					@Html.DropDownList("VehicleId", Enumerable.Empty<SelectListItem>(), "Model Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VehicleId" })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Talep</label>
+					@Html.DropDownList("TaskId", (SelectList)ViewBag.Tasks, "Talep Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "TasksId" })
+
+				</div>
+				<div class="w3-quarter w3-padding">
+					<div class="w3-half" style="padding-right:10px!important;">
+						<label>Seri No</label>
+						@Html.TextBoxFor(model => Model.SerialNo, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "SerialNo" })
+					</div>
+					<div class="w3-half" style="padding-right:10px!important;">
+						<label>Parça No</label>
+						@Html.TextBoxFor(model => Model.PartNo, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "PartNo" })
+					</div>
+
+
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Servis</label>
+					@Html.DropDownList("ServiceId", Enumerable.Empty<SelectListItem>(), "Servis Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "ServiceId" })@*(SelectList)ViewBag.Services*@
+
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Plaka</label>
+					@Html.EditorFor(model => model.Plate, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "36" } })
+
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Şase No</label>
+					@Html.EditorFor(model => model.VIN, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "20" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<div class="w3-half" style="padding-right:10px!important;">
+						<label>İş Emri No</label>
+						@Html.TextBoxFor(model => Model.NoWorkOrder, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "NoWorkOrder" })
+
+					</div>
+					<div class="w3-half" style="padding-right:10px!important;">
+						<label>Yakıt Tipi</label>
+						@Html.DropDownList("FuelType", new List<SelectListItem>
+{
+new SelectListItem{ Text="Yakıt Tipi Seçiniz", Value = "0" },
+new SelectListItem{ Text="Benzin", Value = "1" },
+new SelectListItem{ Text="Dizel", Value = "2" },
+}, htmlAttributes: new { @class = "w3-select w3-border w3-round" })
+					</div>
+
+				</div>
+			</div>
+
+			<div class="w3-row">
+				<div class="w3-half">
+					<div class="w3-half w3-padding">
+						<label>Başlangıç Tarihi</label>
+						@Html.EditorFor(model => model.dtWorkOrderStart, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", name = "date", id = "dtWorkOrderBegin", autocomplete = "off" } })
+
+						@*<input class="w3-input w3-border w3-round" type="datetime-local" placeholder="Date and time" required="" name="date" value="2017-11-16T20:00" id="dtWorkOrderBegin">*@
+					</div>
+					<div class="w3-half w3-padding">
+						<label>Kapanış Tarihi</label>
+						@Html.EditorFor(model => model.dtWorkOrderEnd, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", name = "date", id = "dtWorkOrderEnd", autocomplete = "off" } })
+						@*<input class="w3-input w3-border w3-round" type="datetime-local" placeholder="Date and time" required="" name="date" value="2017-11-16T20:00" id="dtWorkOrderEnd">*@
+					</div>
+				</div>
+
+				<div class="w3-quarter w3-padding">
+					<label>&nbsp; </label>
+					<select class="w3-select w3-border w3-round" name="OrderStatu" id="OrderStatu">
+						<option value="" selected>İş Emri Durumu Seçiniz</option>
+						<option value="10">Açık</option>
+						<option value="20">Faturalandı</option>
+						@if (ViewBag.yetkili)
+	{
+					<option value="33">İade Onayında</option>
+
+}
+						<option value="40">İade</option>
+						<option value="30">İptal</option>
+						@if (ViewBag.yetkili)
+						{
+					<option value="34">İptal Onayında</option>
+}
+					</select>
+				</div>
+
+				<div class="w3-quarter w3-padding">
+					<div class="w3-threequarter">
+						<label>&nbsp;</label>
+						<table cellpadding="5">
+
+							<tr>
+								<td><label>Onay</label></td>
+								<td>@Html.CheckBoxFor(model => Model.SwApproved, new { @class = "w3-check", @Id = "SwApproved" })</td>
+								<td><label>İptalleri Göster</label></td>
+								<td>@Html.CheckBoxFor(model => Model.SwShowCanceled, new { @class = "w3-check", @Id = "SwShowCanceled" })</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="w3-quarter w3-right">
+						<div class="w3-half">&nbsp;</div>
+						<label>&nbsp; </label>
+						<button class="w3-btn w3-ripple w3-blue w3-left w3-round-large" name="command" value="Ara">Ara</button>
+					</div>
+
+				</div>
+			</div>
+			<div class="w3-right w3-small">
+				<input type="submit" class="w3-button w3-round-large " value="Excel'e Aktar" name="command" />
+			</div>
+		}
+
+		<div class="w3-row w3-margin-bottom">
+			<table class="w3-table-all w3-hoverable w3-small" id="tableWorkOrder">
+				<thead>
+					<tr class="w3-light-grey">
+						<th id="thWorkOrderNo">İş Emir No</th>
+						<th id="thCreatedDate">Giriş Tarihi</th>
+
+						<th id="thService">Servis</th>
+						<th id="thContact">İlgili Kişi</th>
+						<th id="thVehicle">Araç Marka-Model</th>
+						<th id="thPlate">Plaka</th>
+						<th id="thKm">Km</th>
+
+						<th id="thSerialNo">Seri No</th>
+						<th id="thStatu">Statu</th>
+						<th>Rapor</th>
+						<th>Onay</th>
+						<th>Müşteri Onay</th>
+						<th>Detay</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in (ViewBag.Works as List<SahinRektefiyeSoln.Models.WorkOrders>).OrderByDescending(x => x.CreatedDate))
+					{
+						<tr>
+							<td>
+								@(item.NoWorkOrder != null ? item.NoWorkOrder : item.WorkOrderId.ToString())
+								@*@if (item.NoWorkOrder != null) { } else { }@item.WorkOrderId*@
+							</td>
+							<td>
+								@Convert.ToDateTime(item.CreatedDate).ToString("dd/MM/yyyy")
+							</td>
+							<td>
+								@item.Services.Name
+							</td>
+							<td>
+								@item.ServiceContact
+							</td>
+							<td>
+								@item.Vehicles.Companies.Name -  @item.Vehicles.Name
+							</td>
+							<td>
+								@item.Plate
+							</td>
+							<td>
+								@item.VehicleKm
+							</td>
+							<td>
+								@item.VIN
+							</td>
+							<td>
+								@switch (item.Statu)
+								{
+									case 10:
+										<label>Açık</label>
+										break;
+									case 20:
+										<label>Faturalandı</label>
+										break;
+									case 30:
+										<label>İptal</label>
+
+										break;
+									case 33:
+										<label>İade Onayında</label>
+
+										break;
+									case 34:
+										<label>İptal Onayında</label>
+
+										break;
+									case 40:
+										<label>İade</label>
+										break;
+								}
+							</td>
+							<td>
+								@switch (item.ReportIsSend)
+								{
+									case true:
+										<img src="~/Images/green.png" class="workordergreenlight" />
+										break;
+									case false:
+										<img src="~/Images/red.png" class="workorderredlight" />
+										break;
+									default:
+										<img src="~/Images/red.png" class="workorderredlight" />
+										break;
+								}
+								@*@(item.ReportIsSend == true ? "Gönderildi" : "Bekliyor")*@
+							</td>
+							<td>
+								@switch (item.SwApproved)
+								{
+									case true:
+										<img src="~/Images/green.png" class="workordergreenlight" />
+										break;
+									case false:
+										<img src="~/Images/red.png" class="workorderredlight" />
+										break;
+									default:
+										<img src="~/Images/red.png" class="workorderredlight" />
+										break;
+								}
+								@*@(item.SwApproved == true ? "Onaylı" : "Onaylanmamış")*@
+							</td>
+
+							<td>
+								@switch (item.ReportApprovedByCustomer)
+								{
+									case true:
+										<img src="~/Images/green.png" class="workordergreenlight" />
+										break;
+									case false:
+										<img src="~/Images/red.png" class="workorderredlight" />
+										break;
+									default:
+										<img src="~/Images/red.png" class="workorderredlight" />
+										break;
+								}
+								@*@(item.ReportApprovedByCustomer == true ? "Onaylı" : "Bekliyor")*@
+							</td>
+							<td>
+
+								<a href="/WorkOrder/Order?id=@item.WorkOrderId" class="w3-btn w3-ripple w3-blue w3-round-large"><i class="fa fa-edit"></i>&nbsp; Detay</a>
+								@*<button class=""><i class="fa fa-edit"></i> &nbsp;Detay</button>*@
+							</td>
+						</tr>
+					}
+
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

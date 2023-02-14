@@ -1,0 +1,205 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Teklif.TeklifDuzenlePageModel
+@{ Layout = null;}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Teklif- @Model.teklifler.TeklifNo </title>
+	@*<link rel="stylesheet" href="~/Styles/w3.css">*@
+	<style type="text/css">
+		@@page {
+
+			@@bottom-left {
+				content: element(footer);
+				vertical-align: top;
+				padding-top: 10px;
+				/*      border: solid red;    */
+			}
+
+			@@top-right {
+				content: element(header);
+				vertical-align: bottom;
+				padding-bottom: 10px;
+				/*          border: solid green;   */
+			}
+
+			size: A4 portrait;
+			margin-top: 0cm;
+			margin-left: 1cm;
+			margin-right: 1cm;
+			margin-bottom: 0cm;
+		}
+
+		div.header {
+			display: block;
+			position: running(header);
+			background-color: white !important;
+		}
+
+		div.footer {
+			margin-top: 0.5cm;
+			display: block;
+			position: running(footer);
+		}
+
+		div.content {
+			/*  border: solid purple;  */
+			display: block;
+			text-align: justify;
+		}
+
+		#tbMusteri td {
+			/*border: 1px black solid;*/
+			padding: 2px;
+			font-size: 12px !important;
+		}
+
+
+		#tbArac td {
+			/*border: 1px black solid;*/
+			padding: 3px;
+			font-size: 14px;
+		}
+
+		.rotate {
+			text-align: center;
+			white-space: nowrap;
+			vertical-align: middle;
+			width: 1.5em;
+		}
+
+			.rotate div {
+				-moz-transform: rotate(-90.0deg); /* FF3.5+ */
+				-o-transform: rotate(-90.0deg); /* Opera 10.5 */
+				-webkit-transform: rotate(-90.0deg); /* Saf3.1+, Chrome */
+				filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083); /* IE6,IE7 */
+				-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+				margin-left: -10em;
+				margin-right: -10em;
+			}
+
+		.fontSize12 {
+			font-size: 12px !important;
+		}
+
+		@@media print {
+			headerBackground {
+				background-color: gray !important;
+				-webkit-print-color-adjust: exact;
+			}
+		}
+
+		
+	</style>
+	<script>
+		window.print();
+	</script>
+</head>
+<body>
+	<page size="A4">
+		<div class="header">
+
+			<div class="headerBackground">
+				<h3 >Servis Teklif Dökümü</h3>
+			</div>
+			<table class="no-border">
+				<tbody>
+					<tr>
+						<td width="20%"><div style="width:190px!important;height:60px!important"></td>
+						<td width="80%" align="right"></td>
+					</tr>
+					<tr>
+						<td style="font-weight:bold">@Model.teklifler.Musteri.MusteriAdi &nbsp; @Model.teklifler.Musteri.MusteriSoyadi</td>
+						<td width="80%" align="right" style="font-size:12px!important">Kayıt Tarihi : @(DateTime.Parse(Model.teklifler.DtCreated.ToString()).ToShortDateString())</td>
+					</tr>
+					<tr>
+						<td>@Model.teklifler.Arac.Plaka - @Model.teklifler.Arac.SaseNo </td>
+						<td width="80%" align="right" style="font-size:12px!important">Döküm Tarihi : @(DateTime.Now.ToShortDateString())</td>
+					</tr>
+					<tr>
+						<td>@Model.teklifler.Arac.ModelYili / @Model.teklifler.Arac.AracModelAdi</td>
+						<td width="80%" align="right" style="font-size:12px!important">Teklif No : @(String.Format("{0:000000}", Model.teklifler.TeklifNo))</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<br />
+			<hr />
+			<br />
+			<table border="0" cellspacing="0" cellpadding="0" style="margin-left: 3px !important; width: 100%; ">
+				<thead>
+					<tr style="border: 1px solid black;width:100%;border-collapse: collapse; ">
+						<td><b>Parça/İş No</b></td>
+						<td><b>Adet/Saat</b></td>
+						<td><b>Açıklama</b></td>
+						<td style="text-align:center"><b>İndirim%</b></td>
+						<td style="text-align:center"><b>B.Fiyat</b></td>
+						<td style="text-align:center"><b>Top. <br />(İnd.'li+KDV'li')</b></td>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model.teklifKalemleri.Count > 0)
+					{
+						foreach (var kalem in Model.teklifKalemleri.Where(x => x.KalemTipi == "I"))
+						{
+							<tr>
+								<td>@kalem.IscilikKodu</td>
+								<td style="text-align:center">@String.Format("{0:0.00}", kalem.Miktar)</td>
+								<td>@kalem.IscilikAdi</td>
+								<td style="text-align:right"> <label class="w3-right">@String.Format("{0:0.00}", kalem.kalemIskontoOrani * 100) </label></td>
+								<td style="text-align:right">
+									@if (kalem.isDYI)
+									{
+										<label class="w3-right">@String.Format("{0:0.00}", kalem.kdvHaricBirimFiyati)</label>
+									}
+									else
+									{
+										<label class="w3-right">@String.Format("{0:0.00}", kalem.kdvHaricBirimFiyati)</label>
+									}
+								</td>
+								<td style="text-align:right">@String.Format("{0:0.00}", kalem.ToplamKdvliTutari)</td>
+							</tr>
+						}
+
+						foreach (var kalem in Model.teklifKalemleri.Where(x => x.KalemTipi == "P"))
+						{
+							<tr>
+								<td>@kalem.ParcaNo</td>
+								<td style="text-align:center">@kalem.Miktar</td>
+								<td>@kalem.ParcaAdi</td>
+								<td style="text-align:right">
+									<label class="w3-right">@(kalem.kalemIskontoOrani * 100)</label>
+								</td>
+								<td style="text-align:right">@String.Format("{0:0.00}", kalem.kdvHaricBirimFiyati)</td>
+
+								<td style="text-align:right">@String.Format("{0:0.00}", kalem.ToplamKdvliTutari)</td>
+							</tr>
+
+						}
+
+					}
+				</tbody>
+			</table>
+			<br />
+			<br />
+			<hr />
+			<br />
+			<table>
+				<tr>
+					<td style="font-weight:bold">Teklif Notu</td>
+				</tr>
+				<tr>
+					<td>@Model.teklifler.TeklifNot</td>
+				</tr>
+			</table>
+
+		</div>
+
+		<div class="footer" style="width:353px!important;height:110px!important">
+			Bahçelievler Mahallesi D-100 Bulvarı
+			No: 50/3 Pendik, İstanbul/TÜRKİYE
+			TELEFON: 444 61 09
+			EPOSTA: info@revmer.com
+		</div>
+
+	</page>
+</body>
+</html>

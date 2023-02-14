@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.WorkOrders>
+@{
+	ViewBag.Title = "DashBoard";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>İş Emirleri</h2>
+<link rel="stylesheet" href="~/Styles/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.mask.js"></script>
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+
+<!--Sementic UI-->
+<script type="text/javascript">
+$(document).ready(function () {
+	$("#tableWorkOrder").DataTable({
+        "processing": true, // for show progress bar
+        "serverSide": true, // for process server side
+        "filter": true, // this is for disable filter (search box)
+        "orderMulti": false, // for disable multiple column at once
+        "ajax": {
+            "url": '@Url.Action("GetIsEmirleri", "Reports")',
+            "type": "POST",
+            "datatype": "json"
+        },
+        "columns": [
+			{ data: 'IsEmriId', name: 'IsEmriId', "autoWidth": true },//,
+            //{ data: 'Name', name: 'Name', "autoWidth": true },
+            //{ data: 'Email', name: 'Email', "autoWidth": true },
+            //{ data: 'UserRole', name: 'UserRole', "autoWidth": true },
+            //{ data: 'Status', name: 'Status', "autoWidth": true },
+			{
+				data: '',
+				name: '',
+				"autoWidth": true,
+				"orderable": false,
+				mRender: function (data, colo, row) {
+					return "<i class='fa fa-trash' style='cursor:pointer'></i>";
+				}
+			}
+        ]
+    });
+});
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+<table id="tableWorkOrder" >
+</table>

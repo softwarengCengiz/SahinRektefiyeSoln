@@ -1,0 +1,59 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Tasks>
+
+@{
+    ViewBag.Title = "İş Emri Ad Tanımla";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İş Emri Listesi", pagePermission = "ADM_13" })
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card">
+        <div class="w3-row w3-margin-left w3-margin-bottom w3-margin-top">
+            <div class="w3-threequarter">
+                <table class="w3-table-all">
+                    <tr>
+                        <th>İş Emri Id</th>
+                        <th>
+                            İş Emri Adı
+                        </th>
+						<th>
+							İş Emri Prefix
+						</th>
+                        <th>
+                            Oluşturan Kullanıcı
+                        </th>
+                        <th>
+                            Oluşturulan Tarih
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+					<tr>
+						<td> @Html.DisplayFor(modelItem => item.TaskId)</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.TaskName)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.PreFix)
+						</td>
+						<td>
+							@Html.DisplayFor(modelItem => item.Creator)
+						</td>
+						<td>
+							@Convert.ToDateTime(item.CreatedDate).ToShortDateString()
+						</td>
+						<td>
+							<a href="/Admin/EditTask?TaskId=@item.TaskId" class="w3-btn w3-ripple w3-blue"><i class="fa fa-cop"></i>&nbsp;Düzenle </a>
+
+						</td>
+						
+					</tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

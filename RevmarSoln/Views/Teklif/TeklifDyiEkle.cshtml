@@ -1,0 +1,177 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Iscilikler>
+@{
+    Layout = null;
+}
+<style>
+    #tableDyiIscilik {
+        font-family: tahoma;
+    }
+</style>
+
+<script>
+	$(document).ready(function () {
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#tableDyiIscilik').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+        $("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+	});
+	function btnDyiIscilikEkle_click(string, el) {
+
+		var iscilikId = $(el)[0].getAttribute('Iscilik');
+        var teklifId = '@ViewBag.TeklifId';
+        var maliyet = $('#Maliyet-' + iscilikId).val();
+        var satisFiyati = $('#SatisFiyat-' + iscilikId).val();
+
+		if (maliyet == "") {
+			alert('Lütfen Maliyet Giriniz!');
+			return false;
+		}
+
+		if (satisFiyati == "") {
+			alert('Lütfen Satış Fiyatı Giriniz!');
+			return false;
+		}
+
+		debugger;
+
+		console.log('iscilikId : ' + iscilikId);
+        console.log('teklifId : ' + teklifId);
+		console.log('maliyet : ' + maliyet);
+		console.log('satisFiyati : ' + satisFiyati);
+
+		WaitBlockUI(2000, 'Dış İşçilik ekleniyor...');
+
+		var urlParcaEkle = '@Url.Action("TeklifDyiEkleme", "Teklif")';
+
+		var data = {
+				iscilikId: iscilikId*1 ,
+				teklifId: teklifId,
+				maliyet: maliyet,
+				satisFiyati: satisFiyati
+		};
+
+		console.log("Post : " + data);
+
+		$.ajax({
+				type: "POST",
+				url: urlParcaEkle,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function (d) {
+					if (d.result == 1)
+						WaitBlockUI(750, 'Dış İşçilik Eklendi');
+					else {
+						debugger;
+						setTimeout(function () {
+							alert(d.message);
+						}, 1500);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);
+				}
+			});
+
+	}
+</script>
+
+
+<table id="tableDyiIscilik">
+    <thead>
+        <tr>
+            <th width="20%">İşçilik Adı</th>
+            <th width="20%">Kodu</th>
+            <th width="20%">Maliyet</th>
+            <th width="20%">Satış Fiyatı</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var iscilik in Model)
+        {
+            <tr>
+                <td>
+                    @iscilik.IscilikAdi
+                </td>
+                <td>
+                    @iscilik.IscilikKodu
+                </td>
+                <td>
+                    <input type="number" class="onlynumeric w3-input w3-border w3-round" id="Maliyet-@iscilik.IscilikId" onkeypress="return isNumberKey(event)" />
+                </td>
+                <td>
+                    <input type="number" class="onlynumeric w3-input w3-border w3-round" id="SatisFiyat-@iscilik.IscilikId" onkeypress="return isNumberKey(event)" />
+                </td>
+                <td><button class="btn-login w3-blue w3-btn" title="Parça Seç" Iscilik="@iscilik.IscilikId" onclick="btnDyiIscilikEkle_click('month', this)"><i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Ekle</button></td>
+            </tr>
+
+        }
+    </tbody>
+</table>

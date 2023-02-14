@@ -1,0 +1,33 @@
+﻿@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html xmlns:office="urn:schemas-microsoft-com:office:office"
+	  xmlns:word="urn:schemas-microsoft-com:office:word"
+	  xmlns="http://www.w3.org/TR/REC-html40">
+<meta name="viewport" content="width=device-width" />
+<title>Word Document</title>
+
+
+<style type="text/css">
+	#CustomerInfo td, #CustomerInfo th {
+		border: 1px solid #ddd;
+		padding: 8px;
+	}
+
+	.customHeader {
+		font: bold;
+		font-size: 12px !important;
+		margin-top: 5px !important;
+		margin-bottom: 5px !important;
+	}
+</style>
+</head>
+<body>
+	<div>
+		@RenderBody()
+	</div>
+</body>
+</html>

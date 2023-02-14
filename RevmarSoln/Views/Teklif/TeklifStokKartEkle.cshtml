@@ -1,0 +1,174 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.StokKarti>
+@{
+	Layout = null;
+	string Alternatifler = string.Empty;
+}
+
+<style>
+	#tableStokKart {
+		font-family: tahoma;
+	}
+</style>
+
+<script>
+    $(document).ready(function () {
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#tableStokKart').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+		});
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+	});
+
+	function btnParcaEkle_click(string, el) {
+		debugger;
+
+		var stokKartId = $(el)[0].getAttribute('stokKart');
+		var teklifId = '@ViewBag.TeklifId';
+		var parcaAdet = $('#stokKartId-' + stokKartId).val();
+
+		if (parcaAdet == "") {
+			alert('Lütfen Adet Giriniz!');
+			return false;
+		}
+		
+		console.log('stokKartId : ' + stokKartId);
+        console.log('teklifId : ' + teklifId);
+		console.log('parcaAdet : ' + parcaAdet);
+
+		WaitBlockUI(2000, 'Parça ekleniyor...');
+
+		var urlParcaEkle = '@Url.Action("TeklifParcaEkleme", "Teklif")';
+
+			var data = {
+                teklifId: teklifId ,
+				StokKartId: stokKartId,
+				parcaAdet: parcaAdet
+			};
+
+			$.ajax({
+				type: "POST",
+				url: urlParcaEkle,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function (d) {
+					if (d.result == 1)
+						WaitBlockUI(750, 'Parça Ekledi');
+
+					else {
+						setTimeout(function () {
+							alert(d.message);
+						}, 1500);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);
+				}
+			});
+
+	}
+</script>
+
+
+<table id="tableStokKart">
+	<thead>
+		<tr>
+			<th width="20%">Parça Tipi</th>
+			<th width="20%">Parça No</th>
+			<th width="30%">Parça Adı</th>
+			<th width="10%">Stok</th>
+			<th width="10%">Miktar</th>
+			<th width="10%"></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var stokKart in Model)
+		{
+			Alternatifler = "Alternatifler \n";
+			foreach (var item in stokKart.StokKartiAlternatif1.ToList())
+			{
+				Alternatifler += item.StokKarti.ParcaAdi + "-" + item.StokKarti.ParcaNo + "\n";
+			}
+			<tr>
+
+				<td>
+					@stokKart.ParcaTipleri.ParcaTipAciklamasi
+				</td>
+				<td>
+					@stokKart.ParcaNo
+				</td>
+				<td>
+					<label title="@Alternatifler">@stokKart.ParcaAdi</label>
+				</td>
+				<td>@stokKart.ToplamStok</td>
+				<td>
+					<input type="number" class="onlynumeric w3-input w3-border w3-round" id="stokKartId-@stokKart.StokKartiId" onkeypress="return isNumberKey(event)"  />
+				</td>
+				<td><button class="btn-login w3-blue w3-btn " title="Parça Seç" stokKart="@stokKart.StokKartiId" onclick="btnParcaEkle_click('month', this)"><i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Ekle</button></td>
+			</tr>
+		}
+	</tbody>
+</table>

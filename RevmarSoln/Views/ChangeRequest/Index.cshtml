@@ -1,0 +1,154 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.ChangeRequest>
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	string Image = string.Empty;
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Uygulama Değişiklik Talepleri", pagePermission = "ADM_01" })
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card w3-padding">
+		<a href="/ChangeRequest/Create" class="w3-button w3-round w3-green">Yeni Talepde Bulun</a>
+		<script>
+			$(document).ready(function () {
+				$('.btnComment').click(function () {
+					debugger;
+					var tiklananChangeRequestId = $(this).attr("changeRequestId");
+
+					var text = $('#commentsLabel-' + tiklananChangeRequestId).html();
+
+					if (text == "Göster") {
+						$('#commentsLabel-' + tiklananChangeRequestId).text("Gizle");
+						$('#divchangeRequestCommentId-' + tiklananChangeRequestId).removeClass("w3-hide");
+						$('#divchangeRequestCommentId-' + tiklananChangeRequestId).addClass("w3-show");
+					}
+					else if (text == "Gizle")
+					{
+						$('#commentsLabel-' + tiklananChangeRequestId).text("Göster");
+						$('#divchangeRequestCommentId-' + tiklananChangeRequestId).removeClass("w3-show");
+						$('#divchangeRequestCommentId-' + tiklananChangeRequestId).addClass("w3-hide");
+					}
+				});
+			});
+		</script>
+		@if (Model.Any())
+		{
+			<div class="w3-row">
+				@foreach (var item in Model.OrderByDescending(x => x.ChangeRequestId))
+				{
+					switch (item.ChangeRequestStatuDetails.OrderByDescending(x => x.ChangeRequestStatuDetailId).First().ChangeRequestStatus.ChangeRequestStatuID)
+					{
+						case 10:
+							Image = "sent.gif";
+							break;
+						case 20:
+							Image = "degerlendiriliyor.gif";
+							break;
+						case 30:
+							Image = "onay.gif";
+							break;
+						case 40:
+							Image = "development.gif";
+							break;
+						case 45:
+							Image = "testing.gif";
+							break;
+						case 50:
+							Image = "live.gif";
+							break;
+						default:
+							break;
+					}
+					<div class="w3-col m12">
+						<div class="w3-container w3-card w3-white w3-round w3-margin">
+
+							<br>
+							<img src="https://www.w3schools.com/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+
+							<span class="w3-right w3-opacity">
+
+								@item.ChangeRequestStatuDetails.OrderByDescending(x => x.ChangeRequestStatuDetailId).First().ChangeRequestStatus.ChangeReqDesc -
+								<i class="fa fa-fw fa-clock-o"></i> @item.ChangeRequestStatuDetails.OrderByDescending(x => x.ChangeRequestStatuDetailId).First().StatuDate
+							</span>
+
+							<h4>@item.Creator</h4><br>
+							
+							<label class="w3-right w3-small">Sayfa : @item.PageUrl</label>
+							<hr class="w3-clear">
+							<div class="w3-row">
+								@Html.Raw(item.ChangeReqDesc)
+							</div>
+
+							@*<button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button>*@
+							<div class="w3-dropdown-hover w3-margin-bottom">
+								<button class="w3-button w3-margin-bottom w3-teal">@item.ChangeRequestStatuDetails.OrderByDescending(x => x.ChangeRequestStatuDetailId).First().ChangeRequestStatus.ChangeReqDesc</button>
+								<div class="w3-dropdown-content w3-bar-block w3-card-4">
+									<a href="#" class="w3-bar-item w3-button">Link 1</a>
+									<a href="#" class="w3-bar-item w3-button">Link 2</a>
+									<a href="#" class="w3-bar-item w3-button">Link 3</a>
+								</div>
+							</div>
+							<button type="button" class="w3-button w3-theme-d2 w3-margin-bottom btnComment" changeRequestId="@item.ChangeRequestId"><i class="fa fa-comment"></i> &nbsp;Yorumları <label id="commentsLabel-@item.ChangeRequestId">Göster</label></button>
+							<img src="~/Images/ChangeRequest/@Image" class="w3-left w3-circle w3-margin-right " style="width:100px" />
+							<div class="w3-row w3-hide" id="divchangeRequestCommentId-@item.ChangeRequestId">
+								<hr />
+								@if (item.ChangeRequestComments.Any())
+								{
+									<div class="w3-col m1 l1">&nbsp;</div>
+									<div class="w3-col m11 l11">
+										@foreach (var comments in item.ChangeRequestComments)
+										{
+											<div class="w3-row w3-margin">
+												<div class="w3-col m1 text-center">
+													<img class="w3-circle" src="https://www.w3schools.com/w3images/avatar3.png" style="width:96px;height:96px">
+												</div>
+												<div class="w3-col m11 ">
+													<h5>@comments.Creator <span class="w3-opacity w3-medium">@SahinRektefiyeSoln.Helpers.RevmerHelper.ToRelativeDate(comments.CreatedDate)</span></h5>
+													<p>@comments.CommentDesc</p>
+												</div>
+											</div>
+										}
+									</div>
+
+								}
+								else
+								{
+									<p>Hiç yorum girilmemiştir.</p>
+								}
+
+							</div>
+
+						</div>
+					</div>
+				}
+			</div>
+
+			<table class="w3-table w3-table-all">
+				<thead>
+					<tr>
+						<th>İsteyen Kişi</th>
+						<th>Tarih</th>
+						<th>Statu</th>
+						<th>Geliştirilecek Sayfa</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>@item.Creator</td>
+							<td>@item.RequestDate</td>
+							<td></td>
+							<td>@item.PageUrl</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td colspan="3">@Html.Raw(item.ChangeReqDesc)</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
+
+	</div>
+</div>

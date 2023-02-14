@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Menus>
+
+@{
+    ViewBag.Title = "Menüler";
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Menuler", pagePermission = "ADM_12" })
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card">
+        <div class="w3-row w3-margin-left w3-margin-bottom w3-margin-top">
+            <div class="w3-threequarter">
+                <table class="w3-table-all">
+                    <thead>
+                        <tr class="w3-light-grey">
+                            <th>
+                                Menu Adı
+                            </th>
+                            <th>
+                                Url
+                            </th>
+                            <th>
+                                Icon
+                            </th>
+                            <th>
+                                Yetki Kodu
+                            </th>
+                            <th>
+                                Oluşturulduğu Tarih
+                            </th>
+                            <th>
+                                Oluşturan Kullanıcı
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var menu in Model)
+                        {
+                        <tr>
+                            <td>@menu.Title</td>
+                            <td>@menu.Url</td>
+                            <td>@menu.Icon</td>
+                            <td>@menu.PermissionName</td>
+                            <td>@Convert.ToDateTime(menu.CreatedDate).ToShortDateString()</td>
+                            <td>@menu.Creator</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

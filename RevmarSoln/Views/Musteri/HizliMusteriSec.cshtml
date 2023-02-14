@@ -1,0 +1,188 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Musteri>
+@{
+	Layout = null;
+}
+
+<style>
+	#example {
+		font-family: tahoma;
+	}
+</style>
+
+<script>
+	$(document).ready(function () {
+
+		$('#btnrefresh').click(function () {
+			$('#MusteriModalContent').load('@Url.Action("HizliMusteriSec","Musteri")');
+
+			console.log('basarili');
+		});
+
+
+        $('.btnModelMusteriSec').click(function () {
+
+            var MusteriId = $(this).attr('MusteriId');
+            var MusteriDesc = $(this).attr('MusteriDesc');
+            var MusteriTel = $(this).attr('MusteriTel');
+            var MusteriAdres = $(this).attr('MusteriAdres');
+            var MusteriTip = $(this).attr('MusteriTip');
+
+            $('#HizliIsEmriVehicleMusteriId').val(MusteriId);
+            $('#HizliIsEmriVehicleMusteriText').val(MusteriDesc);
+            $('#MusteriTelefon').val(MusteriTel);
+            $('#Adres').val(MusteriAdres);
+
+			if (MusteriTip == "K") {
+				$('#ArayanKisiAdSoyad').removeAttr('disabled');
+                $('#MusteriTipiK').prop('checked', true);
+			}
+			else {
+                $('#ArayanKisiAdSoyad').val('');
+				$('#ArayanKisiAdSoyad').attr('disabled', 'disabled');
+                $('#MusteriTipiB').prop('checked', true);
+			}
+
+            $('#VehicleMusteriId').val(MusteriId);
+            $('#VehicleMusteriText').val(MusteriDesc);
+
+            document.getElementById('MusteriSecModal').style.display = 'none';
+        });
+
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#example').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+
+				"sSearch": "",
+
+				"selectAll": "Tümünü Seç",
+
+				"sSearchPlaceholder": "Filtrele",
+
+				"sLengthMenu": "_MENU_",
+
+				"sLoadingRecords": "Yükleniyor...",
+
+				"sProcessing": "İşleniyor...",
+
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+
+				"sInfoEmpty": "Kayıt Yok",
+
+				"sInfoPostFix": "",
+
+				"sInfoThousands": ".",
+
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+	});
+</script>
+
+<div class="w3-row w3-padding-bottom">
+	<div class="w3-half">
+		<button type="button" id="btnrefresh" class="w3-btn w3-green w3-round"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp; Müşteri Yenile</button>
+	</div>
+	<div class="w3-half w3-right"><a href="/Musteri/Create" class="w3-btn w3-ripple w3-green  w3-round w3-right " target="_blank"><i class="fa fa-user-plus"></i>&nbsp;Yeni Müşteri Ekle</a></div>
+</div>
+	
+<table id="example">
+	<thead>
+		<tr>
+			<th width="20%"></th>
+			<th width="60%">
+				Müşteri Adı
+			</th>
+			<th width="20%">
+				Tc/Vergi No
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var musteri in Model)
+		{
+			<tr>
+				<td><button class="btn-login w3-blue w3-btn btnModelMusteriSec" title="Müşteri Seç" MusteriAdres ="@musteri.Adres" MusteriTel="@musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi" MusteriTip="@musteri.MusteriTipi" MusteriId="@musteri.MusteriId" MusteriDesc="@(musteri.MusteriTipi == "B" ? (musteri.MusteriAdi.ToString() +" "+ musteri.MusteriSoyadi.ToString()):musteri.KurumAdi.ToString())"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button></td>
+				<td>
+					@if (musteri.MusteriTipi == "B")
+					{
+						<label>@musteri.MusteriAdi @musteri.MusteriSoyadi</label>
+					}
+					else
+					{
+						<label>@musteri.KurumAdi</label>
+					}
+				</td>
+				<td>
+					@if (musteri.MusteriTipi == "B")
+					{
+					<label>@musteri.TCKN</label>
+					}
+					else
+					{
+					<label>@musteri.VergiNo</label>
+					}
+					
+				</td>
+			</tr>
+
+		}
+	</tbody>
+</table>

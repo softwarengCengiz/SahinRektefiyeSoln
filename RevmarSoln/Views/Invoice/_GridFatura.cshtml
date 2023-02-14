@@ -1,0 +1,393 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using System.Web.Script.Serialization;
+@using Newtonsoft.Json;
+@model SahinRektefiyeSoln.Models.ViewModels.Invoice.FaturaAraYeniViewModel
+<style>
+	#pagination li, ul, h2 {
+		margin-left: auto;
+		margin-right: auto;
+		width: 55em
+	}
+
+
+</style>
+<script>
+	$(document).ready(function () {
+
+		$('.active').children().addClass("w3-button w3-green w3-round");
+
+		$('.btnFaturaKes').click(function () {
+			debugger;
+			$('#FaturaMessage').html($(this).attr('displayIsEmri'));
+
+			var FaturaTipi = $(this).attr('FaturaTipi');
+			var FaturaId = $(this).attr('FaturaId');
+			var IsEmriId = $(this).attr('IsEmriId')
+			var IsEmriTipi = $(this).attr('IsEmriTipi');
+			var MuhasebeNotu = $(this).attr('MuhasebeNotu');
+
+			$('#mdlFaturaId').val(FaturaId);
+			$('#mdlIsEmriId').val(IsEmriId);
+			$('#mdlIsEmriTipi').val(IsEmriTipi);
+			$('#ddlFaturaTipi').val(FaturaTipi);
+			$('#lblMuhasebeNotu').html(MuhasebeNotu);
+
+			if (IsEmriTipi == "Irsaliye") {
+				$("#male").prop("checked", true);
+				$('#female').attr("disabled", "disabled");
+				$('#divFaturaNo').removeClass("w3-hide").addClass("w3-show");
+				$('#divFisNo').removeClass("w3-show").addClass("w3-hide");
+			}
+			else {
+				$('#mdlFaturaNo').val('');
+
+				if (FaturaTipi == "20") // Fiş kesilecek demektir.
+				{
+
+					$('#mdlFaturaNo').attr("disabled", "disabled");
+					$('#btnFaturaFisOlustur').html('Fiş Oluştur');
+					$('#lblFaturaFisNumarasi').html('Fiş Numarası');
+					$('#fisMessage').removeClass('w3-hide').addClass('w3-show');
+
+				}
+				else // Normal Faturadır
+				{
+					$('#mdlFaturaNo').removeAttr("disabled");
+					$('#btnFaturaFisOlustur').html('Fatura Oluştur');
+					$('#lblFaturaFisNumarasi').html('Fatura Numarası');
+
+					$('#fisMessage').removeClass('w3-show').addClass('w3-hide');
+				}
+
+			}
+
+			document.getElementById('modalFatura').style.display = 'block';
+
+			return false;
+
+		});
+	});
+
+	function OnSuccess(data) {
+		debugger;
+		$('#mdlFaturaNo').attr("disabled", "disabled");
+		$('#btnFaturaFisOlustur').attr("disabled", "disabled");
+
+		if (data.result == true) {
+			toastr.success(data.message, "İşlem Başarılı");
+
+			$('#mdlFaturaNo').val(data.FaturaNo);
+
+		}
+		else {
+			toastr.error(data.message, "İşlem Başarısız!");
+		}
+
+	}
+	function OnFailure(data) {
+
+		alert(data.result);
+
+		alert(data.message);
+	}
+</script>
+<div class="w3-row w3-small w3-margin-top">@Model.faturalar.TotalItemCount kayıt bulundu. @Model.faturalar.PageCount sayfadan @(Model.faturalar.PageCount < Model.faturalar.PageNumber ? 0 : Model.faturalar.PageNumber) ncı </div>
+<table class="w3-table-all w3-hoverable  w3-margin-bottom fontDuzgun" id="dtFatura">
+	<thead>
+		<tr>
+			<th style="width:12%">Statü</th>
+			<th>Tipi</th>
+			<th> No</th>
+			<th>Müşteri</th>
+			<th>Plaka</th>
+			<th>Şasi</th>
+			<th>Marka</th>
+			<th><span title="İçerisinde DYI mevcuttur.">Toplam Tutar</span></th>
+			<th>Kdv'li Toplam</th>
+			<th>Tipi</th>
+			<th>Fatura No</th>
+			<th>#</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.faturalar.OrderBy(x => x.FaturaStatu))
+		{
+			<tr class="" title="@item.MuhasebeNotu">
+				<td>
+					@switch (item.FaturaStatu)
+					{
+						case 10:
+							<div class="w3-tag w3-round w3-indigo w3-block" style="padding:3px">
+								<div class="w3-tag w3-round w3-indigo w3-border w3-border-white w3-small  w3-block" title="@item.FaturaBekleyenKullanici tarafından fatura bekleniyor.">
+									BEKLİYOR <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <br /> @item.DtFaturaBekleyen.ToShortDateString() @item.DtFaturaBekleyen.ToShortTimeString()
+								</div>
+							</div>
+							@*<span class="w3-tag w3-blue w3-round w3-border"></span>*@
+							break;
+						case 20:
+							<div class="w3-tag w3-round w3-grey w3-block" style="padding:3px">
+								<div class="w3-tag w3-round w3-grey w3-border w3-border-white w3-small w3-block " title="@item.GeriGonderen tarafından geri gönderildi">
+									GERİ GÖNDERİLDİ <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <br /> @item.DtGeriGonderilen.Value.ToShortDateString() @item.DtGeriGonderilen.Value.ToShortTimeString()
+								</div>
+							</div>
+							@*<span class="w3-tag w3-blue w3-round w3-border"></span>*@
+							break;
+						case 50:
+							<div class="w3-tag w3-round w3-green w3-block" style="padding:3px">
+								<div class="w3-tag w3-round w3-green w3-border w3-border-white w3-small w3-block" title="@item.FaturalayanKullanici tarafından fatura kesildi">
+									@if (item.IsEmriTipi == "Irsaliye")
+									{
+										<label>İŞLENDİ</label>
+									}
+									else
+									{
+										<label>FATURALANDI</label>
+									}<br /> @item.DtFaturalandi.Value.ToShortDateString() @item.DtFaturalandi.Value.ToShortTimeString()
+								</div>
+							</div>
+							@*<span class="w3-tag w3-green w3-round "> </span>*@
+							break;
+						default:
+							break;
+					}
+				</td>
+				<td>
+					@switch (item.IsEmriTipi)
+					{
+						case "Gunluk":
+							<span>Günlük</span>
+							break;
+						case "Fiat":
+							<span>Fiat</span>
+							break;
+						case "Servis":
+							<span>Servis</span>
+							break;
+						case "Irsaliye":
+							<span>Irsaliye</span>
+							break;
+						default:
+							break;
+					}
+				</td>
+				<td>
+					@switch (item.IsEmriTipi)
+					{
+						case "Gunluk":
+							<a href="/WorkOrder/Order?id=@item.IsEmriId" title="İş emrine git" target="_blank">@item.IsEmriKodu</a>
+							break;
+						case "Fiat":
+							<a href="/Fiat/SiparisDetay?FiatOrderHeaderId=@item.IsEmriId" title="İş emrine git" target="_blank">@item.IsEmriId</a>
+							break;
+						case "Servis":
+							<a href="/IsEmri/IsEmriDuzenle?IsEmriId=@item.IsEmriId" title="İş emrine git" target="_blank">@item.IsEmriId</a>
+							break;
+						case "Irsaliye":
+							<a href="/Service/IrsaliyeTanim?irsaliyeId=@item.IsEmriId" title="İrsaliye'ye git" target="_blank">@item.IsEmriId</a>
+							break;
+						default:
+							break;
+					}
+				</td>
+				<td>@item.Musteri</td>
+				<td>@item.Plaka</td>
+				<td>@item.Vin</td>
+				<td>@item.ModelMarka</td>
+				<td>@item.ToplamTutar ₺</td>
+				<td>@item.KdvliToplamTutar ₺</td>
+				<td>
+					@switch (item.FaturaTipi)
+					{
+						case 10:
+							<label>Normal</label>
+							break;
+						case 20:
+							<label>Açık</label>
+							break;
+						default:
+							break;
+					}
+				</td>
+				<td>
+					@if (!string.IsNullOrEmpty(item.FaturaNo))
+					{
+						<label>@item.FaturaNo</label>
+					}
+					else
+					{
+						<label>-</label>
+					}
+				</td>
+				<td>
+					@*<div class="w3-dropdown-hover w3-margin-left">
+							<button class="w3-button w3-blue w3-round">İşlemler <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
+							<div class="w3-dropdown-content w3-bar-block w3-border">
+								@switch (item.IsEmriTipi)
+								{
+									case "Gunluk":
+										<a href="/WorkOrder/Order?id=@item.IsEmriId" class="w3-bar-item w3-button">Detay</a>
+										break;
+									case "Fiat":
+										<a href="/Fiat/SiparisDetay?FiatOrderHeaderId=@item.IsEmriId" class="w3-bar-item w3-button">Detay</a>
+										break;
+									case "Servis":
+										<a href="/IsEmri/IsEmriDuzenle?IsEmriId=@item.IsEmriId" class="w3-bar-item w3-button">Detay</a>
+										break;
+									default:
+										break;
+								}
+								@if (item.FaturaStatu == 10)
+								{
+									<a href="#" class="w3-bar-item w3-button btnFaturaKes" FaturaId="@item.FaturaId" IsEmriTipi="@item.IsEmriTipi" IsEmriId="@item.IsEmriId" displayIsEmri="@item.Plaka plakalı araç için kdv dahil <b>@item.KdvliToplamTutar </b> ₺ kesilmelidir.">Fatura Kes</a>
+									<a href="/WorkOrder/Order?id=@item.IsEmriId" class="w3-bar-item w3-button"> <i class="fa fa-undo" aria-hidden="true"></i> Geri Gönder </a>
+								}
+							</div>
+						</div>*@
+
+					@*@switch (item.IsEmriTipi)
+						{
+							case "Gunluk":
+								<a href="/WorkOrder/Order?id=@item.IsEmriId" class="w3-btn w3-ripple w3-blue w3-left w3-round w3-margin-right">Detay</a>
+								break;
+							case "Fiat":
+								<a href="/Fiat/SiparisDetay?FiatOrderHeaderId=@item.IsEmriId" class="w3-btn w3-ripple w3-blue w3-left w3-round">Detay</a>
+								break;
+							case "Servis":
+								<a href="/IsEmri/IsEmriDuzenle?IsEmriId=@item.IsEmriId" class="w3-btn w3-ripple w3-blue w3-left w3-round">Detay</a>
+								break;
+							default:
+								break;
+						}
+					*@
+					@*<div class="w3-bar">
+							<button class="w3-bar-item w3-button w3-black btnFaturaKes" FaturaId="@item.FaturaId" IsEmriTipi="@item.IsEmriTipi" IsEmriId="@item.IsEmriId" displayIsEmri="@item.Plaka plakalı araç için kdv dahil <b>@item.KdvliToplamTutar </b> ₺ kesilmelidir.">Fatura Kes</button>
+							<button class="w3-bar-item w3-button w3-teal">Geri Gönder</button>
+
+						</div>*@
+					@if (item.FaturaStatu == 10)
+					{
+						if (item.IsEmriTipi == "Irsaliye")
+						{
+							<a href="#" class="w3-small w3-btn w3-ripple w3-blue w3-left w3-round w3-margin-right btnFaturaKes w3-block" FaturaId="@item.FaturaId" IsEmriTipi="@item.IsEmriTipi" IsEmriId="@item.IsEmriId" displayIsEmri="@item.Musteri müşterisi için <b>@item.IsEmriKodu </b> irsaliyesi için kdv dahil @item.KdvliToplamTutar ₺ işlenmelidir.">Irsaliye İşle</a>
+						}
+						else
+						{
+							<a href="#" class="w3-small w3-btn w3-ripple w3-blue w3-left w3-round w3-margin-right btnFaturaKes w3-block" FaturaId="@item.FaturaId" IsEmriTipi="@item.IsEmriTipi" IsEmriId="@item.IsEmriId" FaturaTipi="@item.FaturaTipi" displayIsEmri="@item.Plaka plakalı araç için kdv@(item.FaturaTipi == 20 ? "siz " : " dahil ")<b>@item.KdvliToplamTutar </b> ₺ kesilmelidir." MuhasebeNotu="@item.MuhasebeNotu">Fatura Kes</a>
+							<a href="/Invoice/ReturnWorkOrder?InvoiceId=@item.FaturaId&WorkOrderId=@item.IsEmriId&Type=@item.IsEmriTipi" class="w3-small w3-btn w3-ripple w3-red w3-left w3-round w3-margin-right w3-block" onclick="if (!confirm('Geri göndermek istediğinizden emin misiniz?')) return false;"> <i class="fa fa-undo" aria-hidden="true"></i> Geri Gönder </a>
+						}
+					}
+					else if (item.FaturaStatu == 50)
+					{
+						if (item.IsEmriTipi != "Irsaliye")
+						{
+							<a href="/Invoice/FaturalanmisIsEmriGeriGonder?InvoiceId=@item.FaturaId" class="w3-small w3-btn w3-ripple w3-red w3-left w3-round w3-margin-right w3-block" onclick="if (!confirm('Geri göndermek istediğinizden emin misiniz?')) return false;"> <i class="fa fa-undo" aria-hidden="true"></i> Fatura Geri Gönder </a>
+						}
+					}
+
+				</td>
+
+			</tr>
+			@*if (!string.IsNullOrEmpty(item.MuhasebeNotu))
+				{
+					<tr class="w3-light-gray">
+						<td colspan="2">Muhasebe Notu : </td>
+						<td colspan="12">@item.MuhasebeNotu</td>
+					</tr>
+				}*@
+		}
+	</tbody>
+
+	@*<tfoot>
+			<tr><td class="w3-center w3-padding-4" colspan="100%"> @Html.Pager(Model.faturalar.PageSize, Model.faturalar.PageNumber, Model.faturalar.TotalItemCount)</td></tr>
+		</tfoot>*@
+
+</table>
+
+<div class="pagination w3-margin-bottom w3-row">
+	@*Page @(Model.faturalar.PageCount < Model.faturalar.PageNumber ? 0 : Model.faturalar.PageNumber) of @Model.faturalar.PageCount*@
+	@Html.PagedListPager(Model.faturalar, page => Url.Action("FaturaAraYeni" ,
+											   new
+											   {
+												   IsEmriTipi     = HttpUtility.UrlEncode(Model.IsEmriTipi),
+												   Musteri = HttpUtility.UrlEncode(Model.Musteri),
+												   FaturaStatu = Model.FaturaStatu,
+												   FaturaTipi = Model.FaturaTipi,
+												   IsEmriNo = HttpUtility.UrlEncode(Model.IsEmriNo),
+												   Plaka = HttpUtility.UrlEncode(Model.Plaka),
+												   Sasi = HttpUtility.UrlEncode(Model.Sasi),
+												   FaturaFisNo = HttpUtility.UrlEncode(Model.FaturaFisNo),
+												   SwFaturalandi = Model.SwFaturalandi,
+												   GndrlnBsgTarih = Model.GndrlnBsgTarih,
+												   GndrlnBtsTarih = Model.GndrlnBtsTarih,
+												   BsgTarih = Model.BsgTarih,
+												   BtsTarih = Model.BtsTarih,
+												   IsEmriTipId = Model.IsEmriTipId,
+												   //filter = SahinRektefiyeSoln.Helpers.RevmerHelper.ToQueryString(Model.filter == null ? new SahinRektefiyeSoln.Models.ViewModels.Invoice.FaturaFilterYeniModel() : Model.filter),
+												   //model = JsonConvert.SerializeObject(new SahinRektefiyeSoln.Models.ViewModels.Invoice.FaturaAraYeniViewModel() { filter = Model.filter == null ? new SahinRektefiyeSoln.Models.ViewModels.Invoice.FaturaFilterYeniModel() : Model.filter }),
+												   //filter = JsonConvert.SerializeObject(Model.filter == null ? new SahinRektefiyeSoln.Models.ViewModels.Invoice.FaturaFilterYeniModel() : Model.filter),
+												   //filter = WebUtility.UrlEncode(JsonConvert.SerializeObject(Model.filter == null ? new SahinRektefiyeSoln.Models.ViewModels.Invoice.FaturaFilterYeniModel() : Model.filter)),
+												   //filter = HttpUtility.UrlEncode(new JavaScriptSerializer().Serialize(Model.filter == null ? new SahinRektefiyeSoln.Models.ViewModels.Invoice.FaturaFilterYeniModel() : Model.filter)),
+												   //filter = HttpUtility.UrlEncode(Model.filter == null ? "" : Model.filter.ToString()),
+												   //filter = Url.Encode(Model.filter == null ? "" : Model.filter.ToString()),
+												   //filter = Url.Encode(Model.filter == null ? "" : Model.filter.ToString()),
+												   //filter.IsEmriTipi = "Gunluk",//Model.filter.IsEmriTipi,
+												   //IsEmriTipi = (Model.filter == null ? "" : Model.filter.ToString()),
+												   page
+											   }
+
+											   ), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+											   {
+												   UpdateTargetId = "datatable-faturalar"
+											   }))
+</div>
+
+
+
+<div id="modalFatura" class="w3-modal">
+	<div class="w3-modal-content">
+
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('modalFatura').style.display = 'none';"
+				  class="w3-button w3-display-topright">&times;</span>
+			<h2>Fatura Kes</h2>
+		</header>
+
+		<div class="w3-container">
+			@*@using (Html.BeginForm("FaturaKes", "Invoice", FormMethod.Post))*@
+			@using (Ajax.BeginForm("FaturaKes", "Invoice", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", OnFailure = "OnFailure" }))
+			{
+				@Html.AntiForgeryToken()
+				@Html.Hidden("mdlFaturaId")
+				@Html.Hidden("mdlIsEmriId")
+				@Html.Hidden("mdlIsEmriTipi")
+				@Html.Hidden("ddlFaturaTipi")
+				<div>
+					<div class="w3-row w3-padding">
+						<div class="w3-padding w3-large fontDuzgun w3-center" id="FaturaMessage">
+
+						</div>
+					</div>
+					<div class="w3-row w3-padding w3-hide" id="fisMessage">
+						<span>Fiş numarası sistem tarafından fiş oluştur dedikten sonra oluşur</span>
+					</div>
+					<div class="w3-row w3-padding">
+						<div class="w3-threequarter" id="divFaturaNo">
+							<label id="lblFaturaFisNumarasi">Fatura Numarası</label>
+							<input class="w3-input w3-border uppercase" rows="6" cols="300" name="faturaNumarasi" id="mdlFaturaNo" />
+						</div>
+						<div class="w3-quarter">
+							<br />
+							<button class="w3-btn w3-ripple w3-teal w3-right w3-block w3-border" id="btnFaturaFisOlustur">Fatura Oluştur</button>
+						</div>
+					</div>
+					<div class="w3-row w3-margin w3-yellow w3-panel w3-round w3-padding">
+						Muhasebe Notu : <label id="lblMuhasebeNotu"></label>
+					</div>
+				</div>
+			}
+
+		</div>
+
+	</div>
+</div>

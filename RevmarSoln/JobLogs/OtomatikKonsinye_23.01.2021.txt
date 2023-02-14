@@ -1,0 +1,4 @@
+23.01.2021 19:05:37            Otomatik konsinye processi başlıyor.
+23.01.2021 19:05:37            Veritabanı bağlantısı oluşturuldu.
+23.01.2021 19:05:37            Job Detail bilgisi veritabanına kaydedildi.
+23.01.2021 19:05:37            Stoklar çekiliyor...

@@ -1,0 +1,136 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Parts>
+
+@{
+	Layout = null;
+}
+
+<style>
+	#example {
+		font-family: tahoma;
+	}
+</style>
+
+<script>
+	$(document).ready(function () {
+
+		$('.btnModelParcaSec').click(function () {
+			var PartName = $(this).attr('PartName');
+			var PartId = $(this).attr('PartId');
+			var PartCode = $(this).attr('PartCode');
+			var AlisFiyat = $(this).attr('AlisFiyat');
+			var Stok = $(this).attr('Stok');
+
+			$('#PartCode').val(PartCode);
+			$('#PurcPrice').val(AlisFiyat);
+			$('#Stock').val(Stok);
+
+			$('.ui-autocomplete-input').val(PartName);
+
+			$('#PartId').val(PartId);
+			$('#PartId').trigger("change");
+
+			document.getElementById('ParcaSecModal').style.display = 'none';
+        });
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#example').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+	});
+</script>
+
+
+<table id="example">
+	<thead>
+		<tr>
+			<th width="20%"></th>
+			<th width="60%">
+				Parça Adı
+			</th>
+			<th width="20%">
+				Parça Kodu
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var parca in Model)
+		{
+			<tr>
+				<td>
+					<button class="btn-login w3-blue w3-btn btnModelParcaSec" title="Müşteri Seç" PartId="@parca.PartId" PartCode="@parca.PartCode" PartName="@parca.Name" AlisFiyat="@parca.PurchasePrice" Stok="@parca.Stock"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button>
+				</td>
+				<td>
+					<label>@parca.Name</label>
+				</td>
+				<td>
+					<label>@parca.PartCode</label>
+				</td>
+			</tr>
+
+		}
+	</tbody>
+</table>

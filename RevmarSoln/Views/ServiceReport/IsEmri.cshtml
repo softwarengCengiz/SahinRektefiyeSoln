@@ -1,0 +1,351 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.ServiceReport.IsEmriReportPageModel
+@{
+	ViewBag.Title = "IsEmri";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.sortElements.js"></script>
+<style>
+	#example {
+		font-family: tahoma;
+	}
+</style>
+<script>
+	$(document).ready(function () {
+		$('#dtbsgRaporTarihi').datepicker({
+			dateFormat: "dd-mm-yy",
+			monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+			dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+			firstDay: 1
+		});
+
+		$('#dtbtsRaporTarihi').datepicker({
+			dateFormat: "dd-mm-yy",
+			monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+			dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+			firstDay: 1
+		});
+
+		$('#tblReport').DataTable({
+			dom: 'Bfrtip',
+			buttons: [
+				'copy', 'csv', 'excel', 'pdf', 'print'
+			]
+		});
+	});
+</script>
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Servis Modulü Rapor Sayfası", pagePermission = "XXXXX" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		@using (Html.BeginForm("IsEmri", "ServiceReport", FormMethod.Post))
+		{
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Rapor Başlangıç Tarihi</label>
+					@Html.EditorFor(model => model.bsgRaporTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", name = "date", id = "dtbsgRaporTarihi", autocomplete = "off" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Rapor Bitiş Tarihi</label>
+					@Html.EditorFor(model => model.btsRaporTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", name = "date", id = "dtbtsRaporTarihi", autocomplete = "off" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<br />
+					<label>&nbsp; </label>
+					<button class="w3-btn w3-ripple w3-blue w3-left w3-round-large w3-left" name="command" value="Ara">Rapor Oluştur</button>
+				</div>
+				<div class="w3-quarter w3-padding">
+					<br />
+					<button class="w3-btn w3-ripple w3-blue w3-left w3-round-large w3-right " name="command" value="Excel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> &nbsp; Excel'e Aktar</button>
+				</div>
+			</div>
+		}
+		@if (Model != null)
+		{
+			<div class="w3-padding">
+				<table class="w3-table w3-table-all" border="1">
+					@*<thead>
+							<tr>
+								<th></th>
+								<th>100 TL Altı Servis Araç</th>
+								<th>Araç/İş Emri Sayısı</th>
+								<th>Yedek Parça</th>
+								<th>İşçilik</th>
+								<th>Toplam</th>
+								<th>Parça Maliyet</th>
+								<th>DYI</th>
+							</tr>
+						</thead>*@
+					<tbody>
+						@foreach (var isEmriTipi in Model.kalemler)
+						{
+							<tr style="color: #fff !important;background-color: #607d8b !important;">
+								<td><b class="w3-text-white">@isEmriTipi.isEmriTipiAdi</b></td>
+								<td>100 TL Altı Servis Araç</td>
+								<td>Araç/İş Emri Sayısı</td>
+								<td>Yedek Parça</td>
+								<td>İşçilik</td>
+								<td>Toplam</td>
+								<td>Parça Maliyet</td>
+								<td>DYI</td>
+							</tr>
+							foreach (var kalem in isEmriTipi.kalemler)
+							{
+								<tr>
+									<td>@kalem.AracGrubu</td>
+									<td>@kalem.Below100</td>
+									<td>@kalem.ToplamIsEmriSayisi</td>
+									<td>@kalem.ToplamYedekParca</td>
+									<td>@kalem.ToplamIscilik</td>
+									<td>@kalem.Toplam</td>
+									<td>@kalem.ParcaMaliyet</td>
+									<td>@kalem.DYI</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+				<table id="header-fixed"></table>
+			</div>
+			<div class="w3-row">
+				<div class="wrapper">
+					<style>
+
+
+						.wrapper {
+							position: relative;
+							padding: 20px;
+						}
+
+						.trigger {
+							margin-bottom: 10px;
+						}
+
+						.content {
+							visibility: hidden;
+							background-color: #bfbfbf;
+							position: absolute;
+							padding: 15px;
+							width: fit-content;
+							margin-top: 25px;
+						}
+
+							.content:before {
+								position: absolute;
+								top: -10px;
+								content: "";
+								right: calc(50% - 10px);
+								border-style: solid;
+								border-width: 0 10px 10px 10px;
+								border-color: transparent transparent #bfbfbf transparent;
+							}
+
+						.wrapper:hover .content {
+							visibility: visible;
+						}
+					</style>
+
+				</div>
+				<!--Popover end-->
+			</div>
+			<div class="w3-row w3-padding w3-threequarter ">
+				<table class="w3-table w3-striped w3-bordered" id="example">
+					<tr>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i>
+									<span class="w3-hover-text-gray"> Fatura Toplam Araç Girişi </span>
+								</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında fatura edilen toplam araç girişidir.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.FaturaToplamAracGirisi</td>
+						<td></td>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i>
+									<span class="w3-hover-text-gray">
+										Başlangıç Y.Parça Maliyeti
+									</span>
+								</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarihteki stokta olan toplam yedek parçanın maliyetidir.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.BsgYParcaMaliyeti ₺</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+										Fatura Dahili İş Emri Adedi
+									</span>
+								</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında fatura edilen toplam Dahili araç girişidir.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.FaturaDahiliIsEmriAdedi</td>
+						<td></td>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i><span class="w3-hover-text-gray">
+	9 Ay Hareketsiz Parça Adedi</span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarihten geriye dönük olarak 9 ay ve daha fazla zamandır stok girişi olmuş ve satışı olmayan parçaların adetidir.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.DokuzAyHareketsizParcaAdedi</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+	Toplam İşçilik Satışı(DYI Dahil) </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında fatura edilen toplam işçilik tutarıdır.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.ToplamIscilikSatisiDYIDahil.ToString("N2") ₺</td>
+						<td></td>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+	9 Ay Hareketsiz Parça Maliyeti </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarihten geriye dönük olarak 9 ay ve daha fazla zamandır stok girişi olmuş ve satışı olmayan parçaların toplam maliyetidir.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.DokuzAyHareketsizParcaMaliyeti.ToString("N2") ₺</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+	Toplam Yedek Parça Satışı </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında fatura edilen toplam Yedek Parça tutarıdır.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.ToplamYedekParcaSatisi</td>
+						<td></td>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+	Toplam Parça Alış Maliyeti </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında girilen irsaliyelerin içindeki toplam parça maliyeti.yani tarih aralığındaki girilen irsaliyelerin toplamıdır.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.ToplamParcaAlisMaliyeti.ToString("N2") ₺</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+	DYI Maliyeti   &nbsp;                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span></span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında kesilen faturalar içerisindeki DYI maliyetlerine ait toplam tutar.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.DYIMaliyeti.ToString("N2") ₺</td>
+						<td></td>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+	Toplam Parça Satış Maliyeti </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarihte stokta bulunan toplam yedek parça satış tutarıdır.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.ToplamParcaSatisMaliyeti.ToString("N2") ₺</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i><span class="w3-hover-text-gray">
+	Açık Randevu Sayısı </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında açık olan randevu sayısıdır. Şu an randevu sistemimiz henüz olmadığından bu alan boş olacaktır.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.AcikRandevuSayisi</td>
+						<td></td>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i><span class="w3-hover-text-gray">
+	Toplam Aksesuar / Sarf Mal.Satışı </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarih aralığında fatura edilen toplam aksesuar ve sarf malzemelerin toplamıdır.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.ToplamSarfMalSatisi.ToString("N2") ₺</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i> <span class="w3-hover-text-gray">
+	Açık İş Emri Sayısı </span>
+</span>
+								<span class="content">
+									<span class="heading">Raporun alındığı tarihteki toplam açık iş emri sayısıdır.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.AcikIsEmriSayisi</td>
+						<td></td>
+						<td>
+							<div class="wrapper">
+								<span class="trigger">
+									<i class="fa fa-info-circle" aria-hidden="true"></i><span class="w3-hover-text-gray">
+	Toplam Yedek Parça İadesi / satışı </span>
+</span>
+								<span class="content">
+									<span class="heading">Toplam Yedek Parça İadesi / satışı.</span>
+								</span>
+							</div>
+						</td>
+						<td>@Model.detail.ToplamYedekParcaIadeSatisi.ToString("N2") ₺</td>
+					</tr>
+				</table>
+			</div>
+		}
+
+	</div>
+</div>

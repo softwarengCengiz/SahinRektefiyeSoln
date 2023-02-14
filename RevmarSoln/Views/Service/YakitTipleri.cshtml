@@ -1,0 +1,81 @@
+﻿@using SahinRektefiyeSoln.Models.PagingModels;
+@model SahinRektefiyeSoln.Models.ViewModels.Services.YakitTipleriPageModel
+@{
+	ViewBag.Title = "Yakıt Tipleri";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Yakıt Tipleri", pagePermission = "XXXXX" })
+@using Vereyon.Web;
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+		@using (Html.BeginForm("YakitTipleri", "Service", FormMethod.Post))
+		{
+			<div class="w3-row">
+				<div class="w3-row">
+					<div class="w3-quarter w3-padding">
+						<label>Yakıt Tipi Adı</label>
+						@Html.EditorFor(model => model.filter.Aciklamasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "56", autocomplete = "off", id = "txtYakitTipi" } })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<div class="w3-half">	<br /><button class="w3-btn w3-ripple w3-blue w3-left w3-round">Sorgula</button></div>
+						<div class="w3-half">	<br /><a href="/Service/YakitTipiEkle" class="w3-btn w3-ripple w3-green  w3-round"><i class="fa fa-users fa-users"></i>&nbsp;Yeni Yakıt Tipi Ekle</a></div>
+					</div>
+				</div>
+			</div>
+		}
+		<div class="w3-padding">
+			@if (Model == null)
+			{
+				<div class="w3-panel w3-pale-blue w3-border">
+					<h3>Bilgi!</h3>
+					<p>Yakıt tiplerini yukarıdan aratabilirsiniz...</p>
+				</div>
+			}
+			else
+			{
+				if (Model.yakitTipleri.Count() == 0) //Aranan Araç bulunamadığı için yeni oluşturmak istermisiniz
+				{
+					<div class="w3-panel w3-pale-blue w3-border">
+						<h3>Aranan yakıt tipi bulunamadı!</h3>
+					</div>
+				}
+				else
+				{
+					<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom w3-small">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Yakıt Tipi</th>
+								<th>Oluşturan</th>
+								<th>Oluşturulan Tarih</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var yakitTipi in Model.yakitTipleri)
+							{
+							<tr>
+								<td>
+									<a href="/Service/YakitTipiDuzenle?YakitTipId=@yakitTipi.YakitTipId" title="Yakıt Tipi Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+								</td>
+								<td>@yakitTipi.Aciklamasi</td>
+								<td>@yakitTipi.Creator</td>
+								<td>@yakitTipi.CreatedDate.Value.ToShortDateString()</td>
+							</tr>
+							}
+						</tbody>
+						<tfoot>
+							<tr><td class="w3-center w3-padding-4" colspan="100%"> @Html.Pager(Model.yakitTipleri.PageSize, Model.yakitTipleri.PageNumber, Model.yakitTipleri.TotalItemCount)</td></tr>
+						</tfoot>
+					</table>
+				}
+			}
+		</div>
+	</div>
+</div>
+

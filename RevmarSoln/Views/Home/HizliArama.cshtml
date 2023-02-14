@@ -1,0 +1,488 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.HizliAramaViewModel
+@{
+	ViewBag.Title = "HizliArama";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	#panel {
+		font-family: tahoma;
+	}
+
+	.workordergreenlight {
+		height: 27px !important;
+		width: 27px !important;
+	}
+
+	.workorderredlight {
+		height: 27px !important;
+		width: 27px !important;
+	}
+</style>
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Hızlı Arama", pagePermission = "XXXXX" })
+<script>
+    $(document).ready(function () {
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+		$('#tableIsEmirleri').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+		});
+
+		$('#tableFiatSiparisleri').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+		});
+
+		$('#tableWorkOrder').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+		});
+		$('#tableFord').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+		});
+
+		$('#tableArac').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+	});
+</script>
+<div class="w3-panel" id="panel">
+	<div class="w3-row-padding w3-card w3-padding-bottom">
+		<div class="w3-panel w3-light-grey w3-round w3-padding">
+			<b>@(Model.plakaVeyaSase.ToUpper().Trim()) </b> kaydı için aşağıdaki sonuçlar bulundu.
+		</div>
+		@if (Model.revizyonKayitlari.Count > 0)
+		{
+			<div class="w3-row w3-row-padding">
+				<h4>Revizyon Kayıtları</h4>
+				<table class="w3-table-all w3-hoverable w3-small" id="tableWorkOrder">
+					<thead>
+						<tr class="w3-light-grey">
+							<th id="thWorkOrderNo">İş Emir No</th>
+							<th id="thCreatedDate">Giriş Tarihi</th>
+							<th id="thService">Servis</th>
+							<th id="thContact">İlgili Kişi</th>
+							<th id="thVehicle">Marka</th>
+							<th id="thPlate">Plaka</th>
+							<th id="thKm">Km</th>
+							<th id="thSerialNo">Seri No</th>
+							<th id="thStatu">Statu</th>
+							<th>Rapor</th>
+							<th>Onay</th>
+							<th>Müşteri Onay</th>
+							<th>Detay</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model.revizyonKayitlari.OrderByDescending(x => x.CreatedDate))
+						{
+							<tr>
+								<td>
+									@(item.NoWorkOrder != null ? item.NoWorkOrder : item.WorkOrderId.ToString())
+								</td>
+								<td>
+									@Convert.ToDateTime(item.CreatedDate).ToString("dd/MM/yyyy")
+								</td>
+								<td>
+									@item.Services.Name
+								</td>
+								<td>
+									@item.ServiceContact
+								</td>
+								<td>
+									@item.Vehicles.Companies.Name -  @item.Vehicles.Name
+								</td>
+								<td>
+									@item.Plate
+								</td>
+								<td>
+									@item.VehicleKm
+								</td>
+								<td>
+									@item.VIN
+								</td>
+								<td>
+									@switch (item.Statu)
+									{
+										case 10:
+											<label>Açık</label>
+											break;
+										case 20:
+											<label>Faturalandı</label>
+											break;
+										case 30:
+											<label>İptal</label>
+
+											break;
+										case 40:
+											<label>İade</label>
+											break;
+									}
+								</td>
+								<td>
+									@switch (item.ReportIsSend)
+									{
+										case true:
+											<img src="~/Images/green.png" class="workordergreenlight" />
+											break;
+										case false:
+											<img src="~/Images/red.png" class="workorderredlight" />
+											break;
+										default:
+											<img src="~/Images/red.png" class="workorderredlight" />
+											break;
+									}
+								</td>
+								<td>
+									@switch (item.SwApproved)
+									{
+										case true:
+											<img src="~/Images/green.png" class="workordergreenlight" />
+											break;
+										case false:
+											<img src="~/Images/red.png" class="workorderredlight" />
+											break;
+										default:
+											<img src="~/Images/red.png" class="workorderredlight" />
+											break;
+									}
+								</td>
+								<td>
+									@switch (item.ReportApprovedByCustomer)
+									{
+										case true:
+											<img src="~/Images/green.png" class="workordergreenlight" />
+											break;
+										case false:
+											<img src="~/Images/red.png" class="workorderredlight" />
+											break;
+										default:
+											<img src="~/Images/red.png" class="workorderredlight" />
+											break;
+									}
+								</td>
+								<td>
+									<a href="/WorkOrder/Order?id=@item.WorkOrderId" class="w3-btn w3-ripple w3-blue w3-round-large"><i class="fa fa-edit"></i>&nbsp; Detay</a>
+								</td>
+							</tr>
+						}
+
+
+					</tbody>
+				</table>
+			</div>
+			<hr />
+		}
+
+		@if (Model.isEmirleri.Count > 0)
+		{
+			<div class="w3-row w3-row-padding">
+				<h4>Servis İş Emir Kayıtları ( @Model.isEmirleri.Count ) </h4>
+				<table id="tableIsEmirleri">
+					<thead>
+						<tr>
+							<th width="">İş Emri No</th>
+							<th width="">Fatura Numarası</th>
+							<th width="">Fatura Tarihi</th>
+							<th width="">Açılış Tarihi</th>
+							<th width="">Plaka</th>
+							<th width="">Müşteri Adı</th>
+
+							<th width="">İş Emri Durumu</th>
+							<th width="">İş Emri Tipi</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var isEmri in Model.isEmirleri)
+						{
+							<tr>
+								<td>
+									<a href="/IsEmri/IsEmriDuzenle?IsEmriId=@isEmri.IsEmriId" title="İş Emrini Görüntüle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+									@(String.Format("{0:000000}", isEmri.IsEmriId))
+								</td>
+								<td>@(isEmri.FaturaNo != null ? isEmri.FaturaNo.Replace("FTRRM", "") : "")</td>
+								<td>@(isEmri.FaturaTarihi != null ? isEmri.FaturaTarihi.Value.ToShortDateString() : "")</td>
+								<td>@(isEmri.IsEmriTarihi != null ? isEmri.IsEmriTarihi.Value.ToShortDateString() : "")</td>
+								<td>@isEmri.Arac.Plaka</td>
+								<td>@(isEmri.Musteri.MusteriTipi == "B" ? (isEmri.Musteri.MusteriAdi.ToString() + " " + isEmri.Musteri.MusteriSoyadi.ToString()) : isEmri.Musteri.KurumAdi.ToString())</td>
+								<td>@isEmri.IsEmriStatu.Aciklamasi</td>
+								<td>@isEmri.IsEmriTipleri.Aciklamasi</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+			<hr />
+		}
+
+	
+	
+		@if (Model.servisAraclar.Count > 0)
+		{
+			<div class="w3-row w3-row-padding">
+				<h4>Servis Araç Kaydı</h4>
+				<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom w3-small" id="tableArac">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Şasi No		 </th>
+							<th>Moto No		 </th>
+							<th>Plaka		 </th>
+							<th>Marka		 </th>
+							<th>Ana Model	 </th>
+							<th>Baz Model Adı</th>
+							<th>Araç Grubu   </th>
+							<th>Müşteri Cari Adı	</th>
+							<th>Kurum Kontak Kişi	</th>
+							<th>Kontak Tel			</th>
+							<th>İl					</th>
+							<th>Trafiğe Çıkış Trh	</th>
+							<th>Kayıt Tarihi		</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var arac in Model.servisAraclar)
+						{
+							<tr>
+								<td>
+									<a href="/Vehicle/AracDuzenle?AracId=@arac.AracId" title="Araç Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+									&nbsp;
+
+									<a href="/IsEmri/IsEmriOlustur?AracId=@arac.AracId&MusteriId=@(arac.MusteriAraclari.Where(x=>x.SwAktif==true).FirstOrDefault() != null ? arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().MusteriId : 0)" title="İş Emri Açmak İçin Tıklayın."><i class="fa fa-wrench w3-hover-opacity" aria-hidden="true"></i></a>
+								</td>
+								<td>@arac.SaseNo</td>
+								<td>@arac.MotorNo</td>
+								<td>@arac.Plaka</td>
+								<td>@arac.Companies.Name</td>
+								<td>@arac.Vehicles.Name</td>
+								<td>@arac.AracModelAdi</td>
+								<td>@(arac.AracGrubu != null ? arac.AracGrubu.Aciklamasi : "")</td>
+								<td>
+									@if (arac.MusteriAraclari.Count > 0)
+									{
+										if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTipi == "B")
+											{
+												<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriAdi @arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriSoyadi</label>
+											}
+											else
+											{
+												<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.KurumAdi</label>
+											}
+										}
+										else
+										{
+											<label></label>
+										}
+									}
+									else
+									{
+										<label></label>
+									}
+								</td>
+								<td>
+									@if (arac.MusteriAraclari.Count > 0)
+									{
+										if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTipi == "K")
+											{
+												<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.KontakAdi @arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.KontakSoyadi</label>
+											}
+										}
+									}
+								</td>
+								<td>
+									@if (arac.MusteriAraclari.Count > 0)
+									{
+										if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTelefon != null)
+											{
+												if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTelefon.Count > 0)
+												{
+													<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi</label>
+												}
+											}
+
+										}
+									}
+								</td>
+								<td>
+									@if (arac.MusteriAraclari.Count > 0)
+									{
+										if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.iller != null)
+											{
+												<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.iller.sehir</label>
+											}
+										}
+									}
+								</td>
+								<td>@(arac.AracDetay.TrafigeCikisTarihi.HasValue == true ? arac.AracDetay.TrafigeCikisTarihi.Value.ToShortDateString() : "")</td>
+								<td>@arac.CreatedDate.Value.ToShortDateString()	  </td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+
+		}
+
+	</div>
+</div>

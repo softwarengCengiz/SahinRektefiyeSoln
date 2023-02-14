@@ -1,0 +1,107 @@
+﻿
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Servis Raporları", pagePermission = "XXXXX" })
+
+<div class="w3-panel">
+	<div class=" w3-card ">
+		<div class="w3-row w3-row-padding">
+			<div class="w3-row-padding w3-margin-bottom w3-margin-top">
+
+				<div class="w3-quarter ">
+					<a href="\ServiceReport\IsEmri" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow w3-round-large">
+							<div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>İş Emri Tipine Göre Rapor</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="\ServiceReport\Fatura" style="text-decoration:none;">
+						<div class="w3-container w3-red w3-padding-16 w3-hover-shadow w3-round-large">
+							<div class="w3-left"><i class="fa fa-file w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Fatura Raporu</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="\ServiceReport\Irsaliye" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow w3-round-large">
+							<div class="w3-left"><i class="fa fa-file w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>İrsaliye Raporu</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="\ServiceReport\IsEmriYaslanma" style="text-decoration:none;">
+						<div class="w3-container w3-red w3-padding-16 w3-hover-shadow w3-round-large">
+							<div class="w3-left"><i class="fa fa-file w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>İş Emri Yaşlanma Raporu</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="w3-row w3-row-padding">
+			<div class="w3-row-padding w3-margin-bottom w3-margin-top">
+
+				<div class="w3-quarter ">
+					<a href="\ServiceReport\YedekParcaHareket" style="text-decoration:none;">
+						<div class="w3-container w3-red w3-padding-16 w3-hover-shadow w3-round-large">
+							<div class="w3-left"><i class="fa fa-file w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Yedek Parça Hareket Raporu</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter ">
+					<a href="\ServiceReport\ServisAracTakip" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow w3-round-large">
+							<div class="w3-left"><i class="fa fa-file w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Servis Araç Takip Raporu</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter ">
+					<a href="\ServiceReport\FOParcaListesi" style="text-decoration:none;">
+						<div class="w3-container w3-red w3-padding-16 w3-hover-shadow w3-round-large">
+							<div class="w3-left"><i class="fa fa-file w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3></h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Ford Otosan Parça Listesi Raporu</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

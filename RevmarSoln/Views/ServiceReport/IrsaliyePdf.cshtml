@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.ViewModels.ServiceReport.IrsaliyeReportViewModel>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>IrsaliyePdf</title>
+    <link rel="stylesheet" href="~/Styles/w3.css">
+</head>
+<body>
+    <div>
+        <table class="w3-table-all w3-margin-top w3-margin-bottom ">
+            <tbody>
+                <tr>
+                    <th>Irsaliye Numarası</th>
+                    <th>Irsaliye Tarihi</th>
+                    <th>Irsaliye Kayıt Tarihi</th>
+                    <th>Tedarikci Adi</th>
+                    <th>Kalem Adedi</th>
+                    <th>Parca Adedi</th>
+                    <th>Toplam Tutar</th>
+                    <th>Toplam KDV</th>
+                    <th>Irsaliye Toplamı</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+            <tr style="color: #fff !important;background-color: #607d8b !important;">
+                <td>@item.IrsaliyeId</td>
+                <td>@item.FaturaTarihi.ToShortDateString()</td>
+                <td>@item.KayitTarihi</td>
+                <td>@item.Tedarikci</td>
+                <td>@item.KalemAdedi</td>
+                <td>@item.ParcaAdedi</td>
+                <td>@item.ToplamTutar</td>
+                <td>@item.ToplamKDV</td>
+                <td>@item.IrsaliyeToplami</td>
+            </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

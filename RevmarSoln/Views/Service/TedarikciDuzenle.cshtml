@@ -1,0 +1,74 @@
+﻿@model SahinRektefiyeSoln.Models.Tedarikci
+@{
+    ViewBag.Title = "Tedarikciler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Tedarikci Tanım", pagePermission = "XXXXX" })
+
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card">
+        @using (Html.BeginForm())
+        {
+            <div class="w3-row">
+                <div class="w3-quarter w3-padding">
+                    <label>Tedarikçi Kodu</label>
+                    @Html.EditorFor(model => model.Kodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @required = "required", autocomplete = "off", maxlength = "16" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Tedarikçi Adı</label>
+                    @Html.EditorFor(model => model.Adi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @required = "required", autocomplete = "off", maxlength = "128" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Firma Telefon Numarası</label>
+                    @Html.EditorFor(model => model.FirmaTelNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", autocomplete = "off", maxlength = "16" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Firma E-Mail</label>
+                    @Html.EditorFor(model => model.FirmaEmail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "128" } })
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-quarter w3-padding">
+                    <label>Vade</label>
+                    @Html.EditorFor(model => model.Vade, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Kontak Kişi Ad Soyad</label>
+                    @Html.EditorFor(model => model.KontakAdiSoyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "128" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Kontak Kişi E-Mail</label>
+                    @Html.EditorFor(model => model.KontakEmail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "128" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Kontak Kişi Telefon Numarası</label>
+                    @Html.EditorFor(model => model.KontakTelNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", autocomplete = "off", maxlength = "16" } })
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-quarter w3-padding">
+                    <label>Vergi Dairesi</label>
+                    @Html.EditorFor(model => model.VergiDairesi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "56" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Vergi Numarası</label>
+                    @Html.EditorFor(model => model.VergiNumarasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "10" } })
+                </div>
+                <div class="w3-half w3-padding">
+                    <label>Adres</label>
+                    @Html.TextAreaFor(model => model.Adres, new { @class = "w3-input w3-border w3-round", maxlength = "126" })
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-quarter w3-padding"></div>
+                <div class="w3-quarter w3-padding"></div>
+                <div class="w3-quarter w3-padding"></div>
+                <div class="w3-quarter w3-padding">
+                    <button class="w3-btn w3-ripple w3-blue w3-right">Kaydet</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

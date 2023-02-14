@@ -1,0 +1,95 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Suppliers>
+
+@{
+	ViewBag.Title = "Tedarikçiler";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Tedarikçiler", pagePermission = "ADM_14" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row">
+			@using (Html.BeginForm())
+			{
+				<div class="w3-quarter w3-padding">
+					<label>Tedarikçi Kod</label>
+					<input class="w3-input w3-border w3-round" type="text" id="PartCode" name="SupplierCode"  autocomplete = "off">
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Tedarikçi Ad</label>
+					<input class="w3-input w3-border w3-round" type="text" id="PartName" name="SupplierName"  autocomplete = "off">
+				</div>
+				<div class="w3-quarter w3-padding">
+					<br>
+					<button class="w3-btn w3-ripple w3-blue w3-left">Ara</button>
+				</div>
+			}
+
+		</div>
+		<div class="w3-row">
+			<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom">
+				<tr>
+					<th>
+						Tedarikçi Kod
+					</th>
+					<th>
+						Tedarikçi Ad
+					</th>
+					<th>
+						Vergi Dairesi
+					</th>
+					<th>
+						Vergi No
+					</th>
+					<th>
+						Telefon Numara
+					</th>
+					<th>
+						Adres
+					</th>
+					<th>Oluşturan Kullanıcı</th>
+					<th>Oluşturma Tarihi</th>
+					<th></th>
+					<th></th>
+				</tr>
+				@foreach (var item in Model)
+	{
+			<tr>
+				<td>
+					@item.SupplierCode
+				</td>
+				<td>
+					@item.Name
+				</td>
+				<td>
+					@item.CompanyVd
+				</td>
+				<td>
+					@item.CompanyVNo
+				</td>
+				<td>
+					@item.PhoneNo
+				</td>
+				<td>@item.Address</td>
+				<td>@item.Creator</td>
+				<td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString()</td>
+				<td>
+					<a href="/Admin/EditSupplier?SupplierId=@item.SupplierId" class="w3-btn w3-ripple w3-blue"><i class="fa fa-cop"></i>&nbsp; Düzenle </a>
+
+					
+				</td>
+				<td>
+					<a href="/Admin/DeleteSupplier?SupplierId=@item.SupplierId" class="w3-btn w3-ripple w3-red" onclick="if (!confirm('Silmek istediğinizden emin misiniz?')) return false;"><i class="fa fa-trash"></i>&nbsp; Tedarikçi Sil </a>
+
+				</td>
+			</tr>
+}
+
+			</table>
+		</div>
+
+	</div>
+</div>
+
+

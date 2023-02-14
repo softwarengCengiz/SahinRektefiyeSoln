@@ -1,0 +1,112 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Customer.MusteriIletisimBilgileriYonetPageModel
+@{
+	ViewBag.Title = "IBY";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Vereyon.Web;
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Müşteri İletişim Bilgilerini Yönet", pagePermission = "XXXXX" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+		@if (Model != null)
+		{
+			using (Html.BeginForm())
+			{
+				@Html.AntiForgeryToken()
+				<div class="w3-row w3-padding">
+					@switch (Model.musteri.MusteriTipi)
+					{
+						case "K":
+							<h5>Sn. @Model.musteri.KontakAdi @Model.musteri.KontakSoyadi iletişim izinlerinizi aşağıdaki alandan düzenleyebilirsiniz</h5>
+							break;
+						case "B":
+							<h5>Sn. @Model.musteri.MusteriAdi @Model.musteri.MusteriSoyadi iletişim izinlerinizi aşağıdaki alandan düzenleyebilirsiniz</h5>
+							break;
+						default:
+							break;
+					}
+				</div>
+				<div class="w3-row w3-row w3-margin-right w3-margin-left w3-margin-bottom">
+					<h5>Telefon İletişim İzinlerini Yönet</h5>
+					<table class="w3-table-all">
+						<thead>
+							<tr>
+								<th class="w3-center">Telefon Numarası</th>
+								<th class="w3-center">Sms Onayı</th>
+								<th class="w3-center">Arama Onay</th>
+								<th class="w3-center">Birincil Telefon ?</th>
+							</tr>
+						</thead>
+						<tbody>
+							@{
+								//To make unique Id
+								int i = 0;
+								foreach (var item in Model.telefonlar)
+								{
+
+									<tr>
+										<td class="w3-center">
+											@Model.telefonlar[i].TelefonNumarasi
+										</td>
+										<td class="w3-center">
+											@Html.CheckBoxFor(o => o.telefonlar[i].SwOnaySms, new { @id = "OnaySms_" + i , @class = "w3-check" })
+										</td>
+										<td class="w3-center">
+											@Html.CheckBoxFor(o => o.telefonlar[i].SwOnayArama, new { @id = "OnayArama_" + i, @class = "w3-check" })
+										</td>
+										<td class="w3-center">
+											@Html.CheckBoxFor(o => o.telefonlar[i].SwPrefered, new { @id = "Prefered_" + i, @disabled = "disabled",@class = "w3-check" })
+											@Html.HiddenFor(o => o.telefonlar[i].MusteriTelefonId, new { @id = "MusteriTelefonId_" + i })
+										</td>
+										
+
+									</tr>
+									i++;
+								}
+							}
+						</tbody>
+					</table>
+				</div>
+				<div class="w3-row w3-row w3-margin-right w3-margin-left w3-margin-bottom">
+					<h5>Mail İletişim İzinlerini Yönet</h5>
+					<table class="w3-table-all">
+						<thead>
+							<tr>
+								<th class="w3-center">Mail Adresi</th>
+								<th class="w3-center">Onay</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							@{
+								//To make unique Id
+								int j = 0;
+								foreach (var item in Model.mailler)
+								{
+
+									<tr>
+										<td class="w3-center">
+											@Model.mailler[j].MailAdresi
+										</td>
+										<td class="w3-center">
+											@Html.CheckBoxFor(o => o.mailler[j].SwOnay, new { @id = "OnaySms_" + i , @class = "w3-check" })
+											@Html.HiddenFor(o => o.mailler[j].MusteriMailId, new { @id = "MusteriMailId_" + i })
+
+										</td>
+									</tr>
+									j++;
+								}
+							}
+						</tbody>
+					</table>
+				</div>
+				<div class="w3-row w3-padding">
+					<button type="submit" class="w3-btn w3-green w3-block">Kaydet</button>
+				</div>
+			}
+		}
+	</div>
+</div>

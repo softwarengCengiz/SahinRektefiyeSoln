@@ -1,0 +1,671 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Customer.MusteriKvkIzinPageModel
+@{
+	ViewBag.Title = "MusteriKvkIzinYonet";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Müşteri İletişim Bilgileri Yönet", pagePermission = "XXXXX" })
+@using Vereyon.Web;
+<style>
+	#txtTelefon {
+		font-family: tahoma;
+	}
+</style>
+<script>
+	$(document).ready(function () {
+
+
+		$('.btnMailGonder').click(function () {
+			WaitBlockUI(2000, 'Mail Gönderiliyor...');
+
+			var MusteriId = '@Model.MusteriId';
+			var MusteriMailId = $(this).attr('MusteriMailId');
+
+			$('#MusteriMailId').val(MusteriMailId);
+
+			var data = {
+				MusteriId: MusteriId,
+				MusteriMailId: MusteriMailId
+			};
+			console.log(data);
+			var MailKvkOnayGonderUrl = '@Url.Action("MailKvkOnayGonder", "Musteri")';
+			$.ajax({
+				type: "POST",
+				url: MailKvkOnayGonderUrl,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,//JSON.stringify(),
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('MailKvkOnay').style.display = 'block';
+
+					}
+					else if (d.result == 0){
+						alert('Mail Gönderilirken hata oluştu.');
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+
+		});
+
+
+		$('#btnMailApprove').click(function () {
+
+			var MusteriMailId = $('#MusteriMailId').val();
+			var txtMailOnayKodu = $('#txtMailOnayKodu').val();
+
+
+			var data = {
+				MailApproveCode: txtMailOnayKodu,
+				MusteriMailId: MusteriMailId
+			};
+			console.log(data);
+
+			var MailKvkApproveUrl = '@Url.Action("MailKvkApprove", "Musteri")';
+			$.ajax({
+				type: "POST",
+				url: MailKvkApproveUrl,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('MailKvkOnay').style.display = 'block';
+
+						$('#lblMessage').addClass('w3-text-green');
+						$('#lblMessage').html('Mail onaylandı.');
+						$('#approveImage').removeClass('w3-hide').addClass('w3-show');
+
+						$('#btnMailApprove').addClass('w3-disabled');
+					}
+					else if (d.result == 0) {
+						$('#lblMessage').addClass('w3-text-red');
+						$('#lblMessage').html(d.message);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+		$('.email').change(function () {
+
+			$(".error").hide();
+			$(this).removeClass('w3-border-red');
+
+			var hasError = false;
+			var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+
+			var emailaddressVal = $(this).val();
+
+
+			if (!emailReg.test(emailaddressVal)) {
+				$(this).after('<span class="error w3-text-red w3-small">Lütfen geçerli bir email adresi giriniz.</span>');
+				$(this).addClass('w3-border-red');
+				hasError = true;
+			}
+
+			if (hasError == true) { return false; }
+
+		});
+
+
+		$('.btnSmsOnayGonder').click(function () {
+			WaitBlockUI(2500, 'Kullanıcıya Sms Gönderiliyor...');
+
+			var MusteriId = '@Model.MusteriId';
+			var MusteriTelefonId = $(this).attr('MusteriTelefonId');
+
+			$('#MusteriTelefonId').val(MusteriTelefonId);
+
+			var data = {
+				MusteriId: MusteriId,
+				MusteriTelefonId: MusteriTelefonId
+			};
+			console.log(data);
+			var SmsKvkOnayGonder = '@Url.Action("SmsKvkOnayGonder", "Musteri")';
+
+			$.ajax({
+				type: "POST",
+				url: SmsKvkOnayGonder,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('SmsKvkOnay').style.display = 'block';
+					}
+					else if (d.result == 0){
+						alert('Sms Gönderilirken hata oluştu.');
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+		$('#btnSmsApprove').click(function () {
+
+			var MusteriTelefonId = $('#MusteriTelefonId').val();
+			var txtSmsOnayKodu = $('#txtSmsOnayKodu').val();
+
+
+			var data = {
+				SmsApproveCode: txtSmsOnayKodu,
+				MusteriTelefonId: MusteriTelefonId
+			};
+			console.log(data);
+
+			var SmsKvkApprove = '@Url.Action("SmsKvkApprove", "Musteri")';
+
+			$.ajax({
+				type: "POST",
+				url: SmsKvkApprove,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('SmsKvkOnay').style.display = 'block';
+
+						$('#lblSmsMessage').addClass('w3-text-green');
+						$('#lblSmsMessage').html('Sms onaylandı.');
+						$('#approveSmsImage').removeClass('w3-hide').addClass('w3-show');
+
+						$('#btnSmsApprove').addClass('w3-disabled');
+					}
+					else if (d.result == 0) {
+						$('#lblSmsMessage').addClass('w3-text-red');
+						$('#lblSmsMessage').html(d.message);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+
+		$('.btnAramaOnayGonder').click(function () {
+			WaitBlockUI(2500, 'Kullanıcıya Sms Gönderiliyor...');
+
+			var MusteriId = '@Model.MusteriId';
+			var MusteriTelefonId = $(this).attr('MusteriTelefonId');
+
+			$('#MusteriTelefonId').val(MusteriTelefonId);
+
+			var data = {
+				MusteriId: MusteriId,
+				MusteriTelefonId: MusteriTelefonId
+			};
+			console.log(data);
+			var AramaKvkOnayGonder = '@Url.Action("AramaKvkOnayGonder", "Musteri")';
+
+			$.ajax({
+				type: "POST",
+				url: AramaKvkOnayGonder,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('AramaKvkOnay').style.display = 'block';
+					}
+					else if (d.result == 0){
+						alert('Arama sms i Gönderilirken hata oluştu.');
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+		//
+		$('#btnAramaApprove').click(function () {
+
+			var MusteriTelefonId = $('#MusteriTelefonId').val();
+			var txtSmsOnayKodu = $('#txtAramaOnayKodu').val();
+
+
+			var data = {
+				AramaApproveCode: txtSmsOnayKodu,
+				MusteriTelefonId: MusteriTelefonId
+			};
+			console.log(data);
+
+			var AramaKvkApprove = '@Url.Action("AramaKvkApprove", "Musteri")';
+
+			$.ajax({
+				type: "POST",
+				url: AramaKvkApprove,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('AramaKvkOnay').style.display = 'block';
+
+						$('#lblAramaMessage').addClass('w3-text-green');
+						$('#lblAramaMessage').html('Arama onaylandı.');
+						$('#approveAramaImage').removeClass('w3-hide').addClass('w3-show');
+
+						$('#btnAramaApprove').addClass('w3-disabled');
+					}
+					else if (d.result == 0) {
+						$('#lblAramaMessage').addClass('w3-text-red');
+						$('#lblAramaMessage').html(d.message);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+		$('#btnKvkSozlesmeSmsGonder').click(function () {
+			WaitBlockUI(2500, 'Kullanıcıya Sms Gönderiliyor...');
+
+			var MusteriId = '@Model.MusteriId';
+
+			var data = {
+				MusteriId: MusteriId
+			};
+			console.log(data);
+
+			var KvkSozlesmeSmsGonder = '@Url.Action("KvkSozlesmeSmsGonder", "Musteri")';
+
+			$.ajax({
+				type: "POST",
+				url: KvkSozlesmeSmsGonder,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('KvkGenelOnayModal').style.display = 'block';
+					}
+					else if (d.result == 0){
+						alert('Kvk Sozlesme Sms Gönderilirken hata oluştu.');
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+		$('#btnKvkGenelOnay').click(function () {
+
+			var MusteriId = '@Model.MusteriId';
+			var txtToken = $('#txtToken').val();
+
+
+			var data = {
+				Token: txtToken,
+				MusteriId: MusteriId
+			};
+			console.log(data);
+
+			var KvkGenelApprove = '@Url.Action("KvkGenelApprove", "Musteri")';
+
+			$.ajax({
+				type: "POST",
+				url: KvkGenelApprove,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						document.getElementById('KvkGenelOnayModal').style.display = 'block';
+
+						$('#lblKvkGenelOnayMessage').addClass('w3-text-green');
+						$('#lblKvkGenelOnayMessage').html('Tüm iletişim izinleri verildi.');
+						$('#approveKvkGenelOnayImage').removeClass('w3-hide').addClass('w3-show');
+
+						$('#btnKvkGenelOnay').addClass('w3-disabled');
+					}
+					else if (d.result == 0) {
+						$('#lblKvkGenelOnayMessage').addClass('w3-text-red');
+						$('#lblKvkGenelOnayMessage').html(d.message);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+		$('.btnUpdateModal').click(function () {
+			var musteriTelefonId = $(this).attr("MusteriTelefonId");
+			var telefonNumarasi= $(this).attr("Telefon");
+			$('#txtMusteriTelId').val(musteriTelefonId );
+			$('#txtTelefon').val(telefonNumarasi);
+			document.getElementById('TelefonUpdateModal').style.display = 'block';
+
+		});
+
+		$('#btnTelefonGuncelle').click(function () {
+			WaitBlockUI(1000, 'Telefon Güncelleniyor...');
+			var telefonNumarasi = $('#txtTelefon').val();
+			var MusteriTelefonId = $('#txtMusteriTelId').val();
+			var primaryTelNo = $('#chkBirincilTelNo').is(":checked");
+			var data = {
+				telefonNumarasi: telefonNumarasi,
+				MusteriTelefonId: MusteriTelefonId * 1,
+				primaryTelNo: primaryTelNo
+			};
+			console.log(data);
+
+			var UrlMusteriTelefonGuncelle= '@Url.Action("MusteriTelefonGuncelle", "Musteri")';
+
+			$.ajax({
+				type: "POST",
+				url: UrlMusteriTelefonGuncelle,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data ,
+				success: function (d) {
+					if (d.result == 1) {
+						WaitBlockUI(1000, 'Telefon Güncellendi...');
+						document.getElementById('TelefonUpdateModal').style.display = 'block';
+
+						$('#lblTelefonGuncelleOnayMessage').addClass('w3-text-green');
+						$('#lblTelefonGuncelleOnayMessage').html('Telefon Başarıyla Kaydedildi');
+
+						$('#approveKvkGenelOnayImage').removeClass('w3-hide').addClass('w3-show');
+
+						$('#btnTelefonGuncelle').addClass('w3-disabled');
+					}
+					else if (d.result == 0) {
+						$('#lblTelefonGuncelleOnayMessage').addClass('w3-text-red');
+						$('#lblTelefonGuncelleOnayMessage').html(d.message);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+	});
+
+	function WaitBlockUI(milisaniye, message) {
+
+		$.blockUI({
+			css: {
+				border: 'none',
+				padding: '15px',
+				backgroundColor: '#000',
+				'-webkit-border-radius': '10px',
+				'-moz-border-radius': '10px',
+				opacity: .5,
+				color: '#fff'
+			},
+			message: message
+		});
+
+		setTimeout($.unblockUI, milisaniye);
+
+	}
+</script>
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+		<div class="w3-row w3-margin-bottom">
+			<div class="w3-row">
+				<a href="/Musteri/MusteriDuzenle?MusteriId=@Model.MusteriId" class="btn-login w3-green w3-btn w3-round w3-block">Müşteri Bilgilerine Geri Dön</a>
+			</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<button class="btn-login w3-blue w3-btn w3-round " id="btnKvkSozlesmeSmsGonder">Müşteriye Kvk Sözleşme Metnini Gönder</button>
+				</div>
+			</div>
+			<!--Left Side Mail İzinleri-->
+			<div class="w3-row w3-padding">
+				<h3>Mail İzinlerini Yönet</h3>
+				<div class="w3-row">
+					@using (Html.BeginForm("AddMusteriMail", "Musteri", FormMethod.Post))
+					{
+						@Html.HiddenFor(x => x.MusteriId)
+						<div class="w3-quarter">
+							@Html.EditorFor(model => model.mail.MailAdresi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", id = "Mail", placeholder = "Mail Adresi Ekleyin" } })
+						</div>
+						<div class="w3-quarter w3-padding-left">
+							<button class="btn-login w3-blue w3-btn w3-round " id="btnMailEkle">Ekle</button>
+						</div>
+					}
+				</div>
+				<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom w3-small">
+					<thead>
+						<tr>
+							<th class="w3-center" width="10%"></th>
+							<th class="w3-center">Mail Adresi</th>
+							<th class="w3-center">Onaylı mı?</th>
+							<th class="w3-center">Onay Tarihi</th>
+							<th class="w3-center">Oluşturan</th>
+							<th class="w3-center">Oluşturulan Tarih</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@foreach (var mail in Model.musteriMailleri)
+						{
+							<tr>
+								<td>
+									@if (mail.SwOnay == false)
+									{
+										<button class="btn-login w3-blue w3-btn w3-round w3-block w3-small btnMailGonder" MusteriMailId="@mail.MusteriMailId">Mail Gönder</button>
+									}
+								</td>
+								<td class="w3-center">@mail.MailAdresi</td>
+								<td class="w3-center">
+									<i class="fa @(mail.SwOnay == false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i><br />
+								</td>
+								<td class="w3-center">@mail.DtOnay</td>
+								<td class="w3-center">@mail.Creator</td>
+								<td class="w3-center">@mail.DtCreated.Value.ToShortDateString()</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+
+			<!--Right Side Mail İzinleri-->
+			<div class="w3-row w3-padding">
+				<h3>Telefon İzinlerini Yönet</h3>
+				<div class="w3-row">
+					@using (Html.BeginForm("AddMusteriTelefon", "Musteri", FormMethod.Post))
+					{
+						@Html.HiddenFor(x => x.MusteriId)
+						<div class="w3-quarter">
+							@Html.EditorFor(model => model.telefon.TelefonNumarasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "20", autocomplete = "off", id = "TelefonNumarasi", placeholder = "Telefon Ekleyin" } })
+						</div>
+						<div class="w3-quarter w3-padding-left">
+							<button class="btn-login w3-blue w3-btn w3-round " id="btnMailEkle">Ekle</button>
+						</div>
+					}
+				</div>
+				<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom w3-small">
+					<thead>
+						<tr>
+							<th></th>
+							<th></th>
+							<th class="w3-center" width="10%"></th>
+							<th class="w3-center">Telefon Numarası</th>
+							<th class="w3-center">Sms Onayı</th>
+							<th class="w3-center">Sms Onay Tarihi</th>
+							<th class="w3-center">Arama Onay</th>
+							<th class="w3-center">Arama Onay Tarihi</th>
+							<th class="w3-center">Oluşturan</th>
+							<th class="w3-center">Oluşturulan Tarih</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@foreach (var telefon in Model.musteriTelefonlari)
+						{
+							<tr>
+								<td><span class="w3-btn w3-tag w3-blue w3-round btnUpdateModal" MusteriTelefonId="@telefon.MusteriTelefonId" Telefon="@telefon.TelefonNumarasi">Düzenle</span></td>
+								<td class="w3-center">
+									@if (telefon.SwOnaySms == false)
+									{
+										<button class="btn-login w3-blue w3-btn w3-round w3-block w3-small btnSmsOnayGonder" MusteriTelefonId="@telefon.MusteriTelefonId" >Sms Onay Gönder</button>
+									}
+								</td>
+								<td>
+									@if (telefon.SwOnayArama == false)
+									{
+										<button class="btn-login w3-blue w3-btn w3-round w3-block w3-small btnAramaOnayGonder" MusteriTelefonId="@telefon.MusteriTelefonId">Arama Onay Gönder</button>
+									}
+								</td>
+								<td class="w3-center">
+
+
+									@telefon.TelefonNumarasi<br /> @if (telefon.SwPrefered == true)
+									{<span class="w3-text w3-tag w3-red">Birincil iletişim numarası</span>}
+
+
+
+								</td>
+								<td class="w3-center">
+									<i class="fa @(telefon.SwOnaySms == false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i><br />
+								</td>
+								<td class="w3-center">@telefon.DtOnaySms</td>
+								<td class="w3-center">
+									<i class="fa @(telefon.SwOnayArama== false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i><br />
+								</td>
+								<td class="w3-center">@telefon.DtOnayArama</td>
+								<td class="w3-center">@telefon.Creator</td>
+								<td class="w3-center">@telefon.DtCreated.Value.ToShortDateString()</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="MailKvkOnay" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('MailKvkOnay').style.display = 'none';location.reload();" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Müşteri Mail İzni Kod Girişi</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin">
+				<label id="lblMessage"></label><br />
+				<img class="w3-center w3-hide" src="~/Images/tenor.gif" width="75" height="75" id="approveImage" />
+
+				<input type="hidden" id="MusteriMailId" name="MusteriMailId" />
+				<label>Onay Kodu</label>
+				<input id="txtMailOnayKodu" class="w3-input w3-round w3-border" name="MailApproveCode" /><br />
+				<button class="btn-login w3-green w3-btn w3-round w3-block w3-small" id="btnMailApprove">Onayla</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="SmsKvkOnay" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('SmsKvkOnay').style.display = 'none';location.reload();" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Müşteri Sms İzni Kod Girişi</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin">
+				<label id="lblSmsMessage"></label><br />
+				<img class="w3-center w3-hide" src="~/Images/tenor.gif" width="75" height="75" id="approveSmsImage" />
+
+				<input type="hidden" id="MusteriTelefonId" name="MusteriTelefonId" />
+				<label>Onay Kodu</label>
+				<input id="txtSmsOnayKodu" class="w3-input w3-round w3-border" name="SmsApproveCode" /><br />
+				<button class="btn-login w3-green w3-btn w3-round w3-block w3-small" id="btnSmsApprove">Onayla</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="AramaKvkOnay" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('AramaKvkOnay').style.display = 'none';location.reload();" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Müşteri Arama İzni Kod Girişi</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin">
+				<label id="lblAramaMessage"></label><br />
+				<img class="w3-center w3-hide" src="~/Images/tenor.gif" width="75" height="75" id="approveAramaImage" />
+
+				<input type="hidden" id="MusteriTelefonId" name="MusteriTelefonId" />
+				<label>Onay Kodu</label>
+				<input id="txtAramaOnayKodu" class="w3-input w3-round w3-border" name="AramaApproveCode" /><br />
+				<button class="btn-login w3-green w3-btn w3-round w3-block w3-small" id="btnAramaApprove">Onayla</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="KvkGenelOnayModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('KvkGenelOnayModal').style.display = 'none';location.reload();" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Müşteri Kvk Genel İzni Kod Girişi</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin">
+				<label id="lblKvkGenelOnayMessage"></label><br />
+				<img class="w3-center w3-hide" src="~/Images/tenor.gif" width="75" height="75" id="approveKvkGenelOnayImage" />
+
+				<label>Onay Kodu</label>
+				<input id="txtToken" class="w3-input w3-round w3-border" name="txtToken" /><br />
+				<button class="btn-login w3-green w3-btn w3-round w3-block w3-small" id="btnKvkGenelOnay">Onayla</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="TelefonUpdateModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('TelefonUpdateModal').style.display = 'none';location.reload();" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Müşteri Telefon Güncelle</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin">
+				<label id="lblTelefonGuncelleOnayMessage"></label><br />
+				<img class="w3-center w3-hide" src="~/Images/tenor.gif" width="75" height="75" id="approveTelefonGuncelleOnayImage" />
+				<input type="hidden" id="txtMusteriTelId" />
+				<div class="w3-padding-bottom">
+					Birincil Telefon Numarası
+					<input type="checkbox" class="w3-check" id="chkBirincilTelNo"/>
+				</div>
+				<input id="txtTelefon" class="w3-input w3-round w3-border phone" name="txtTelefon" /><br />
+				<button class="btn-login w3-green w3-btn w3-round w3-block w3-small" id="btnTelefonGuncelle">Kaydet</button>
+
+			</div>
+		</div>
+	</div>
+</div>

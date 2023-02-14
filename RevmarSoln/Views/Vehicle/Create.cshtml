@@ -1,0 +1,772 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Vehicle.VehicleCreatePageModel
+@{
+	ViewBag.Title = "Create";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Vereyon.Web;
+
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Araç Tanımlama Ekranı", pagePermission = "XXXXX" })
+<script>
+	$(document).ready(function () {
+		jQuery(document).ready(function () {
+			'use strict';
+
+			jQuery('#arac_AracDetay_TrafigeCikisTarihi').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+			jQuery('#arac_AracDetay_GarantiBsgTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+
+			jQuery('#arac_AracDetay_GarantiBtsTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+			jQuery('#arac_AracDetay_EgsozMuayeneBsgTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+			jQuery('#arac_AracDetay_EgsozMuayeneBtsTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+			jQuery('#arac_AracDetay_MuayeneBsgTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+			jQuery('#arac_AracDetay_MuayeneBtsTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+
+			jQuery('#arac_AracDetay_TrafikSigortasiBsgTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+
+			jQuery('#arac_AracDetay_TrafikSigortasiBtsTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+
+			jQuery('#arac_AracDetay_KaskoBsgTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+
+			jQuery('#arac_AracDetay_KaskoBtsTrh').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+			$.datetimepicker.setLocale('tr');
+
+		});
+
+
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				if (this.bindings[0].getAttribute("required") == "required") {
+					this.input.attr("required", "required");
+				}
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tümünü Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.css('margin-right', 3)
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				var i = 0;
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text))) {
+						i += 1;
+						if (i <= 5) {
+							return {
+								label: text,
+								value: text,
+								option: this
+							};
+						}
+
+					}
+
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				// Remove invalid value
+				this.input
+					.val("")
+					.attr("title", value + " seçilmedi.")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			}
+		});
+
+		$("#CompanyId").combobox({
+			select: function (event, ui) {
+				$('#CompanyId').val(ui.item.value);
+				$('#CompanyId').trigger("change");
+			}
+		});
+
+		$("#VehicleId").combobox({
+			select: function (event, ui) {
+				$('#VehicleId').val(ui.item.value);
+				$('#VehicleId').trigger("change");
+			}
+		});
+
+		var url = '@Url.Action("GetCompanies", "Stok")';
+
+		$.getJSON(url, { CompanyId : 1 }, function (response) {
+			$("#CompanyId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#CompanyId").append(p);
+			});
+		});
+
+		$("#fileInput").click(function () {
+			$("#fileInputhdn").click();
+		});
+
+		$('#fileInputhdn').change(function (event) {
+			$('#txtpath').val(event.target.files[0].name);
+			readURL(this);
+		});
+
+		$('#btnClear').click(function () {
+			$('#fileInputhdn').val('');
+			$('#blah').attr('src', '');
+			$('#btnClear').removeClass('w3-show').addClass('w3-hide');
+			$('#txtpath').val('');
+			$('.image-upload-wrap').show();
+			$("#WorkOrderImagesList").empty();
+		});
+		SetReadOnly('VehicleMusteriText');
+
+		var cariId = @Model.VehicleMusteriId ;
+		$('#VehicleMusteriId').val(cariId);
+		var musteriTipi = '@ViewBag.MusteriTipi';
+
+		if (musteriTipi != "") {
+			$('#VehicleMusteriText').val('@ViewBag.MusteriAciklama');
+		}
+
+
+
+		$('#btnMusteriSec').click(function () {
+
+			$('#MusteriModalContent').load('@Url.Action("HizliMusteriSec","Musteri")');
+
+			document.getElementById('MusteriSecModal').style.display = 'block';
+
+			return false;
+
+		});
+
+
+	});
+
+	function AracGunlukOnChange(element) {
+		element.checked ? $('#arac_SwGunlukArac').val(true) : $('#arac_SwGunlukArac').val(false);
+		
+		if (element.checked) {
+			// Gunluk Araçtır.
+			$("#arac_MotorNo").removeAttr("required");
+			$("#arac_AracModelAdi").removeAttr("required");
+			$("#CsModelYear").removeAttr("required");
+			$("#AracTipId").removeAttr("required");
+			$("#VitesTipId").removeAttr("required");
+			$("#AracGrupId").removeAttr("required");
+			$("#YakitTipId").removeAttr("required");
+			$("#AktarmaTipId").removeAttr("required");
+			$("#RenkId").removeAttr("required");
+
+		} else {
+			// Normal Araçtır.
+			$("#arac_MotorNo").attr('required', 'required');
+			$("#arac_AracModelAdi").attr('required', 'required');
+			$("#CsModelYear").attr('required', 'required');
+			$("#AracTipId").attr('required', 'required');
+			$("#VitesTipId").attr('required', 'required');
+			$("#AracGrupId").attr('required', 'required');
+			$("#YakitTipId").attr('required', 'required');
+			$("#AktarmaTipId").attr('required', 'required');
+			$("#RenkId").attr('required', 'required');
+		}
+	}
+	function SetReadOnly(elementName) {
+		document.getElementById(elementName).readOnly = true;
+		document.getElementById(elementName).style.backgroundColor = "#ebebe4";
+		document.getElementById(elementName).style.color = "#545454";
+
+	}
+	function onChangeCompany() {
+		var url = '@Url.Action("GetCompanyVehicles", "Stok")';
+		$("#VehicleId").attr('disabled', 'disabled');
+
+		var companyId = $("#CompanyId").val();
+
+		$.getJSON(url, { CompanyId: companyId}, function (response) {
+			$("#VehicleId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#VehicleId").append(p);
+			});
+			$("#VehicleId").removeAttr('disabled', 'disabled');
+		});
+	}
+
+	function readURL(input) {
+		$("#WorkOrderImagesList").empty();
+		$('#blah').removeClass("w3-hide").addClass('w3-show');
+		for (var i = 0; i <= input.files.length; i++) {
+			if (input.files && input.files[i]) {
+				var reader = new FileReader();
+
+				$('#blah').attr('src', '/Images/Loading1.gif');
+				$('#barim').removeClass('w3-hide').addClass('w3-show');
+				reader.readAsDataURL(input.files[i]);
+				var elem = document.getElementById("myBar");
+				var width = 1;
+				var id = setInterval(frame, 5);
+				function frame() {
+					if (width >= 100) {
+						clearInterval(id);
+					} else {
+						width++;
+						elem.style.width = width + '%';
+						document.getElementById("demo").innerHTML = width * 1 + '%';
+					}
+				}
+				reader.onload = function (e) {
+
+					$('.image-upload-wrap').hide();
+					setTimeout(function () {
+						//$('#blah').attr('src', e.target.result);
+						var x = document.createElement("IMG");
+						x.setAttribute("class", "w3-quarter w3-padding w3-border w3-margin-right")
+						x.setAttribute("src", e.target.result);
+
+						x.setAttribute("alt", "The Pulpit Rock");
+						$('#WorkOrderImagesList').append(x);
+						$('#barim').removeClass('w3-show').addClass('w3-hide');
+						$('#blah').removeClass("w3-show").addClass('w3-hide');
+					}, 500);
+
+				}
+
+			}
+
+			if ($('#blah')[0].currentSrc = null) {
+				$('#btnClear').removeClass("w3-show").addClass("w3-hide");
+			} else {
+				$('#btnClear').removeClass("w3-hide").addClass("w3-show");
+			}
+
+
+
+			$(" <div class='w3-col l3 m6 w3-margin-bottom'><div class='w3-display-container' id='" + i + '"> asdfasdf </div></div>"').appendTo('#Images');
+		}
+
+	}
+</script>
+
+<style>
+
+	.file-upload-input {
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height: 100%;
+		outline: none;
+		opacity: 0;
+		cursor: pointer;
+	}
+
+	.image-upload-wrap:hover {
+		background-color: #f1f1f1 !important;
+	}
+
+	.drag-text {
+		text-align: center;
+	}
+
+		.drag-text h3 {
+			font-weight: 100;
+			text-transform: uppercase;
+			color: #15824B;
+			padding: 60px 0;
+		}
+</style>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+
+		@using (Html.BeginForm("Create", "Vehicle", FormMethod.Post, new { enctype = "multipart/form-data" }))
+		{
+			@Html.AntiForgeryToken()
+
+			<div class="w3-row ">
+				<div class="w3-quarter w3-padding">
+					<label>Şase No</label>
+					@Html.EditorFor(model => model.arac.SaseNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", required = "required", maxlength = "17" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Motor No</label>
+					@Html.EditorFor(model => model.arac.MotorNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "20", autocomplete = "off", required = "required" } })
+				</div>
+				<div class="w3-half">
+					<div class="w3-third w3-padding">
+						<label>Araç model Kodu</label>
+						@Html.DropDownList("CompanyId", (SelectList)ViewBag.Companies, "Marka Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "CompanyId", required = "required", @onchange = "onChangeCompany();" })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>Model</label>
+						@Html.DropDownList("VehicleId", Enumerable.Empty<SelectListItem>(), "Model Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VehicleId", required = "required" })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>Araç model Adı</label>
+						@Html.EditorFor(model => model.arac.AracModelAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "126", autocomplete = "off", required = "required" } })
+					</div>
+				</div>
+			</div>
+			<div class="w3-row ">
+				<div class="w3-quarter w3-padding">
+					<label>Plaka</label>
+					@Html.EditorFor(model => model.arac.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "16", autocomplete = "off", required = "required" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<div class="w3-threequarter">
+						<label>Müşteri (Cari)</label>
+						<input type="text" class="w3-input w3-border w3-round" autocomplete="off" id="VehicleMusteriText" required/>
+						<input type="hidden" class="w3-input w3-border w3-round" autocomplete="off" id="VehicleMusteriId" name="VehicleMusteriId" />
+					</div>
+					<div class="w3-quarter">
+						<br />
+						<button class="btn-login w3-blue w3-btn  w3-block" id="btnMusteriSec" title="Müşteri Seç"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button>
+					</div>
+
+				</div>
+				<div class="w3-half">
+					<div class="w3-third w3-padding">
+						<label>Model Yılı</label>
+						@Html.DropDownList("CsModelYear", ViewData["listModelYear"] as List<SelectListItem>, htmlAttributes: new { @class = "w3-select w3-border w3-round" })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>Araç Cinsi</label>
+						@Html.DropDownList("AracTipId", (SelectList)ViewBag.AracTipleri, "Araç Cinsi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "AracTipId", required = "required" })
+					</div>
+
+					<div class="w3-third w3-padding">
+						<label>Vites Tipi</label>
+						@Html.DropDownList("VitesTipId", (SelectList)ViewBag.VitesTipleri, "Vites Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VitesTipId", required = "required" })
+					</div>
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-half">
+					<div class="w3-third w3-padding">
+						<label>Araç Grubu</label>
+						@Html.DropDownList("AracGrupId", (SelectList)ViewBag.AracGruplari, "Araç Grubu Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "AracGrupId", required = "required" })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>Yakıt Tipi</label>
+						@Html.DropDownList("YakitTipId", (SelectList)ViewBag.YakitTipleri, "Yakıt Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "YakitTipId", required = "required" })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>Aktarma Tipi</label>
+						@Html.DropDownList("AktarmaTipId", (SelectList)ViewBag.AktarmaTipleri, "Aktarma Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "AktarmaTipId", required = "required" })
+					</div>
+				</div>
+				<div class="w3-half">
+					<div class="w3-third w3-padding">
+						<label>Dış Renk</label>
+						@Html.DropDownList("RenkId", (SelectList)ViewBag.Renkler, "Dış Renk Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "RenkId" })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>İç Renk</label>
+						@Html.EditorFor(model => model.arac.IcRenk, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
+					</div>
+					<div class="w3-third w3-padding">
+						<br />
+						<label>Günlük Araç ?</label>
+						@Html.CheckBoxFor(model => Model.arac.SwGunlukArac, new { @class = "w3-check", onchange = "AracGunlukOnChange(this)" })
+					</div>
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-padding">
+					<div class="w3-row" style="border-style: dashed;position: relative;">
+						<div class="image-upload-wrap" style="display: block;">
+							<input type="file" id="fileInputhdn" accept="image/png, image/jpeg" name="files" class="file-upload-input" multiple="">
+							<div class="drag-text">
+								<h3>Araca dosya eklemek için buraya sürükleyin.</h3>
+							</div>
+						</div>
+						<div class="w3-center">
+
+							<div class="w3-display-container">
+								<div class="w3-display-topright  ">
+									<span id="btnClear" class="w3-margin-right w3-hide"><i class="fa fa-times" aria-hidden="true"></i> </span>
+								</div>
+								<div id="WorkOrderImagesList"></div>
+								<img id="blah" src="" alt="" class="w3-quarter w3-padding w3-center w3-hide" onclick="onClick(this)">
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="w3-half w3-padding">
+					@Html.TextAreaFor(model => model.arac.Notes, new { @class = "w3-input w3-border w3-round", rows = "6", cols = "300", placeholder = "Notları buraya girebilirsiniz" })
+				</div>
+			</div>
+			<div class="w3-row w3-margin-bottom">
+				<div class="w3-half w3-padding">
+					<div class="w3-card-2 w3-hover-shadow ">
+						<div class="w3-blue w3-center">
+							<h2>Garanti - Sigorta</h2>
+						</div>
+						<div class="w3-container">
+							<div class="w3-row">
+								<div class="w3-quarter w3-padding">
+									<div class=" w3-right w3-padding-top">
+										<label><b>Trafiğe Çıkış Tarih</b></label>
+									</div>
+								</div>
+								<div class="w3-rest">
+									<div class="w3-rest w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.TrafigeCikisTarihi, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-quarter">&nbsp;</div>
+								<div class="w3-rest">
+									<div class="w3-half w3-padding">
+										<b>Başlangıç Tarihi</b>
+									</div>
+									<div class="w3-half w3-padding">
+										<b>Bitiş Tarihi</b>
+									</div>
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-quarter w3-padding">
+									<div class=" w3-right w3-padding">
+										<label><b>Garanti</b></label>
+									</div>
+								</div>
+								<div class="w3-rest">
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.GarantiBsgTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.GarantiBtsTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-quarter w3-padding">
+									<div class=" w3-right w3-padding">
+										<label><b>Egzos Muayene</b></label>
+									</div>
+								</div>
+								<div class="w3-rest">
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.EgsozMuayeneBsgTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.EgsozMuayeneBtsTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-quarter w3-padding">
+									<div class=" w3-right w3-padding">
+										<label><b>Muayene</b></label>
+									</div>
+								</div>
+								<div class="w3-rest">
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.MuayeneBsgTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.MuayeneBtsTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-quarter w3-padding">
+									<div class=" w3-right w3-padding">
+										<label><b>Trafik Sigortası</b></label>
+									</div>
+								</div>
+								<div class="w3-rest">
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.TrafikSigortasiBsgTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.TrafikSigortasiBtsTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-quarter w3-padding">
+									<div class=" w3-right w3-padding">
+										<label><b>Kasko</b></label>
+									</div>
+								</div>
+								<div class="w3-rest">
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.KaskoBsgTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+									<div class="w3-half w3-padding">
+										@Html.EditorFor(model => model.arac.AracDetay.KaskoBtsTrh, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtAracDetayTarih", autocomplete = "off" } })
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="w3-half w3-padding">
+					<div class="w3-card-2 w3-hover-shadow ">
+						<div class="w3-blue w3-center">
+							<h2>Teknik Bilgiler</h2>
+						</div>
+						<div class="w3-container">
+							<div class="w3-row">
+								<div class="w3-half w3-padding">
+									<label>Araç Serisi</label>
+									@Html.EditorFor(model => model.arac.AracDetay.AracSerisi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
+
+								</div>
+								<div class="w3-half w3-padding">
+									<label>Şanzıman Tipi</label>
+									@Html.EditorFor(model => model.arac.AracDetay.SanzimanTipi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-half w3-padding">
+									<label>Motor Tipi</label>
+									@Html.EditorFor(model => model.arac.AracDetay.MotorTipi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
+								</div>
+								<div class="w3-half w3-padding">
+									<label>Silindir Sayısı</label>
+									@Html.EditorFor(model => model.arac.AracDetay.SilindirSayisi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round number", maxlength = "3", autocomplete = "off" } })
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-half w3-padding">
+									<label>Anahtar Kodu</label>
+									@Html.EditorFor(model => model.arac.AracDetay.AnahtarKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+								</div>
+								<div class="w3-half w3-padding">
+									<label>Trim Tipi</label>
+									@Html.EditorFor(model => model.arac.AracDetay.TrimTipi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-half w3-padding">
+									<label>Yakıt Deposu</label>
+									@Html.EditorFor(model => model.arac.AracDetay.YakitDeposu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+								</div>
+								<div class="w3-half w3-padding">
+									<label>Gövde Tipi</label>
+									@Html.EditorFor(model => model.arac.AracDetay.GovdeTipi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+								</div>
+							</div>
+							<div class="w3-row ">
+								<div class="w3-half w3-padding">
+									<label>Depo Kodu</label>
+									@Html.EditorFor(model => model.arac.AracDetay.DepoKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+								</div>
+								<div class="w3-half w3-padding">
+									<label>Sübap Adet</label>
+									@Html.EditorFor(model => model.arac.AracDetay.SubapAdet, new { htmlAttributes = new { @class = "w3-input w3-border w3-round number ", maxlength = "3", autocomplete = "off" } })
+								</div>
+							</div>
+							<div class="w3-row">
+								<div class="w3-half w3-padding">
+									<label>Oturma Yeri</label>
+									@Html.EditorFor(model => model.arac.AracDetay.OturmaYeri, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "3", autocomplete = "off" } })
+								</div>
+								<div class="w3-half w3-padding">
+									<label>Motor Hacmi</label>
+									@Html.EditorFor(model => model.arac.AracDetay.MotorHacmi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+								</div>
+							</div>
+						</div>
+
+						@*<footer class="w3-container w3-blue">
+								<h5>Footer</h5>
+							</footer>*@
+					</div>
+				</div>
+			</div>
+			<div class="w3-row">
+				<a href="/Vehicle/AracSorgula" class=" w3-margin w3-green w3-btn w3-round w3-left" value="Geri">Geri</a>
+				<button type="submit" class=" w3-margin w3-green w3-btn w3-right w3-round" value="Araç Oluştur">Araç Oluştur</button>
+			</div>
+
+		}
+	</div>
+</div>
+
+<div id="MusteriSecModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('MusteriSecModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Müşteri Seç</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin" id="MusteriModalContent">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>
+<script src="~/Scripts/DatetimePicker/bootstrap-datetimepicker.tr.js"></script>

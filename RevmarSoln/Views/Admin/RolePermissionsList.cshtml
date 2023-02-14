@@ -1,0 +1,89 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Roles>
+@{
+	ViewBag.Title = "RolePermissionsList";
+}
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-threequarter">
+			<table class="w3-table-all w3-hoverable  w3-margin-top w3-margin-bottom">
+				<thead>
+					<tr>
+						<td colspan="4">
+							Role Açıklaması
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var Role in Model)
+					{
+						<tr class="w3-blue">
+
+							<td colspan="3">
+								@Role.RoleName - @Role.RoleId
+							</td>
+							<td>
+								<button onclick="document.getElementById('UserRole-@Role.RoleId').style.display='block'" class="w3-button w3-black">	Bu role ait Kullanıcıları Gör</button>
+							</td>
+						</tr>
+						
+						if (Role.RolePermissions.Count > 0)
+						{
+							<tr>
+								<td></td>
+								<td colspan="3">Yetki Kodları </td>
+							</tr>
+							foreach (var rolePermissions in Role.RolePermissions)
+							{
+								<tr>
+									<td></td>
+									<td>@rolePermissions.Permissions.PermissionId</td>
+									<td>@rolePermissions.Permissions.PermissionName</td>
+									<td>@rolePermissions.Permissions.PermissionDesc</td>
+								</tr>
+							}
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+@foreach (var Role in Model)
+{
+	if (Role.UserRoles.Count > 0)
+	{
+		<div id="UserRole-@Role.RoleId" class="w3-modal">
+			<div class="w3-modal-content w3-animate-top w3-card-4">
+				<header class="w3-container w3-teal">
+					<span onclick="document.getElementById('UserRole-@Role.RoleId').style.display='none'"
+						  class="w3-button w3-display-topright">&times;</span>
+					<h2>Role Sahip Olan Kullanıcılar</h2>
+				</header>
+				<div class="w3-container">
+					@foreach (var userRole in Role.UserRoles.ToList())
+					{
+					<p>@userRole.UserName</p>
+					}
+				</div>
+				@*<footer class="w3-container w3-teal">
+					<p>Modal Footer</p>
+				</footer>*@
+			</div>
+		</div>
+	}
+}
+
+
+
+<script>
+	function myFunction(id) {
+		var x = document.getElementById(id);
+		if (x.className.indexOf("w3-show") == -1) {
+			x.className += " w3-show";
+		} else {
+			x.className = x.className.replace(" w3-show", "");
+		}
+	}
+</script>

@@ -1,0 +1,596 @@
+﻿@model SahinRektefiyeSoln.Models.IsEmirleri
+
+@{
+	int ServiceKlimaIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceKlimaIsEmriTipId;
+	int ServiceEgrIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceEgrIsEmriTipId;
+	int ServiceSanzimanIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceSanzimanIsEmriTipId;
+	int ServiceTurboIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceTurboIsEmriTipId;
+	int ServiceAlternatorIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceAlternatorIsEmriTipId;
+	int ServiceMarsMotorIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceMarsMotorIsEmriTipId;
+	int ServiceDireksiyonPompasiIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceDireksiyonPompasiIsEmriTipId;
+	int ServiceDireksiyonKutusuMekanikIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceDireksiyonKutusuMekanikIsEmriTipId;
+	int ServiceDireksiyonKutusuHidrolikIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceDireksiyonKutusuHidrolikIsEmriTipId;
+	int ServiceDpfIsEmriTipId = SahinRektefiyeSoln.Models.Parameters.ServiceDpfIsEmriTipId;
+
+	Layout = null;
+
+	ViewBag.Title = "IsEmriDetayPrint - " + Model.IsEmriId;
+	int countKalem = 1;
+
+	var kalemler = ViewBag.Kalemler as IEnumerable<SahinRektefiyeSoln.Models.HelperModels.FaturaKalem>;
+
+	int Counter = 0;
+	string table = "<table class='FixingTable' style='font-size: 12px!important;width:100%;'>";
+	int fixingCount = 0;
+	Dictionary<string, int> fixingDic = new Dictionary<string, int>();
+	string ArizaTespitFormHeader = string.Empty;
+	string ArizaTespitFormDetayInfo = string.Empty;
+	string TespitAciklama = string.Empty;
+	int? sonIsEmriTipId = null;
+	string Tip = ViewBag.Tip;
+	if (ViewBag.Tip == "Normal")
+	{
+		sonIsEmriTipId = Model.IsEmriTipId;
+
+	}
+	else if (ViewBag.Tip == "BelirtiKodu")
+	{
+		sonIsEmriTipId = ViewBag.BelirtiKodu;
+	}
+
+
+	if (sonIsEmriTipId == ServiceAlternatorIsEmriTipId)
+	{
+		fixingDic = ViewBag.AlternatorFixing;
+		ArizaTespitFormHeader = "";
+		ArizaTespitFormDetayInfo = "ALTERNATÖR BİLGİLERİ";
+		TespitAciklama = Model.AlternatorFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceKlimaIsEmriTipId)
+	{
+		fixingDic = ViewBag.KlimaFixing;
+		ArizaTespitFormHeader = "KLİMA ARIZA TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "KLİMA BİLGİLERİ";
+		TespitAciklama = Model.KlimaFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceEgrIsEmriTipId)
+	{
+		fixingDic = ViewBag.EgrFixing;
+		ArizaTespitFormHeader = "EGR ARIZA TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "EGR BİLGİLERİ";
+		TespitAciklama = Model.EGRFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceSanzimanIsEmriTipId)
+	{
+		fixingDic = ViewBag.SanzimanFixing;
+		ArizaTespitFormHeader = "ŞANZIMAN ARIZA TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "ŞANZIMAN BİLGİLERİ";
+		TespitAciklama = Model.SanzimanFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceTurboIsEmriTipId)
+	{
+		fixingDic = ViewBag.TurboFixing;
+		ArizaTespitFormHeader = "TURBOŞARJ ARIZA TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "TURBOŞARJ BİLGİLERİ";
+		TespitAciklama = Model.TurboSarjFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceMarsMotorIsEmriTipId)
+	{
+		fixingDic = ViewBag.MarsMotorFixing;
+		ArizaTespitFormHeader = "MARŞ MOTOR ARIZA TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "MARŞ MOTOR BİLGİLERİ";
+		TespitAciklama = Model.MarsMotorFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceDireksiyonPompasiIsEmriTipId)
+	{
+		fixingDic = ViewBag.direksiyonPompaFixing;
+		ArizaTespitFormHeader = "DİREKSİYON POMPA ARIZA TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "DİREKSİYON POMPA BİLGİLERİ";
+		TespitAciklama = Model.DireksiyonPompaFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceDireksiyonKutusuMekanikIsEmriTipId)
+	{
+		fixingDic = ViewBag.direksiyonMekanikFixing;
+		ArizaTespitFormHeader = "DİREKSİYON KUTUSU MEKANİK TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "DİREKSİYON KUTUSU MEKANİK BİLGİLERİ";
+		TespitAciklama = Model.DireksiyonMekanikFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceDireksiyonKutusuHidrolikIsEmriTipId)
+	{
+		fixingDic = ViewBag.direksiyonHidrolikFixing;
+		ArizaTespitFormHeader = "DİREKSİYON KUTUSU HİDROLİK TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "DİREKSİYON KUTUSU HİDROLİK BİLGİLERİ";
+		TespitAciklama = Model.DireksiyonHidrolikFixing.First().TespitAciklama;
+	}
+	else if (sonIsEmriTipId == ServiceDpfIsEmriTipId)
+	{
+		fixingDic = ViewBag.DpfFixing;
+		ArizaTespitFormHeader = "DPF TESPİT FORMU";
+		ArizaTespitFormDetayInfo = "DPF BİLGİLERİ";
+		TespitAciklama = Model.DpfFixing.First().TespitAciklama;
+	}
+
+
+	fixingCount = fixingDic.Count();
+	foreach (var item in fixingDic)
+	{
+		table += Counter % 2 == 0 ? "<tr>" : "";
+		table += "<td>&bull;&nbsp;" + item.Key.ToString() + "</td>";
+		Counter += 1;
+		table += (fixingDic.Count() % 2 == 1 && Counter % 2 == 1 && fixingDic.Count() == Counter) == true ? "<td>&nbsp;</td>" : "";
+		table += Counter % 2 == 0 ? "</tr>" : "";
+
+	}
+	table += "</table>";
+
+	bool iskonto = false;
+
+	foreach (var kalemDetay in kalemler)
+	{
+		if (kalemDetay.kalemIskontoOrani != 0)
+		{
+			iskonto = true;
+		}
+	}
+
+}
+<link href="~/Styles/Print.css" rel="stylesheet" />
+<script>
+	window.print();
+</script>
+<style>
+	/*Print Deneme*/
+
+	.centertext {
+		text-align: center;
+	}
+
+	.lefttext {
+		text-align: left;
+	}
+
+	.righttext {
+		text-align: right;
+	}
+
+
+	.FixingTableContent th, td {
+		border-left: 1px solid #000;
+		border-right: 1px solid #000;
+		border-bottom: 1px solid #000;
+	}
+
+	.FixingTableContent {
+		border-collapse: collapse;
+	}
+
+	.FixingTable th, td {
+		border: 1px solid #000;
+	}
+
+	.FixingTable {
+		border-collapse: collapse;
+	}
+
+	.WorkOrderParts {
+		border-collapse: collapse;
+	}
+
+		.WorkOrderParts th, td {
+			border-collapse: collapse;
+		}
+
+	.HeaderImages th, td {
+		border: 1px solid #000;
+	}
+
+	.HeaderImages {
+		border-collapse: collapse;
+	}
+
+	.informationTable th, td {
+		border: 1px solid #000;
+	}
+
+	.informationTable {
+		border-collapse: collapse;
+	}
+
+	.w3-right {
+		float: right !important
+	}
+
+	.w3-right-align {
+		text-align: right !important
+	}
+
+	.w3-left-align {
+		text-align: left !important
+	}
+
+	.w3-left {
+		float: left !important
+	}
+
+	.padding-leftright-5 {
+		padding-left: 5px !important;
+		padding-right: 5px !important;
+	}
+
+	.padding-left-5 {
+		padding-left: 5px !important;
+	}
+
+	.padding-right-5 {
+		padding-right: 5px !important
+	}
+
+	.padding-top-5 {
+		padding-top: 5px !important;
+	}
+
+	.padding-bottom-5 {
+		padding-bottom: 5px !important;
+	}
+
+	#kalemler {
+		/*border: 1px black solid;*/
+		font-size: 10px !important;
+	}
+
+		/*#kalemler td:first-child, th:first-child {
+				border-left: none;
+			}*/
+
+		#kalemler tr td {
+			border-right: 1px solid black !important;
+			padding: 5px !important;
+		}
+
+		#kalemler th {
+			border-right: 1px solid black !important;
+			padding: 3px !important
+		}
+
+
+	.twothird {
+		float: left !important;
+		width: 60% !important;
+		/*border: black solid 1px;*/
+	}
+
+	.third {
+		float: left !important;
+		width: 39% !important;
+		/*border: black solid 1px;*/
+	}
+
+	#tableSonToplam {
+		border: 1px solid black;
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 10px !important;
+	}
+
+		#tableSonToplam > th > td {
+			border: 1px solid black;
+		}
+</style>
+
+<div class=Section2>
+	<table class="HeaderImages" style="width:100%;border-bottom:none!important;">
+		<tr>
+			<td>
+				<img src="http://www.revmer.net/Images/logo.png" class="w3-circle w3-margin-right" style="width:150px;height:70px">
+			</td>
+			<td style="width:500px;"></td>
+			<td>
+				<img src="http://www.revmer.net/Images/Kalite.jpg" style="max-width:150px;max-height:70px" height="70" width="150" />
+			</td>
+		</tr>
+	</table>
+
+
+	<table class="informationTable" style="width:100%;border-top:1px #000!important;" cellpadding="3">
+		<tr class="padding-bottom-5 padding-top-5">
+			<td colspan="4" class="centertext" style="font-size:8px!important"><label style="font-size:medium!important;margin-bottom:3px!important;">@ArizaTespitFormHeader</label></td>
+
+
+		</tr>
+		<tr>
+			<td style="border-right:none;" colspan="2">
+				<label class="lefttext w3-left w3-right-align">&nbsp; MÜŞTERİ BİLGİLERİ</label>
+			</td>
+			<td class="w3-right-align" style="border-left:none;" colspan="2"><label class="righttext w3-right w3-left-align"> TARİH : @System.DateTime.Now.ToShortDateString() &nbsp;</label></td>
+		</tr>
+		<tr style="font:smaller!important">
+			<td rowspan="3" style="font-size:14px!important;font-weight: bold;padding:5px!important;width:15%;">
+				&nbsp;
+				@(Model.Musteri.MusteriTipi == "B" ? (Model.Musteri.MusteriAdi.ToString() + " " + Model.Musteri.MusteriSoyadi.ToString()) : Model.Musteri.KurumAdi.ToString())
+			</td>
+			<td style="width:32%">İş Emri No: @Model.IsEmriId</td>
+			<td style="width:28%">MARKA : @Model.Arac.Companies.Name</td>
+			<td style="width:23%">PLAKA : @Model.Arac.Plaka</td>
+		</tr>
+		<tr>
+			<td>Şase : @Model.Arac.SaseNo</td>
+			<td>MODEL : @Model.Arac.Vehicles.Name</td>
+			<td>
+				Yakıt Tipi :
+
+				@if (Model.Arac.YakitTipi != null)
+				{
+					<label>@Model.Arac.YakitTipi.Aciklamasi</label>
+				}
+
+			</td>
+		</tr>
+		<tr>
+			<td>Model Yılı : @Model.Arac.ModelYili</td>
+			<td>KM    : @Model.Arac.Km</td>
+			<td>
+				@if (sonIsEmriTipId == ServiceSanzimanIsEmriTipId)
+				{
+					<label>Şanzıman Tipi : @Model.SanzimanFixing.First().SanzimanType</label>
+				}
+				else
+				{
+					<label>
+					</label>
+				}
+
+			</td>
+
+		</tr>
+
+		<tr style="padding-top:5px!important;padding-bottom:5px!important;">
+			<td colspan="4" class="lefttext" style="font-size:8px!important;font-weight:bold;"><label style="font-size:medium!important;">@ArizaTespitFormDetayInfo</label></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				&nbsp;SERİ NO&nbsp;:
+				@if (ViewBag.Tip == "Normal")
+				{
+					<label>@Model.SerialNo</label>
+
+				}
+				else if (ViewBag.Tip == "BelirtiKodu")
+				{
+					<label>@Model.IsEmriBelirtiKodlari.FirstOrDefault(x => x.IsEmriTipId == sonIsEmriTipId).SeriNo</label>
+				}
+
+
+			</td>
+			<td colspan="2">
+				&nbsp;PARÇA NO:
+				@if (ViewBag.Tip == "Normal")
+				{
+					<label>@Model.PartNo</label>
+
+				}
+				else if (ViewBag.Tip == "BelirtiKodu")
+				{
+					<label>@Model.IsEmriBelirtiKodlari.FirstOrDefault(x => x.IsEmriTipId == sonIsEmriTipId).PartNo</label>
+				}
+
+
+			</td>
+		</tr>
+		<tr>
+
+			<td colspan="4">
+				<p style="font-size: 12px!important;margin-top:3px!important;margin-bottom:3px!important">
+					&nbsp;ŞİKAYET&nbsp;:
+
+					@if (ViewBag.Tip == "Normal")
+					{
+						<label>	@Model.Notlar</label>
+
+					}
+					else if (ViewBag.Tip == "BelirtiKodu")
+					{
+						<label>	@Model.IsEmriBelirtiKodlari.FirstOrDefault(x => x.IsEmriTipId == sonIsEmriTipId).Notlar</label>
+					}
+
+
+
+				</p>
+			</td>
+
+		</tr>
+	</table>
+	@if (fixingCount > 0)
+	{
+		<p class="customHeader" style="font:bold;margin-top:1px!important;margin-bottom:1px!important;">&nbsp; TESPİTLER</p>
+		@Html.Raw(table)
+	}
+
+	@if (!string.IsNullOrEmpty(TespitAciklama))
+	{
+		<table class="FixingTableContent">
+			<tr>
+				<td>
+					<p class="customHeader" style="font:bold;color:red;">&nbsp; @TespitAciklama</p>
+				</td>
+			</tr>
+		</table>
+	}
+	@if (Model.IsEmriDosyalari.Count > 0)
+	{
+		<div class="w3-border">
+			<p class="customHeader" style="font:bold;margin-top:1px!important;margin-bottom:1px!important;">&nbsp; GÖRSELLER</p>
+		</div>
+	}
+
+	@if (Model.IsEmriDosyalari.Count > 0)
+	{
+
+		<table>
+			<tr>
+				@foreach (var photos in Model.IsEmriDosyalari.Where(x => (Tip == "Normal" ? true : x.IsEmriTipId == sonIsEmriTipId)).Take(4))
+				{
+					<td>
+						<img src="@Request.Url.GetLeftPart(UriPartial.Authority)/@photos.DosyaUrl" style="max-height:150px;max-width:150px" width="160" height="160" />
+					</td>
+				}
+
+			</tr>
+			<tr>
+				@foreach (var photos in Model.IsEmriDosyalari.Where(x => (Tip == "Normal" ? true : x.IsEmriTipId == sonIsEmriTipId)).Skip(4).Take(4))
+				{
+					<td>
+						<img src="@Request.Url.GetLeftPart(UriPartial.Authority)/@photos.DosyaUrl" style="max-height:160px;max-width:160px" width="160" height="160" />
+					</td>
+				}
+			</tr>
+			<tr>
+				@foreach (var photos in Model.IsEmriDosyalari.Where(x => (Tip == "Normal" ? true : x.IsEmriTipId == sonIsEmriTipId)).Skip(8).Take(4))
+				{
+					<td>
+						<img src="@Request.Url.GetLeftPart(UriPartial.Authority)/@photos.DosyaUrl" style="max-height:160px;max-width:160px" width="160" height="160" />
+					</td>
+				}
+			</tr>
+		</table>
+
+
+	}
+
+
+	<table id="kalemler" style="border: 1px solid black;width:100%;border-collapse: collapse; ">
+		<thead>
+			<tr style="border-bottom:1pt solid black;">
+				<th>Sıra No</th>
+				<th class="outlined">Parça Kodu</th>
+				<th>Parça Adı</th>
+				<th>Miktar</th>
+				@if (iskonto)
+				{
+					<th>Kalem İskonto</th>
+				}
+				@*<th>KDV Hariç B.Fiyat</th>*@
+				@*<th>İskonto Oranı</th>*@
+				@*<th>İskonto Tutarı</th>*@
+				@*<th>KDV Hariç İskontolu B. Fiyat</th>*@
+				@*<th>KDV Oranı</th>*@
+				@*<th>KDV Tutarı</th>*@
+				@*<th>KDV Dahil B.Fiyat</th>*@
+				@*<th>T.KDV Tutarı</th>*@
+				<th>KDV Hariç Tutar</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var parca in kalemler.Where(x => x.KalepTipi == "P" && (Tip == "Normal" ? true : x.IsEmriTipId == sonIsEmriTipId)).ToList())
+			{
+				<tr>
+					<td>@countKalem @{countKalem += 1;}</td>
+					<td>@parca.ParcaNo</td>
+					<td>
+						@parca.ParcaAdi
+					</td>
+					<td>@parca.Miktar </td>
+					@if (iskonto)
+					{
+						<td>@String.Format("{0:0.00}", (parca.Miktar * parca.kalemIskontoTutari)) </td>
+					}
+					@*<td>@String.Format("{0:0.00}", parca.kdvHaricBirimFiyati)</td>*@
+					@*<td>@String.Format("{0:0.00}", parca.kalemIskontoOrani * 100)</td>*@
+					@*<td>@String.Format("{0:0.00}", parca.kalemIskontoTutari)</td>*@
+					@*<td>@String.Format("{0:0.00}", parca.KdvHaricIskontoluBFiyat)</td>*@
+					@*<td>@String.Format("{0:0.00}", parca.KdvOrani * 100)</td>*@
+					@*<td>@String.Format("{0:0.00}", parca.KdvBirimTutari)</td>*@
+					@*<td>@String.Format("{0:0.00}", parca.KdvDahilBirimFiyat)</td>*@
+					@*<td>@String.Format("{0:0.00}", parca.ToplamKdvliTutari)</td>*@
+					<td>@String.Format("{0:0.00}", parca.KdvHaricTutar)</td>
+				</tr>
+			}
+			@foreach (var iscilik in kalemler.Where(x => x.KalepTipi == "I" && (Tip == "Normal" ? true : x.IsEmriTipId == sonIsEmriTipId)).ToList())
+			{
+				<tr>
+					<td>@countKalem @{countKalem += 1;}</td>
+					<td>@iscilik.IscilikKodu</td>
+					<td>
+						@iscilik.IscilikAdi
+					</td>
+					<td>@iscilik.Miktar</td>
+					@if (iskonto)
+					{
+						<td>@String.Format("{0:0.00}", (iscilik.Miktar * iscilik.kalemIskontoTutari)) </td>
+					}
+					@*<td>@String.Format("{0:0.00}", iscilik.kdvHaricBirimFiyati)</td>
+						<td>@String.Format("{0:0.00}", iscilik.kalemIskontoOrani * 100)</td>
+						<td>@String.Format("{0:0.00}", iscilik.kalemIskontoTutari)</td>
+						<td>@String.Format("{0:0.00}", iscilik.KdvHaricIskontoluBFiyat)</td>
+						<td>@String.Format("{0:0.00}", iscilik.KdvOrani * 100)</td>
+						<td>@String.Format("{0:0.00}", iscilik.KdvBirimTutari)</td>
+						<td>@String.Format("{0:0.00}", iscilik.KdvDahilBirimFiyat)</td>
+						<td>@String.Format("{0:0.00}", iscilik.ToplamKdvliTutari)</td>*@
+					<td>@String.Format("{0:0.00}", iscilik.KdvHaricTutar)</td>
+				</tr>
+
+			}
+		</tbody>
+		<tfoot style="border-top: 1px solid black;">
+			<tr>
+				<td></td>
+				<td></td>
+				@*<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>*@
+				@if (iskonto)
+				{
+					<td></td>
+				}
+				<td>G.Toplam</td>
+				<td>Kdv Tutarı : @String.Format("{0:0.00}", kalemler.Sum(x => x.ToplamKdvliTutari))</td>
+				<td>@String.Format("{0:0.00}", kalemler.Sum(x => x.KdvHaricTutar))</td>
+			</tr>
+		</tfoot>
+	</table>
+	<br />
+	<div class="twothird">
+		<div style="padding-right:20px">
+			<table border="0" style=" border: 1px solid black;width:100%;font-size:10px!important;">
+				<tr>
+					<td><b>Parça </b>: </td>
+					<td>@String.Format("{0:0.00}", kalemler.Where(x => x.KalepTipi == "P").Sum(x => x.KdvHaricTutar)) ₺</td>
+				</tr>
+				<tr>
+					<td><b>işçilik </b>: </td>
+					<td>@String.Format("{0:0.00}", kalemler.Where(x => x.KalepTipi == "I").Sum(x => x.KdvHaricTutar)) ₺ </td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="third">
+		<table border="0" id="tableSonToplam" cellpadding="2">
+			<tr>
+				<td style="text-align:right;border: 1px solid black;padding:1px"><b>Mal Hizmet Toplam Tutarı</b></td>
+				<td style="text-align:right;border: 1px solid black;padding:1px">@String.Format("{0:0.00}", kalemler.Sum(x => x.KdvHaricTutar)) TL</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;border: 1px solid black;"><b>Hesaplanan KDV</b></td>
+				<td style="text-align:right;border: 1px solid black;">@String.Format("{0:0.00}", kalemler.Sum(x => x.ToplamKdvliTutari)) TL</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;border: 1px solid black;"><b>Vergiler Dahil Toplam Tutar</b></td>
+				<td style="text-align:right;border: 1px solid black;">@String.Format("{0:0.00}", (kalemler.Sum(x => x.ToplamKdvliTutari) + kalemler.Sum(x => x.KdvHaricTutar))) TL</td>
+			</tr>
+			<tr>
+				<td style="text-align:right;border: 1px solid black;"><b>Ödenecek Tutar</b></td>
+				<td style="text-align:right;border: 1px solid black;">@String.Format("{0:0.00}", (kalemler.Sum(x => x.ToplamKdvliTutari) + kalemler.Sum(x => x.KdvHaricTutar))) TL</td>
+			</tr>
+		</table>
+	</div>
+	<div class="centertext">
+		<p class="customHeader" style="font:bold;margin-top:1px!important;margin-bottom:1px!important;border:1px solid #000000">Revmer A.Ş. Bahçelievler Mahallesi Detay Sokak No:4 Pendik-İSTANBUL TEL : 0216 444 61 09</p>
+	</div>
+
+
+</div>

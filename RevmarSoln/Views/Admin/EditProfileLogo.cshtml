@@ -1,0 +1,187 @@
+﻿@{
+	Layout = null;
+}
+<script>
+	$(document).ready(function () {
+		$('#ProfilePhoto').click(function () {
+			$('#ProfilePhotoModal').show();
+		});
+
+		$('#closeProfilePhoto').click(function () {
+			$('#ProfilePhotoModal').hide();
+		});
+
+
+	});
+</script>
+<script>
+
+	$(document).ready(function () {
+
+		$('#fileInput').click(function () {
+			$('#fileInputhdn').click();
+		});
+
+		$('#fileInputhdn').change(function (event) {
+			$('#txtpath').val(event.target.files[0].name);
+			readURL(this);
+		});
+
+		$('#btnClear').click(function () {
+			$('#fileInputhdn').val('');
+			$('#blah').attr('src', '');
+			$('#btnClear').removeClass('w3-show').addClass('w3-hide');
+			$('#txtpath').val('');
+			$('.image-upload-wrap').show();
+			$("#WorkOrderImagesList").empty();
+		});
+	});
+	function readURL(input) {
+		$("#WorkOrderImagesList").empty();
+		$('#blah').removeClass("w3-hide").addClass('w3-show');
+		for (var i = 0; i <= input.files.length; i++) {
+			if (input.files && input.files[i]) {
+				var reader = new FileReader();
+
+				$('#blah').attr('src', '/Images/Loading1.gif');
+				$('#barim').removeClass('w3-hide').addClass('w3-show');
+				reader.readAsDataURL(input.files[i]);
+				var elem = document.getElementById("myBar");
+				var width = 1;
+				var id = setInterval(frame, 5);
+				function frame() {
+					if (width >= 100) {
+						clearInterval(id);
+					} else {
+						width++;
+						elem.style.width = width + '%';
+						document.getElementById("demo").innerHTML = width * 1 + '%';
+					}
+				}
+				reader.onload = function (e) {
+
+					$('.image-upload-wrap').hide();
+					setTimeout(function () {
+						//$('#blah').attr('src', e.target.result);
+						var x = document.createElement("IMG");
+						x.setAttribute("class", "w3-half w3-padding")
+						x.setAttribute("src", e.target.result);
+
+						x.setAttribute("alt", "The Pulpit Rock");
+						$('#WorkOrderImagesList').append(x);
+						$('#barim').removeClass('w3-show').addClass('w3-hide');
+						$('#blah').removeClass("w3-show").addClass('w3-hide');
+					}, 500);
+
+				}
+
+			}
+
+			if ($('#blah')[0].currentSrc = null) {
+				$('#btnClear').removeClass("w3-show").addClass("w3-hide");
+			} else {
+				$('#btnClear').removeClass("w3-hide").addClass("w3-show");
+			}
+
+
+
+			$(" <div class='w3-col l12 m12 w3-margin-bottom'><div class='w3-display-container' id='" + i + '"> asdfasdf </div></div>"').appendTo('#Images');
+		}
+
+	}
+
+</script>
+<style>
+
+	.file-upload-input {
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height: 100%;
+		outline: none;
+		opacity: 0;
+		cursor: pointer;
+	}
+
+	.image-upload-wrap:hover {
+		background-color: #f1f1f1 !important;
+	}
+
+	.drag-text {
+		text-align: center;
+	}
+
+		.drag-text h3 {
+			font-weight: 100;
+			text-transform: uppercase;
+			color: #15824B;
+			padding: 60px 0;
+		}
+</style>
+
+<div class="w3-container">
+	@if (ViewBag.ProfilePhotoUrl != null)
+	{
+
+		<img id="ProfilePhoto" style="cursor: pointer;" src="@ViewBag.ProfilePhotoUrl" class="w3-image w3-hover-opacity w3-padding" width="250" height="250">
+
+	}
+	else
+	{
+		<img id="ProfilePhoto" src="/Images/user-512.png" style="cursor: pointer;width:46px;" class="w3-circle w3-margin-right">
+	}
+
+</div>
+
+
+<div id="ProfilePhotoModal" class="w3-modal">
+	<div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+		@using (Html.BeginForm("EditProfileLogo", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+	{
+		
+		<input type="hidden" value="@ViewBag.UserName" name="UserName" />
+		<div class="w3-center">
+			<br>
+			<span id="closeProfilePhoto" class="w3-button w3-xlarge w3-transparent w3-display-topright" title="Kapat">×</span>
+
+			<div class="w3-row w3-padding w3-margin-top">
+				<div class="image-upload-wrap" style="border-style: dashed;position: relative;">
+					<input type="file" id="fileInputhdn" accept="image/png, image/jpeg" name="profilPhotoFile" class="file-upload-input" />
+					<div class="drag-text">
+						<h3>Profil fotoğrafı yükleyin..</h3>
+					</div>
+				</div>
+				<div class="w3-center">
+
+					<div class="w3-display-container">
+						<div class="w3-display-topright  ">
+							<span id="btnClear" class="w3-margin-right w3-hide"><i class="fa fa-times" aria-hidden="true"></i> </span>
+						</div>
+						<div id="WorkOrderImagesList" class="w3-center"></div>
+						<img id="blah" src="#" alt="" class="w3-quarter w3-padding w3-center" onclick="onClick(this)" />
+					</div>
+
+				</div>
+			</div>
+			<div id="barim" class="w3-row w3-small w3-border w3-round w3-hide" style="margin-top:3px!important">
+				<div id="myBar" class="w3-container w3-padding w3-green w3-round" style="width:00%">
+					<div class="w3-center" id="demo"></div>
+				</div>
+			</div>
+			<div class="w3-row w3-tiny" style="margin-top:3px!important;padding-left:16px!important;padding-right:16px!important;">
+				<input id="txtpath" class="w3-input w3-border-top w3-border-left w3-border-right w3-threequarter w3-left" type="text" autocomplete="off">
+				<button id="fileInput" onclick="return false;" class="w3-btn w3-blue w3-quarter w3-right w3-border"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+			</div>
+		</div>
+
+		<div class="w3-section"></div>
+
+
+		<div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+			<button onclick="document.getElementById('ProfilePhotoModal').style.display='none'" type="button" class="w3-button w3-red w3-left">İptal</button>
+			<button type="submit" class="w3-button w3-green w3-right">Kaydet</button>
+		</div>
+}
+	</div>
+</div>

@@ -1,0 +1,30 @@
+﻿@model SahinRektefiyeSoln.Models.Mail
+@{
+	ViewBag.Title = "MailDetail";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Mail Detay", pagePermission = "XXXXX" })
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding w3-margin-top">
+			<a href="/Mail/TopluGonderilenMailler" class="w3-left w3-btn w3-ripple w3-green"><i class="fa fa-plus-circle fa-fw"></i>&nbsp; Toplu Gönderilen Maillleri Gör</a>
+			
+			<a href="/Mail/MailGrupTanimla" class="w3-btn w3-ripple w3-green w3-right w3-margin-right"><i class="fa fa-users  fa-fw"></i>&nbsp; Mail Grubu Ekle</a>
+			<a href="/Mail/TopluMailGonder" class="w3-btn w3-ripple w3-green w3-right "><i class="fa fa-envelope fa-fw"></i>&nbsp; Toplu Mail Gönder</a>
+			
+
+		</div>
+
+		<div id="" class="w3-container person" style="display: block;">
+			<br>
+			<img class="w3-round  w3-animate-top" src="/Images/user-512.png" style="width:10%;">
+			<h5 class="w3-opacity">Konu: @Model.Konu</h5>
+			<h4><i class="fa fa-clock-o"></i>  @Model.Kime kişisine, @Model.CreatedDate tarihinde gönderildi.</h4>
+
+			<hr>
+			<p>@Html.Raw(Model.Icerik)</p>
+		</div>
+
+	</div>
+</div>

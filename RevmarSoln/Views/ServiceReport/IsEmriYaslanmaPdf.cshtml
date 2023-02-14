@@ -1,0 +1,42 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.ServiceReport.IsEmriYaslanma
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>IrsaliyePdf</title>
+    <link rel="stylesheet" href="~/Styles/w3.css">
+</head>
+<body>
+    <div>
+        <table class="w3-table-all w3-striped w3-bordered" id="example">
+            <tr>
+                <th>Yaşlanma Gün Sayısı</th>
+                <th>İş Emri Numarası</th>
+                <th>Müşteri</th>
+                <th>Plaka</th>
+            </tr>
+            @foreach (var item in Model.YaslanmaList.OrderByDescending(x => x.YaslanmaGunSayisi).GroupBy(x => x.IsEmriTipi))
+            {
+                <tr>
+					<td colspan="4" class="w3-teal">@item.Key - İş emri süresi @Model.YaslanmaList.Where(x => x.IsEmriTipi == item.Key).Count() adet iş emri <b><u>@Model.YaslanmaList.Where(x => x.IsEmriTipi == item.Key).FirstOrDefault().YaslanmaGunSayisi</u></b> günü geçmiştir.</td>
+                </tr>
+                foreach (var item2 in Model.YaslanmaList.Where(x => x.IsEmriTipi == item.Key).OrderByDescending(x => x.YaslanmaGunu).ToList())
+                {
+                    <tr class="w3-light-gray">
+                        <td>@item2.YaslanmaGunu</td>
+                        <td>@item2.IsEmriId</td>
+                        <td>@item2.MusteriAdi</td>
+                        <td>@item2.Plaka</td>
+                    </tr>
+                }
+
+            }
+        </table>
+    </div>
+</body>
+</html>

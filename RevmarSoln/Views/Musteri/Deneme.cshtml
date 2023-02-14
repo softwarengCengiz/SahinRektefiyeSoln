@@ -1,0 +1,16 @@
+﻿
+@{
+	ViewBag.Title = "Deneme";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Vereyon.Web;
+
+<h2>Deneme</h2>
+<div class="w3-row w3-row-padding">
+	@Html.RenderFlashMessages(true)
+</div>
+@using (Html.BeginForm())
+{
+	<input class="w3-input" name="value" />
+	<button type="submit" value="Ara">ara</button>
+}

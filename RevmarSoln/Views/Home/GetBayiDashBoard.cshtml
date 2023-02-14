@@ -1,0 +1,269 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Dashboard.UserServiceDashBoard
+@{
+	ViewBag.Title = "GetBayiDashBoard";
+	Layout = null;
+
+	int konsinyeSiparisBekleyenAdet = Model.FordKonsinyeSiparisleri.Count();
+
+}
+
+<script>
+	$(document).ready(function () {
+		debugger;
+		var adet = '@konsinyeSiparisBekleyenAdet';
+
+		if (adet*1 >0) {
+			// Konsinye Bekleyen sipariş vardır bundan dolayı git pop up aç ve içinde göster.
+
+			document.getElementById('KonsinyeBekleyenModal').style.display = 'block';
+		}
+
+	})
+</script>
+
+<div id="KonsinyeBekleyenModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('KonsinyeBekleyenModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Konsinye Araç Bilgileri Bekleniyor !</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin" id="">
+
+				@if (Model.FordKonsinyeSiparisleri != null)
+				{
+					if (Model.FordKonsinyeSiparisleri.Count > 0)
+					{
+						<label>Aşağıdaki siparişleriniz için araç bilgileri beklenmektedir ! </label>
+				<table class="w3-margin-top w3-table-all w3-hoverable" id="dtFordNormalSiparisler">
+					<thead>
+						<tr class="w3-light-grey">
+							<th>Sipariş Giriş Tarihi</th>
+							<th>Parça Tip</th>
+							<th>Parça No</th>
+							<th>Revizyon Takip No</th>
+							<th>Durum</th>
+							<th>Detay</th>
+						</tr>
+					</thead>
+					@foreach (var item in Model.FordKonsinyeSiparisleri)
+	{
+					<tr>
+						<td>@(item.OrderEntryDate.ToShortDateString() + " " + item.OrderEntryDate.ToShortTimeString())</td>
+						<td>@item.FordPartTypes.PartTypeDesc</td>
+						<td>@item.PartNumber</td>
+						<td>@item.RevisionTrackNumber</td>
+						<td>@item.FordOrderStatus.FordOrderStatuDesc</td>
+						<td>
+							<a href="/FordSiparis/SiparisDetay?FordOrderHeaderId=@item.FordOrderHeaderId" class="w3-btn w3-ripple w3-blue w3-round-large"><i class="fa fa-edit"></i>&nbsp; Detay</a>
+						</td>
+					</tr>
+}
+				</table>
+
+
+					}
+				}
+
+			</div>
+		</div>
+	</div>
+</div>
+@if (Model.CompanyName == "Ford")
+{
+	<div class="w3-row-padding w3-margin-bottom w3-margin-top">
+		<div class="w3-row">
+			<h2>Ford Sipariş Modulü</h2>
+		</div>
+		<div class="w3-quarter ">
+			<a href="\FordSiparis\Siparisler" style="text-decoration:none;">
+				<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+					<div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+					<div class="w3-right">
+						<h3>@Model.OnaydaBekleyenSiparisSayisi</h3>
+					</div>
+					<div class="w3-clear"></div>
+					<h4>Onayda Bekleyen Siparişler</h4>
+				</div>
+			</a>
+
+
+		</div>
+		<div class="w3-quarter">
+			<a href="\FordSiparis\Siparisler" style="text-decoration:none;">
+				<div class="w3-container w3-red w3-padding-16 w3-hover-shadow">
+					<div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+					<div class="w3-right">
+						<h3>@Model.OnaydaBekleyenSiparisSayisi</h3>
+					</div>
+					<div class="w3-clear"></div>
+					<h4>İade Onayı Bekleyen Siparişler</h4>
+				</div>
+			</a>
+		</div>
+		<div class="w3-quarter">
+			<a href="\FordSiparis\Siparisler" style="text-decoration:none;">
+				<div class="w3-container w3-teal w3-padding-16 w3-hover-shadow">
+					<div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+					<div class="w3-right">
+						<h3>@Model.OnaydaBekleyenSiparisSayisi</h3>
+					</div>
+					<div class="w3-clear"></div>
+					<h4>Tamamlanan Siparişlerim</h4>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="w3-container w3-margin-top">
+		<div class="w3-row w3-border w3-border-blue">
+			<div class="w3-row  w3-text-center w3-center">
+				<h4>Ford Sipariş Modülü - Kullanım Klavuzu</h4>
+			</div>
+			<div class="w3-bar w3-blue">
+				<button class="w3-bar-item w3-button" onclick="openKlavuz('NormalSiparis')">Normal Sipariş</button>
+				<button class="w3-bar-item w3-button" onclick="openKlavuz('KonsiyeSiparis')">Konsiye Sipariş</button>
+
+
+				<button class="w3-bar-item w3-button" onclick="openKlavuz('SiparisIade')">Sipariş İade</button>
+				<button class="w3-bar-item w3-button" onclick="openKlavuz('SiparisIptal')">Sipariş İptal</button>
+			</div>
+
+			<div id="NormalSiparis" class="w3-container klavuz">
+				<h4>Normal Sipariş</h4>
+				<p>Normal sipariş verebilmek için sol menü üzerinden “Sipariş Ver” sekmesine gidilir. Sipariş için parça tipi ve parça numarası doldurulduktan sonra yanında Revmer tarafında hazır stok olup olmadığı belirecektir, stokta olmasa bile sipariş işleminize devam edebilirsiniz.</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/17.PNG" class="w3-image w3-border" />
+				</div>
+				<p>“Sipariş Ver” butonuna basılır ve sistem sizi “Sipariş Listesi” sayfasına yönlendirir. Burada siparişlerinizin durumlarını görüntüleyebilirsiniz.</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/18.PNG" class="w3-image w3-border" />
+				</div>
+				<p>Sipariş Revmer yetkilisi tamamlandıktan sonra sipariş modülü üzerinde herhangi bir şey yapmanıza gerek kalmadan sipariş tamamlanmıştır. Arızalı parça simim’e gönderilmelidir.</p>
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/19.PNG" class="w3-image w3-border" />
+				</div>
+
+
+			</div>
+
+
+			<div id="KonsiyeSiparis" class="w3-container klavuz" style="display:none">
+				<h4>Konsiye Sipariş</h4>
+				<p>Servisinize parça stoğu çekmek için kullanılır. Elinizde hazır bulunmasını istediğiniz parçaları aşağıdaki şekilde sipariş edebilirsiniz.</p>
+				<p>Sol menü üzerinden “Sipariş Ver” butonuna basılır gelen sayfa üzerinde parça tipini ve parça numarası yazılır. Bu kısma istediğiniz parça numarasını yazabilirsiniz, parça numarası seçme kutusundan gelmese bile parça numarasını doğru yazdığınızı düşünüyorsanız sipariş işlemine devam edebilirsiniz.</p>
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/04.PNG" class="w3-image w3-border" />
+				</div>
+
+				<p>Parça numarası yazıldıktan sonra yanında Revmer tarafında hazır stok olup olmadığı belirecektir, stokta olmasa bile sipariş işleminize devam edebilirsiniz.</p>
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/05.PNG" class="w3-image w3-border" />
+				</div>
+				<p>Parça numarasını yazdıktan sonra aşağıdan mutlaka “Konsiye Sipariş” kutusu işaretlenmelidir!</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/07.PNG" class="w3-image w3-border" />
+				</div>
+				<p>“Sipariş Ver” butonuna tıkladıktan sonra karşınıza bir uyarı gelecektir, konsiye siparişler de parça araca takıldıktan sonra araç bilgileri mutlaka Revmer sipariş modülü üzerine girilmelidir aksi takdirde sipariş tamamlanmayacaktır.</p>
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/08.PNG" class="w3-image w3-border" />
+				</div>
+
+				<p>Sipariş verildikten sonra sistem sizi “Sipariş Listesi” sekmesine yönlendirir ve siparişinizi burada durumunu görüntüleyebilirsiniz. Siparişinizi verdikten sonra durumu “Sipariş Onay Bekliyor” olarak gözükür.</p>
+
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/09.PNG" class="w3-image w3-border" />
+				</div>
+
+
+				<p>Sipariş iptal işlemi bir sonraki adımlarda anlatılacaktır. İptal işlemine atlamak için tıklayınız.</p>
+				<p>Konsiye siparişiniz Revmer sistem yetkilisi tarafından onaylandıktan sonra sipariş durumu “Konsiye Araç Bilgileri Bekleniyor” statüsüne çekilir. Konsiye parçayı bir araca taktığınızda bu siparişin tamamlanması için sipariş içerisine girmelisiniz!</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/11.PNG" class="w3-image w3-border" />
+				</div>
+				<p>Sipariş Bilgilerini doldurunuz!</p>
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/12.PNG" class="w3-image w3-border" />
+				</div>
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/13.PNG" class="w3-image w3-border" />
+				</div>
+
+
+				<p>Konsiye sipariş detayları doldurulur ve “Sipariş Bilgilerini Güncelle” butonuna basılır. Sonrasında araçtan çıkan parçayı SİMİM’e göndermelisiniz. Bu işlemi tamamladığınızda sipariş detayına girip “Arızalı Parça Simim’e Gönderildi” butonuna basılır ve sipariş tamamlanır.</p>
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/14.PNG" class="w3-image w3-border" />
+				</div>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/15.PNG" class="w3-image w3-border" />
+				</div>
+
+			</div>
+
+
+
+
+			<div id="SiparisIade" class="w3-container klavuz" style="display:none">
+				<h4>Sipariş İade</h4>
+				<p>İade etmek istediğiniz sipariş detayına girerek “Parçayı İade Et” butonuna basılmalıdır.</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/20.PNG" class="w3-image w3-border" />
+				</div>
+
+				<p>Karşınıza gelen ekranda iade nedenini girmeniz gerekmektedir.</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/21.PNG" class="w3-image w3-border" />
+				</div>
+				<p>Sipariş Detay sayfası üzerinde siparişinizin durumunu görüntüleyebilirsiniz. İade nedeni burada gözükür.</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/22.PNG" class="w3-image w3-border" />
+				</div>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/23.PNG" class="w3-image w3-border" />
+				</div>
+
+				<p>Revmer yetkilisi iade talebinizi onayladığında siparişler kısmından kontrol ettiğinizde siparişiniz statüsü “Bayi Sipariş İade Onaylandı” olarak gözükecektir.</p>
+
+
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/24.PNG" class="w3-image w3-border" />
+				</div>
+			</div>
+
+
+
+			<div id="SiparisIptal" class="w3-container klavuz" style="display:none">
+				<h4>Bayi Sipariş İptal İşlemi</h4>
+				<p>Sipariş verdiniz ve iptal etmek isterseniz “Sipariş Listesi” sekmesinden iptal etmek istediğiniz sipariş bulunur ve detayına girilir. “Siparişi İptal Et” butonuna basılır ve sipariş iptal edilmiş olur.</p>
+				<div class="w3-row">
+					<img src="~/Images/FordKlavuz/10.PNG" class="w3-image w3-border" />
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<hr />
+
+	<script>
+		function openKlavuz(KlavuzAdi) {
+			var i;
+			var x = document.getElementsByClassName("klavuz");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";
+			}
+			document.getElementById(KlavuzAdi).style.display = "block";
+		}
+	</script>
+
+}
+else if (Model.CompanyName == "Fiat")
+{
+
+}

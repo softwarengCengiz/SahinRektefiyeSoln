@@ -1,0 +1,526 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Customer.CreateMusteriPageModel
+@{
+	ViewBag.Title = "Create";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Müşteri Tanımlama Ekranı", pagePermission = "XXXXX" })
+@using Vereyon.Web;
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/DatetimePicker/bootstrap-datetimepicker.tr.js"></script>
+<link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
+<script>
+	$(document).ready(function () {
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				if (this.bindings[0].getAttribute("required") == "required") {
+					this.input.attr("required", "required");
+				}
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tümünü Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.css('margin-right', 3)
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				var i = 0;
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text))) {
+						i += 1;
+						if (i <= 5) {
+							return {
+								label: text,
+								value: text,
+								option: this
+							};
+						}
+
+					}
+
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				// Remove invalid value
+				this.input
+					.val("")
+					.attr("title", value + " seçilmedi.")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			}
+		});
+
+		jQuery(document).ready(function () {
+			'use strict';
+
+			jQuery('#musteri_DogumTarihi').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				scrollInput: false
+			});
+
+			$.datetimepicker.setLocale('tr');
+
+		});
+
+		$("#IlId").combobox({
+			select: function (event, ui) {
+				$('#IlId').val(ui.item.value);
+				$('#IlId').trigger("change");
+			}
+		});
+
+		$("#VergiDaireIlId").combobox({
+			select: function (event, ui) {
+				$('#VergiDaireIlId').val(ui.item.value);
+				$('#VergiDaireIlId').trigger("change");
+			}
+		});
+
+		$("#MeslekId").combobox({
+			select: function (event, ui) {
+				$('#MeslekId').val(ui.item.value);
+				$('#MeslekId').trigger("change");
+			}
+		});
+
+
+
+		$("#MusteriTipiB").prop("checked", true);
+
+		$('.musteriTipi').change(function () {
+			var value = $(this).filter(':checked').val();
+			if (value == "B") {
+				$('#divkurumsal').removeClass('w3-show').addClass('w3-hide');
+				$('#divbireysel').removeClass('w3-hide').addClass('w3-show');
+			}
+			else if (value == "K") {
+				$('#divkurumsal').removeClass('w3-hide').addClass('w3-show');
+				$('#divbireysel').removeClass('w3-show').addClass('w3-hide');
+			}
+		});
+
+		$('.email').change(function () {
+
+			$(".error").hide();
+			$(this).removeClass('w3-border-red');
+
+			var hasError = false;
+			var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+
+			var emailaddressVal = $(this).val();
+
+
+			if (!emailReg.test(emailaddressVal)) {
+				$(this).after('<span class="error w3-text-red w3-small">Lütfen geçerli bir email adresi giriniz.</span>');
+				$(this).addClass('w3-border-red');
+				hasError = true;
+			}
+
+			if (hasError == true) { return false; }
+
+		});
+
+		$('#btnKaydet').click(function () {
+			//Kontroller yapılacak 
+
+			//bireyselde müşteri adı soyadı tc zorunlu olmalı.
+			if ($('.musteriTipi').filter(':checked').val() == "B") {
+				var adi = $('#musteri_MusteriAdi').val();
+				var soyadi = $('#musteri_MusteriSoyadi').val();
+
+				if (adi =="") {
+					alert("Müşteri adı zorunlu alandır.");
+					return false;
+				}
+				else if (soyadi == "") {
+					alert("Müşteri soyadı zorunlu alandır.");
+					return false;
+				}
+
+			}
+			else if ($('.musteriTipi').filter(':checked').val() == "K")
+			{
+
+			}
+
+			//kurumsal'da da olmaları 
+
+			return true;
+		});
+	});
+
+		function onChangeIl() {
+		var url = '@Url.Action("GetIlceler", "Musteri")';
+
+		$("#IlceId").attr('disabled', 'disabled');
+
+			var IlId = $("#IlId").val();
+
+			$.getJSON(url, { IlId: IlId}, function (response) {
+			$("#IlceId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#IlceId").append(p);
+			});
+			$("#IlceId").removeAttr('disabled', 'disabled');
+		});
+	}
+
+	function openCity(evt, cityName, MusteriTip) {
+		var i, x, tablinks;
+		x = document.getElementsByClassName("tab");
+		for (i = 0; i < x.length; i++) {
+			x[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablink");
+		for (i = 0; i < x.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
+		}
+		document.getElementById(cityName).style.display = "block";
+		evt.currentTarget.firstElementChild.className += " w3-border-red";
+
+		if (MusteriTip == "B") {
+
+			$("#MusteriTipiB").prop("checked", true);
+
+		} else if (MusteriTip == "K") {
+
+			$("#MusteriTipiK").prop("checked", true);
+		}
+
+
+	}
+
+	function onChangeVergiDaireIl() {
+		var url = '@Url.Action("GetIlceler", "Musteri")';
+
+		$("#VergiDaireIlceId").attr('disabled', 'disabled');
+
+		var IlId = $("#VergiDaireIlId").val();
+
+			$.getJSON(url, { IlId: IlId}, function (response) {
+				$("#VergiDaireIlceId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#VergiDaireIlceId").append(p);
+			});
+				$("#VergiDaireIlceId").removeAttr('disabled', 'disabled');
+		});
+
+
+	}
+</script>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+		@using (Html.BeginForm("Create", "Musteri", FormMethod.Post))
+		{
+			<div class="w3-row w3-margin-bottom">
+				<!--Left Side-->
+				<div class="w3-half">
+					<div class="w3-row w3-padding">
+						<table class="w3-hide">
+							<tr>
+								<td style="padding-right:10px!important;">
+									<label>Müşteri Tipi</label>
+								</td>
+								<td>
+									<label>Bireysel Müşteri</label>
+								</td>
+								<td>
+									@Html.RadioButtonFor(model => model.musteri.MusteriTipi, "B", new { @id = "MusteriTipiB", @class = "musteriTipi", name = "MusteriTipiB" })
+								</td>
+								<td>
+									<label>Kurumsal Müşteri</label>
+								</td>
+								<td>
+									@Html.RadioButtonFor(model => model.musteri.MusteriTipi, "K", new { @id = "MusteriTipiK", @class = "musteriTipi", name = "MusteriTipiK" })
+								</td>
+							</tr>
+						</table>
+						<div class="w3-row">
+							<a href="javascript:void(0)" onclick="openCity(event, 'divbireysel','B');">
+								<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">Bireysel Müşteri</div>
+							</a>
+							<a href="javascript:void(0)" onclick="openCity(event, 'divkurumsal','K');">
+								<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Kurumsal Müşteri</div>
+							</a>
+						</div>
+					</div>
+					<div class="w3-row w3-padding tab" id="divbireysel">
+						<div class="w3-row">
+							<div class="w3-third w3-padding-right">
+								<label>Müşteri Adı</label>
+								@Html.EditorFor(model => model.musteri.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+							</div>
+							<div class="w3-third w3-padding-right">
+								<label>Müşteri Soyadı</label>
+								@Html.EditorFor(model => model.musteri.MusteriSoyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+							</div>
+							<div class="w3-third w3-padding-right">
+								<label>Tc Kimlik Numarası</label>
+								@Html.EditorFor(model => model.musteri.TCKN, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "11", autocomplete = "off" } })
+							</div>
+						</div>
+					</div>
+					<div class="w3-row w3-padding tab" id="divkurumsal" style="display:none">
+						<div class="w3-row">
+							<div class="w3-twothird w3-padding-right">
+								<label>Kurum Adı</label>
+								@Html.EditorFor(model => model.musteri.KurumAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "150", autocomplete = "off" } })
+							</div>
+							<div class="w3-third">
+								<label>Kurum Tipi</label>
+								@Html.DropDownList("KurumTipId", (SelectList)ViewBag.KurumTipleri, "Kurum Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "KurumTipId" })
+							</div>
+						</div>
+						<div class="w3-row">
+						
+						</div>
+						<div class="w3-row">
+							<div class="w3-third w3-padding-right">
+								<label>İlgili Ad</label>
+								@Html.EditorFor(model => model.musteri.KontakAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+							</div>
+							<div class="w3-third w3-padding-right">
+								<label>İlgili Soyad</label>
+								@Html.EditorFor(model => model.musteri.KontakSoyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+							</div>
+							<div class="w3-third">
+								<label>İlgili Kategori</label>
+								@Html.DropDownList("KontakKatId", (SelectList)ViewBag.KontakKategorileri, "İlgili Kategorisi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "KontakKatId" })
+							</div>
+						</div>
+					</div>
+					<div class="w3-row w3-padding ">
+						<div class="w3-row">
+							<div class="w3-third w3-padding-right">
+								<label>Doğum Tarihi</label>
+								@Html.EditorFor(model => model.musteri.DogumTarihi, new { id = "DogumTarihi", htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+							</div>
+							<div class="w3-third w3-padding-right">
+								<label>Meslek</label>
+								@Html.DropDownList("MeslekId", (SelectList)ViewBag.Meslekler, "Meslek Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "MeslekId" ,  autocomplete = "off" })
+							</div>
+							<div class="w3-third">
+								<label>Cinsiyet</label>
+								@Html.DropDownListFor(model => model.musteri.Cinsiyet, new List<SelectListItem>
+{
+new SelectListItem{ Text="Cinsiyet Seçiniz", Value = "0" },
+new SelectListItem{ Text="Kadın", Value = "K" },
+new SelectListItem{ Text="Erkek", Value = "E" },
+}, htmlAttributes: new { @class = "w3-select w3-border w3-round" })
+							</div>
+						</div>
+						<div class="w3-row">
+							<div class="w3-third w3-padding-right ">
+								<label>Telefon Numarası</label>
+								@Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off" } })
+							</div>
+							<div class="w3-twothird ">
+								<label>Mail Adresi</label>
+								@Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off" } })
+							</div>
+						</div>
+						<div class="w3-row">
+								<div class="w3-third w3-padding-right">
+									<label>İl</label>
+									@Html.DropDownList("IlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlId", @onchange = "onChangeIl();" })
+								</div>
+								<div class="w3-third">
+									<label>İlçe</label>
+									@Html.DropDownList("IlceId", Enumerable.Empty<SelectListItem>(), "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlceId" })
+								</div>
+						</div>
+						<div class="w3-row">
+							<div class="w3-row w3-row w3-padding-top">
+								@Html.TextAreaFor(model => model.musteri.Adres, new { @class = "w3-input w3-border w3-round", maxlength = "512", rows = "6", cols = "300", placeholder = "Adres giriniz" })
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--Right Side-->
+				<div class="w3-half">
+					<div class="w3-row w3-padding">
+						<div class="w3-col m5 l5">
+							<img src="~/Images/eFatura.png" class="w3-round" style="width:50px!important;height:50px!important;" />
+
+							@Html.CheckBoxFor(model => model.musteri.SWEFaturaMukellefi, new { @class = "w3-check" })
+							<label>E-fatura Mükellefi</label>
+						</div>
+						<div class="w3-col m5 l5">
+							<img src="~/Images/Earsiv.png" class="w3-round" style="width:50px!important;height:50px!important;" />
+							@Html.CheckBoxFor(model => model.musteri.SWEArsivMukellefi, new { @class = "w3-check" })
+							<label>E-Arşiv Mükellefi</label>
+						</div>
+					</div>
+					<div class="w3-row">
+
+						<div class="w3-third w3-padding-right">
+							<label>Vergi No</label>
+							@Html.EditorFor(model => model.musteri.VergiNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "15", autocomplete = "off" } })
+						</div>
+						<div class="w3-twothird w3-padding-right">
+							<label>Vergi Dairesi</label>
+							@Html.EditorFor(model => model.musteri.VergiDairesi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
+						</div>
+						@*<div class="w3-third w3-padding-right">
+			<label>Vergi Daire İl</label>
+			@Html.DropDownList("VergiDaireIlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VergiDaireIlId", @onchange = "onChangeVergiDaireIl();" })
+		</div>
+		<div class="w3-third">
+			<label>Vergi Daire İlçe</label>
+			@Html.DropDownList("VergiDaireIlceId", Enumerable.Empty<SelectListItem>(), "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VergiDaireIlceId" })
+		</div>*@
+					</div>
+					<div class="w3-row">
+						<div class="w3-third w3-padding-right">
+							<label>Muhasebe Kodu</label>
+							@Html.EditorFor(model => model.musteri.MuhasebeKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+						</div>
+						<div class="w3-third w3-padding-right">
+							<label>Vade</label>
+							@Html.EditorFor(model => model.musteri.Vade, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+						</div>
+						@*<div class="w3-third w3-padding-right">
+							<label>Cari Kod</label>
+							@Html.EditorFor(model => model.musteri.CariKod, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off", required = "required" } })
+						</div>*@
+					</div>
+					<div class="w3-row">
+						<div class="w3-third w3-padding-right">
+							<label>Parça İskontosu</label>
+							@Html.EditorFor(model => model.musteri.ParcaIskonto, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+						</div>
+						<div class="w3-third w3-padding-right">
+							<label>İşçilik İskontosu</label>
+							@Html.EditorFor(model => model.musteri.IscilikIskonto, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+						</div>
+						<div class="w3-third "></div>
+					</div>
+					<div class="w3-row w3-padding-top">
+						@Html.TextAreaFor(model => model.musteri.Note, new { @class = "w3-input w3-border w3-round", maxlength = "512", rows = "6", cols = "300", placeholder = "Notları buraya girebilirsiniz" })
+					</div>
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-right w3-margin">
+					<button class="w3-btn w3-ripple w3-green w3-round w3-right" id="btnKaydet">Kaydet</button>
+				</div>
+			</div>
+		}
+	</div>
+</div>
+
+
+<script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>

@@ -1,0 +1,15 @@
+﻿
+@{
+	Layout = null;
+}
+@*@if (ViewBag.IsManager == true)
+{
+	<a href="/Admin/MailBox" class="w3-bar-item w3-button w3-light-gray " style="padding-right: 5px;">
+		<i class="fa fa-envelope"></i>
+
+		@if (Convert.ToInt32(ViewBag.UnReadMessages) > 0)
+		{
+		<span class="w3-badge" style="margin-left:2px!important">@ViewBag.UnReadMessages</span>
+		}
+		
+	</a>}*@

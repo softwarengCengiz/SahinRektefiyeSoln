@@ -1,0 +1,663 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.StokKartiDuzenle.StokKartiDuzenlePageModel
+@{
+	ViewBag.Title = "StokKartiDuzenle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Vereyon.Web;
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/ChartScripts/highcharts.js"></script>
+<script src="~/Scripts/ChartScripts/data.js"></script>
+<script src="~/Scripts/ChartScripts/exporting.js"></script>
+<script src="~/Scripts/ChartScripts/export-data.js"></script>
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Stok Kartı Düzenleme", pagePermission = "XXXXX" })
+
+<script>
+	$(document).ready(function () {
+
+		
+		var satisBirimFiyat = parseFloat(GetCurreny($('#SatisBirimFiyati').val()));
+		var kdvOrani = parseFloat($('#Kdv').val());
+		if (isNaN(satisBirimFiyat)) {
+			$('#kdvliFiyat').val('Birim Fiyatı Giriniz');
+		} else {
+			var kdv = parseFloat(satisBirimFiyat * kdvOrani / 100);
+			var kdvli = satisBirimFiyat + kdv;
+			$('#kdvliFiyat').val(kdvli.toFixed(2));
+			kdvliFiyat.classList.toggle("money");
+			kdvliFiyat.classList.toggle("money2");
+
+		}
+		$('#BarkodStokKartId').val('@Model.model.StokKartiId');
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tümünü Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.css('margin-right', 3)
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text)))
+						return {
+							label: text,
+							value: text,
+							option: this
+						};
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				// Remove invalid value
+				this.input
+					.val("")
+					.attr("title", value + " seçilmedi.")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			}
+		});
+
+		$('#btnStokKartiGuncelle').click(function () {
+			var parcaTipId = $('#ParcaTipId').val();
+			var errorMessage = '';
+
+			if (parcaTipId === '') {
+				errorMessage += 'Parça tipini seçiniz\n';
+			}
+
+
+			if ($('#SatisBirimFiyati').val() === '0,00') {
+				errorMessage += 'Satış birim fiyatı giriniz\n';
+			}
+
+			if ($('#model_EnAzStokAdedi').val() === '') {
+				errorMessage += 'En az stok adedini giriniz\n';
+			}
+
+			if (errorMessage != '') {
+				alert(errorMessage);
+				return false;
+			}
+
+			return true;
+
+		});
+
+		$("#ParcaTipId").combobox({
+			select: function (event, ui) {
+				$('#ParcaTipId').val(ui.item.value);
+				$('#ParcaTipId').trigger("change");
+			}
+		});
+
+
+		$("#SatisBirimFiyati").focusout(function () {
+			var satisBirimFiyat = parseFloat(GetCurreny($(this).val()));
+			var kdvOrani = parseFloat($('#Kdv').val());
+			if (isNaN(kdvOrani)) {
+				$('#kdvliFiyat').val('Kdv orani giriniz');
+			} else {
+				var kdv = parseFloat(satisBirimFiyat * kdvOrani / 100);
+				var kdvli = satisBirimFiyat + parseFloat(kdv);
+				$('#kdvliFiyat').val(parseFloat(kdvli).toFixed(2));
+				kdvliFiyat.classList.toggle("money");
+				kdvliFiyat.classList.toggle("money2");
+
+			}
+
+		});
+
+		$('#Kdv').focusout(function () {
+
+			var satisBirimFiyat = parseFloat(GetCurreny($('#SatisBirimFiyati').val()));
+			var kdvOrani = parseFloat($('#Kdv').val());
+			if (isNaN(satisBirimFiyat)) {
+				$('#kdvliFiyat').val('Birim Fiyatı Giriniz');
+			} else {
+				var kdv = parseFloat(satisBirimFiyat * kdvOrani / 100);
+				var kdvli = satisBirimFiyat + kdv;
+				$('#kdvliFiyat').val(parseFloat(kdvli).toFixed(2));
+				kdvliFiyat.classList.toggle("money");
+				kdvliFiyat.classList.toggle("money2");
+			}
+
+        });
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#tblKimdenAldim').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+		});
+
+		$('#tblKimeSattim').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+		$('#btnAlternatifler').click(function () {
+
+			$('#AlternatifModalContent').load('@Url.Action("ParcaAlternatif","Stok", new { StokKartiId = Model.model.StokKartiId })');
+
+			document.getElementById('AlternatifModal').style.display = 'block';
+
+			return false;
+
+		});
+
+		$('#btnBarkodYaz').click(function () {
+
+			
+			document.getElementById('BarkodModal').style.display = 'block';
+
+			return false;
+
+		});
+
+	});
+
+	function openCity(evt, cityName) {
+		var i, x, tablinks;
+		x = document.getElementsByClassName("tab");
+		for (i = 0; i < x.length; i++) {
+			x[i].style.display = "none";
+		}
+		tablinks = document.getElementsByClassName("tablink");
+		for (i = 0; i < x.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" w3-border-blue", "");
+		}
+		document.getElementById(cityName).style.display = "block";
+		evt.currentTarget.firstElementChild.className += " w3-border-blue";
+
+
+	}
+</script>
+
+<script>
+	$(document).ready(function () {
+		Highcharts.chart('containerWorkOrder', {
+			data: {
+				table: 'datatable'
+			},
+			chart: {
+				type: 'column'
+			},
+			title: {
+				text: 'Ay Bazında Satılan Parça Adetleri'
+			},
+			yAxis: {
+				allowDecimals: false,
+				title: {
+					text: 'Adet'
+				}
+			},
+			tooltip: {
+				formatter: function () {
+					return '<b>' + this.series.name + '</b><br/>' +
+						this.point.y + ' Adet';
+				}
+			}
+		});
+
+	});
+
+</script>
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-margin-top w3-row-padding">
+			<div class="w3-quarter">
+			<a href="/Stok/StokKartiTanimlariV2" class="w3-btn w3-ripple w3-blue"><i class="fa fa-arrow-left"></i>&nbsp;Geri </a>
+			</div>
+			<div class="w3-quarter w3-right">
+				<a href="#" title="Barkod Yazdır" class="w3-right" id="btnBarkodYaz"><i class="fa fa-print w3-hover-opacity" aria-hidden="true"></i></a>
+			</div>
+		</div>
+		<div class="w3-row w3-row-padding">
+			@Html.RenderFlashMessages()
+		</div>
+		<div class="w3-border w3-round w3-margin-top w3-leftbar w3-border-blue">
+
+			@using (Html.BeginForm("StokKartiDuzenle", "Stok", FormMethod.Post))
+			{
+				<input type="hidden" value="@Model.model.StokKartiId" name="StokKartId" />
+				<div class="w3-row">
+					<div class="w3-quarter w3-padding">
+						<label>Parça No</label>
+						@Html.EditorFor(model => model.model.ParcaNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "20", autocomplete = "off", required = "required" } })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<label>Parça Adı</label>
+						@Html.EditorFor(model => model.model.ParcaAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "128", autocomplete = "off", required = "required" } })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<label>Kdv</label>
+						@Html.DropDownList("Kdv", ViewData["VergiOranlari"] as List<SelectListItem>, htmlAttributes: new { @class = "w3-select w3-border w3-round", required = "required" })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<br />
+						<button type="button" id="btnAlternatifler" class="w3-btn w3-ripple w3-teal w3-half w3-block">Alternatifler</button>
+					</div>
+				</div>
+				<div class="w3-row">
+					<div class="w3-quarter w3-padding">
+						<label>Parça Tipi</label>
+						@Html.DropDownList("ParcaTipId", (SelectList)ViewBag.ParcaTipleri, "Parça Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "ParcaTipId", required = "required" })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<div class="w3-half w3-padding-right">
+							<label>En Az Stok Adedi</label>
+							@Html.EditorFor(model => model.model.EnAzStokAdedi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "2", autocomplete = "off" } })
+						</div>
+						<div class="w3-half">
+							<label>En Az Satış Adedi</label>
+							@Html.EditorFor(model => model.model.EnAzSatisAdedi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "2", autocomplete = "off", required = "required" } })
+						</div>
+
+					</div>
+					<div class="w3-quarter w3-padding">
+						<div class="w3-half w3-padding-right">
+							<label>Satış Birim Fiyatı</label>
+							@Html.EditorFor(model => model.model.SatisBirimFiyati, new { htmlAttributes = new { @class = "w3-input w3-border w3-round money ", id = "SatisBirimFiyati", autocomplete = "off", required = "required" } })
+						</div>
+						<div class="w3-half">
+							<label>Satış Birim Fiyatı Kdv'li</label>
+							<input id="kdvliFiyat" class="w3-input w3-border w3-round money" autocomplete="off" disabled="disabled" />
+						</div>
+					</div>
+					<div class="w3-quarter w3-padding">
+						<br />
+						<button id="btnStokKartiGuncelle" class="w3-btn w3-ripple w3-green w3-half w3-block">Güncelle</button>
+					</div>
+				</div>
+			}
+		</div>
+		<div class="w3-row">
+			<div class="w3-quarter w3-padding">
+				<label>Günlük Satış Hızı</label>
+				@Html.EditorFor(model => model.detay.GunlukSatisHizi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", disabled = "disabled" } })
+
+			</div>
+			<div class="w3-quarter w3-padding">
+				<label>Ortalama Maliyet (Kdv'siz)</label>
+				@Html.EditorFor(model => model.detay.OrtalamaMaliyet, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", disabled = "disabled" } })
+			</div>
+			<div class="w3-quarter w3-padding">
+				<label>Son Maliyet (Kdv'siz)</label>
+				@Html.EditorFor(model => model.detay.SonMaliyet, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", disabled = "disabled" } })
+			</div>
+			<div class="w3-quarter w3-padding">
+				<div class="w3-half w3-padding-right">
+					<label>Toplam Stok</label>
+					@Html.EditorFor(model => model.model.ToplamStok, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "2", autocomplete = "off", disabled = "disabled" } })
+				</div>
+				<div class="w3-half ">
+					<label>Atolye Stok</label>
+					@Html.EditorFor(model => model.model.AtolyeStok, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "2", autocomplete = "off", disabled = "disabled" } })
+				</div>
+			</div>
+
+		</div>
+		<div class="w3-row w3-margin-bottom">
+			<div class="w3-half">
+				@Html.Action("AddDepoRafTanimToStokKarti", new { StokKartiId = Model.model.StokKartiId })
+			</div>
+			<div class="w3-half">
+				@Html.Action("AddVehicleToStokKarti", new { StokKartiId = Model.model.StokKartiId })
+			</div>
+		</div>
+
+		<div class="w3-row w3-margin-bottom w3-border w3-round">
+			<div class="w3-row">
+				<a href="javascript:void(0)" onclick="openCity(event, 'divKimdenAldim');">
+					<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-blue">Kimden Aldım</div>
+				</a>
+				<a href="javascript:void(0)" onclick="openCity(event, 'divKimeSattim');">
+					<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding ">Kime Sattım</div>
+				</a>
+			</div>
+			<div class="w3-row w3-padding w3-margin-top tab" id="divKimdenAldim">
+				@if (Model.KimdenAldim.Count > 0)
+				{
+					<table id="tblKimdenAldim">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Firma Adı</th>
+								<th>Fatura Tarihi</th>
+								<th>Adet</th>
+								<th>TL</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var aldim in Model.KimdenAldim)
+							{
+								var iskontoluFiyat = aldim.BirimFiyat - (aldim.BirimFiyat * aldim.Iskonto / 100);
+								var kdvliFiyat = iskontoluFiyat + (iskontoluFiyat * aldim.StokKarti.Kdv / 100);
+								var toplamTutar = kdvliFiyat * aldim.Adet;
+								<tr>
+									<td><a href="/Service/IrsaliyeTanim?irsaliyeId=@aldim.IrsaliyeId" title="İrsaliye Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a></td>
+									<td class="w3-center">
+										@aldim.Irsaliyeler.Musteri.KurumAdi
+									</td>
+									<td class="w3-center">@aldim.Irsaliyeler.FaturaTarihi.ToShortDateString()</td>
+									<td class="w3-center">@aldim.Adet</td>
+									<td class="w3-center">@toplamTutar</td>
+								</tr>
+
+							}
+						</tbody>
+					</table>
+				}
+				else
+				{
+					<div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Bu stok kartı için hiç irsaliye girilmemiştir.</div>
+				}
+			</div>
+			<div class="w3-row w3-padding w3-margin-top tab" id="divKimeSattim" style="display:none">
+				@if (Model.KimeSattim.Count > 0)
+				{
+					<table id="tblKimeSattim">
+						<thead>
+							<tr>
+								<th></th>
+								<th>İş Emri No</th>
+								<th>Statu</th>
+								<th>Müşteri</th>
+								<th>Fatura Tarihi</th>
+								<th>Adet</th>
+								<th>TL</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var sattim in Model.KimeSattim)
+							{
+								<tr>
+									<td><a href="/IsEmri/IsEmriDuzenle?IsEmriId=@sattim.IsEmriId" title="İş Emri Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a></td>
+									<td>@(String.Format("{0:000000}", sattim.IsEmriId))</td>
+									<td>@sattim.IsEmirleri.IsEmriStatu.Aciklamasi</td>
+									<td class="w3-center">
+										@if (sattim.IsEmirleri.Musteri.MusteriTipi == "B")
+										{
+											<label>@sattim.IsEmirleri.Musteri.MusteriAdi @sattim.IsEmirleri.Musteri.MusteriSoyadi</label>
+										}
+										else
+										{
+											<label>@sattim.IsEmirleri.Musteri.KurumAdi</label>
+										}
+									</td>
+									<td class="w3-center">@sattim.IsEmirleri.FaturaTarihi</td>
+									<td class="w3-center">@sattim.BirimSaatAdet</td>
+									<td class="w3-center">@sattim.KalemTutar</td>
+								</tr>
+
+							}
+						</tbody>
+					</table>
+				}
+				else
+				{
+					<div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Bu stok kartı hiçbir iş emrine faturalanmamıştır.</div>
+				}
+			</div>
+		</div>
+
+		<div class="w3-row w3-margin-bottom w3-border w3-round">
+			<div id="containerWorkOrder" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+			<table id="datatable" class="w3-hide">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Stok Kartı Aylık Satış Sayıları</th>
+
+					</tr>
+				</thead>
+				<tbody>
+
+					@foreach (var task in ViewBag.isEmriAylikCikis)
+					{
+						<tr>
+							<th>@task.MonthName</th>
+							<td>@task.Total</td>
+
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>
+
+<div id="AlternatifModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('AlternatifModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Alternatif Parça'yı Seç</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin" id="AlternatifModalContent">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="BarkodModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('BarkodModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Barkod Yazdır</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin" id="BarkodModalContent">
+				<div class="w3-row">
+					@using (Html.BeginForm("StokKartBarkodBas","Stok"))
+					{
+						
+						<input type="hidden" name="BarkodStokKartId" id="BarkodStokKartId"/>
+						<div class="w3-half">
+							<label>Barkod Adet</label>
+							<input type="text" class="w3-input w3-border w3-round" id="BarkodAdet" name="BarkodAdet" />
+						</div>
+						<div class="w3-half w3-padding-left">
+							<br />
+							<button type="submit" id="btnBarkodBas" class="w3-btn w3-ripple w3-blue w3-half w3-block">Barkod Yazdır</button>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

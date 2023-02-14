@@ -1,0 +1,41 @@
+﻿@model SahinRektefiyeSoln.Models.IsEmriTipleri
+@{
+	ViewBag.Title = "IsEmriTipiDuzenle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Vereyon.Web;
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İş Emri Tipi Düzenleme Ekranı", pagePermission = "XXXXX" })
+
+
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+		@using (Html.BeginForm("IsEmriTipiDuzenle", "Service", FormMethod.Post))
+		{
+			@Html.HiddenFor(x=>x.IsEmriTipId)
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>İş Emri Tipi Adı</label>
+					@Html.EditorFor(model => model.Aciklamasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", @required = "required", autocomplete = "off", maxlength = "16" } })
+				</div>
+				
+			</div>
+			<div class="w3-row">
+				<div class="w3-row">
+					<div class="w3-quarter w3-padding w3-left">
+						<a href="~/Service/IsEmriTipleri" class="w3-green w3-btn w3-left w3-round">Geri</a>
+					</div>
+					<div class="w3-quarter w3-padding">
+						<button type="submit" class="w3-green w3-btn w3-left w3-round">Kaydet</button>
+					</div>
+				</div>
+
+			</div>
+		}
+
+	</div>
+</div>

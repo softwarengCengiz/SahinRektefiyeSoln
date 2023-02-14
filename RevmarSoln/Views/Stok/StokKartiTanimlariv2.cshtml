@@ -1,0 +1,111 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Stok.StokKartiTanimlariV2ViewModel
+@{
+	ViewBag.Title = "StokKartiTanimlariv2";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Stok Kartı Tanımları", pagePermission = "XXXXX" })
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.sortElements.js"></script>
+<script src="~/Scripts/Table2Excel/jquery.table2excel.js"></script>
+
+
+<style>
+	.fontDuzgun {
+		font-family: tahoma;
+	}
+</style>
+<script>
+	$(document).ready(function () {
+		$('#ParcaAdi').val('@Model.ParcaAdi');
+		$('#ParcaNo').val('@Model.ParcaNo');
+	});
+</script>
+<script type="text/javascript">
+	//function OnSuccess(data) {
+
+	//	$('#mdlFaturaNo').attr("disabled", "disabled");
+	//	$('#btnFaturaFisOlustur').attr("disabled", "disabled");
+
+	//	if (data.result == true) {
+	//		toastr.success(data.message, "İşlem Başarılı");
+
+	//		$('#mdlFaturaNo').val(data.FaturaNo);
+
+	//	}
+	//	else {
+	//		toastr.error(data.message, "İşlem Başarısız!");
+	//	}
+
+	//}
+	//function OnFailure(data) {
+
+	//	alert(data.result);
+
+	//	alert(data.message);
+	//}
+</script>
+
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		
+
+
+		@using (Ajax.BeginForm("StokKartiTanimlariv2", "Stok", FormMethod.Post, new AjaxOptions { OnSuccess = "loadFatura" }))
+		{
+
+			<div class="w3-row">
+				<div class="w3-third w3-padding">
+					<label>Parça Numarası</label>
+					@Html.EditorFor(model => model.ParcaNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "20", autocomplete = "off", id = "ParcaNo" } })
+				</div>
+				<div class="w3-rest">
+					<div class="w3-quarter w3-right w3-padding">
+						<br />
+						<a href="/Stok/StokKartiTanim" class="w3-btn w3-ripple w3-blue w3-right"><i class="fa fa-cog fa-fw"></i> Stok Kartı Tanımla</a>
+					</div>
+				</div>
+
+			</div>
+			<div class="w3-row">
+				<div class="w3-third w3-padding">
+					<label>Parça Adı</label>
+					@Html.EditorFor(model => model.ParcaAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
+				</div>
+				<div class="w3-third w3-padding">
+					<br />
+					<button class="w3-btn w3-ripple w3-blue w3-left">Ara</button>
+				</div>
+			</div>
+			<div class="w3-small">
+				<div class="w3-right">
+					<button class="w3-btn w3-ripple w3-white w3-left w3-round-large w3-right " name="command" type="submit" value="Excel" id="btnExcel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> &nbsp; Excel'e Aktar</button>
+				</div>
+			</div>
+
+		}
+
+		<div id="datatable-stokKartlari">
+			@Html.Partial("_GridStokKartlari", Model)
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script>
+	function loadFatura(result) {
+
+
+		if (result.FileGuid != undefined) {
+			window.location = '/Stok/Download?fileGuid=' + result.FileGuid + '&filename=' + result.FileName;
+		}
+		else {
+			$('#datatable-stokKartlari').html(result);
+		}
+
+	}
+</script>

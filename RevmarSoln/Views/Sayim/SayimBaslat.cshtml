@@ -1,0 +1,152 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Sayim.SayimBaslatViewModel
+@{
+	ViewBag.Title = "IsEmriOlustur";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İş Emri Oluşturma Ekranı", pagePermission = "XXXXX" })
+<script>
+	$(document).ready(function () {
+
+		var selectedIds = [];
+		var ParcaAdlari = [];
+
+		$('#btnOlustur').click(function () {
+			alert('Tıklandı.');
+		});
+
+		$('#kalemIds').change(function () {
+			var eklenenStokParcalari = $('#kalemIds').val();
+			var eklenenStokParcaAdlari = $('#ParcaAdlari').val();
+
+
+			debugger;
+
+			//alert('Ana sayfada parça bilgileri geldi.' + eklenenStokParcalari);
+			//alert('Ana sayfada parça bilgileri geldi.' + eklenenStokParcaAdlari);
+
+			DeleteRows();
+			selectedIds = eklenenStokParcalari.split(',');
+			ParcaAdlari = eklenenStokParcaAdlari.split(',');
+
+			selectedIds = selectedIds.filter(onlyUnique);
+			ParcaAdlari = ParcaAdlari.filter(onlyUnique);
+			if (selectedIds.length > 0) {
+				console.log(selectedIds);
+				console.log(ParcaAdlari);
+
+				//WaitBlockUI(2000, selectedIds.length + ' adet parça için irsaliye ekranı açılıyor...');
+
+				//setTimeout(2000);
+
+				$.each(ParcaAdlari, function (key, value) {
+					//alert(key + ": " + value);
+					$('#tblParcaAdlari tr:last').after('<tr><td>' + selectedIds[key] + '</td><td>' + value + '</td></tr>');
+				});
+
+				$('#kalemIds').val(selectedIds);
+
+				
+			} else {
+				
+			}
+
+
+		});
+
+		$('#btnParcaSec').click(function () {
+			$('#SayimParcaSecModalContent').load('/Sayim/SayimParcaSec?MasterPage=1');
+			document.getElementById('SayimParcaSecModal').style.display = 'block';
+			return false;
+		});
+	});
+
+
+	function DeleteRows() {
+		var rowCount = tblParcaAdlari.rows.length;
+		for (var i = rowCount - 1; i > 0; i--) {
+			tblParcaAdlari.deleteRow(i);
+		}
+	}
+	function onlyUnique(value, index, self) {
+		return self.indexOf(value) === index;
+	}
+	function onSayimTipiChanged() {
+		var SayimTipId = $('#SayimTipId').val();
+
+		if (SayimTipId == "1")// Genel Sayım
+		{
+			$('#divSecilenParca').addClass("w3-hide").removeClass("w3-show");
+		}
+		else if (SayimTipId == "2") // Parça sayım
+		{
+			$('#divSecilenParca').addClass("w3-show").removeClass("w3-hide");
+			$('#SayimParcaSecModalContent').load('/Sayim/SayimParcaSec?MasterPage=1');
+			document.getElementById('SayimParcaSecModal').style.display = 'block';
+		}
+	}
+	
+</script>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+		</div>
+		@using (Html.BeginForm())
+		{
+			@Html.Hidden("kalemIds")
+			@Html.Hidden("ParcaAdlari")
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Sayim Tipi</label>
+					@Html.DropDownList("SayimTipId", (SelectList)ViewBag.SayimTipleri, "Sayim Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "SayimTipId", required = "required", @onchange = "onSayimTipiChanged();" })
+				</div>
+				<div class="w3-threequarter w3-padding">
+					<label>Sayim Açıklama</label>
+					@Html.EditorFor(model => model.SayimAciklama, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+				</div>
+
+			</div>
+			<div id="divSecilenParca" class="w3-row w3-hide">
+				<div class="w3-half w3-padding w3-left ">
+					<button class="w3-btn w3-ripple w3-green " id="btnParcaSec">Parça Seç</button>
+					<h4>Sayım Yapılacak Parçalar</h4>
+					<div class="w3-row w3-padding">
+						<table class="w3-table-all" id="tblParcaAdlari">
+							<thead>
+								<tr>
+									<th width="20½">Parça Id</th>
+									<th width="80½">Parça Adı</th>
+								</tr>
+							</thead>
+							<tr></tr>
+							@*<tbody id="tblBarkodNosBody">
+
+				</tbody>*@
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding w3-right">
+					<button class="w3-btn w3-ripple w3-green w3-right" id="btnOlustur">Sayım Başlat</button>
+				</div>
+			</div>
+
+		}
+	</div>
+</div>
+
+<div id="SayimParcaSecModal" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('SayimParcaSecModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>Sayılacak Parça'yı Seç</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin" id="SayimParcaSecModalContent">
+
+			</div>
+		</div>
+	</div>
+</div>

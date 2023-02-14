@@ -1,0 +1,79 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Services>
+
+@{
+	ViewBag.Title = "Servisler";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Servisler", pagePermission = "MNGR_01" })
+<script>
+	$(document).ready(function () {
+		$('#ServiceName').keyup(function () {
+			this.value = $.trim(this.value.toUpperCase());
+		});
+	});
+</script>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding w3-margin-top">
+			<a href="/Admin/CreateService" class="w3-btn w3-ripple w3-green"><i class="fa fa-industry fa-fw"></i>&nbsp;Servis Ekle </a>
+		</div>
+		<div class="w3-row">
+			@using (Html.BeginForm())
+			{
+				<div class="w3-quarter w3-padding">
+					<label>Servis Adı</label>
+					<input class="w3-input w3-border w3-round" type="text" id="ServiceName" name="ServiceName">
+				</div>
+				<div class="w3-quarter w3-padding">
+					<br>
+					<button class="w3-btn w3-ripple w3-blue w3-left">Ara</button>
+				</div>
+			}
+
+		</div>
+		<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom">
+			<thead>
+				<tr class="w3-light-grey">
+					<th>Firma Adı</th>
+					<th>Kontak Kişi</th>
+					<th>Telefon Numarası</th>
+					<th>Adres</th>
+					<th>Oluşturulan Tarih</th>
+					<th>Oluşturan Kullanıcı</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@item.Name
+					</td>
+					<td>
+						@item.ContactName
+					</td>
+					<td>
+						@item.PhoneNumber
+					</td>
+					<td>
+						@item.Address
+					</td>
+					<td>
+						@Convert.ToDateTime(item.CreatedDate).ToShortDateString()
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Creator)
+					</td>
+					<td>
+						<a href="/Admin/EditService?ServiceId=@item.ServiceId" class="w3-btn w3-ripple w3-blue"><i class="fa fa-car"></i>&nbsp;Düzenle </a>
+					</td>
+					<td>
+						<a href="/Admin/DeleteService?ServiceId=@item.ServiceId" class="w3-btn w3-ripple w3-red" onclick="if (!confirm('Silmek istediğinizden emin misiniz?')) return false;"><i class="fa fa-trash"></i>&nbsp; Servis Sil </a>
+					</td>
+				</tr>
+			}
+		</table>
+	</div>
+</div>
+

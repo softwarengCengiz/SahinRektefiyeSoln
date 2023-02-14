@@ -1,0 +1,205 @@
+﻿@model SahinRektefiyeSoln.Models.WorkOrderPhotos
+
+@{
+	ViewBag.Title = "İş Emrine Fotoğraf Ekle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İş Emrine Resim Ekle", pagePermission = "EMP_01" })
+@*<script>
+		function openFileUploderForWorkOrder() {
+			document.getElementById('fileUploaderWork').click();
+			$('#urlPhoto').val($('#fileUploaderWork')[0].value);
+		}
+	</script>*@
+<script>
+
+	$(document).ready(function () {
+
+		$('#fileInput').click(function () {
+			$('#fileInputhdn').click();
+		});
+
+		$('#fileInputhdn').change(function (event) {
+			$('#txtpath').val(event.target.files[0].name);
+			readURL(this);
+		});
+
+		$('#btnClear').click(function () {
+			$('#fileInputhdn').val('');
+			$('#blah').attr('src', '');
+			$('#btnClear').removeClass('w3-show').addClass('w3-hide');
+			$('#txtpath').val('');
+			$('.image-upload-wrap').show();
+			$("#WorkOrderImagesList").empty();
+		});
+	});
+	function readURL(input) {
+		$("#WorkOrderImagesList").empty();
+		$('#blah').removeClass("w3-hide").addClass('w3-show');
+		for (var i = 0; i <= input.files.length; i++) {
+			if (input.files && input.files[i]) {
+				var reader = new FileReader();
+
+				$('#blah').attr('src', '/Images/Loading1.gif');
+				$('#barim').removeClass('w3-hide').addClass('w3-show');
+				reader.readAsDataURL(input.files[i]);
+				var elem = document.getElementById("myBar");
+				var width = 1;
+				var id = setInterval(frame, 5);
+				function frame() {
+					if (width >= 100) {
+						clearInterval(id);
+					} else {
+						width++;
+						elem.style.width = width + '%';
+						document.getElementById("demo").innerHTML = width * 1 + '%';
+					}
+				}
+				reader.onload = function (e) {
+
+					$('.image-upload-wrap').hide();
+					setTimeout(function () {
+						//$('#blah').attr('src', e.target.result);
+						var x = document.createElement("IMG");
+						x.setAttribute("class", "w3-quarter w3-padding")
+						x.setAttribute("src", e.target.result);
+
+						x.setAttribute("alt", "The Pulpit Rock");
+						$('#WorkOrderImagesList').append(x);
+						$('#barim').removeClass('w3-show').addClass('w3-hide');
+						$('#blah').removeClass("w3-show").addClass('w3-hide');
+					}, 500);
+
+				}
+
+			}
+
+			if ($('#blah')[0].currentSrc = null) {
+				$('#btnClear').removeClass("w3-show").addClass("w3-hide");
+			} else {
+				$('#btnClear').removeClass("w3-hide").addClass("w3-show");
+			}
+
+
+
+			$(" <div class='w3-col l3 m6 w3-margin-bottom'><div class='w3-display-container' id='" + i + '"> asdfasdf </div></div>"').appendTo('#Images');
+		}
+
+	}
+
+</script>
+<style>
+
+	.file-upload-input {
+		position: absolute;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height: 100%;
+		outline: none;
+		opacity: 0;
+		cursor: pointer;
+	}
+
+	.image-upload-wrap:hover {
+		background-color: #f1f1f1 !important;
+	}
+
+	.drag-text {
+		text-align: center;
+	}
+
+		.drag-text h3 {
+			font-weight: 100;
+			text-transform: uppercase;
+			color: #15824B;
+			padding: 60px 0;
+		}
+</style>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<a href="/WorkOrder/Order?id=@ViewBag.WorkOrderId" class="w3-btn w3-ripple w3-blue w3-margin-top"><i class="fa fa-arrow-left"></i>&nbsp;Geri </a>
+		@using (Html.BeginForm("AddPhotoToOrder", "WorkOrder", FormMethod.Post, new { enctype = "multipart/form-data" }))
+		{
+			@Html.AntiForgeryToken()
+			@Html.HiddenFor(model => model.WorkOrderId, new { value = ViewBag.WorkOrderId })
+			<div class="w3-margin-top">
+			</div>
+			<div class="w3-row w3-margin-top">
+				<div class="w3-row ">
+					<div class="w3-row w3-container">
+
+						<div class="w3-row w3-padding-16">
+							<div class="w3-row">
+								<div class="w3-row" style="border-style: dashed;position: relative;">
+									<div class="image-upload-wrap">
+										<input type="file" id="fileInputhdn" accept="image/png, image/jpeg" name="files" class="file-upload-input" multiple />
+										<div class="drag-text">
+											<h3>Buraya görsel sürükleyin.</h3>
+										</div>
+									</div>
+									<div class="w3-center">
+
+										<div class="w3-display-container">
+											<div class="w3-display-topright  ">
+												<span id="btnClear" class="w3-margin-right w3-hide"><i class="fa fa-times" aria-hidden="true"></i> </span>
+											</div>
+											<div id="WorkOrderImagesList"></div>
+											<img id="blah" src="#" alt="" class="w3-quarter w3-padding w3-center" onclick="onClick(this)" />
+										</div>
+
+									</div>
+								</div>
+								<div id="barim" class="w3-row w3-small w3-border w3-round w3-hide" style="margin-top:3px!important">
+									<div id="myBar" class="w3-container w3-padding w3-green w3-round" style="width:00%">
+										<div class="w3-center" id="demo"></div>
+									</div>
+								</div>
+								<div class="w3-row w3-tiny" style="margin-top:3px!important;">
+									<input id="txtpath" class="w3-input w3-border-top w3-border-left w3-border-right w3-threequarter w3-left" type="text" autocomplete="off">
+									<button id="fileInput" onclick="return false;" class="w3-btn w3-blue w3-quarter w3-right w3-border"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+									<button type="submit" class="w3-right w3-btn w3-padding w3-green" style="width:135px"> Ekle</button>
+								</div>
+							</div>
+
+
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+
+		}
+
+
+		<div class="w3-row w3-margin-top w3-margin-bottom">
+
+			<div class="w3-row-padding w3-center">
+				@foreach (var item in ViewBag.WorkOrderPhotos as List<SahinRektefiyeSoln.Models.WorkOrderPhotos>)
+				{
+					<div class="w3-col m3">
+						<div class="w3-container">
+							<div class="w3-display-container">
+								<img src="@item.WOPUrl" style="width:100%">
+								<span class="w3-tag w3-display-topleft">@item.Creator</span>
+								<div class="w3-display-bottomright w3-display-hover">
+									<a href="/WorkOrder/DeletePhotoFromOrder?PhotoId=@item.WOPId" class="w3-btn w3-ripple w3-red" onclick="if (!confirm('Silmek istediğinizden emin misiniz?')) return false;"><i class="fa fa-trash-o"></i>&nbsp;Sil </a>
+									@*<button class="w3-button w3-red">Sil   <i class="fa fa-trash"></i></button>*@
+								</div>
+							</div>
+						</div>
+					</div>
+				}
+
+
+
+			</div>
+
+		</div>
+	</div>
+</div>
+
+

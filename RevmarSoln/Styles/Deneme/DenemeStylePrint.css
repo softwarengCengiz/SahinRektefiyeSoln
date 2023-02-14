@@ -1,0 +1,33 @@
+﻿h1 {
+	text-align: center
+}
+
+count::before {
+	counter-increment: section;
+	/*//content: "\A I am flag " counter(section) ".\A ";*/
+	font-weight: bold;
+	white-space: pre;
+}
+
+@media print {
+	.two {
+		column-count: 2;
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+	}
+
+	.one {
+		column-count: 1;
+		-webkit-column-count: 1;
+		-moz-column-count: 1;
+	}
+
+	input[type="button"] {
+		display: none
+	}
+
+	.page-break {
+		display: block;
+		page-break-before: always;
+	}
+}

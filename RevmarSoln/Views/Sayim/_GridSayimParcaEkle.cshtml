@@ -1,0 +1,75 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using System.Web.Script.Serialization;
+@using Newtonsoft.Json;
+@{
+	string Alternatifler = string.Empty;
+}
+@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.IsEmriParcaEkleViewModel
+
+<style>
+	#pagination li, ul, h2 {
+		margin-left: auto;
+		margin-right: auto;
+		width: 55em
+	}
+</style>
+<script>
+	$(document).ready(function () {
+		$('.active').children().addClass("w3-button w3-green w3-round");
+
+	});
+
+
+</script>
+<div class="w3-row w3-small w3-margin-top">@Model.parcalar.TotalItemCount kayıt bulundu. @Model.parcalar.PageCount sayfadan @(Model.parcalar.PageCount < Model.parcalar.PageNumber ? 0 : Model.parcalar.PageNumber) ncı </div>
+
+<table class="w3-table-all w3-hoverable  w3-margin-bottom fontDuzgun" id="dtFatura">
+	<thead>
+		<tr>
+			<th width="20%">Parça Tipi</th>
+			<th width="20%">Parça No</th>
+			<th width="30%">Parça Adı</th>
+			<th width="10%"></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var stokKart in Model.parcalar)
+		{
+			<tr>
+
+				<td>
+					@stokKart.ParcaTipleri.ParcaTipAciklamasi
+				</td>
+				<td>
+					@stokKart.ParcaNo
+				</td>
+				<td>
+					<label>@stokKart.ParcaAdi</label>
+				</td>
+				<td>
+					<button class="btn-login w3-blue w3-btn " title="Parça Seç" stokKart="@stokKart.StokKartiId" ParcaAdi="@stokKart.ParcaAdi" onclick="btnParcaEkle_click('month', this)">
+						<i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Ekle</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+<div class="pagination w3-margin-bottom w3-row">
+	@Html.PagedListPager(Model.parcalar, page => Url.Action("SayimParcaSec",
+														   new
+														   {
+															   ParcaAdi = Model.ParcaAdi,
+															   ParcaNo = Model.ParcaNo,
+															   ParcaTipiId = Model.ParcaTipiId,
+															   IsEmriId= ViewBag.IsEmriId,
+															   BelirtiKodu = ViewBag.BelirtiKodu,
+															   page
+														   }
+
+														   ), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+														   {
+															   UpdateTargetId = "datatable-loadStokKart"
+														   }))
+</div>

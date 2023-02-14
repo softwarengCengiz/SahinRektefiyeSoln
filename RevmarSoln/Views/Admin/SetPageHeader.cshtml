@@ -1,0 +1,21 @@
+﻿@{ Layout = null; }
+
+
+<header class="w3-container" @*style="padding-top:22px"*@>
+    <div class="w3-threequarter">
+        <h5>
+            <b><i class="fa fa-dashboard"></i> @ViewBag.PageTitle</b>
+        </h5>
+    </div>
+    <div class="w3-quarter w3-hide-small">
+        <h6>
+            <div class="w3-tag w3-round w3-green w3-right" style="padding:5px">
+                <div class="w3-tag w3-round w3-green w3-border w3-border-white">
+                    Yetki Kodu : @ViewBag.PagePermission
+                </div>
+            </div>
+        </h6>
+
+    </div>
+
+</header>

@@ -1,0 +1,246 @@
+﻿
+@{
+	/**/
+
+	ViewBag.Title = "MagicScreen";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Magic", pagePermission = "ADM_00" })
+
+<link href="https://code.jquery.com/ui/1.8.23/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"></link>
+<style type="text/css" media="screen">
+	
+	/*html, body {
+		height: 100%;
+	}
+
+	body, textarea {
+		font-family: "lucida sans", verdana, arial, helvetica, sans-serif;
+		font-size: 80%;
+	}
+
+	textarea {
+		font-size: 100%;
+	}
+
+	h1 {
+		font-size: 1.4em;
+		padding: 10px 10px 0;
+	}
+
+	h2 {
+		font-size: 1.2em;
+		padding: 10px 10px 0;
+		color: Navy;
+	}
+
+	p {
+		margin-top: 6px;
+		padding: 0 10px 1em;
+	}*/
+
+	.ui-widget {
+		font-size: 0.8em;
+		line-height: 0.6em;
+	}
+
+		.ui-widget .ui-widget {
+			font-size: 0.7em;
+		}
+
+	.ui-menu-item {
+		font-size: 10pt;
+	}
+
+
+	#inputDiv {
+		left: 1%;
+		right: 38%;
+	}
+
+	/*#msgs {
+		left: 63%;
+		right: 1%;
+	}*/
+
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<!-- script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script -->
+
+<script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+
+<script>
+	var phraselist = [
+		'Select * from Users',
+		'Select * from FordOrderHeader',
+		'Select * from IsEmirleri ',
+		'Select * from IsEmirleri where IsEmriId=',
+		'ord1 | select * from IsEmirleri ie join IsEmriKalemleri iek on iek.IsEmriId = ie.IsEmriId',
+		
+	];
+
+
+	phraselist.sort();
+
+
+	$(document).ready(function () {
+
+		monkeyPatchAutocomplete();
+
+		$("#input1").autocomplete({
+			// The source option can be an array of terms.  In this case, if
+			// the typed characters appear in any position in a term, then the
+			// term is included in the autocomplete list.
+			// The source option can also be a function that performs the search,
+			// and calls a response function with the matched entries.
+			source: function (req, responseFn) {
+				addMessage("search on: '" + req.term + "'<br/>");
+				var re = $.ui.autocomplete.escapeRegex(req.term);
+				var matcher = new RegExp("\\b" + re, "i");
+				var a = $.grep(phraselist, function (item, index) {
+					//addMessage("&nbsp;&nbsp;sniffing: '" + item + "'<br/>");
+					return matcher.test(item);
+				});
+				addMessage("Result: " + a.length + " items<br/>");
+				responseFn(a);
+			},
+
+			select: function (value, data) {
+				var s = ""
+				if (typeof data == "undefined") {
+					s = value;
+				} else {
+					s = data.item.value;
+				}
+				if (s.length > 30) { s = s.substring(0, 30) + "..."; }
+				addMessage('You selected: ' + s + "<br/>");
+			}
+		});
+	});
+
+
+	// This patches the autocomplete render so that
+	// matching items have the match portion highlighted.
+	function monkeyPatchAutocomplete() {
+
+		// Don't really need to save the old fn,
+		// but I could chain if I wanted to
+		var oldFn = $.ui.autocomplete.prototype._renderItem;
+
+		$.ui.autocomplete.prototype._renderItem = function (ul, item) {
+			var re = new RegExp("\\b" + this.term, "i");
+			var t = item.label.replace(re, "<span style='font-weight:bold;color:Blue;'>" + this.term + "</span>");
+			return $("<li></li>")
+				.data("item.autocomplete", item)
+				.append("<a>" + t + "</a>")
+				.appendTo(ul);
+		};
+	}
+
+	function addMessage(msg) {
+		//$('#msgs').append(msg + "<br/>");
+	}
+
+	$(document).ready(function () {
+
+	});
+	var formatException = function (exceptionMessage) {
+		//result = exceptionMessage || '' ;
+		result = '@ViewBag.CommandResult' || '' ;
+
+		var searchReplaces = [
+			{
+				find: /   at/g,
+				repl: '\r\n   at'
+			},
+			{
+				find: / ---> /g,
+				repl: '\r\n ---> '
+			},
+			{
+				find: /\) at /g,
+				repl: '\r\n at '
+			},
+			{
+				find: / --- End of inner exception stack trace ---/g,
+				repl: '\r\n   --- End of inner exception stack trace ---'
+			}
+		]
+
+		searchReplaces.forEach(function (item) {
+			result = result.replace(item.find, item.repl);
+		});
+
+		return result;
+	};
+
+</script>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-padding">
+			@Html.Raw(ViewBag.CommandResult)
+		</div>
+		<div class="w3-row">
+			@*<div class="w3-teal w3-margin">
+				<div id='inputDiv' class='column'>
+					
+					<h1>DENEME jQueryUI Autocomplete demo</h1>
+					<p>This demo uses jQuery 1.12.4, and jQueryUI v1.8.23</p>
+					<p>Type a few characters of a word. Try these: <em>Four, train, even.</em></p>
+					<form action="jquery" >
+						<textarea rows='14' cols='80' id="input1"></textarea>
+
+					</form>
+				</div>
+
+				<div id='msgs' class='column' style='font-size:10pt;font-weight:normal;color:red;'>
+				</div>
+
+			</div>*@
+			@using (Html.BeginForm())
+			{
+				@Html.AntiForgeryToken()
+				<div class="w3-row w3-padding">
+					<button type="submit" class="w3-button w3-green"> <i class="fa fa-play" aria-hidden="true"></i> Magic</button>
+					<textarea class="w3-input w3-border w3-round w3-margin-top" rows="5" id="input1" placeholder="do magic" name="value">@ViewBag.DbQuery</textarea>
+				</div>
+			}
+
+
+		</div>
+		<div class="w3-responsive">
+			@if (ViewBag.datatable != null)
+			{
+				<div class="w3-row">
+					@ViewBag.datatable.Rows.Count satır döndü
+				</div>
+				<table class="w3-table-all">
+					<thead>
+						<tr>
+							@foreach (System.Data.DataColumn column in ViewBag.datatable.Columns)
+							{
+								<th title="AllowDbNull : @column.AllowDBNull.ToString() &#010; AutoIncrement :@column.AutoIncrement &#010; DataType : @column.DataType.Name">@column.ColumnName</th>
+							}
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (System.Data.DataRow row in ViewBag.datatable.Rows)
+						{
+							<tr>
+
+								@foreach (System.Data.DataColumn column in ViewBag.datatable.Columns)
+								{
+									<td>@row[column].ToString()</td>
+								}
+
+
+							</tr>
+						}
+					</tbody>
+				</table>
+
+			}
+
+		</div>
+	</div>
+</div>

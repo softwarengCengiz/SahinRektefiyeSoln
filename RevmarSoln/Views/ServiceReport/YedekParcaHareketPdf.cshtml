@@ -1,0 +1,41 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.ViewModels.ServiceReport.YedekParcaHareketResponse>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Yedek Parça Pdf</title>
+    <link rel="stylesheet" href="~/Styles/w3.css">
+</head>
+<body>
+    <div>
+        <table class="w3-table-all w3-margin-top w3-margin-bottom ">
+            <tbody>
+                <tr>
+                    <th>İş Emri Numarası</th>
+                    <th>Parça Numarası</th>
+                    <th>Parça Adı</th>
+                    <th>Fatura Durumu</th>
+                    <th>Fatura Numarası</th>
+                    <th>Stok Bilgisi</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr class="w3-light-gray">
+                        <td>@item.IsEmriId</td>
+                        <td>@item.ParcaNo</td>
+                        <td>@item.ParcaAdi</td>
+                        <td>@item.SwFatura</td>
+                        <td>@item.FaturaNo</td>
+                        <td>@item.StokBilgisi</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

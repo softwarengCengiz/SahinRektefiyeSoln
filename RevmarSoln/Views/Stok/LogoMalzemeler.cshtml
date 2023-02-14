@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.LG_001_ITEMS>
+@{
+	ViewBag.Title = "LogoMalzemeler";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Logo Malzemeler Arama", pagePermission = "XXXXX" })
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<table class="w3-table-all w3-margin-top w3-margin-bottom">
+			<thead>
+				<tr>
+					<th>Parça No</th>
+					<th>Parça Adı</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.CODE</td>
+						<td>@item.NAME</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

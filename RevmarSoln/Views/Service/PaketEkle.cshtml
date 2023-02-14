@@ -1,0 +1,35 @@
+﻿@model SahinRektefiyeSoln.Models.Paketler
+@{
+	ViewBag.Title = "Paket Ekle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Vereyon.Web;
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Paket Ekleme Ekranı", pagePermission = "XXXXX" })
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+		@using (Html.BeginForm("PaketEkle", "Service", FormMethod.Post))
+		{
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Paket Adı</label>
+					@Html.EditorFor(model => model.PaketAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", @required = "required", autocomplete = "off", maxlength = "126" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Marka</label>
+					@Html.DropDownList("CompanyId", (SelectList)ViewBag.Companies, "Marka Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "CompanyId", required = "required" })
+				</div>
+				<div class="w3-quarter w3-padding w3-left">
+					<br />
+					<button type="submit" class="  w3-green w3-btn w3-left w3-round">Ekle</button>
+				</div>
+			</div>
+		}
+
+	</div>
+</div>
+

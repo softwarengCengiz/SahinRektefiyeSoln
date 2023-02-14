@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.TamirParca>
+
+@{
+	ViewBag.Title = "Servis Tamir Parça";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Servis Tamir Parça", pagePermission = "EMP_01" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding w3-margin-top">
+			<a href="/Admin/CreateTamirParca" class="w3-btn w3-ripple w3-green"><i class="fa fa-cog fa-fw"></i>&nbsp;Tamir Parça Ekle </a>
+		</div>
+		@using (Html.BeginForm())
+	{
+		<div class="w3-row">
+
+			<div class="w3-quarter w3-padding">
+				<label>Parça Ad</label>
+				<input class="w3-input w3-border w3-round" type="text" id="PartName" name="PartName" autocomplete = "off">
+			</div>
+			<div class="w3-quarter w3-padding">
+				<br>
+				<button class="w3-btn w3-ripple w3-blue w3-left" name="command" value="Ara">Ara</button>
+			</div>
+
+
+		</div>
+		<div class="w3-right w3-small">
+			<input type="submit" class="w3-button w3-round-large " value="Excel'e Aktar" name="command" />
+		</div>
+}
+		<div class="w3-row">
+			<table class="w3-table-all w3-hoverable  w3-margin-bottom">
+				<tr>
+					
+					<th>
+						Parça Adı
+					</th>
+					<th>Oluşturan Kullanıcı</th>
+					<th>Oluşturma Tarihi</th>
+					<th></th>
+					<th></th>
+				</tr>
+
+				@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Name)
+					</td>
+
+					<td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+					<td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString()</td>
+					<td>
+						<a href="/Admin/EditTamirParca?PartId=@item.TamirParcaId" class="w3-btn w3-ripple w3-blue"><i class="fa fa-cop"></i>&nbsp; Düzenle </a>
+						
+					</td>
+					<td><a href="/Admin/DeleteTamirParca?PartId=@item.TamirParcaId" class="w3-btn w3-ripple w3-red" onclick="if (!confirm('Silmek istediğinizden emin misiniz?')) return false;"><i class="fa fa-trash"></i>&nbsp; Parça Sil </a></td>
+				</tr>
+		}
+
+			</table>
+		</div>
+
+	</div>
+</div>

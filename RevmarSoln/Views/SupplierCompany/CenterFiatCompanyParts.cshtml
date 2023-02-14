@@ -1,0 +1,340 @@
+﻿@model SahinRektefiyeSoln.Models.FilterModels.FiatCenterSupplierPartsFilter
+@{
+	ViewBag.Title = "SupplierParts";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+
+<style>
+	table {
+		font-size: 1em;
+	}
+
+	.ui-draggable, .ui-droppable {
+		background-position: top;
+	}
+</style>
+<script>
+	$(document).ready(function () {
+
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tümünü Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.css('margin-right', 3)
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text)))
+						return {
+							label: text,
+							value: text,
+							option: this
+						};
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				// Remove invalid value
+				this.input
+					.val("")
+					.attr("title", value + " seçilmedi.")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			}
+		});
+
+		$("#ServiceId").combobox({
+			select: function (event, ui) {
+				//console.log(event);
+				//console.log(ui.item.value);
+				$('#ServiceId').val(ui.item.value);
+				$('#ServiceId').trigger("change");
+			}
+		});
+		$("#toggle").on("click", function () {
+			$("#ServiceId").toggle();
+		});
+
+		$("#VehicleId").combobox({
+			select: function (event, ui) {
+				//console.log(event);
+				//console.log(ui.item.value);
+				$('#VehicleId').val(ui.item.value);
+				$('#VehicleId').trigger("change");
+			}
+		});
+		$("#toggle").on("click", function () {
+			$("#VehicleId").toggle();
+		});
+
+		//** Custom AutoComp end **//
+
+
+		var url = '@Url.Action("Vehicles", "WorkOrder")';
+
+		
+		//var ODD = '1008'; // Fiat Test ID'si
+		var ODD = '1007'; // Production Fiat ID
+		$.getJSON(url, { CompanyId: ODD , selectedId : null}, function (response) {
+			$("#VehicleId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#VehicleId").append(p);
+			});
+		});
+		url = '@Url.Action("Services", "WorkOrder")';
+		$.getJSON(url, { CompanyId: ODD }, function (response) {
+			$("#ServiceId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+				$("#ServiceId").append(p);
+			});
+		});
+	});
+	
+</script>
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Firma Merkez Parça Arama", pagePermission = "SUPMN_20" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		@using (Html.BeginForm())
+		{
+		<div class="w3-row">
+			<div class="w3-quarter w3-padding">
+				<label>Arac Model</label>
+				@Html.DropDownList("VehicleId", Enumerable.Empty<SelectListItem>(), "Model Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VehicleId" })
+			</div>
+			<div class="w3-quarter w3-padding">
+				<label>Parça Cinsi</label>
+				@Html.DropDownList("PartReviewTypeId", (SelectList)ViewBag.PartReviewType, "Parça Cinsi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "PartReviewTypeId" })
+
+			</div>
+			<div class="w3-quarter">
+				<label>&nbsp;</label>
+				<table cellpadding="5">
+					<tr>
+						<td><label>Bayidekileri Göster</label></td>
+						<td>@Html.CheckBoxFor(model => Model.SwShowInBayi, new { @class = "w3-check", @Id = "SwShowInBayi" })</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Servis</label>
+					@Html.DropDownList("ServiceId", Enumerable.Empty<SelectListItem>(), "Servis Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "ServiceId" })
+
+				</div>
+				<div class="w3-third w3-padding">
+					<div class="w3-half" style="padding-right:10px!important;">
+						<label class="w3-small">Parça Numarası</label>
+						@Html.TextBoxFor(model => Model.PartNumber, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "WorkOrderId" })
+
+					</div>
+					<div class="w3-half" style="padding-right:10px!important;">
+						<label class="w3-small">Revizyon Takip Numarası</label>
+						@Html.TextBoxFor(model => Model.RevisionTrackNumber, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "NoWorkOrder" })
+
+					</div>
+
+				</div>
+			
+				<div class="w3-quarter w3-left w3-padding">
+					<label>&nbsp; </label><br />
+					<button class="w3-btn w3-ripple w3-blue w3-left w3-round-large" name="command" value="Ara">Ara</button>
+				</div>
+			</div>
+
+
+			<div class="w3-right w3-small">
+				<input type="submit" class="w3-button w3-round-large " value="Excel'e Aktar" name="command" />
+			</div>
+		}
+		<div class="w3-row w3-margin-bottom">
+
+			<table class="w3-table-all w3-hoverable">
+				<thead>
+					<tr class="w3-light-grey">
+						<th>Giriş Tarihi</th>
+						<th>Parti Numarası</th>
+						<th>Kleym No</th>
+						<th>Parça İnceleme Sonucu</th>
+
+						<th>Parça Cinsi</th>
+						<th>Parça Numarası</th>
+						<th>Araç Cinsi</th>
+
+						<th>Revizyon Takip Numarası</th>
+						<th>Revizyon Tipi</th>
+						<th>Gönderilecek Bayi</th>
+						<th>Araç Km</th>
+						<th>Şase</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in ViewBag.SupplierParts as List<SahinRektefiyeSoln.Models.SupplierParts>)
+					{
+						<tr>
+							<td>
+								@Convert.ToDateTime(item.ArrivalDate).ToShortDateString()
+							</td>
+							<td>
+								@item.ShipmentNumber
+							</td>
+							<td>
+								@item.KleymNumber
+							</td>
+							<td>
+								@item.PartReviewResult.PartReviewResultDesc
+							</td>
+							<td>
+								@item.PartReviewType.PartTypeDesc
+							</td>
+							<td>
+								@item.PartNumber
+							</td>
+							<td>
+								@(item.Companies.Name == null ? "" : item.Companies.Name)  @(item.Vehicles == null ? "" : "-" + item.Vehicles.Name)
+							</td>
+							<td>
+								@item.RevisionTrackNumber
+							</td>
+							<td>
+								@(item.RevisionType == null ? "" : item.RevisionType.RevisionDesc)
+							</td>
+							<td>
+								@(item.Services == null ? "" : item.Services.Name)
+							</td>
+							<td>
+								@item.VehicleKm
+							</td>
+							<td>
+								@item.VIN
+							</td>
+							@*<td>
+									@(item.SwApproved == true ? "Onaylı" : "Onaylanmamış")
+								</td>
+								<td>
+									@(item.ReportIsSend == true ? "Gönderildi" : "Bekliyor")
+								</td>*@
+							<td>@(item.IsSend == true ?"Bayide" :"Stokta")</td>
+						</tr>
+					}
+
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,428 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Services.IrsaliyePageModel
+@{
+    ViewBag.Title = "IrsaliyeTanim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using Vereyon.Web;
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İrsaliye Tanım", pagePermission = "XXXXX" })
+
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+
+<style>
+    table {
+        font-size: 1em;
+    }
+
+    .ui-draggable, .ui-droppable {
+        background-position: top;
+    }
+</style>
+
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card">
+        <div class="w3-row w3-row-padding">
+            @Html.RenderFlashMessages()
+        </div>
+        @using (Html.BeginForm("IrsaliyeIade", "Service", FormMethod.Post))
+        {
+            <div class="w3-row ">
+                <div class="w3-quarter w3-padding">
+                    <label>Fatura No</label>
+                    @Html.EditorFor(model => model.Irsaliye.FaturaNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase", maxlength = "16", autocomplete = "off", @required = "required" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <div class="w3-threequarter">
+                        <label>Tedarikçi</label>
+
+                        <input type="text" class="w3-input w3-border w3-round ms-pasif" autocomplete="off" id="VehicleMusteriText" name="VehicleMusteriAdi" value="@Model.VehicleMusteriAdi" />
+                        <input type="hidden" class="w3-input w3-border w3-round" autocomplete="off" id="VehicleMusteriId" name="VehicleMusteriId" />
+                    </div>
+                    <div class="w3-quarter">
+                        <br />
+                        <button class="btn-login w3-blue w3-btn  w3-block ms-pasif" id="btnMusteriSec" title="Müşteri Seç"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button>
+                    </div>
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Vade</label>
+                    @Html.EditorFor(model => model.Irsaliye.Vade, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", @required = "required", @id = "VadeForm", @maxlength = "3" } })
+                </div>
+                <div class="w3-quarter w3-padding">
+                    <label>Fatura Tarihi</label>
+                    @Html.EditorFor(model => model.Irsaliye.FaturaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round date", id = "FaturaTarihi", autocomplete = "off", @disabled = "disabled" } })
+                </div>
+            </div>
+
+            <div class="w3-row-padding">
+                @Html.EditorFor(model => model.Irsaliye.IrsaliyeId, new { htmlAttributes = new { @class = "w3-hide" } })
+
+                @if (Model.IrsaliyeParcalari != null && Model.IrsaliyeParcalari.Count() > 0)
+                {
+                    <div class="w3-row w3-padding">
+                        <table class="w3-table-all w3-hoverable">
+                            <thead>
+                                <tr class="w3-light-grey">
+                                    <th>Parça No</th>
+                                    <th>Parça Adı</th>
+                                    <th>Adet</th>
+                                    <th>İade Adet Sayısı</th>
+                                    <th>Birim Fiyat</th>
+                                    <th>İskonto</th>
+                                    <th>İskontolu Fiyat</th>
+                                    <th>Kdv</th>
+                                    <th>Kdvli Fiyat</th>
+                                    <th>Toplam Tutar</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var i = 0;
+                                }
+                                @foreach (var item in Model.IrsaliyeParcalari)
+                                {
+
+                                    var iskontoluFiyat = item.BirimFiyat - (item.BirimFiyat * item.Iskonto / 100);
+                                    var kdvliFiyat = iskontoluFiyat + (iskontoluFiyat * item.StokKarti.Kdv / 100);
+                                    var toplamTutar = kdvliFiyat * item.Adet;
+
+                                    var iadeAdetSayisi = item.StokKarti.ToplamStok - item.Adet >= 0 ? item.Adet : item.StokKarti.ToplamStok;
+
+                                    <tr>
+                                        <td>@item.StokKarti.ParcaNo</td>
+                                        <td>@item.StokKarti.ParcaAdi</td>
+                                        <td>@item.Adet</td>
+                                        <td width="10%">
+                                            <input class="w3-hide" name="IrsaliyeParcalari[@i].IrsaliyeParcaId" value="@item.IrsaliyeParcaId" />
+                                            <input class="w3-hide" name="IrsaliyeParcalari[@i].IrsaliyeId" value="@item.IrsaliyeId" />
+
+
+                                            <input type="number" class="w3-input w3-border w3-round w3-half" name="IrsaliyeParcalari[@i].IadeAdet" value="@iadeAdetSayisi" />
+                                            <input class="w3-hide" name="IrsaliyeParcalari[@i].StokKartId" value="@item.StokKartId" />
+                                            @*<input type="number" class="w3-input w3-border w3-round w3-half" name="IrsaliyeIadeParcaAdetleri.IrsaliyeIadeParcaAdetleri[@i].IrsaliyeIadeParcaAdet" value="@iadeAdetSayisi" />*@
+                                        </td>
+                                        <td>@item.BirimFiyat</td>
+                                        <td>@item.Iskonto %</td>
+                                        <td>@iskontoluFiyat ₺</td>
+                                        <td>@item.StokKarti.Kdv %</td>
+                                        <td>@kdvliFiyat ₺</td>
+                                        <td>@toplamTutar ₺</td>
+                                        <td>
+                                            <a href="/Service/IrsaliyeParcaSil?IrsaliyeParcaId=@item.IrsaliyeParcaId" class="w3-btn w3-ripple w3-red w3-btnDeletePart"><i class="fa fa-trash"></i>&nbsp;Parça Sil</a>
+                                        </td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Toplam Tutar : @Model.Irsaliye.ToplamTutar</td>
+                                    <td>Toplam Iskonto : @Model.Irsaliye.ToplamIskonto</td>
+                                    <td>Ara Toplam : @ViewBag.AraToplam</td>
+                                    <td>Hesaplanan KDV : @Model.Irsaliye.HesaplananKdv</td>
+                                    <td>Fatura Toplam : @Model.Irsaliye.FaturaToplam</td>
+
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                }
+            </div>
+
+            <div class="w3-row w3-row-padding w3-margin-bottom">
+                <div class="w3-half w3-row-padding w3-right">
+                    <button type="submit" class="w3-btn w3-ripple w3-blue w3-right">İrsaliye Tamamla</button>
+                </div>
+            </div>
+        }
+
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+        $.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tümünü Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.css('margin-right', 3)
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text)))
+						return {
+							label: text,
+							value: text,
+							option: this
+						};
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				// Remove invalid value
+				this.input
+					.val("")
+					.attr("title", value + " seçilmedi.")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			}
+		});
+
+		$("#StokKartiId").combobox({
+			select: function (event, ui) {
+				$('#StokKartiId').val(ui.item.value);
+				$('#StokKartiId').trigger("change");
+			}
+		});
+
+        $('#FaturaTarihi').datepicker({
+			format: 'dd/mm/yyyy',
+			monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+			dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+			firstDay: 1
+        });
+
+
+
+
+        $('#StokKartiId').on("change", function () {
+            if ($('#StokKartiId').val() == '') {
+                $('#ParcaNo').val('');
+                $('#ParcaAdi').val('');
+                $('#parcaEkleBlok').removeClass('w3-show');
+                $('#TedarikciBlok').addClass("w3-hide");
+            } else {
+
+            }
+        });
+
+        SetReadOnly('VehicleMusteriText');
+		//if ($('#TedarikciId').val() == "") {
+		//	$('#TedarikciBlok').addClass("w3-hide");
+  //      } else {
+  //          TedarikciDegisimi();
+		//	$('#TedarikciBlok').addClass("w3-show");
+  //      }
+
+        $('#btnMusteriSec').click(function () {
+
+			$('#MusteriModalContent').load('@Url.Action("HizliMusteriSec","Musteri")');
+
+			document.getElementById('MusteriSecModal').style.display = 'block';
+
+			return false;
+
+        });
+
+
+    });
+
+    function stokKartiGetir() {
+        if ($('#StokKartiId').val() == '') {
+                $('#parcaEkleBlok').removeClass('w3-show');
+                $('#parcaEkleBlok').addClass("w3-hide");
+            } else {
+                var url = '@Url.Action("StokKartiGetir", "Service")';
+		        var domParcaNo = $("#ParcaNo");
+		        var domParcaAdi = $("#ParcaAdi");
+                var ODD = $("#StokKartiId").val();
+		        if (ODD == "") {
+			        $("#ParcaNo").val('');
+			        $("#ParcaAdi").val('');
+
+                }
+
+            $.getJSON(url, { StokKartiId: ODD }, function (response) {
+                console.log(response);
+			        domParcaNo.val(response.ParcaNo);
+			        domParcaAdi.val(response.ParcaAdi);
+                });
+                $('#parcaEkleBlok').removeClass('w3-hide');
+                $('#parcaEkleBlok').addClass("w3-show");
+            }
+        }
+
+    	function SetReadOnly(elementName) {
+		document.getElementById(elementName).readOnly = true;
+		document.getElementById(elementName).style.backgroundColor  = "#ebebe4";
+		document.getElementById(elementName).style.color = "#545454";
+
+	}
+
+
+	@*function TedarikciDegisimi() {
+        var url = '@Url.Action("TedarikciGetir", "Service")';
+
+        var ODD = $("#TedarikciId").val();
+
+		if (ODD != "") {
+			$.getJSON(url, { TedarikciId: ODD }, function (response) {
+
+					$("#Kodu").val(response.Kodu);
+
+					$("#Adi").val(response.Adi);
+
+                $("#VergiDairesi").val(response.VergiDairesi);
+				$("#VergiNumarasi").val(response.VergiNumarasi);
+				$("#FirmaTelNo").val(response.FirmaTelNo);
+				$("#FirmaEmail").val(response.FirmaEmail);
+				$("#KontakAdiSoyadi").val(response.KontakAdiSoyadi);
+				$("#KontakTelNo").val(response.KontakTelNo);
+                $("#Vade").val(response.Vade);
+                if ('@ViewBag.Vade' != '') {
+                    $("#VadeForm").val('@ViewBag.Vade');
+                } else {
+                    $("#VadeForm").val(response.Vade);
+                }
+				$("#Adres").text(response.Adres);
+			});
+		}
+
+		if ($('#TedarikciId').val() == "") {
+			$('#TedarikciBlok').removeClass("w3-show").addClass("w3-hide");
+		} else {
+			$('#TedarikciBlok').removeClass("w3-hide").addClass("w3-show");
+		}
+
+
+    }*@
+
+    $('#btnFirmaBilgileriniGoster').click(function () {
+        var x = document.getElementById('CompanyInfo');
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+        }
+    });
+</script>
+
+
+<div id="MusteriSecModal" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4">
+        <header class="w3-container w3-teal">
+            <span onclick="document.getElementById('MusteriSecModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+            <h5>Müşteri Seç</h5>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-margin" id="MusteriModalContent">
+
+            </div>
+        </div>
+    </div>
+</div>

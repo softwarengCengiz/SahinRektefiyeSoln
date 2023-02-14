@@ -1,0 +1,305 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string UserName = Session["UserName"].ToString();
+}
+
+
+@*
+        @if (ViewBag.isRevmerUser == false)
+        {
+
+    @Html.Action("GetBayiDashBoard", "Home")
+        }
+        else
+        {
+            <script src="~/Scripts/ChartScripts/highcharts.js"></script>
+            <script src="~/Scripts/ChartScripts/data.js"></script>
+            <script src="~/Scripts/ChartScripts/exporting.js"></script>
+            <script src="~/Scripts/ChartScripts/export-data.js"></script>
+            @*<script src="~/Scripts/countUp.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            Highcharts.chart('containerWorkOrder', {
+                data: {
+                    table: 'datatable'
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Ay Bazında Oluşturulan İş Emirleri'
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    title: {
+                        text: 'Adet'
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' Adet';
+                    }
+                }
+            });
+
+            Highcharts.chart('containerWayBill', {
+                data: {
+                    table: 'datatableWayBill'
+                },
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Ay Bazında Oluşturulan İrsaliyeler'
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    title: {
+                        text: 'Adet'
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        return '<b>' + this.series.name + '</b><br/>' +
+                            this.point.y + ' Adet';
+                    }
+                }
+            });
+
+            $('#btnOnayBekleyen').click(function () {
+
+
+                $('#ApprovalWorkOrderModalContent').load('@Url.Action("GetApprovalWorkOrders", "Home")');
+
+                document.getElementById('ApprovalWorkOrdersModal').style.display = 'block';
+
+            });
+        });
+
+    </script>
+    <div class="w3-container">
+        @if (ViewBag.yetkili)
+        {
+            <div class="w3-row w3-margin-left w3-margin-right">
+                <div class="w3-panel w3-blue w3-round">
+                    <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Onayınızda bekleyen <u id="btnOnayBekleyen">@ViewBag.OnayBekleyenIade adet iade</u> <u>@ViewBag.OnayBekleyenIptal adet iptal </u> iş emri bulunmaktadır.</p>
+                </div>
+            </div>
+        }
+        @if (ViewBag.IsReadOnly)
+        {
+            <div class="w3-row-padding w3-margin-bottom w3-margin-top">
+                <div class="w3-quarter ">
+                    <a href="\WorkOrder\Index" style="text-decoration:none;">
+                        <div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.WorkOrdersCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Açık İş Emirleri</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="w3-row-padding w3-margin-bottom w3-margin-top">
+                <div class="w3-quarter ">
+                    <a href="\WorkOrder\Index" style="text-decoration:none;">
+                        <div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.WorkOrdersCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Açık İş Emirleri</h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="w3-quarter">
+                    <a href="\Admin\Companies" style="text-decoration:none;">
+                        <div class="w3-container w3-red w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-industry w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.CompaniesCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Firmalar</h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="w3-quarter">
+                    <a href="\Admin\Services" style="text-decoration:none;">
+                        <div class="w3-container w3-teal w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-car w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.ServicesCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Servisler</h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="w3-quarter">
+                    <a href="\Admin\Users" style="text-decoration:none;">
+                        <div class="w3-container w3-orange w3-text-white w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.UsersCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Kullanıcılar</h4>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+            <div class="w3-row-padding w3-margin-bottom w3-margin-top">
+                @*<div class="w3-quarter">
+                        <a href="\Admin\Users" style="text-decoration:none;">
+                            <div class="w3-container w3-orange w3-text-white w3-padding-16 w3-hover-shadow">
+                                <div class="w3-left"><i class="fa fa-try w3-xxxlarge"></i></div>
+                                <div class="w3-right">
+                                    <h4 id="counter"></h4>
+                                </div>
+                                <div class="w3-clear"></div>
+                                <h4>Aylık Toplam Ciro</h4><h5></h5>
+                            </div>
+                        </a>
+                    </div>
+                <div class="w3-quarter">
+                    <a href="\Admin\WayBills" style="text-decoration:none;">
+                        <div class="w3-container w3-teal w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.WayBillsCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Açık İrsaliyeler</h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="w3-quarter">
+                    <a href="\Admin\Parts" style="text-decoration:none;">
+                        <div class="w3-container w3-orange w3-text-white w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-cog  w3-xxxlarge"></i></div>
+                            <div class="w3-right ">
+                                <h3>@ViewBag.PartsCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Parçalar</h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="w3-quarter">
+                    <a href="\Admin\Suppliers" style="text-decoration:none;">
+                        <div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-briefcase  w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.SuppliersCount</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Tedarikçiler</h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="w3-quarter">
+                    <a href="\Reports\UserIp" style="text-decoration:none;">
+                        <div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+                            <div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+                            <div class="w3-right">
+                                <h3>@ViewBag.ActiveUsers</h3>
+                            </div>
+                            <div class="w3-clear"></div>
+                            <h4>Aktif Kullanıcı sayısı	</h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="w3-row-padding w3-margin-bottom w3-margin-top">
+
+                <div id="containerWorkOrder" class="w3-half" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                <div id="containerWayBill" class="w3-half" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+            </div>
+            <table id="datatable" class="w3-hide">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>İş Emri</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var task in ViewBag.WorkOrders)
+                    {
+                        <tr>
+                            <th>@task.MonthName</th>
+                            <td>@task.Total</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <table id="datatableWayBill" class="w3-hide">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>İrsaliye</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var task in ViewBag.WayBills)
+                    {
+                        <tr>
+                            <th>@task.MonthName</th>
+                            <td>@task.Total</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+    </div>
+
+    <div id="ApprovalWorkOrdersModal" class="w3-modal w3-animate-opacity">
+        <div class="w3-modal-content w3-card-4">
+            <header class="w3-container w3-teal">
+                <span onclick="document.getElementById('ApprovalWorkOrdersModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+                <h5>Onay Bekleyen İş Emirleri</h5>
+            </header>
+            <div class="w3-container">
+                <div class="w3-row w3-margin" id="ApprovalWorkOrderModalContent">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    }
+
+*@
+
+@*<script type="text/javascript">
+        var options = {
+              useEasing: true,
+              useGrouping: true,
+              separator: ',',
+              decimal: '.',
+              prefix: '',
+              suffix: ''
+        };
+        var demo = new CountUp("counter", 0, 69800.85 , 2, 0,8, options);
+        demo.start();
+    </script>*@

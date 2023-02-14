@@ -1,0 +1,229 @@
+﻿
+@{
+	ViewBag.Title = "ServiceConfiguration";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Servis Tanımları", pagePermission = "XXXXX" })
+
+<div class="w3-panel">
+	<div class=" w3-card ">
+		<div class="w3-row w3-row-padding">
+			@*<h4>Aşağıdaki sekmelerden servis tanımlamaları yapabilirsiniz.</h4>*@
+			<div class="w3-row-padding w3-margin-bottom w3-margin-top">
+				<div class="w3-quarter">
+					<a href="/Service/Iscilikler" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.Iscilikler</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>İşçilikler</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/IscilikTipleri" style="text-decoration:none;">
+						<div class="w3-container w3-red w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.IscilikTipleri</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>İşçilik Tipleri	</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/IsEmriTipleri" style="text-decoration:none;">
+						<div class="w3-container w3-teal w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.IsEmriTipleri</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>İş Emri Tipleri</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/Danismanlar" style="text-decoration:none;">
+						<div class="w3-container w3-orange w3-text-white w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.Danismanlar</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Danişmanlar</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="w3-row-padding w3-margin-bottom">
+				<div class="w3-quarter">
+					<a href="/Service/Paketler" style="text-decoration:none;">
+						<div class="w3-container w3-teal w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.Paketler</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Paketler</h4>
+						</div>
+					</a>
+				</div>
+
+
+			</div>
+
+			<div class="w3-row-padding w3-margin-bottom">
+				<h4 class="w3-padding">Araç Tanımları</h4>
+				<div class="w3-quarter">
+					<a href="/Service/Renkler" style="text-decoration:none;">
+						<div class="w3-container w3-red w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.Renkler</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Araç Renkleri</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/AracGruplari" style="text-decoration:none;">
+						<div class="w3-container w3-teal w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.AracGrubu</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Araç Grupları</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/YakitTipleri" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.YakitTipleri</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Araç Yakıt Tipleri</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/AktarmaTipleri" style="text-decoration:none;">
+						<div class="w3-container w3-purple w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.AktarmaTipi</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Aktarma Tipleri</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+			<div class="w3-row-padding w3-margin-bottom">
+				<div class="w3-quarter">
+					<a href="/Service/AracCinsleri" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.AracTipi</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Araç Cinsi</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/VitesTipleri" style="text-decoration:none;">
+						<div class="w3-container w3-red w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.VitesTipi </h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Vites Tipi</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+
+			<div class="w3-row-padding w3-margin-bottom">
+				<h4 class="w3-padding">Müşteri Tanımları</h4>
+				<div class="w3-quarter">
+					<a href="/Service/Meslekler" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.Meslekler </h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Meslekler</h4>
+						</div>
+					</a>
+				</div>
+				<div class="w3-quarter">
+					<a href="/Service/KurumTipleri" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-users  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								<h3>@ViewBag.KurumTipleri</h3>
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Kurum Tipleri</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+
+			<div class="w3-row-padding w3-margin-bottom">
+				<h4 class="w3-padding">Stok Kartı</h4>
+				<div class="w3-quarter">
+					<a href="/Stok/TopluIndirimEkrani" style="text-decoration:none;">
+						<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+							<div class="w3-left"><i class="fa fa-cog  w3-xxxlarge"></i></div>
+							<div class="w3-right">
+								@*<h3>@ViewBag.Meslekler </h3>*@
+							</div>
+							<div class="w3-clear"></div>
+							<h4>Stok Kartı Toplu İndirim Ekranı</h4>
+						</div>
+					</a>
+				</div>
+				<!---->
+			</div>
+
+			@if (ViewBag.ServisYetkilisi)
+			{
+				<div class="w3-row-padding w3-margin-bottom">
+					<h4 class="w3-padding">Yetki Tanımları</h4>
+					<div class="w3-quarter">
+						<a href="/Service/KullaniciYetkileri" style="text-decoration:none;">
+							<div class="w3-container w3-blue w3-padding-16 w3-hover-shadow">
+								<div class="w3-left"><i class="fa fa-cog  w3-xxxlarge"></i></div>
+								<div class="w3-right">
+									@*<h3>@ViewBag.Meslekler </h3>*@
+								</div>
+								<div class="w3-clear"></div>
+								<h4>Kullanıcı İş Emri Tip Yetkisi</h4>
+							</div>
+						</a>
+					</div>
+					<!---->
+				</div>
+
+			}
+
+
+
+		</div>
+	</div>
+</div>

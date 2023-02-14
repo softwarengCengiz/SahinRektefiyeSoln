@@ -1,0 +1,43 @@
+﻿@model SahinRektefiyeSoln.Models.WebErrorLogs
+@{
+	ViewBag.Title = "Error";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+	List<string> errorParams = new List<string>();
+	if (!string.IsNullOrEmpty(Model.Parameters)) { 
+		errorParams = Model.Parameters.Split('&').ToList();
+	}
+	int i = 1;
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Error Detayı", pagePermission = "MNGR_01" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-padding-top">
+			<header class="w3-container w3-blue w3-round w3-border">
+				<div class="w3-row w3-padding">
+					<div class="w3-third">Hata Id : @Model.IdLog</div>
+					<div class="w3-third">Kullanıcı Adı : @Model.UserName </div>
+					<div class="w3-third">Hata Zamanı : @Model.DtLog</div>
+				</div>
+				<div class="w3-padding">
+					<label><b>URL : @Model.FullUrl</b></label><br />
+				</div>
+			</header>
+			<div class="w3-container w3-padding " id="codeContent">
+				<h4>HATA MESAJI : @Model.Error</h4><br />
+				
+				<h6>Sayfa Parametreleri</h6>
+				@foreach (var item in errorParams)
+				{
+					<b>@i - @item</b><br />
+					i += 1;
+				}
+				<code class="w3-codespan jsHigh w3-margin-top">
+					@Html.Raw(Model.StackTrace.Replace("konum","<br/>konum").Replace("satır","<b class='w3-yellow'>SATIR</b>"))
+				</code>
+			</div>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,151 @@
+﻿@model SahinRektefiyeSoln.Models.Arac
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+@{
+	Layout = null;
+	int aracIsEmriCount = (Model.IsEmirleri != null ? Model.IsEmirleri.Count : 0);
+}
+<script>
+	$(document).ready(function () {
+		var aracIsEmriCount = @aracIsEmriCount;
+
+        if (aracIsEmriCount > 0) {
+			jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+			$('#tableAracIsEmirleri').DataTable({
+				"processing": true,
+				"filter": true,
+				"language": {
+
+					"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+
+					"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+
+					"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+
+					"sSearch": "",
+
+					"selectAll": "Tümünü Seç",
+
+					"sSearchPlaceholder": "Filtrele",
+
+					"sLengthMenu": "_MENU_",
+
+					"sLoadingRecords": "Yükleniyor...",
+
+					"sProcessing": "İşleniyor...",
+
+					"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+
+					"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+
+					"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+
+					"sInfoEmpty": "Kayıt Yok",
+
+					"sInfoPostFix": "",
+
+					"sInfoThousands": ".",
+
+					"sDecimal": ","
+
+				},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+            });
+
+        $("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+        }
+
+
+	})
+</script>
+<div id="divIsKartlari" class="w3-row w3-padding " >
+	@if (Model.IsEmirleri != null)
+	{
+		if (Model.IsEmirleri.Count > 0)
+		{
+	<div class="w3-row w3-margin-bottom"><label>Araca ait <b>@Model.IsEmirleri.Count </b> iş emri kaydı bulundu.</label></div>
+			<table id="tableAracIsEmirleri">
+				<thead>
+					<tr>
+						<th width="">İş Emri No</th>
+						<th width="">Fatura Numarası</th>
+						<th width="">Fatura Tarihi</th>
+						<th width="">Açılış Tarihi</th>
+						<th width="">Plaka</th>
+						<th width="">Müşteri Adı</th>
+						<th width="">Sorumlu Danışman</th>
+						<th width="">İş Emri Durumu</th>
+						<th width="">İş Emri Tipi</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var isEmri in Model.IsEmirleri)
+					{
+						<tr>
+							<td>
+								<a href="/IsEmri/IsEmriDuzenle?IsEmriId=@isEmri.IsEmriId" title="İş Emrini Görüntüle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+								@(String.Format("{0:000000}", isEmri.IsEmriId))
+							</td>
+							<td>@isEmri.FaturaNo</td>
+							<td>@(isEmri.FaturaTarihi != null ? isEmri.FaturaTarihi.Value.ToShortDateString() : "")</td>
+							<td>@(isEmri.IsEmriTarihi != null ? isEmri.IsEmriTarihi.Value.ToShortDateString() : "")</td>
+							<td>@isEmri.Arac.Plaka</td>
+							<td>@(isEmri.Musteri.MusteriTipi == "B" ? (isEmri.Musteri.MusteriAdi.ToString() + " " + isEmri.Musteri.MusteriSoyadi.ToString()) : isEmri.Musteri.KurumAdi.ToString())</td>
+							<td>@isEmri.Danismanlar.Adi @isEmri.Danismanlar.Soyadi</td>
+							<td>@isEmri.IsEmriStatu.Aciklamasi</td>
+							<td>@isEmri.IsEmriTipleri.Aciklamasi</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		}
+		else
+		{
+			<div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Araca ait iş emri kaydı bulunamadı</div>
+		}
+
+
+	}
+</div>

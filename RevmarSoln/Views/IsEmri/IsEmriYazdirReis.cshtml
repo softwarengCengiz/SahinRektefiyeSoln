@@ -1,0 +1,327 @@
+﻿@model SahinRektefiyeSoln.Models.IsEmirleri
+@using SahinRektefiyeSoln.Models.HelperModels;
+@{ Layout = null;}
+@{
+	ViewBag.Title = "IsEmriDetayPrint - " + Model.IsEmriId;
+	int countKalem = 1;
+	decimal? KalemKdvHaricIskontoluBFiyat = 0;
+	var kalemler = ViewBag.Kalemler as IEnumerable<SahinRektefiyeSoln.Models.HelperModels.FaturaKalem>;
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title></title>
+	<style type="text/css">
+		@@page {
+
+			@@bottom-left {
+				content: element(footer);
+				vertical-align: top;
+				padding-top: 10px;
+				/*      border: solid red;    */
+			}
+
+			@@top-right {
+				content: element(header);
+				vertical-align: bottom;
+				padding-bottom: 10px;
+				/*          border: solid green;   */
+			}
+
+			size: A4 portrait;
+			margin-top: 0cm;
+			margin-left: 1cm;
+			margin-right: 1cm;
+			margin-bottom: 0cm;
+		}
+
+		div.header {
+			display: block;
+			position: running(header);
+			background-color: white !important;
+		}
+
+		div.footer {
+			margin-top: 0.5cm;
+			display: block;
+			position: running(footer);
+		}
+
+		div.content {
+			/*  border: solid purple;  */
+			display: block;
+			text-align: justify;
+		}
+
+		#tbMusteri td {
+			/*border: 1px black solid;*/
+			padding: 2px;
+			font-size: 10px !important;
+		}
+
+		.rotate {
+			text-align: center;
+			white-space: nowrap;
+			vertical-align: middle;
+			width: 1.5em;
+		}
+
+			.rotate div {
+				-moz-transform: rotate(-90.0deg); /* FF3.5+ */
+				-o-transform: rotate(-90.0deg); /* Opera 10.5 */
+				-webkit-transform: rotate(-90.0deg); /* Saf3.1+, Chrome */
+				filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083); /* IE6,IE7 */
+				-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+				margin-left: -10em;
+				margin-right: -10em;
+			}
+
+		.fontSize12 {
+			font-size: 10px !important;
+		}
+
+		#kalemler {
+			/*border: 1px black solid;*/
+			font-size: 10px !important;
+		}
+
+			/*#kalemler td:first-child, th:first-child {
+				border-left: none;
+			}*/
+
+			#kalemler tr td {
+				border-right: 1px solid black !important;
+				padding: 5px !important;
+			}
+
+			#kalemler th {
+				border-right: 1px solid black !important;
+				padding: 3px !important
+			}
+	</style>
+	<style type="text/css">
+
+		.twothird {
+			float: left;
+			width: 60%
+			/*border: black solid 1px;*/
+		}
+
+		.third {
+			float: left;
+			width: 39%
+			/*border: black solid 1px;*/
+		}
+
+		#tableSonToplam {
+			border: 1px solid black;
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 10px !important;
+		}
+
+			#tableSonToplam > th > td {
+				border: 1px solid black;
+			}
+	</style>
+	<script>
+		window.print();
+	</script>
+</head>
+<body>
+	<page size="A4">
+		<header>
+			<table class="no-border">
+				<tbody>
+					<tr>
+						<td width="20%">
+							<img src="~/Images/logo.png" />
+							<div style="width:190px!important;height:60px!important">
+						</td>
+						<td width="80%" align="right">
+							<h3>FATURA ÖN ÇIKTI</h3>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td width="80%" align="right" style="font-size:10px!important">İş Emri Numarası : @(String.Format("{0:000000}", Model.IsEmriId))</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table border="0" id="tbMusteri" style=" border: 1px solid black;width:100%">
+				<tr>
+					<td class="rotate" rowspan="10"><div class="fontSize12">MÜŞTERİ BİLGİLERİ</div></td>
+					<td colspan="2">ARAÇ SERVİSE TESLİM/KABUL TARİHİ :  </td>
+					<td colspan="2">@Model.CreatedDate.ToShortDateString() - @Model.CreatedDate.ToShortTimeString()</td>
+				</tr>
+				<tr>
+					<td style="width:22%">ADI SOYADI / ÜNVANI </td>
+					<td style="width:30%">
+						@(Model.Musteri.MusteriTipi == "B" ? Model.Musteri.MusteriAdi.ToUpper() + " " + Model.Musteri.MusteriSoyadi.ToUpper() : Model.Musteri.KurumAdi.ToUpper())
+					</td>
+				</tr>
+				<tr>
+					<td>ADRES</td>
+					<td colspan="3">@Model.Musteri.Adres</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>@Model.Musteri.iller.sehir /@Model.Musteri.ilceler.ilce</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>VERGİ DAİRESİ VE NO</td>
+					<td>TCKN /  @Model.Musteri.TCKN</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>TELEFON</td>
+					<td>@(Model.Musteri.MusteriTelefon.Count > 0 ? Model.Musteri.MusteriTelefon.First().TelefonNumarasi : "-")</td>
+					<td>@*ARACI GETİREN*@</td>
+					<td>@*@(Model.Musteri1 != null ? Model.Musteri1.MusteriAdi.ToUpper() + " " + Model.Musteri1.MusteriSoyadi.ToUpper() : "")*@</td>
+				</tr>
+				<tr>
+					<td>E-POSTA</td>
+					<td>@(Model.Musteri.MusteriMail.Count > 0 ? Model.Musteri.MusteriMail.First().MailAdresi : "-")</td>
+					<td>@*TELEFON*@</td>
+					<td>@*@(Model.Musteri1 != null ? (Model.Musteri1.MusteriTelefon.Count > 0 ? Model.Musteri1.MusteriTelefon.First().TelefonNumarasi : "") : "-")*@</td>
+				</tr>
+				<tr>
+					<td>ARACI GETİREN</td>
+					<td><label style="font-size:10px!important">@(Model.Musteri1 != null ? Model.Musteri1.MusteriAdi.ToUpper() + " " + Model.Musteri1.MusteriSoyadi.ToUpper() : "") <br />@(Model.Musteri1 != null ? (Model.Musteri1.MusteriTelefon.Count > 0 ? Model.Musteri1.MusteriTelefon.First().TelefonNumarasi : "") : "-") </label></td>
+					<td style="width:15%">ARACI ALAN</td>
+					<td><label style="font-size:10px!important">@(Model.Musteri2 != null ? Model.Musteri2.MusteriAdi.ToUpper() + " " + Model.Musteri2.MusteriSoyadi.ToUpper() : "") <br /> @(Model.Musteri2 != null ? (Model.Musteri2.MusteriTelefon.Count > 0 ? Model.Musteri2.MusteriTelefon.First().TelefonNumarasi : "") : "-")</label></td>
+
+				</tr>
+			</table>
+			<br />
+			<table id="kalemler" style="border: 1px solid black;width:100%;border-collapse: collapse; ">
+				<thead>
+					<tr style="border-bottom:1pt solid black;">
+						<th>Sıra No</th>
+						<th class="outlined">Parça Kodu</th>
+						<th>Parça Adı</th>
+						<th>Miktar</th>
+						<th>KDV Hariç B.Fiyat</th>
+						<th>İskonto Oranı</th>
+						<th>İskonto Tutarı</th>
+						<th>KDV Hariç İskontolu B. Fiyat</th>
+						<th>KDV Oranı</th>
+						<th>KDV Tutarı</th>
+						<th>KDV Dahil B.Fiyat</th>
+						<th>T.KDV Tutarı</th>
+						<th>KDV Hariç Tutar</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var parca in kalemler.Where(x => x.KalepTipi == "P").ToList())
+					{
+						<tr>
+							<td>@countKalem @{countKalem += 1;}</td>
+							<td>@parca.ParcaNo</td>
+							<td>
+								@parca.ParcaAdi
+							</td>
+							<td>@parca.Miktar </td>
+							<td>@String.Format("{0:0.00}", parca.kdvHaricBirimFiyati)</td>
+							<td>@String.Format("{0:0.00}", parca.kalemIskontoOrani * 100)</td>
+							<td>@String.Format("{0:0.00}", parca.kalemIskontoTutari)</td>
+							<td>@String.Format("{0:0.00}", parca.KdvHaricIskontoluBFiyat)</td>
+							<td>@String.Format("{0:0.00}", parca.KdvOrani * 100)</td>
+							<td>@String.Format("{0:0.00}", parca.KdvBirimTutari)</td>
+							<td>@String.Format("{0:0.00}", parca.KdvDahilBirimFiyat)</td>
+							<td>@String.Format("{0:0.00}", parca.ToplamKdvliTutari)</td>
+							<td>@String.Format("{0:0.00}", parca.KdvHaricTutar)</td>
+						</tr>
+					}
+					@foreach (var iscilik in kalemler.Where(x => x.KalepTipi == "I").ToList())
+					{
+						<tr>
+							<td>@countKalem @{countKalem += 1;}</td>
+							<td>@iscilik.IscilikKodu</td>
+							<td>
+								@iscilik.IscilikAdi
+							</td>
+							<td>@iscilik.Miktar</td>
+							<td>@String.Format("{0:0.00}", iscilik.kdvHaricBirimFiyati)</td>
+							<td>@String.Format("{0:0.00}", iscilik.kalemIskontoOrani * 100)</td>
+							<td>@String.Format("{0:0.00}", iscilik.kalemIskontoTutari)</td>
+							<td>@String.Format("{0:0.00}", iscilik.KdvHaricIskontoluBFiyat)</td>
+							<td>@String.Format("{0:0.00}", iscilik.KdvOrani * 100)</td>
+							<td>@String.Format("{0:0.00}", iscilik.KdvBirimTutari)</td>
+							<td>@String.Format("{0:0.00}", iscilik.KdvDahilBirimFiyat)</td>
+							<td>@String.Format("{0:0.00}", iscilik.ToplamKdvliTutari)</td>
+							<td>@String.Format("{0:0.00}", iscilik.KdvHaricTutar)</td>
+						</tr>
+
+					}
+				</tbody>
+				<tfoot style="border-top: 1px solid black;">
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>G.Toplam</td>
+						<td>@String.Format("{0:0.00}", kalemler.Sum(x => x.ToplamKdvliTutari))</td>
+						<td>@String.Format("{0:0.00}", kalemler.Sum(x => x.KdvHaricTutar))</td>
+					</tr>
+				</tfoot>
+			</table>
+			<br />
+			<div class="twothird">
+				<div style="padding-right:20px">
+					<table border="0" style=" border: 1px solid black;width:100%;font-size:10px!important;">
+						<tr>
+							<td><b>Plaka </b>: </td>
+							<td>@Model.Arac.Plaka - İş Emri No : @(String.Format("{0:000000}", Model.IsEmriId)) - Km: @Model.Km</td>
+						</tr>
+						<tr>
+							<td><b>Parça </b>: </td>
+							<td>@String.Format("{0:0.00}", kalemler.Where(x => x.KalepTipi == "P").Sum(x => x.KdvHaricTutar)) ₺</td>
+						</tr>
+						<tr>
+							<td><b>işçilik </b>: </td>
+							<td>@String.Format("{0:0.00}", kalemler.Where(x => x.KalepTipi == "I").Sum(x => x.KdvHaricTutar)) ₺ </td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div class="third">
+				<table border="0" id="tableSonToplam" cellpadding="2">
+					<tr>
+						<td style="text-align:right;border: 1px solid black;padding:1px"><b>Mal Hizmet Toplam Tutarı</b></td>
+						<td style="text-align:right;border: 1px solid black;padding:1px">@String.Format("{0:0.00}", kalemler.Sum(x => x.KdvHaricTutar)) TL</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;border: 1px solid black;"><b>Hesaplanan KDV</b></td>
+						<td style="text-align:right;border: 1px solid black;">@String.Format("{0:0.00}", kalemler.Sum(x => x.ToplamKdvliTutari)) TL</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;border: 1px solid black;"><b>Vergiler Dahil Toplam Tutar</b></td>
+						<td style="text-align:right;border: 1px solid black;">@String.Format("{0:0.00}", (kalemler.Sum(x => x.ToplamKdvliTutari) + kalemler.Sum(x => x.KdvHaricTutar))) TL</td>
+					</tr>
+					<tr>
+						<td style="text-align:right;border: 1px solid black;"><b>Ödenecek Tutar</b></td>
+						<td style="text-align:right;border: 1px solid black;">@String.Format("{0:0.00}", (kalemler.Sum(x => x.ToplamKdvliTutari) + kalemler.Sum(x => x.KdvHaricTutar))) TL</td>
+					</tr>
+				</table>
+			</div>
+		</header>
+
+		<footer></footer>
+	</page>
+
+</body>
+</html>
+

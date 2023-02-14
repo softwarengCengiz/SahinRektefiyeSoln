@@ -1,0 +1,313 @@
+﻿@model SahinRektefiyeSoln.Models.IsEmirleri
+@{ Layout = null;}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>İş Emri - </title>
+	@*<link rel="stylesheet" href="~/Styles/w3.css">*@
+	<style type="text/css">
+		@@page {
+
+			@@bottom-left {
+				content: element(footer);
+				vertical-align: top;
+				padding-top: 10px;
+				/*      border: solid red;    */
+			}
+
+			@@top-right {
+				content: element(header);
+				vertical-align: bottom;
+				padding-bottom: 10px;
+				/*          border: solid green;   */
+			}
+
+			size: A4 portrait;
+			margin-top: 0cm;
+			margin-left: 1cm;
+			margin-right: 1cm;
+			margin-bottom: 0cm;
+		}
+
+		div.header {
+			display: block;
+			position: running(header);
+			background-color: white !important;
+		}
+
+		div.footer {
+			margin-top: 0.5cm;
+			display: block;
+			position: running(footer);
+		}
+
+		div.content {
+			/*  border: solid purple;  */
+			display: block;
+			text-align: justify;
+		}
+
+		#tbMusteri td {
+			/*border: 1px black solid;*/
+			padding: 2px;
+			font-size: 12px !important;
+		}
+
+
+		#tbArac td {
+			/*border: 1px black solid;*/
+			padding: 3px;
+			font-size: 14px;
+		}
+
+		.rotate {
+			text-align: center;
+			white-space: nowrap;
+			vertical-align: middle;
+			width: 1.5em;
+		}
+
+			.rotate div {
+				-moz-transform: rotate(-90.0deg); /* FF3.5+ */
+				-o-transform: rotate(-90.0deg); /* Opera 10.5 */
+				-webkit-transform: rotate(-90.0deg); /* Saf3.1+, Chrome */
+				filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083); /* IE6,IE7 */
+				-ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+				margin-left: -10em;
+				margin-right: -10em;
+			}
+
+		.fontSize12 {
+			font-size: 12px !important;
+		}
+	</style>
+	<script>
+		window.print();
+	</script>
+</head>
+<body>
+	<page size="A4">
+		<div class="header">
+			<table class="no-border">
+				<tbody>
+					<tr>
+						<td width="20%"><div style="width:190px!important;height:60px!important"></td>
+						<td width="80%" align="right">
+							<h3>MÜŞTERİ İSTEK FORMU</h3>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td width="80%" align="right" style="font-size:12px!important">İş Emri Numarası : @(String.Format("{0:000000}", Model.IsEmriId))</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<table border="0" id="tbMusteri" style=" border: 1px solid black;width:100%">
+				<tr>
+					<td class="rotate" rowspan="10"><div class="fontSize12">MÜŞTERİ BİLGİLERİ</div></td>
+					<td colspan="2">ARAÇ SERVİSE TESLİM/KABUL TARİHİ :  </td>
+					<td colspan="2">@Model.CreatedDate.ToShortDateString() - @Model.IsEmriTarihi.Value.ToShortTimeString()</td>
+				</tr>
+				<tr>
+					<td style="width:22%">ADI SOYADI / ÜNVANI </td>
+					<td style="width:30%">
+						@(Model.Musteri.MusteriTipi == "B" ? Model.Musteri.MusteriAdi.ToUpper() + " " + Model.Musteri.MusteriSoyadi.ToUpper() : Model.Musteri.KurumAdi.ToUpper())
+					</td>
+				</tr>
+				<tr>
+					<td>ADRES</td>
+					<td colspan="3">@Model.Musteri.Adres</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>@Model.Musteri.iller.sehir /@Model.Musteri.ilceler.ilce</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>VERGİ DAİRESİ VE NO</td>
+					<td>
+						@(Model.Musteri.MusteriTipi == "B" ? "TCKN / " + Model.Musteri.TCKN : "Vergi No /" + Model.Musteri.VergiNo)
+					</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>TELEFON</td>
+					<td>@(Model.Musteri.MusteriTelefon.Count > 0 ? Model.Musteri.MusteriTelefon.First().TelefonNumarasi : "-")</td>
+					<td>@*ARACI GETİREN*@</td>
+					<td>@*@(Model.Musteri1 != null ? Model.Musteri1.MusteriAdi.ToUpper() + " " + Model.Musteri1.MusteriSoyadi.ToUpper() : "")*@</td>
+				</tr>
+				<tr>
+					<td>E-POSTA</td>
+					<td>@(Model.Musteri.MusteriMail.Count > 0 ? Model.Musteri.MusteriMail.First().MailAdresi : "-")</td>
+					<td>@*TELEFON*@</td>
+					<td>@*@(Model.Musteri1 != null ? (Model.Musteri1.MusteriTelefon.Count > 0 ? Model.Musteri1.MusteriTelefon.First().TelefonNumarasi : "") : "-")*@</td>
+				</tr>
+				<tr>
+					<td>ARACI GETİREN</td>
+					<td>
+						<label style="font-size:11px!important">
+							@if (Model.Musteri1 == null)
+					{
+						<label>@Model.AracTeslimEdenKisi</label>
+			}
+			else
+			{
+				<label>@(Model.Musteri1 != null ? Model.Musteri1.MusteriAdi.ToUpper() + " " + Model.Musteri1.MusteriSoyadi.ToUpper() : "") <br />@(Model.Musteri1 != null ? (Model.Musteri1.MusteriTelefon.Count > 0 ? Model.Musteri1.MusteriTelefon.First().TelefonNumarasi : "") : "-")</label>
+	}
+
+						</label>
+					</td>
+					<td style="width:15%">ARACI ALAN</td>
+					<td><label style="font-size:11px!important">@(Model.Musteri2 != null ? Model.Musteri2.MusteriAdi.ToUpper() + " " + Model.Musteri2.MusteriSoyadi.ToUpper() : "") <br /> @(Model.Musteri2 != null ? (Model.Musteri2.MusteriTelefon.Count > 0 ? Model.Musteri2.MusteriTelefon.First().TelefonNumarasi : "") : "-")</label></td>
+
+				</tr>
+			</table>
+
+			<br />
+			@if (SahinRektefiyeSoln.Models.Parameters.ServiceBankoSatisIsEmriTipId != Model.IsEmriTipId)
+	{
+		<table border="0" id="tbArac" style=" border: 1px solid black;width:100%">
+			<tr>
+				<td><br /></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td class="rotate" rowspan="4"><div class="fontSize12">ARAÇ BİLGİLERİ</div></td>
+				<td>PLAKA NO</td>
+				<td><b>@Model.Arac.Plaka.ToUpper()</b></td>
+				<td>TİP</td>
+				<td><b>@Model.Arac.Companies.Name - @Model.Arac.Vehicles.Name - @Model.Arac.AracModelAdi</b></td>
+			</tr>
+			<tr>
+				<td>ŞASE NO</td>
+				<td><b>@Model.Arac.SaseNo.ToUpper()</b></td>
+				<td>MOTOR NO</td>
+				<td><b>@Model.Arac.MotorNo</b></td>
+			</tr>
+			<tr>
+				<td>TRF ÇIK. TRH</td>
+				<td><b>@(Model.Arac.AracDetay.TrafigeCikisTarihi.HasValue == true ? Model.Arac.AracDetay.TrafigeCikisTarihi.Value.ToShortDateString() : "-")</b></td>
+				<td>KM / MODEL YILI</td>
+				<td><b>@Model.Arac.Km / @Model.Arac.ModelYili</b></td>
+			</tr>
+			<tr>
+				<td>YAKIT TİPİ</td>
+				<td>
+					<b>
+						@if (Model.Arac.YakitTipi != null)
+				{
+					<label>@Model.Arac.YakitTipi.Aciklamasi</label>
+		}
+					</b>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><br /></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table>
+}
+
+			<br /><br />
+			<table border="0" cellspacing="0" cellpadding="0" style="margin-left:3px!important">
+				@for (int i = 0; i < 10; i++)
+		{
+			if (i == 0)
+			{
+				<tr>
+					<td class="rotate" rowspan="10"><div class="fontSize12">MÜŞTERİ İSTEKLERİ/ŞİKAYETLERİ</div></td>
+					<td>@(i + 1)</td>
+					<td>
+						@if (Model.IsEmriMusteriIstekleri.Count > 0)
+				{
+					if (Model.IsEmriMusteriIstekleri.ToArray()[i] != null)
+					{
+						@Model.IsEmriMusteriIstekleri.ToArray()[i].Istek.ToUpper()
+			}
+		}
+
+					</td>
+				</tr>
+	}
+	else
+	{
+		<tr>
+			<td>@(i + 1)</td>
+			<td>
+				@if (Model.IsEmriMusteriIstekleri.Count > i)
+		{
+			<label>@Model.IsEmriMusteriIstekleri.ToArray()[i].Istek.ToUpper()</label>
+}
+			</td>
+		</tr>
+}
+}
+
+			</table>
+			<br />
+			<table>
+				<tr>
+					<td>NOT</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			<p>-Bakım/Onarım sonrası çıkan parçaların; geri dönüşüm/atık yöntemi amacıyla sizin adınıza tarafımızdan bertaraf edilmesini istiyor musunuz? Evet [ ✓ ] Hayır [ ]</p>
+			<p>-Araç teslimi mesai saatlerinde yapılabilir.</p>
+			<p>-Bakım ve onarım süresince teşhis ve kalite kontrol amacıyla test sürüşüne çıkılabilir.</p>
+			<p>-Genel şartları okudum, anladım ve yukarıda yazılan işlerin yapılması için servisinizi yetkili kılıyorum.İş tamamlandığında ödeme tarafım(ız) dan yapılacaktır.</p>
+			<br />
+			<div class="w3-row">
+				<div class="w3-half">
+					<label style="font-size:12px!important">MÜŞTERİYE TAHMİNİ TESLİM TARİHİ : @(Model.TahminiTeslimTarihi.HasValue == true ? Model.TahminiTeslimTarihi.Value.ToShortDateString() + "-" + Model.TahminiTeslimTarihi.Value.ToShortTimeString() : "______/______/______")</label>
+				</div>
+
+
+			</div>
+			<div class="" style="margin-right:10px!important;float:right;height: 80px;width: 150px;border:dashed 1px;margin-left: 10px;">
+				<label style="font-size:12px!important">TESLİM ALAN/SERVİS DANIŞMANI</label>
+
+			</div>
+
+			<div class="" style="margin-right:10px!important;float:right;height: 80px;width: 150px;border:dashed 1px;margin-left: 10px;">
+				<label style="font-size:12px!important">TESLİM EDEN/MÜŞTERİ</label>
+			</div>
+		</div>
+
+		<div class="footer" style="width:353px!important;height:110px!important">
+			@*<table class="no-border" style=" border: 1px solid black;">
+					<thead>
+						<tr>
+							<th align="left">Revmer Otomotiv Servis Hizmetleri</th>
+						</tr>
+					</thead>
+					<tr>
+						<td align="left">
+							Bahçelievler, Detay Sok. No:4, 34890 Pendik/İstanbul
+						</td>
+					</tr>
+					<tr>
+						<td>Telefon : 90 216 444 61 09</td>
+					</tr>
+					<tr>
+						<td>E-Posta : info@revmer.com</td>
+					</tr>
+					<tr>
+						<td>Web Adresi: www.revmer.com</td>
+					</tr>
+				</table>*@
+		</div>
+	</page>
+</body>
+</html>

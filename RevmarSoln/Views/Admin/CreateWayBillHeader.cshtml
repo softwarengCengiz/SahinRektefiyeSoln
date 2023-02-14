@@ -1,0 +1,480 @@
+﻿@model SahinRektefiyeSoln.Models.WayBills
+
+@{
+	ViewBag.Title = "İrsaliye Oluştur";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "İrsaliye Oluştur/Düzenle", pagePermission = "ADM_15" })
+<script>
+	$(document).ready(function () {
+
+
+		if($('#SupplierId').val() == "") {
+			$('#SupplierBlock').addClass("w3-hide");
+		} else
+		{
+			var url = '@Url.Action("GetSupplierInfos", "Admin")';
+			var ODD = $("#SupplierId").val();
+			$.getJSON(url, { SupplierId: ODD }, function (response) {
+				console.log(response);
+				$("#SupplierCode").val(response.SupplierCode);
+				$("#SupplierName").val(response.Name);
+				$("#SupplierPhone").val(response.PhoneNo);
+				$("#SupplierVD").val(response.CompanyVd);
+				$("#SupplierVN").val(response.CompanyVNo);
+				$("#SupplierAddress").val(response.Address);
+				$("#SupplierNameHeader").text(response.Name);
+			});
+			$('#SupplierBlock').addClass("w3-show");
+
+		}
+
+		var wayBillStatu = $("#WayBillStatu").val(@Model.Statu);
+		if (wayBillStatu != null) {
+			if (wayBillStatu.val() == "40") {
+				 url = '@Url.Action("CheckPermission", "Admin")';
+
+				$.getJSON(url, { permission: "ADM_20" }, function (response) {
+					console.log(response);
+				 	if (response.success == false) {
+						  $("#btnAddPart").attr('disabled', 'disabled');
+						  $('#WayBillStatu').attr('disabled', 'disabled');
+						  $('#btnStatuUpdate').addClass('w3-hide');
+
+					}
+					var btns = $(".w3-btnDeletePart");
+					btns.addClass("w3-hide");
+				 });
+
+
+
+
+			}
+		}
+
+
+	});
+	function onChangeSupplier(s, e) {
+        var url = '@Url.Action("GetSupplierInfos", "Admin")';
+
+        var ODD = $("#SupplierId").val();
+		if (ODD != "") {
+			$.getJSON(url, { SupplierId: ODD }, function (response) {
+				console.log(response);
+				$("#SupplierCode").val(response.SupplierCode);
+				$("#SupplierName").val(response.Name);
+				$("#SupplierPhone").val(response.PhoneNo);
+				$("#SupplierVD").val(response.CompanyVd);
+				$("#SupplierVN").val(response.CompanyVNo);
+				$("#SupplierAddress").val(response.Address);
+				$("#SupplierNameHeader").text(response.Name);
+			});
+		}
+
+		if ($('#SupplierId').val() == "") {
+			$('#SupplierBlock').removeClass("w3-show").addClass("w3-hide");
+		} else {
+			$('#SupplierBlock').removeClass("w3-hide").addClass("w3-show");
+		}
+
+
+	}
+	 function onChangePart(s, e) {
+        var url = '@Url.Action("GetPartInfo", "WorkOrder")';
+		var domPartCode = $("#PartCode");
+		var domPartDesc = $("#PartDesc");
+        var ODD = $("#PartId").val();
+		 if (ODD == "") {
+			 $("#PartCode").val('');
+			 $("#PartDesc").val('');
+
+		 }
+        $.getJSON(url, { PartId: ODD }, function (response) {
+            console.log(response);
+			domPartCode.val(response.PartCode);
+			domPartDesc.val(response.Name);
+
+        });
+
+	}
+	function btnPartPrice_onBlur() {
+
+		var price = $("#btnPartPrice").val();
+
+		$("#btnPartPrice").val(price.replace(".", ","));
+
+	}
+</script>
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script>
+	$(function () {
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tüm Parçaları Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text)))
+						return {
+							label: text,
+							value: text,
+							option: this
+						};
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				// Remove invalid value
+				this.input
+					.val("")
+					.attr("title", value + " parça seçilmedi.")
+					.tooltip("open");
+				this.element.val("");
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			}
+		});
+
+
+	});
+</script>
+<script>
+	$(function () {
+		$("#PartId").combobox({
+			select: function (event, ui) {
+				//console.log(event);
+				//console.log(ui.item.value);
+				$('#PartId').val(ui.item.value);
+				$('#PartId').trigger("change");
+			}
+		});
+		$("#toggle").on("click", function () {
+			$("#PartId").toggle();
+		});
+
+
+	});
+</script>
+<style>
+	.custom-combobox {
+		position: relative;
+		display: inline-block;
+	}
+
+	.custom-combobox-toggle {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		margin-left: -1px;
+		padding: 0;
+	}
+
+	.custom-combobox-input {
+		margin: 0;
+		padding: 5px 10px;
+	}
+</style>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		@using (Html.BeginForm())
+		{
+			<div id="Header">
+				@*<div class="w3-row w3-padding">
+						@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "128", placeholder = "İrsaliye Başlık", @disabled = "disabled" } })
+					</div>*@
+				<div class="w3-row ">
+					<div class="w3-third w3-padding">
+						<label>İrsaliye No</label>
+						@Html.EditorFor(model => model.WayBillNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "50", @disabled = "disabled" } })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>Tedarikçi</label>
+						@Html.DropDownListFor(model => model.SupplierId, (SelectList)ViewBag.Suppliers, "Tedarikçi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "SupplierId", @onchange = "onChangeSupplier(this);", @disabled = "disabled" })
+					</div>
+					<div class="w3-third w3-padding">
+						<label>İrsaliye Tarihi</label>
+						<input type="text" class="w3-input w3-border w3-round" value="@Convert.ToDateTime(Model.WayBillDate).ToShortDateString()" disabled />
+						@*@Html.TextBoxFor(model => model.WayBillDate, new { @class = "w3-input w3-border w3-round", id = "WayBillDate", @disabled = "disabled" })*@
+					</div>
+				</div>
+
+				<div id="SupplierBlock" class="w3-margin-bottom w3-padding">
+					<button onclick="myFunction('CompanyInfo'); return false;" class="w3-btn w3-block w3-blue w3-left-align w3-round">Firma Bilgileri </button>
+					<div id="CompanyInfo" class=" w3-hide w3-border ">
+						<div class="w3-row">
+							<div class="w3-third  w3-padding">
+								<input class="w3-input w3-border w3-round" type="text" id="SupplierCode" disabled>
+							</div>
+							<div class="w3-third  w3-padding">
+								<input class="w3-input w3-border w3-round" type="text" id="SupplierName" disabled>
+							</div>
+							<div class="w3-third  w3-padding">
+								<input class="w3-input w3-border w3-round" type="text" id="SupplierPhone" disabled>
+							</div>
+						</div>
+						<div class="w3-row">
+							<div class="w3-third w3-padding">
+								<input class="w3-input w3-border w3-round" type="text" id="SupplierVD" disabled>
+							</div>
+							<div class="w3-third w3-padding">
+								<input class="w3-input w3-border w3-round" type="text" id="SupplierVN" disabled>
+							</div>
+						</div>
+						<div class="w3-row ">
+							<div class="w3-padding">
+								<textarea class="w3-input w3-border w3-round" id="SupplierAddress" disabled></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="w3-row w3-padding">
+					<div class="w3-quarter"><label>&nbsp;</label></div>
+					<div class="w3-quarter"><label>&nbsp;</label></div>
+					<div class="w3-quarter"><label>&nbsp;</label></div>
+					<div class="w3-quarter">
+
+						<button class="w3-btn w3-ripple w3-green w3-right" disabled>Ekle</button>
+
+					</div>
+				</div>
+			</div>
+
+		}
+
+		@using (Html.BeginForm("AddPartToWayBill", "Admin", FormMethod.Post))
+		{
+			@Html.Hidden("WayBillId", Model.WayBillId)
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Parça Adı</label>
+					@Html.DropDownList("PartId", (SelectList)ViewBag.Parts, "Parça Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "PartId", @onchange = "onChangePart(this);" })
+
+				</div>
+				<div class="w3-rest">
+					<div class="w3-half ">
+						<div class="w3-half w3-padding">
+							<label>Parça Kodu</label>
+							<input class="w3-input w3-border w3-round" type="text" disabled id="PartCode">
+						</div>
+						<div class="w3-half w3-padding">
+							<label>Parça Açıklaması</label>
+							<input class="w3-input w3-border w3-round" type="text" disabled id="PartDesc">
+						</div>
+					</div>
+					<div class="w3-half">
+						<div class="w3-third w3-padding">
+							<label>Adet</label>
+							<input class="w3-input w3-border w3-round" name="Quantity" type="number" min="0" max="100" placeholder="0" required>
+						</div>
+						<div class="w3-third w3-padding">
+							<label>Birim Fiyat</label>
+							<input class="w3-input w3-border w3-round" type="text" name="Price" id="btnPartPrice" onkeyup="btnPartPrice_onBlur();" autocomplete = "off"  required>
+						</div>
+						<div class="w3-third w3-padding">
+							<label>&nbsp;  </label><br />
+							<button class="w3-btn w3-ripple w3-blue" id="btnAddPart">Ekle</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		}
+
+		@if (Model.WayBillParts.Count() > 0)
+		{
+			<div class="w3-row w3-padding">
+				<table class="w3-table-all w3-hoverable">
+					<thead>
+						<tr class="w3-light-grey">
+							<th>Parça Kodu</th>
+							<th>Parça Açıklaması</th>
+							<th>Adet</th>
+							<th>Birim Fiyat</th>
+							<th>Toplam</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var part in Model.WayBillParts)
+						{
+							<tr>
+								<td>@part.Parts.PartCode</td>
+								<td>@part.Parts.Name</td>
+								<td>@part.Quantity</td>
+								<td>@part.Price</td>
+								<td>@(part.Quantity * part.Price) ₺</td>
+								<td>
+									<a href="/Admin/DeletePartFromWayBill?WayBillPartId=@part.WayBillPartId&&WayBillId=@part.WayBillId" class="w3-btn w3-ripple w3-red w3-btnDeletePart"><i class="fa fa-trash"></i>&nbsp;Parça Sil</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>Toplam : @(String.Format("{0:.##}", Model.WayBillParts.Sum(x => x.Price * x.Quantity)) )+ KDV ₺</td>
+							<td>KDV : @(String.Format("{0:.##}", Model.WayBillParts.Sum(x => x.Price * x.Quantity) * 18 / 100)) ₺</td>
+							<td>KDV Dahil : @(String.Format("{0:.##}", Model.WayBillParts.Sum(x => x.Price * x.Quantity) + Model.WayBillParts.Sum(x => x.Price * x.Quantity) * 18 / 100)) ₺</td>
+
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<div class="w3-row ">
+				@using (Html.BeginForm("UpdateWayBillStatu", "Admin", FormMethod.Post))
+				{
+					@Html.HiddenFor(x => x.WayBillId, new { name = "WayBillId" })
+					<div class="w3-quarter w3-padding">
+						<a href="/Admin/WayBills" class="w3-btn w3-ripple w3-blue"><i class="fa fa-arrow-left"></i>&nbsp;İrsaliyeler </a>
+					</div>
+
+					<div class="w3-quarter w3-padding">
+
+					</div>
+					<div class="w3-quarter w3-padding">
+						<select class="w3-select" name="WayBillStatu" id="WayBillStatu">
+							<option value="" disabled selected>İrsaliye Durum</option>
+							<option value="10">Açık</option>
+							<option value="40">Tamamlandı</option>
+							@*<option value="80">İptal</option>*@
+						</select>
+
+					</div>
+					<div class="w3-quarter w3-padding">
+
+						<button class="w3-btn w3-ripple w3-green" id="btnStatuUpdate"><i class="fa fa-floppy-o"></i>&nbsp; Güncelle</button>
+
+					</div>
+				}
+
+			</div>
+		}
+
+
+
+	</div>
+	<script>
+		function myFunction(id) {
+
+
+			var x = document.getElementById(id);
+			if (x.className.indexOf("w3-show") == -1) {
+				x.className += " w3-show";
+			} else {
+				x.className = x.className.replace(" w3-show", "");
+			}
+
+		}
+	</script>
+</div>

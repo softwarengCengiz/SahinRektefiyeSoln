@@ -1,0 +1,215 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Teklif.TeklifSorgulaPageModel
+@{
+    ViewBag.Title = "Teklifler";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
+
+<link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Teklifler", pagePermission = "XXXXX" })
+
+<script>
+	$(document).ready(function () {
+		jQuery(document).ready(function () {
+			'use strict';
+
+			jQuery('#TeklifTarihi').datetimepicker(
+				{
+					 value: '@(Model.TeklifTarihi != null ? Model.TeklifTarihi.Value.Year +"/"+ Model.TeklifTarihi.Value.Month+"/"+ Model.TeklifTarihi.Value.Day +" "+ Model.TeklifTarihi.Value.Hour+":"+ Model.TeklifTarihi.Value.Minute+"\'" : null)'
+				});
+
+
+        });
+
+        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#tableTeklifler').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+
+			},
+			dom: 'Bfrtip',
+			buttons: [
+				'excelHtml5',
+				'pdfHtml5'
+			],
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+        $("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+		var btns = $('.dt-buttons')[0];
+
+		btns.firstElementChild.className = "w3-btn w3-blue w3-round";
+		btns.firstElementChild.textContent = "Excel'e Aktar";
+
+		btns.firstElementChild.nextElementSibling.className = "w3-btn w3-blue w3-round";
+		btns.firstElementChild.nextElementSibling.textContent = "Pdf'e Aktar";
+
+		$('.isEmriStatuleri').change(function () {
+			$("#btnAra").trigger("click");
+		});
+
+	});
+
+</script>
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card ">
+        <div class="w3-margin-top">
+            <div class="w3-col m2 l2 ">
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <a href="/Teklif/TeklifOlustur" class="w3-btn w3-blue w3-block w3-round">Teklif Oluştur</a>
+                </div>
+                @using (Html.BeginForm())
+                {
+                    <div class="w3-padding-lr-8">
+                        @Html.EditorFor(model => model.filter.TeklifNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase isEmriStatuleri", placeholder = "Teklif No", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-padding-lr-8">
+                        @Html.EditorFor(model => model.TeklifTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", placeholder = "Teklif Tarihi", id = "TeklifTarihi", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-padding-lr-8">
+                        @Html.EditorFor(model => model.filter.Arac.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase isEmriStatuleri", placeholder = "Plaka", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-padding-lr-8">
+                        <h6>Teklif Durumları</h6>
+                        @{ int i = 0;
+
+                            foreach (var statu in Model.teklifStatuleri)
+                            {
+                                @Html.HiddenFor(o => o.teklifStatuleri[i].Name)
+                                @Html.HiddenFor(o => o.teklifStatuleri[i].Id)
+                                @Html.CheckBoxFor(o => o.teklifStatuleri[i].Value, new { @id = "Statu_" + i, @class = "w3-check isEmriStatuleri" })
+                                <label>&nbsp; @statu.Name</label><br />
+                                i++;
+                            }
+
+                        }
+
+                    </div>
+                    <div class="w3-padding-lr-8">
+                        <h6>İş Emri Tipi</h6>
+                        @{ int j = 0;
+
+                            foreach (var tip in Model.isEmriTipleri)
+                            {
+                                @Html.HiddenFor(o => o.isEmriTipleri[j].Name)
+                                @Html.HiddenFor(o => o.isEmriTipleri[j].Id)
+                                @Html.CheckBoxFor(o => o.isEmriTipleri[j].Value, new { @id = "Tip_" + i, @class = "w3-check isEmriStatuleri" })
+                                <label>&nbsp; @tip.Name</label><br />
+                                j++;
+                            }
+
+                        }
+                    </div>
+
+                    <div class="w3-padding-lr-8">
+                        <button class="w3-blue w3-btn w3-block w3-round" type="submit" id="btnAra">Ara</button>
+                    </div>
+                }
+            </div>
+            <div class="w3-col m10 l10">
+                <div class="w3-padding-lr-8">
+                    <table id="tableTeklifler">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Teklif No</th>
+                                <th>Teklif Tarihi</th>
+                                <th>Plaka</th>
+                                <th>Müşteri Adı</th>
+                                <th>İş Emri Tipi</th>
+                                <th>Teklif Durumu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var teklif in Model.teklifler)
+                            {
+                            <tr>
+                                <td>
+                                    <a href="/Teklif/TeklifDuzenle?TeklifId=@teklif.TeklifId" title="Teklif Düzenle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+                                </td>
+                                <td>@teklif.TeklifNo</td>
+                                <td>@teklif.TeklifTarihi</td>
+                                <td>@teklif.Arac.Plaka</td>
+                                <td>@teklif.Musteri.MusteriAdi @teklif.Musteri.MusteriSoyadi</td>
+                                <td>@teklif.IsEmriTipleri.Aciklamasi</td>
+                                <td>@teklif.TeklifStatu.Aciklamasi</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>

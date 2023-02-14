@@ -1,0 +1,97 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.ServiceReport.IsEmriYaslanma
+@{
+    ViewBag.Title = "IsEmriYaslanma";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #example {
+        font-family: tahoma;
+    }
+</style>
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.sortElements.js"></script>
+<script src="~/Scripts/Table2Excel/jquery.table2excel.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#dtbsgRaporTarihi').datepicker({
+            dateFormat: "dd-mm-yy",
+            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+            dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+            firstDay: 1
+        });
+
+        $('#dtbtsRaporTarihi').datepicker({
+            dateFormat: "dd-mm-yy",
+            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+            dayNamesMin: ["Pa", "Pt", "Sl", "Ça", "Pe", "Cu", "Ct"],
+            firstDay: 1
+        });
+
+        $("#btnExcel").click(function () {
+            $("#example").table2excel({
+                // exclude CSS class
+                exclude: ".w3-dark-gray",
+                name: "Worksheet Name",
+                filename: "IsEmriYaslanmaRapor", //do not include extension
+                fileext: ".xls", // file extension
+                preserveColors: true
+            });
+        });
+
+    });
+</script>
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Servis Modulü Rapor Sayfası", pagePermission = "XXXXX" })
+<div class="w3-panel">
+   
+    <div class="w3-row-padding w3-card">
+
+        @if (Model != null)
+        {
+		<div class="w3-row w3-padding">
+			<div class="w3-row">
+
+				<div class="w3-threequarter"><br /></div>
+				<div class="w3-quarter w3-padding">
+					@using (Html.BeginForm("IsEmriYaslanma", "ServiceReport", FormMethod.Post))
+					{
+						<button class="w3-btn w3-ripple w3-blue w3-left w3-round-large w3-right w3-margin-left" name="command" value="Pdf" id="btnPDF"><i class="fa fa-file-excel-o" aria-hidden="true"></i> &nbsp; PDF'e Aktar</button>
+					}
+					<button class="w3-btn w3-ripple w3-blue w3-left w3-round-large w3-right " name="command" value="Excel" id="btnExcel"><i class="fa fa-file-excel-o" aria-hidden="true"></i> &nbsp; Excel'e Aktar</button>
+				</div>
+			</div>
+			<table class="w3-table-all" id="example">
+				<thead>
+					<tr>
+						<th>Yaşlanma Gün Sayısı</th>
+						<th>İş Emri Numarası</th>
+						<th>Müşteri</th>
+						<th>Plaka</th>
+					</tr>
+				</thead>
+				@foreach (var item in Model.YaslanmaList.OrderByDescending(x => x.YaslanmaGunSayisi).GroupBy(x => x.IsEmriTipi))
+				{
+					<tr>
+						<td colspan="4" class="w3-teal">@item.Key - İş emri süresi @Model.YaslanmaList.Where(x => x.IsEmriTipi == item.Key).Count() adet iş emri <b><u>@Model.YaslanmaList.Where(x => x.IsEmriTipi == item.Key).FirstOrDefault().YaslanmaGunSayisi</u></b> günü geçmiştir.</td>
+					</tr>
+					foreach (var item2 in Model.YaslanmaList.Where(x => x.IsEmriTipi == item.Key).OrderByDescending(x => x.YaslanmaGunu).ToList())
+					{
+						<tr class="w3-light-gray">
+							<td>@item2.YaslanmaGunu</td>
+							<td>@item2.IsEmriId</td>
+							<td>@item2.MusteriAdi</td>
+							<td>@item2.Plaka</td>
+						</tr>
+					}
+
+				}
+			</table>
+
+		</div>
+       
+        }
+    </div>
+</div>
+

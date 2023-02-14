@@ -1,0 +1,90 @@
+﻿@model SahinRektefiyeSoln.Models.Danismanlar
+
+@{
+	ViewBag.Title = "DanismanDuzenle";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using Vereyon.Web;
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Danışman Düzenleme Ekranı", pagePermission = "XXXXX" })
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
+<script>
+	$(document).ready(function () {
+		jQuery(document).ready(function () {
+			'use strict';
+
+
+			jQuery('#dtIseGirisTarihi').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				value: '@(Model.IseGirisTarihi !=null ? Model.IseGirisTarihi.Day +"/"+ Model.IseGirisTarihi.Month+"/"+ Model.IseGirisTarihi.Year : null)',
+				scrollInput: false
+			});
+			
+			jQuery('#dtIstenCikisTarihi').datetimepicker({
+				timepicker: false,
+				format: 'd.m.Y',
+				value: '@(Model.IstenCikisTarihi !=null ? Model.IstenCikisTarihi.Value.Day +"/"+ Model.IstenCikisTarihi.Value.Month+"/"+ Model.IstenCikisTarihi.Value.Year : null)',
+				scrollInput: false
+			});
+			
+			$.datetimepicker.setLocale('tr');
+		});
+	});
+</script>
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+		</div>
+
+		@using (Html.BeginForm("DanismanDuzenle","Service",FormMethod.Post))
+		{
+			@Html.HiddenFor(x=>x.DanismanId)
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>Danışman Adı</label>
+					@Html.EditorFor(model => model.Adi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase", @required = "required", autocomplete = "off", maxlength = "56" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Danışman Soyadı</label>
+					@Html.EditorFor(model => model.Soyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase", @required = "required", autocomplete = "off", maxlength = "56" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Aktif </label><br />
+					@Html.CheckBoxFor(model => model.SwAktif, new { @class = "w3-check" })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>Teknisyen?</label><br />
+					@Html.CheckBoxFor(model => model.SwTeknisyen, new { @class = "w3-check" })
+				</div>
+
+			</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding">
+					<label>İşe Girşi Tarihi</label>
+					@Html.EditorFor(model => model.IseGirisTarihi, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtIseGirisTarihi", id = "dtIseGirisTarihi", autocomplete = "off" } })
+				</div>
+				<div class="w3-quarter w3-padding">
+					<label>İşten Çıkış Tarihi</label>
+					@Html.EditorFor(model => model.IstenCikisTarihi, new { htmlAttributes = new { @class = "w3-select w3-border w3-round w3-padding dtIstenCikisTarihi", id = "dtIstenCikisTarihi", autocomplete = "off" } })
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-quarter w3-padding-right w3-left">
+					<a href="~/Service/Danismanlar" class=" w3-margin w3-green w3-btn w3-left w3-round">Geri</a>
+				</div>
+				<div class="w3-quarter w3-padding w3-right">
+					<button type="submit" class=" w3-margin w3-green w3-btn w3-right w3-round">Kaydet</button>
+				</div>
+			</div>
+		}
+	</div>
+</div>
+
+
+<script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>
+<script src="~/Scripts/DatetimePicker/bootstrap-datetimepicker.tr.js"></script>

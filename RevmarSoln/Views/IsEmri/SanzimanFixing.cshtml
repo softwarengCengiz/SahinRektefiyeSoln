@@ -1,0 +1,127 @@
+﻿@model SahinRektefiyeSoln.Models.SanzimanFixing
+
+@{
+	ViewBag.Title = "Şanzıman Tespit Sonuçları";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+	$(document).ready(function () {
+		$("#WorkOrderStatu").val('@ViewBag.WorkOrderStatu');
+		if ($("#WorkOrderStatu").val() == "20") {
+			$("#btnSave").addClass("w3-hide");
+			$(".w3-check").attr("disabled", true);
+			$("#TespitAciklama").attr("disabled", true);
+		}
+
+		$('#SanzimanType').keyup(function () {
+			this.value = $.trim(this.value.toUpperCase());
+		});
+	});
+</script>
+<input type="text" class="w3-hide" id="WorkOrderStatu" />
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Şanzıman Tespit Sonuçları", pagePermission = "EMP_02" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		@using (Html.BeginForm("SanzimanFixingAdd", "IsEmri", FormMethod.Post))
+		{
+			@Html.HiddenFor(model => model.SanzimanFixId)
+			@Html.HiddenFor(model => model.IsEmriId)
+			<div class="w3-row w3-padding">
+				<div class="w3-quarter">
+					<label>Şanzıman Tipi</label>
+					@Html.TextBoxFor(model => model.SanzimanType, new { @class = "w3-input w3-border w3-round", autocomplete = "off", maxlength = "12" })
+				</div>
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwPistonlardaAsinma, new { @class = "w3-check" })
+					<label>Pistonlarda aşınma/Hasar</label>
+
+				</div>
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwSelenoidKacagi, new { @class = "w3-check" })
+					<label>Selenoid kaçağı</label>
+
+				</div>
+
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwBaltalardaYanma, new { @class = "w3-check" })
+					<label>Balatalarda Yarma</label>
+
+				</div>
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwTekYonluKavramaHasar, new { @class = "w3-check" })
+					<label>Tek yönlü kavramada hasar </label>
+
+				</div>
+
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwDirekKavramaTasindaHasar, new { @class = "w3-check" })
+					<label>Direk kavrama tasında hasar</label>
+
+				</div>
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwVitesCatalindaHasar, new { @class = "w3-check" })
+					<label>Vites çatalında hasar</label>
+
+				</div>
+
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwPleydlerdeYanma, new { @class = "w3-check" })
+					<label>Pleydlerde yanma</label>
+
+				</div>
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwGunesDislideHasar, new { @class = "w3-check" })
+					<label>Güneş dişlide hasar</label>
+
+				</div>
+
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwGezegenDislideHasar, new { @class = "w3-check" })
+					<label>Gezegen dişlide hasar </label>
+
+				</div>
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwDifransiyeldeKirilma, new { @class = "w3-check" })
+					<label>Difransiyelde kırılma </label>
+
+				</div>
+
+			</div>
+			<div class="w3-row">
+				<div class="w3-half w3-padding">
+					@Html.CheckBoxFor(model => model.SwKavramadaHasar, new { @class = "w3-check" })
+					<label>Kavramada hasar</label>
+
+				</div>
+
+			</div>
+
+			<div class="w3-row">
+				<div class=" w3-padding">
+					<label>Tespitler</label>
+					@Html.TextAreaFor(model => model.TespitAciklama, new { @class = "w3-input w3-border w3-round", rows = "6", cols = "300" })
+
+				</div>
+			</div>
+			<div class="w3-row w3-margin">
+				<div class="w3-quarter">
+					<a href="/IsEmri/IsEmriDuzenle?IsEmriId=@Model.IsEmriId" class="w3-btn w3-ripple w3-blue"><i class="fa fa-arrow-left"></i>&nbsp;Geri </a>
+				</div>
+				<div class="w3-quarter">
+					<button class="w3-btn w3-ripple w3-green" id="btnSave">Kaydet</button>
+				</div>
+			</div>
+		}
+	</div>
+</div>
+

@@ -1,0 +1,65 @@
+﻿@model IEnumerable <SahinRektefiyeSoln.Models.ViewModels.ServiceReport.FOParcaListesiResponse>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>IrsaliyePdf</title>
+    <link rel="stylesheet" href="~/Styles/w3.css">
+</head>
+<body>
+    <div class="w3-row">
+        <table class="w3-table-all w3-margin-top w3-margin-bottom ">
+                <thead class="w3-small">
+                    <tr>
+                        <th>Sıra No</th>
+                        <th>Revmer İş Emri No</th>
+                        <th>Talep Tarihi</th>
+                        <th>Bayi</th>
+                        <th>Parça Adı</th>
+                        <th>Parca No</th>
+                        <th>Seri No</th>
+                        <th>Barkod No</th>
+                        <th>Kleym Bo</th>
+                        <th>Araç Model</th>
+                        <th>Vın</th>
+                        <th>Rev. Tipi</th>
+                        <th>Revizyon Tutarı</th>
+                        <th>Sevk Tarihi</th>
+                        <th>Kargo Firması</th>
+                        <th>İrs. No</th>
+                        <th>Fatura No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr style="color: #fff !important;background-color: #607d8b !important;">
+                            <td>@item.SiraNo</td>
+                            <td>@item.RevmerIsEmriNo</td>
+                            <td>@Convert.ToDateTime(item.TalepTarihi).ToString("dd/MM/yyyy")</td>
+                            <td>@item.Name</td>
+                            <td>@item.ParcaAdi</td>
+                            <td>@item.ParcaNo</td>
+                            <td>@item.SeriNo</td>
+                            <td>@item.BarkodNo</td>
+                            <td>@item.Kleymno</td>
+                            <td>@item.AracModel</td>
+                            <td>@item.Vin</td>
+                            <td>@item.RevTipi</td>
+                            <td>@item.RevizyonTutari</td>
+                            <td>@item.SevkTarihi</td>
+                            <td>@item.KargoFirmasi</td>
+                            <td>@item.IrsaliyeNo</td>
+                            <td>@item.FaturaNo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+    </div>
+</body>
+</html>

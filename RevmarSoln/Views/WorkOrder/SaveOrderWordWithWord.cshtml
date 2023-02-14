@@ -1,0 +1,877 @@
+﻿@model SahinRektefiyeSoln.Models.WorkOrders
+
+@{
+	ViewBag.Title = "İş Emri Yazdır";
+	double CsExWork = 0;
+	if (Model.SwExWorkShip != null)
+	{
+		CsExWork = Model.SwExWorkShip == true ? (double)Model.CsExWorkShip : 0;
+	}
+
+}
+
+<div class="w3-container">
+	<div class="w3-nav w3-border">
+		<table class="w3-table ">
+			<tr>
+				<td>
+					<img src="http://www.revmer.net/Images/logo.png" class="w3-circle w3-margin-right" style="width:150px;height:70px">
+				</td>
+				<td style="width:500px;"></td>
+				<td>
+
+					<img src="http://www.revmer.net/Images/Kalite.jpg" style="max-width:150px;max-height:70px" height="70" width="150" />
+
+				</td>
+			</tr>
+		</table>
+
+
+
+	</div>
+	<div class="">
+		<div class="w3-row w3-border-left w3-border-right w3-center">
+			@switch (Model.TaskId)
+	{
+		case 1:
+			<p class="customHeader">KLİMA ARIZA TESPİT FORMU</p>
+	break;
+case 2:
+		<p class="customHeader">EGR ARIZA TESPİT FORMU</p>
+break;
+case 3:
+		<p class="customHeader">ŞANZIMAN ARIZA TESPİT FORMU</p>
+break;
+case 4:
+		<p class="customHeader">TURBOŞARJ ARIZA TESPİT FORMU</p>
+break;
+case 5:
+		<p class="customHeader">ALTERNATÖR ARIZA TESPİT FORMU</p>
+break;
+case 6:
+		<p class="customHeader">MARŞ MOTOR ARIZA TESPİT FORMU</p>
+break;
+case 7:
+		<p class="customHeader">DİREKSİYON POMPA ARIZA TESPİT FORMU</p>
+break;
+case 8:
+		<p class="customHeader">DİREKSİYON KUTUSU MEKANİK TESPİT FORMU</p>
+break;
+default:
+case 9:
+		<p class="customHeader">DİREKSİYON KUTUSU HİDROLİK TESPİT FORMU</p>
+break;
+}
+		</div>
+	</div>
+	<div class="w3-border-top w3-border-right w3-border-left w3-border-bottom">
+		<p class="customHeader">&nbsp;MÜŞTERİ BİLGİLERİ</p>
+	</div>
+
+	<div class="w3-border-bottom">
+		<table id="CustomerInfo" class="w3-table " style="font-size:8px!important">
+
+			<tr>
+				<td>Sistem-İş Emri Numarası : @Model.WorkOrderId - @Model.NoWorkOrder</td>
+				<td>Şase : @Model.VIN</td>
+				<td>PLAKA : @Model.Plate</td>
+			</tr>
+			<tr>
+				<td>MARKA : @Model.Companies.Name</td>
+				<td>MODEL : @Model.Vehicles.Name</td>
+				<td>Servis : @Model.Services.Name</td>
+
+			</tr>
+			<tr>
+				<td>Model Yılı : @Model.CsModelYear</td>
+				<td>KM    : @Model.VehicleKm</td>
+				<td>
+					Yakıt Tipi : @{
+						switch (Model.CdFuelType)
+						{
+							case "0":
+								break;
+							case "1":
+								<text>
+									Benzin
+								</text>
+								break;
+							case "2":
+								<text>
+									Dizel
+								</text>
+								break;
+							default:
+								break;
+						}
+
+					}
+				</td>
+			</tr>
+
+		</table>
+	</div>
+
+	@*<div class="">
+			<div class="w3-border ">
+				@switch (Model.TaskId)
+				{
+					case 1:
+						<p class="customHeader">KLİMA BİLGİLERİ</p>
+						break;
+					case 2:
+						<p class="customHeader">EGR BİLGİLERİ</p>
+						break;
+					case 3:
+						<p class="customHeader">
+							ŞANZIMAN BİLGİLERİ
+						</p>
+						break;
+					case 4:
+						<p class="customHeader">
+							TURBOŞARJ BİLGİLERİ
+						</p>
+						break;
+					case 5:
+						<p class="customHeader">ALTERNATÖR BİLGİLERİ</p>
+						break;
+					case 6:
+						<p class="customHeader">MARŞ BİLGİLERİ</p>
+						break;
+					default:
+						break;
+				}
+			</div>
+		</div>*@
+	<div class="w3-border-bottom w3-border-left w3-border-right">
+		<p style="font-size: 12px!important;margin-top:3px!important;margin-bottom:3px!important">&nbsp; ŞİKAYET : @Model.ComplaintsCustomerRequests</p>
+
+
+	</div>
+	<div class="w3-border ">
+		<p class="customHeader" style="font:bold;margin-top:3px!important;margin-bottom:3px!important;">&nbsp; TESPİTLER</p>
+		@switch (Model.TaskId)
+	{
+		case 1:
+			<table style="font-size: 12px!important;">
+				<tr>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwKasnakKisimHasar, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Kasnak kısmında hasar</label>
+
+					</td>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwKompleKlimaKompHasar, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Komple klima kompresöründe hasar</label>
+
+					</td>
+				</tr>
+				<tr>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwPleytKisimHasar, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Pleyt kısmanda hasar</label>
+
+					</td>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwBobinHasar, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Bobinde arıza</label>
+
+					</td>
+				</tr>
+				<tr>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwRulmanHasar, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Rulmanda hasar</label>
+
+					</td>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwBasincValfAriza, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Basınç valfinde arıza</label>
+
+					</td>
+				</tr>
+				<tr>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwGovdeHasar, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Gövde de hasar</label>
+
+					</td>
+					<td>
+						@Html.CheckBoxFor(model => Model.KlimaFixing.First().SwKapakHasar, new { @class = "w3-check", @disabled = "disabled" })
+						<label>Kapakta hasar</label>
+
+					</td>
+				</tr>
+			</table>
+			<div class="w3-row w3-row-padding w3-margin-top" style="font-size:12px!important">
+				@Model.KlimaFixing.First().TespitAciklama
+			</div>
+
+		break;
+	case 2:
+		<table style="font-size: 12px!important;">
+			<tr>
+				<td>
+					@Html.CheckBoxFor(model => Model.EGRFixing.First().SwElektronikValfAriza, new { @class = "w3-check", @disabled = "disabled" })
+					<label>Elektronik valf arızalı</label>
+
+				</td>
+				<td>
+					@Html.CheckBoxFor(model => Model.EGRFixing.First().SwAsiriKum, new { @class = "w3-check", @disabled = "disabled" })
+					<label>Aşırı Kurum</label>
+
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.CheckBoxFor(model => Model.EGRFixing.First().SwBilyaliValfAriza, new { @class = "w3-check", @disabled = "disabled" })
+					<label>Bilyalı valf arızalı</label>
+
+				</td>
+				<td></td>
+			</tr>
+		</table>
+		<div class="w3-row w3-row-padding w3-margin-top" style="font-size:12px!important">
+			@Model.EGRFixing.First().TespitAciklama
+		</div>
+	break;
+case 3:
+	<table style="font-size: 12px!important;">
+		<tr>
+			<td style="width:310px;">
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwPistonlardaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Pistonlarda aşınma/Hasar</label>
+
+			</td>
+			<td style="width:310px;">
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwSelenoidKacagi, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Selenoid kaçağı</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwBaltalardaYanma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Balatalarda Yarma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwTekYonluKavramaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Tek yönlü kavramada hasar </label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwDirekKavramaTasindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Direk kavrama tasında hasar</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwVitesCatalindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Vites çatalında hasar</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwPleydlerdeYanma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Pleydlerde yanma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwGunesDislideHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Güneş dişlide hasar</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwGezegenDislideHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Gezegen dişlide hasar </label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwDifransiyeldeKirilma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Difransiyelde kırılma </label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.SanzimanFixing.First().SwKavramadaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kavramada hasar</label>
+
+			</td>
+			<td></td>
+		</tr>
+	</table>
+	<div class="w3-row w3-row-padding w3-margin-top" style="font-size: 12px!important;">
+		@Model.SanzimanFixing.First().TespitAciklama
+	</div>
+break;
+case 4:
+	<table style="font-size: 12px!important;">
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwTamirTakimindaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Tamir takımında aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwWastegateHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Wastegate hasar</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwYahKapagindaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Yağ kapağında aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwEgzosSalyangozundaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Egzoz salyangozunda hasar </label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwKomprosorPervanesindeHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kompresör pervanesinde hasar</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwKomprasorSalyangozundaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kompresör salyangozunda hasar</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwTurbinMilindeHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Türbin milinde hasar</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwKompleTurboHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Komple turbo hasarı</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwVNTMekanizmasindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>VNT mekanizmasında hasar </label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwVNTMekanizmasindaAsiriKurum, new { @class = "w3-check", @disabled = "disabled" })
+				<label>VNT mekanizmasında aşırı kurum </label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwMerkezGovdeHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Merkez gövde de hasar</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.TurboSarjFixing.First().SwCartridgeKompleHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Cartridge komple hasar</label>
+
+			</td>
+		</tr>
+	</table>
+	<div class="w3-row w3-row-padding w3-margin-top" style="font-size:12px!important">
+		@Model.TurboSarjFixing.First().TespitAciklama
+	</div>
+break;
+case 5:
+	<table style="font-size: 12px!important;">
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwKomurAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kömürlerde aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwKonjektorAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Konjektör arızalı</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwStatorAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Statör arızalı</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwDiyotTablasiHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Diyot tablası hasarı </label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwRotorAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Rotor arızalı </label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwKasnakAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kasnak hasarı</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwRulmanHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Rulman hasarı</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwOnKapakHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Ön kapak hasarı</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwArkaKapakHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Arka kapak hasarı </label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwRulmanYatagiHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Rulman yatağı hasarı</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwRotorBakirAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Rotor bakırı aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.AlternatorFixing.First().SwPlastikKapakHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Plastik kapak hasar</label>
+
+			</td>
+		</tr>
+	</table>
+
+	<div class="w3-row w3-row-padding w3-margin-top" style="font-size:12px!important">
+		@Model.AlternatorFixing.First().TespitAciklama
+	</div>
+break;
+case 6:
+	<table style="font-size: 12px!important;">
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwCatalHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Çatal hasarı</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwKomurAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kömürlerde aşınma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwKomurYuvasindaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kömür yuvasında aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwDislideAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Dişlide aşınma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwDisliKafasindaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Dişli kafasında aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwRediktorDisliAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Rediktör Dişlisinde aşınma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwDebriyajAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Debriyaj arızalı</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwArkaKapaktaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Arka kapakta aşınma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwPinyonKapakAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Pinyon Kapağında aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwOtomatikTamirTakimiAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Otomatik tamir takımında aşınma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwBurcAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Burçta aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwOtomatikAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Otomatik arızası</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwYardimciOtomatikAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Yardımcı otomatik arızası</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwYastikAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Yastıkta arıza</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwKollektorAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kollektör arızası</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.MarsMotorFixing.First().SwRulmanAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Rulmanda aşınma</label>
+
+			</td>
+		</tr>
+	</table>
+	<div class="w3-row w3-row-padding w3-margin-top" style="font-size:11px!important">
+		@Model.MarsMotorFixing.First().TespitAciklama
+	</div>
+break;
+case 7:
+	<table style="font-size: 12px!important;">
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwTamirTakimindaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Tamir takımında aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwPompaMilindeAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Pompa milinde aşınma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwBurclardaSarma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Burçlarda sarma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwTamirTakimindaKirilma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Tamir takımında kırılma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwAltKapaktaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Alt kapakta hasar</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwUstKapaktaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Üst kapakta hasar</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwKasadaCatlak, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kasada çatlak</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwPompaKecesindeHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Pompa keçesinde hasar</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwPompaOringindeHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Pompa oringinde hasar</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwYagBasincSupabindaAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Yağ basınç supabında arıza</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwMilSegmanindaAriza, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Mil segmanında arıza</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonPompaFixing.First().SwRulmandaBozulma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Rulmanda bozulma</label>
+
+			</td>
+		</tr>
+
+	</table>
+	<div class="w3-row w3-row-padding w3-margin-top" style="font-size:11px!important">
+		@Model.DireksiyonPompaFixing.First().TespitAciklama
+	</div>
+break;
+case 8:
+	<table style="font-size: 12px!important;">
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwAnaMildeAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Ana milde aşınma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwSektorMilindeAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Sektör milinde aşınma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwKovandaHasarlanma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kovanda hasarlanma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwBaglantiAyagindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Bağlantı ayağında hasar</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwMotorBilyalarindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Motor Bilyalarında hasarlanma</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwMafsalBilyalarindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Mafsal bilyalarında hasarlanma</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwAsiklerdeHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Aşıklarda hasar</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwMasuraBilya, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Masura bilya</label>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwMildeEgrilik, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Milde eğrilik</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonMekanikFixing.First().SwBaglantiBurclarindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Bağlantı burçlarında hasarlanma</label>
+
+			</td>
+		</tr>
+	</table>
+	<div class="w3-row w3-row-padding w3-margin-top" style="font-size:11px!important">
+		@Model.DireksiyonMekanikFixing.First().TespitAciklama
+	</div>
+break;
+case 9:
+	<table style="font-size: 12px!important;">
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwAnaMildeAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Ana milde aşınma</label>
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwSektorMilindeAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Sektör milinde aşınma</label>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwKovandaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Kovanda hasarlanma</label>
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwBaglantiAyagindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Bağlantı ayağında hasar</label>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwMotorBilyalarindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Motor Bilyalarında hasarlanma</label>
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwMafsalBilyalarindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Mafsal bilyalarında hasarlanma</label>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwAsiklardaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Aşıklarda hasar</label>
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwMasuraBilya, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Masura bilya</label>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwAnaMildeAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Milde eğrilik</label>
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwBaglantiBurclarindaHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Bağlantı burçlarında hasarlanma</label>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwKecelerdePatlak, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Keçelerde patlak</label>
+
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwPistondaKopma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Pistonda kopma</label>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwBeyinPistonlarindaAsinma, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Beyin pistonlarında aşınma</label>
+			</td>
+			<td>
+				@Html.CheckBoxFor(model => Model.DireksiyonHidrolikFixing.First().SwYagDagiticiBeyindeHasar, new { @class = "w3-check", @disabled = "disabled" })
+				<label>Yağ dağıtıcı beyinde hasar</label>
+			</td>
+		</tr>
+	</table>
+	<div class="w3-row w3-row-padding w3-margin-top" style="font-size:11px!important">
+		@Model.DireksiyonHidrolikFixing.First().TespitAciklama
+	</div>
+break;
+default:
+break;
+}
+	</div>
+	@if (Model.WorkOrderPhotos.Count > 0)
+	{
+		<div style="margin-top:5px;" class="w3-border" id="Photos">
+			<table>
+				<tr>
+					@foreach (var photos in Model.WorkOrderPhotos.Take(4))
+					{
+						<td>
+							<img src="@Request.Url.GetLeftPart(UriPartial.Authority)/@photos.WOPUrl" style="max-height:150px;max-width:150px" width="150" height="150" />
+						</td>
+					}
+
+				</tr>
+			</table>
+
+		</div>
+	}
+
+	@*<div style="margin-top:5px;"><hr /></div>*@
+
+
+	<div class="w3-row" style="margin-top:5px;">
+		<table class="w3-table-all" style="font-size:11px!important">
+			<thead>
+				<tr class="w3-light-grey">
+					<th>İhtiyaç Duyulan Yedek Parçalar</th>
+					<th>Adet</th>
+					<th>Fiyat</th>
+				</tr>
+			</thead>
+			@foreach (var part in Model.WorkOrderParts)
+			{
+				<tr>
+					<td>@part.Parts.Name</td>
+					<td>@part.Quantity</td>
+					<td>@part.SalesPrice ₺</td>
+				</tr>
+			}
+			<tr>
+				<td>
+					@if (Model.SwExWorkShip == true)
+					{
+						<label>Dış İşçilik :  @Model.CsExWorkShip ₺ eklendi.</label>
+					}
+				</td>
+				<td>Toplam:</td>
+				<td>@(Model.WorkOrderParts.Sum(x => x.SalesPrice * x.Quantity) + (decimal)CsExWork) ₺ + KDV</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>Genel Toplam:</td>
+				<td>@((Model.WorkOrderParts.Sum(x => x.SalesPrice * x.Quantity) + (decimal)CsExWork) + ((Model.WorkOrderParts.Sum(x => x.SalesPrice * x.Quantity) + (decimal)CsExWork) * 18 / 100))  ₺</td>
+			</tr>
+		</table>
+	</div>
+
+
+	@*<div class="w3-row" style="margin-top:5px;">
+			<table class="w3-table-all" style="font-size:11px!important">
+
+				<tr>
+					<td style="float:right!important">Yedek Parça ve İşçilik Fiyatı:</td>
+					<td>@(Model.WorkOrderParts.Sum(x => x.SalesPrice * x.Quantity) + (decimal)CsExWork) ₺ + KDV</td>
+					<td style="float:right!important">Genel Toplam:</td>
+					<td>@((Model.WorkOrderParts.Sum(x => x.SalesPrice * x.Quantity) + (decimal)CsExWork) + ((Model.WorkOrderParts.Sum(x => x.SalesPrice * x.Quantity) + (decimal)CsExWork) * 18 / 100))  ₺</td>
+				</tr>
+			</table>
+
+		</div>*@
+
+	<div class="w3-footer w3-border w3-row-padding" style="margin-top:5px;">
+		<p style="font:bold;font-size:9px!important">Revmer A.Ş. Bahçelievler Mahallesi Detay Sokak No:4 Pendik-İSTANBUL TEL : 0216 444 61 09</p>
+	</div>
+</div>

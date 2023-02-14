@@ -1,0 +1,1181 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0C97F7E5-EC4E-491D-8524-FC2D5AA2F7C0}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SahinRektefiyeSoln</RootNamespace>
+    <AssemblyName>SahinRektefiyeSoln</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.92.1.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.92.1\lib\net46\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="FastMember.Signed, Version=1.3.0.0, Culture=neutral, PublicKeyToken=9e8f22703bef9a29, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.Signed.1.3.0\lib\net45\FastMember.Signed.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlRenderer.PdfSharp, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlRenderer.PdfSharp.1.5.0.6\lib\net45\HtmlRenderer.PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.14.0.0.1\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc, Version=4.5.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.32.3057.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\PDFsharp.1.32.3057.0\lib\net20\PdfSharp.Charting.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Data.Linq, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Data.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Interfaces, Version=1.13.52.2, Culture=neutral, PublicKeyToken=0669cf0452175907, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqToExcel.1.11.0\lib\Remotion.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Vereyon.Web.FlashMessage, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vereyon.Web.FlashMessage.1.2.0\lib\net40\Vereyon.Web.FlashMessage.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="zxing, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.6\lib\net461\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.6.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZXing.Net.0.16.6\lib\net461\zxing.presentation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ArrayOfString.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportOriginatorResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportQuotaResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportSMSResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportSMSResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendSMSAdvancedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendSMSResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendSMSResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendTCKNSMSResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Connected Services\JetSms\soapsms.disco" />
+    <None Include="Connected Services\JetSms\configuration91.svcinfo" />
+    <None Include="Connected Services\JetSms\configuration.svcinfo" />
+    <None Include="Connected Services\JetSms\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Content\KaliteKontrol.css" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Images\burakyaldirak.jpg" />
+    <Content Include="Images\ChangeRequest\degerlendiriliyor.gif" />
+    <Content Include="Images\ChangeRequest\development.gif" />
+    <Content Include="Images\ChangeRequest\live.gif" />
+    <Content Include="Images\ChangeRequest\onay.gif" />
+    <Content Include="Images\ChangeRequest\sent.gif" />
+    <Content Include="Images\ChangeRequest\testing.gif" />
+    <Content Include="Images\Earsiv.png" />
+    <Content Include="Images\eFatura.png" />
+    <Content Include="Images\FordKlavuz\01.PNG" />
+    <Content Include="Images\FordKlavuz\02.PNG" />
+    <Content Include="Images\FordKlavuz\03.PNG" />
+    <Content Include="Images\FordKlavuz\04.PNG" />
+    <Content Include="Images\FordKlavuz\05.PNG" />
+    <Content Include="Images\FordKlavuz\06.PNG" />
+    <Content Include="Images\FordKlavuz\07.PNG" />
+    <Content Include="Images\FordKlavuz\08.PNG" />
+    <Content Include="Images\FordKlavuz\09.PNG" />
+    <Content Include="Images\FordKlavuz\10.PNG" />
+    <Content Include="Images\FordKlavuz\11.PNG" />
+    <Content Include="Images\FordKlavuz\12.PNG" />
+    <Content Include="Images\FordKlavuz\13.PNG" />
+    <Content Include="Images\FordKlavuz\14.PNG" />
+    <Content Include="Images\FordKlavuz\15.PNG" />
+    <Content Include="Images\FordKlavuz\16.PNG" />
+    <Content Include="Images\FordKlavuz\17.PNG" />
+    <Content Include="Images\FordKlavuz\18.PNG" />
+    <Content Include="Images\FordKlavuz\19.PNG" />
+    <Content Include="Images\FordKlavuz\20.PNG" />
+    <Content Include="Images\FordKlavuz\21.PNG" />
+    <Content Include="Images\FordKlavuz\22.PNG" />
+    <Content Include="Images\FordKlavuz\23.PNG" />
+    <Content Include="Images\FordKlavuz\24.PNG" />
+    <Content Include="Images\green.png" />
+    <Content Include="Images\Kalite.jpg" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\quality-icon-20.jpg" />
+    <Content Include="Images\red.png" />
+    <Content Include="Images\tenor.gif" />
+    <Content Include="Images\user-512.png" />
+    <Content Include="logo.ico" />
+    <Content Include="Models\LogoModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LogoModel.edmx</DependentUpon>
+      <LastGenOutput>LogoModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\LogoModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>LogoModel.edmx</DependentUpon>
+      <LastGenOutput>LogoModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_Browsers\qt.browser" />
+    <Content Include="ExampleExcels\OrnekExcel.xlsx" />
+    <None Include="Connected Services\JetSms\soapsms.wsdl" />
+    <EntityDeploy Include="Models\LogoModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LogoModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\LogoModel.edmx.diagram">
+      <DependentUpon>LogoModel.edmx</DependentUpon>
+    </Content>
+    <EntityDeploy Include="Models\SahinRektefiyeModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SahinRektefiyeModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SahinRektefiyeModel.edmx.diagram">
+      <DependentUpon>SahinRektefiyeModel.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Models\SahinRektefiyeModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SahinRektefiyeModel.edmx</DependentUpon>
+      <LastGenOutput>SahinRektefiyeModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\SahinRektefiyeModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SahinRektefiyeModel.edmx</DependentUpon>
+      <LastGenOutput>SahinRektefiyeModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="Rotativa\help-wkhtmltoimage.txt" />
+    <Content Include="Rotativa\help-wkhtmltopdf.txt" />
+    <Content Include="Rotativa\wkhtmltoimage.exe" />
+    <Content Include="Rotativa\wkhtmltopdf.exe" />
+    <Content Include="Scripts\ChartScripts\data.js" />
+    <Content Include="Scripts\ChartScripts\drilldown.js" />
+    <Content Include="Scripts\ChartScripts\export-data.js" />
+    <Content Include="Scripts\ChartScripts\exporting.js" />
+    <Content Include="Scripts\ChartScripts\highcharts.js" />
+    <Content Include="Scripts\CKeditor\ckeditor.js" />
+    <Content Include="Scripts\CKeditor\config.js" />
+    <Content Include="Scripts\CKeditor\contents.css" />
+    <Content Include="Scripts\CKeditor\styles.js" />
+    <Content Include="Scripts\countUp.min.js" />
+    <Content Include="Scripts\DatetimePicker\bootstrap-datetimepicker.tr.js" />
+    <Content Include="Scripts\DatetimePicker\jquery.datetimepicker.css" />
+    <Content Include="Scripts\DatetimePicker\jquery.datetimepicker.full.min.js" />
+    <Content Include="Scripts\DatetimePicker\jquery.datetimepicker.js" />
+    <Content Include="Scripts\ExcelScript\xlsx.full.min.js" />
+    <Content Include="Scripts\IsEmri\KaliteKontrol1.js" />
+    <Content Include="Scripts\IsEmri\KaliteKontrol2.js" />
+    <Content Include="Scripts\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery.sortElements.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\Table2Excel\jquery.table2excel.js" />
+    <Content Include="Styles\BarkodPrint.css" />
+    <Content Include="Styles\Deneme\avatar2.png" />
+    <Content Include="Styles\Deneme\avatar3.png" />
+    <Content Include="Styles\Deneme\avatar5.png" />
+    <Content Include="Styles\Deneme\avatar6.png" />
+    <Content Include="Styles\Deneme\DenemeStylePrint.css" />
+    <Content Include="Styles\Deneme\font-awesome.min.css" />
+    <Content Include="Styles\Deneme\forest.jpg" />
+    <Content Include="Styles\Deneme\lights.jpg" />
+    <Content Include="Styles\Deneme\mountains.jpg" />
+    <Content Include="Styles\Deneme\muslumgurses.png" />
+    <Content Include="Styles\Deneme\nature.jpg" />
+    <Content Include="Styles\Deneme\okey.png" />
+    <Content Include="Styles\Deneme\snow.jpg" />
+    <Content Include="Styles\Deneme\w3-theme-blue-grey.css" />
+    <Content Include="Styles\Deneme\w3.css" />
+    <Content Include="Styles\ErrorContent\css\style.css" />
+    <Content Include="Styles\ErrorContent\img\emoji.png" />
+    <Content Include="Styles\images\ui-icons_444444_256x240.png" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.mask.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Login.js" />
+    <Content Include="Styles\jquery-ui.css" />
+    <Content Include="Styles\Login.css" />
+    <Content Include="Styles\Print.css" />
+    <Content Include="Styles\w3.css" />
+    <Content Include="Images\Loading1.gif" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Test.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Components\LogActionFilter.cs" />
+    <Compile Include="Components\SessionAuthorizationAttribute.cs" />
+    <Compile Include="Connected Services\JetSms\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JobsController.cs" />
+    <Compile Include="Controllers\MailController.cs" />
+    <Compile Include="Controllers\MusteriController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\SayimController.cs" />
+    <Compile Include="Controllers\SupplierCompanyController.cs" />
+    <Compile Include="Controllers\TeklifController.cs" />
+    <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\DirectoryHelper.cs" />
+    <Compile Include="Helpers\EncryptionHelper.cs" />
+    <Compile Include="Helpers\LogHelper\LogBase.cs" />
+    <Compile Include="Helpers\LogHelper\LogHelper.cs" />
+    <Compile Include="Helpers\LogHelper\WebErrorLogsHelper.cs" />
+    <Compile Include="Helpers\LogoHelper.cs" />
+    <Compile Include="Helpers\RevmerHelper.cs" />
+    <Compile Include="Helpers\ToasterHelper.cs" />
+    <Compile Include="Infrastructure\BaseController.cs" />
+    <Compile Include="Models\AktarmaTipi.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Arac.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AracDetay.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AracGrubu.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AracTipi.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ArizaBildirim.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChangeRequest.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChangeRequestStatus.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Companies.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Danismanlar.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DepoRafTanim.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DpfRevisionTypes.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EnCokSatilanParcalar_Result.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ExcelModels\FordExcelPart.cs" />
+    <Compile Include="Models\FiatPartCountByWorkType_Result.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FiatSeriesCountByPartNumber_Result.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FilterModels\CreateRolePermission.cs" />
+    <Compile Include="Models\FilterModels\FiatCenterSupplierPartsFilter.cs" />
+    <Compile Include="Models\FilterModels\FiatSupplierPartsFilter.cs" />
+    <Compile Include="Models\FilterModels\SupplierPartsFilter.cs" />
+    <Compile Include="Models\FilterModels\WorkOrderFilter.cs" />
+    <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\HelperModels\Calculate.cs" />
+    <Compile Include="Models\HelperModels\CalculateFaturaHelper.cs" />
+    <Compile Include="Models\HelperModels\ExceptionLog.cs" />
+    <Compile Include="Models\HelperModels\IsEmriHelper.cs" />
+    <Compile Include="Models\ilceler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\iller.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Irsaliyeler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Iscilikler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IscilikTipleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IsEmirleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IsEmriBelirtiKodlari.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IsEmriDosyalari.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IsEmriKalemleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IsEmriStatu.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IsEmriTipleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\JobDetails.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Jobs.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KlimaFixing.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KlimaRevisionTypes.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KontakKategorileri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KurumTipleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KvkMusteriLogs.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LG_001_01_INVOICE.cs">
+      <DependentUpon>LogoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LG_001_01_STFICHE.cs">
+      <DependentUpon>LogoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LG_001_01_STLINE.cs">
+      <DependentUpon>LogoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LG_001_CLCARD.cs">
+      <DependentUpon>LogoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LG_001_ITEMS.cs">
+      <DependentUpon>LogoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LG_001_SRVCARD.cs">
+      <DependentUpon>LogoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LogoModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogoModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LogoModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LogoModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LogoModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Logs.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Mail.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MailAdresleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MailGruplari.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MarsMotorFixing.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MarsMotorRevisionTypes.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Menus.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Meslekler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Messages.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Musteri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MusteriAraclari.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MusteriMail.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MusteriTelefon.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PagingModels\IPagedList.cs" />
+    <Compile Include="Models\PagingModels\PagedList.cs" />
+    <Compile Include="Models\PagingModels\Pager.cs" />
+    <Compile Include="Models\PagingModels\PagerOptions.cs" />
+    <Compile Include="Models\PagingModels\PagerOptionsBuilder.cs" />
+    <Compile Include="Models\PagingModels\PaginationModel.cs" />
+    <Compile Include="Models\PagingModels\PagingExtensions.cs" />
+    <Compile Include="Models\PagingModels\RouteValueDictionaryExtensions.cs" />
+    <Compile Include="Models\PaketIscilikleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Paketler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PaketStokKartlari.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Parameters.cs" />
+    <Compile Include="Models\ParcaTipleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PartReviewResult.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PartReviewType.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Parts.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Permissions.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PostModel\StokKartiTopluIndirim.cs" />
+    <Compile Include="Models\PostModel\UpdateWorkOrderModel.cs" />
+    <Compile Include="Models\Renkler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ResponseModels\AlternetorRevisionTypeResponse.cs" />
+    <Compile Include="Models\ResponseModels\DireksiyonRevisionTypeResponse.cs" />
+    <Compile Include="Models\ResponseModels\DpfRevisionTypeResponse.cs" />
+    <Compile Include="Models\ResponseModels\EgrRevisionTypeResponse.cs" />
+    <Compile Include="Models\ResponseModels\KlimaRevisionTypeResponse.cs" />
+    <Compile Include="Models\ResponseModels\MarsMotorRevisionTypeResponse.cs" />
+    <Compile Include="Models\ResponseModels\TurboRevisionTypeResponse.cs" />
+    <Compile Include="Models\RevisionType.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RolePermissions.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Roles.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SahinRektefiyeModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SahinRektefiyeModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SahinRektefiyeModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SahinRektefiyeModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SahinRektefiyeModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SanzimanFixing.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SanzimanRevisionTypes.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SayimDetail.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SayimHeader.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SayimStatu.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SayimTipi.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SensorRevisionTypes.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Services.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StokKarti.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StokKartiAlternatif.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StokKartiDetay.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StokKartiSayimLoglari.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SupplierCompany.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SupplierParts.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Suppliers.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Talepler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TamirParca.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tasks.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TeklifKalemleri.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Teklifler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TeklifStatu.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TurboRevisionTypes.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TurboSarjFixing.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UploadedFordExcels.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserAgentInfos.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserAllowedIsEmriTip.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserMenus.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserRoles.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Users.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Vehicles.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VehicleStoks.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ViewModels\Admin\CreateUserPageModel.cs" />
+    <Compile Include="Models\ViewModels\ChartModel_FiatPartCountByWorkType.cs" />
+    <Compile Include="Models\ViewModels\ChartModel_FiatSeriesCountByPartNumber.cs" />
+    <Compile Include="Models\ViewModels\ChartModel_FiatStock.cs" />
+    <Compile Include="Models\ViewModels\ChartModel_FordParcalar.cs" />
+    <Compile Include="Models\ViewModels\Customer\CreateMusteriPageModel.cs" />
+    <Compile Include="Models\ViewModels\Customer\MusteriEditPageModel.cs" />
+    <Compile Include="Models\ViewModels\Customer\MusteriIletisimBilgileriYonetPageModel.cs" />
+    <Compile Include="Models\ViewModels\Customer\MusteriKvkIzinPageModel.cs" />
+    <Compile Include="Models\ViewModels\Customer\MusteriSearchPageModel.cs" />
+    <Compile Include="Models\ViewModels\Dashboard\UserServiceDashBoard.cs" />
+    <Compile Include="Models\ViewModels\FiatBayiViewModel.cs" />
+    <Compile Include="Models\ViewModels\GetApprovalWorkOrderPageModelcs.cs" />
+    <Compile Include="Models\ViewModels\HizliAramaViewModel.cs" />
+    <Compile Include="Models\ViewModels\Invoice\FaturaAraPageModel.cs" />
+    <Compile Include="Models\ViewModels\Invoice\FaturaAraYeniViewModel.cs" />
+    <Compile Include="Models\ViewModels\Invoice\InvoiceFaturaKesModel.cs" />
+    <Compile Include="Models\ViewModels\IrsaliyeViewModel.cs" />
+    <Compile Include="Models\ViewModels\Irsaliye\IrsaliyeParcalariPageModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\BankoSatisPageModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\IsEmriBedelsizOnayRequest.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\IsEmriDuzenlePageModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\IsEmriOlusturPageModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\IsEmriParcaEkleViewModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\IsEmriSorgulaPageModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\TicketListModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\TicketDetailViewModel.cs" />
+    <Compile Include="Models\ViewModels\IsEmri\TicketOpenViewModel.cs" />
+    <Compile Include="Models\ViewModels\Jobs\JobsListPageModel.cs" />
+    <Compile Include="Models\ViewModels\Mail\MailGrupPageModel.cs" />
+    <Compile Include="Models\ViewModels\Mail\TopluMailGonderPageModel.cs" />
+    <Compile Include="Models\ViewModels\Reports\CustomerModel.cs" />
+    <Compile Include="Models\ViewModels\Reports\DenemePartTableViewModel.cs" />
+    <Compile Include="Models\ViewModels\Reports\DenemeTableViewModel.cs" />
+    <Compile Include="Models\ViewModels\Sayim\SayimBaslatViewModel.cs" />
+    <Compile Include="Models\ViewModels\ServiceReport\FOParcaListesiReport.cs" />
+    <Compile Include="Models\ViewModels\ServiceReport\IrsaliyeReportModel.cs" />
+    <Compile Include="Models\ViewModels\ServiceReport\IsEmriYaslanma.cs" />
+    <Compile Include="Models\ViewModels\ServiceReport\ServisAracTakipModel.cs" />
+    <Compile Include="Models\ViewModels\ServiceReport\YedekParcaHareketModel.cs" />
+    <Compile Include="Models\ViewModels\Services\KullaniciIsEmriTipPermGuncellePageModel.cs" />
+    <Compile Include="Models\ViewModels\Stok\StokKartBarkodBasPageModel.cs" />
+    <Compile Include="Models\ViewModels\Stok\StokKartBarkodBasRequestModel.cs" />
+    <Compile Include="Models\ViewModels\Stok\StokKartiTanimlariV2ViewModel.cs" />
+    <Compile Include="Models\ViewModels\ServiceReport\FaturaReportViewModel.cs" />
+    <Compile Include="Models\ViewModels\ServiceReport\IsEmriReportModel.cs" />
+    <Compile Include="Models\ViewModels\Services\AktarmaTipleriPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\AracCinsleriPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\AracGruplariPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\DanismanlarPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\DepoRafTanimPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\IsciliklerPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\IscilikTipleriPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\IsEmriTipleriPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\KurumTipleriPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\MesleklerPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\PaketDuzenlePageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\PaketlerPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\RenklerPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\VitesTipleriPageModel.cs" />
+    <Compile Include="Models\ViewModels\Services\YakitTipleriPageModel.cs" />
+    <Compile Include="Models\ViewModels\StokDepoRafTanim\AddDepoRafTanimToStokKartiPageModel.cs" />
+    <Compile Include="Models\ViewModels\StokKartiDuzenle\StokKartiDuzenlePageModel.cs" />
+    <Compile Include="Models\ViewModels\StokKartiSearch\StokKartiSearchPageModel.cs" />
+    <Compile Include="Models\ViewModels\StokVehicle\AddVehicleToStokKartiPageModel.cs" />
+    <Compile Include="Models\ViewModels\Stok\ParcaAlternatifPageModel.cs" />
+    <Compile Include="Models\ViewModels\Stok\StokKartıViewModel.cs" />
+    <Compile Include="Models\ViewModels\Stok\TopluIndirimEkraniPageModel.cs" />
+    <Compile Include="Models\ViewModels\Teklif\TeklifDuzenlePageModel.cs" />
+    <Compile Include="Models\ViewModels\Teklif\TeklifIsEmriDonusturPageModel.cs" />
+    <Compile Include="Models\ViewModels\Teklif\TeklifOlusturPageModel.cs" />
+    <Compile Include="Models\ViewModels\Teklif\TeklifSorgulaPageModel.cs" />
+    <Compile Include="Models\ViewModels\Vehicle\VehicleCreatePageModel.cs" />
+    <Compile Include="Models\ViewModels\Vehicle\VehicleEditPageModel.cs" />
+    <Compile Include="Models\ViewModels\Vehicle\VehicleSearchPageModel.cs" />
+    <Compile Include="Models\VitesTipi.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WayBillParts.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WayBills.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WebErrorLogs.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WebUsageLogs.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\WorkOrders.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\YakitTipi.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\GetMenuForUser.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Admin\CreateUser.cshtml" />
+    <Content Include="Views\Admin\SetPageHeader.cshtml" />
+    <Content Include="Views\Admin\CreateRole.cshtml" />
+    <Content Include="Views\Admin\CreatePermission.cshtml" />
+    <Content Include="Views\Admin\CreateRolePermission.cshtml" />
+    <Content Include="Views\Admin\CreateUserRole.cshtml" />
+    <Content Include="Views\Admin\CreateMenu.cshtml" />
+    <Content Include="Views\Admin\CreateUserMenu.cshtml" />
+    <Content Include="Views\Admin\CreateService.cshtml" />
+    <Content Include="Views\Admin\CreateCompany.cshtml" />
+    <Content Include="Views\Admin\CreateServiceForCompany.cshtml" />
+    <Content Include="Views\Admin\CreateVehicle.cshtml" />
+    <Content Include="Views\Admin\Login.cshtml" />
+    <Content Include="Views\Admin\NotPermitted.cshtml" />
+    <Content Include="Views\Admin\UserRoles.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Admin\Companies.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Admin\Menus.cshtml" />
+    <Content Include="Views\Admin\UserMenu.cshtml" />
+    <Content Include="Views\Admin\CreatePart.cshtml" />
+    <Content Include="Views\Admin\Parts.cshtml" />
+    <Content Include="Views\Admin\EditPart.cshtml" />
+    <Content Include="Views\Admin\CreateTask.cshtml" />
+    <Content Include="Views\Admin\Tasks.cshtml" />
+    <Content Include="Views\WorkOrder\Create.cshtml" />
+    <Content Include="Views\WorkOrder\Index.cshtml" />
+    <Content Include="Views\WorkOrder\Order.cshtml" />
+    <Content Include="Views\WorkOrder\KlimaFixing.cshtml" />
+    <Content Include="Views\WorkOrder\AddPartToOrder.cshtml" />
+    <Content Include="Views\WorkOrder\AddPhotoToOrder.cshtml" />
+    <Content Include="Views\WorkOrder\WorkOrderPrint.cshtml" />
+    <Content Include="Views\WorkOrder\EgrFixing.cshtml" />
+    <Content Include="Views\WorkOrder\SanzimanFixing.cshtml" />
+    <Content Include="Views\WorkOrder\TurbosarjFixing.cshtml" />
+    <Content Include="Views\WorkOrder\AlternatorFixing.cshtml" />
+    <Content Include="Views\WorkOrder\MarsMotorFixing.cshtml" />
+    <Content Include="Views\Admin\Roles.cshtml" />
+    <Content Include="Views\Admin\Role.cshtml" />
+    <Content Include="Views\Admin\Users.cshtml" />
+    <Content Include="Views\Admin\User.cshtml" />
+    <Content Include="Views\Admin\UserPortfolio.cshtml" />
+    <Content Include="Views\Admin\CompanyVehicles.cshtml" />
+    <Content Include="Views\Admin\CreateSupplier.cshtml" />
+    <Content Include="Views\Admin\Suppliers.cshtml" />
+    <Content Include="Views\Admin\EditSupplier.cshtml" />
+    <Content Include="Views\Admin\CreateBillWay.cshtml" />
+    <Content Include="Views\Admin\CreateWayBillHeader.cshtml" />
+    <Content Include="Views\Admin\EditProfile.cshtml" />
+    <Content Include="Views\Admin\WayBills.cshtml" />
+    <Content Include="Views\Admin\CompanyServices.cshtml" />
+    <Content Include="Views\Admin\Services.cshtml" />
+    <Content Include="Views\Admin\EditService.cshtml" />
+    <Content Include="Views\Admin\EditCompany.cshtml" />
+    <Content Include="Views\Admin\RolePerm.cshtml" />
+    <Content Include="Views\Shared\_LayoutPrintWord.cshtml" />
+    <Content Include="Views\WorkOrder\SaveOrderWordWithWord.cshtml" />
+    <Content Include="Views\WorkOrder\DireksiyonPompaFixing.cshtml" />
+    <Content Include="Views\WorkOrder\DireksiyonMekanikFixing.cshtml" />
+    <Content Include="Views\WorkOrder\DireksiyonHidrolikFixing.cshtml" />
+    <Content Include="Views\Admin\EditTask.cshtml" />
+    <Content Include="Views\WorkOrder\PrintDeneme.cshtml" />
+    <Content Include="Views\WorkOrder\SaveOrderWithWordv2.cshtml" />
+    <Content Include="Views\SupplierCompany\CreatePartReviewType.cshtml" />
+    <Content Include="Views\SupplierCompany\PartReviewTypes.cshtml" />
+    <Content Include="Views\SupplierCompany\EditPartReviewType.cshtml" />
+    <Content Include="Views\SupplierCompany\RevisionTypes.cshtml" />
+    <Content Include="Views\SupplierCompany\CreateRevisionType.cshtml" />
+    <Content Include="Views\SupplierCompany\EditRevisionType.cshtml" />
+    <Content Include="Views\SupplierCompany\PartReviewResults.cshtml" />
+    <Content Include="Views\SupplierCompany\CreatePartReviewResult.cshtml" />
+    <Content Include="Views\SupplierCompany\EditPartReviewResult.cshtml" />
+    <Content Include="Views\SupplierCompany\SupplierCompanies.cshtml" />
+    <Content Include="Views\SupplierCompany\CreateSupplierCompany.cshtml" />
+    <Content Include="Views\SupplierCompany\EditSupplierCompany.cshtml" />
+    <Content Include="Views\SupplierCompany\CreateSupplierPart.cshtml" />
+    <Content Include="Views\SupplierCompany\SupplierParts.cshtml" />
+    <Content Include="Views\SupplierCompany\FiatSupplierParts.cshtml" />
+    <Content Include="Views\SupplierCompany\EditCompanyPart.cshtml" />
+    <Content Include="Views\SupplierCompany\CenterFiatCompanyParts.cshtml" />
+    <Content Include="Views\Admin\ManagerIndex.cshtml" />
+    <Content Include="Views\Admin\MailBox.cshtml" />
+    <Content Include="Views\WorkOrder\DpfFixing.cshtml" />
+    <Content Include="Views\WorkOrder\SaveWithPdf.cshtml" />
+    <Content Include="Views\Admin\EditProfileLogo.cshtml" />
+    <Content Include="Views\Admin\CreateMultipleUserRoles.cshtml" />
+    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Reports\DashBoard.cshtml" />
+    <Content Include="Views\Admin\AccessDenied.cshtml" />
+    <Content Include="Views\Mail\TopluMailGonder.cshtml" />
+    <Content Include="Views\Admin\RolePermissionsList.cshtml" />
+    <Content Include="Views\Home\GetMailButton.cshtml" />
+    <Content Include="Views\Reports\UserIp.cshtml" />
+    <Content Include="Views\Service\DepoRafTanim.cshtml" />
+    <Content Include="Views\Service\DepoRafTanimlari.cshtml" />
+    <Content Include="Views\Service\EditDepoRafTanim.cshtml" />
+    <Content Include="Views\Mail\MailGruplari.cshtml" />
+    <Content Include="Views\Mail\MailGrupTanimla.cshtml" />
+    <Content Include="Views\Mail\MailGrupAdresleriGor.cshtml" />
+    <Content Include="Views\Mail\TopluGonderilenMailler.cshtml" />
+    <Content Include="Views\Mail\MailDetail.cshtml" />
+    <Content Include="Views\Stok\StokKartiTanim.cshtml" />
+    <Content Include="Views\Stok\StokKartiTanimlari.cshtml" />
+    <Content Include="Views\Stok\StokKartiDuzenle.cshtml" />
+    <Content Include="Views\Stok\AddDepoRafTanimToStokKarti.cshtml" />
+    <Content Include="Views\Service\Tedarikciler.cshtml" />
+    <Content Include="Views\Service\TedarikciTanim.cshtml" />
+    <Content Include="Views\Service\TedarikciDuzenle.cshtml" />
+    <Content Include="Views\Stok\AddVehicleToStokKarti.cshtml" />
+    <Content Include="Views\Service\Irsaliyeler.cshtml" />
+    <Content Include="Views\Vehicle\Create.cshtml" />
+    <Content Include="Views\Vehicle\AracSorgula.cshtml" />
+    <Content Include="Views\Service\IrsaliyeIade.cshtml" />
+    <Content Include="Views\Vehicle\AracDuzenle.cshtml" />
+    <Content Include="Views\Musteri\Create.cshtml" />
+    <Content Include="Styles\Deneme\css" />
+    <Content Include="Views\Musteri\MusteriAra.cshtml" />
+    <Content Include="Views\Musteri\MusteriDuzenle.cshtml" />
+    <Content Include="Views\Musteri\MusteriKvkIzinYonet.cshtml" />
+    <Content Include="Views\Musteri\HizliMusteriSec.cshtml" />
+    <Content Include="Views\Musteri\IBY.cshtml" />
+    <Content Include="Views\Reports\ComboUI.cshtml" />
+    <Content Include="Views\Stok\TopluIndirimEkrani.cshtml" />
+    <Content Include="Views\Service\DanismanEkle.cshtml" />
+    <Content Include="Views\Service\Danismanlar.cshtml" />
+    <Content Include="Views\Service\DanismanDuzenle.cshtml" />
+    <Content Include="Views\Service\IscilikTipiEkle.cshtml" />
+    <Content Include="Views\Service\IscilikTipleri.cshtml" />
+    <Content Include="Views\Service\IscilikTipiDuzenle.cshtml" />
+    <Content Include="Views\Service\IscilikEkle.cshtml" />
+    <Content Include="Views\Service\Iscilikler.cshtml" />
+    <Content Include="Views\Service\IscilikDuzenle.cshtml" />
+    <Content Include="Views\Service\ServiceConfiguration.cshtml" />
+    <Content Include="Views\Service\IsEmriTipiEkle.cshtml" />
+    <Content Include="Views\Service\IsEmriTipleri.cshtml" />
+    <Content Include="Views\Service\IsEmriTipiDuzenle.cshtml" />
+    <Content Include="Views\Service\PaketEkle.cshtml" />
+    <Content Include="Views\Service\PaketDuzenle.cshtml" />
+    <Content Include="Views\Service\Paketler.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriOlustur.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriDuzenle.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriIscilikEkle.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriStokKartEkle.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriPaketEkle.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriParcaYonet.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriTeslimAlanEdenKullaniciEkle.cshtml" />
+    <Content Include="Views\IsEmri\IsEmirleri.cshtml" />
+    <Content Include="Views\Stok\LogoMalzemeler.cshtml" />
+    <Content Include="Views\Service\RenkEkle.cshtml" />
+    <Content Include="Views\Service\Renkler.cshtml" />
+    <Content Include="Views\Service\RenkDuzenle.cshtml" />
+    <Content Include="Views\Service\AracGruplari.cshtml" />
+    <Content Include="Views\Service\AracGrupDuzenle.cshtml" />
+    <Content Include="Views\Service\AracGrubuEkle.cshtml" />
+    <Content Include="Views\Service\YakitTipleri.cshtml" />
+    <Content Include="Views\Service\YakitTipiDuzenle.cshtml" />
+    <Content Include="Views\Service\YakitTipiEkle.cshtml" />
+    <Content Include="Views\Service\AktarmaTipiEkle.cshtml" />
+    <Content Include="Views\Service\AktarmaTipleri.cshtml" />
+    <Content Include="Views\Service\AktarmaTipiDuzenle.cshtml" />
+    <Content Include="Views\Service\AracTipiEkle.cshtml" />
+    <Content Include="Views\Service\AracCinsleri.cshtml" />
+    <Content Include="Views\Service\AracTipiDuzenle.cshtml" />
+    <Content Include="Views\Service\VitesTipiEkle.cshtml" />
+    <Content Include="Views\Service\VitesTipleri.cshtml" />
+    <Content Include="Views\Service\VitesTipiDuzenle.cshtml" />
+    <Content Include="Views\Service\MeslekEkle.cshtml" />
+    <Content Include="Views\Service\Meslekler.cshtml" />
+    <Content Include="Views\Service\MeslekDuzenle.cshtml" />
+    <Content Include="Views\Service\KurumTipiEkle.cshtml" />
+    <Content Include="Views\Service\KurumTipleri.cshtml" />
+    <Content Include="Views\Service\KurumTipDuzenle.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriPrintView.cshtml" />
+    <Content Include="Views\Service\IrsaliyeTanim.cshtml" />
+    <Content Include="Views\Reports\Fuel.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriDetayPrint.cshtml" />
+    <Content Include="Views\ServiceReport\IsEmri.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriDyiEkle.cshtml" />
+    <Content Include="Views\Musteri\Deneme.cshtml" />
+    <Content Include="Views\Home\HizliArama.cshtml" />
+    <Content Include="Views\Home\GetHizliArama.cshtml" />
+    <Content Include="Views\ServiceReport\Fatura.cshtml" />
+    <Content Include="Views\ServiceReport\Index.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriYazdirReis.cshtml" />
+    <Content Include="Views\Admin\ErrorPage.cshtml" />
+    <Content Include="Views\Admin\Error.cshtml" />
+    <Content Include="Views\Admin\Errors.cshtml" />
+    <Content Include="Views\Home\GetMenuForUserMobile.cshtml" />
+    <Content Include="Views\WorkOrder\GetApprovalWorkOrders.cshtml" />
+    <Content Include="Views\Home\GetBayiDashBoard.cshtml" />
+    <Content Include="Views\Home\GetApprovalWorkOrders.cshtml" />
+    <Content Include="Views\Jobs\Index.cshtml" />
+    <Content Include="Views\Stok\ParcaAlternatif.cshtml" />
+    <Content Include="Views\Invoice\FaturaAra.cshtml" />
+    <Content Include="Views\ServiceReport\ServisParcaRaporlari.cshtml" />
+    <Content Include="Views\IsEmri\VehicleHistory.cshtml" />
+    <Content Include="Views\Teklif\TeklifDuzenle.cshtml" />
+    <Content Include="Views\Teklif\TeklifDyiEkle.cshtml" />
+    <Content Include="Views\Teklif\TeklifIscilikEkle.cshtml" />
+    <Content Include="Views\Teklif\TeklifIsEmriDonustur.cshtml" />
+    <Content Include="Views\Teklif\Teklifler.cshtml" />
+    <Content Include="Views\Teklif\TeklifOlustur.cshtml" />
+    <Content Include="Views\Teklif\TeklifPaketEkle.cshtml" />
+    <Content Include="Views\Teklif\TeklifPrintView.cshtml" />
+    <Content Include="Views\Teklif\TeklifStokKartEkle.cshtml" />
+    <Content Include="Views\WorkOrder\HizliParcaSec.cshtml" />
+    <Content Include="Views\Reports\DenemeTable.cshtml" />
+    <Content Include="Views\Reports\_ReportUsers.cshtml" />
+    <Content Include="Views\Invoice\FaturaAraYeni.cshtml" />
+    <Content Include="Views\Invoice\_GridFatura.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriKaliteKontrolFormu.cshtml" />
+    <Content Include="Views\IsEmri\GetTespitler.cshtml" />
+    <Content Include="Views\IsEmri\AlternatorFixing.cshtml" />
+    <Content Include="Views\IsEmri\KlimaFixing.cshtml" />
+    <Content Include="Views\IsEmri\EgrFixing.cshtml" />
+    <Content Include="Views\IsEmri\SanzimanFixing.cshtml" />
+    <Content Include="Views\IsEmri\TurbosarjFixing.cshtml" />
+    <Content Include="Views\IsEmri\MarsMotorFixing.cshtml" />
+    <Content Include="Views\IsEmri\DireksiyonPompaFixing.cshtml" />
+    <Content Include="Views\IsEmri\DireksiyonMekanikFixing.cshtml" />
+    <Content Include="Views\IsEmri\DireksiyonHidrolikFixing.cshtml" />
+    <Content Include="Views\IsEmri\DpfFixing.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriGunlukPrint.cshtml" />
+    <Content Include="Views\IsEmri\GunlukSaveOrderWithWordv2.cshtml" />
+    <Content Include="Views\IsEmri\SaveWithPdf.cshtml" />
+    <Content Include="Views\Service\KullaniciYetkileri.cshtml" />
+    <Content Include="Views\Service\KullaniciIsEmriTipPermGuncelle.cshtml" />
+    <Content Include="Views\Stok\StokKartBarkodBas.cshtml" />
+    <Content Include="Views\IsEmri\GetTespitlerBelirtiKoduIle.cshtml" />
+    <Content Include="Views\Reports\DenemePartTable.cshtml" />
+    <Content Include="Views\Reports\_ReportPartTable.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriStokKartEkleNew.cshtml" />
+    <Content Include="Views\IsEmri\_GridIsEmriParcaEkle.cshtml" />
+    <Content Include="Views\Admin\CheckSendMail.cshtml" />
+    <Content Include="Views\IsEmri\BankoSatis.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriAracTeslimGecmisi.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriPrintViewTse.cshtml" />
+    <Content Include="Views\ServiceReport\Irsaliye.cshtml" />
+    <Content Include="Views\ServiceReport\IrsaliyePdf.cshtml" />
+    <Content Include="Views\ServiceReport\IsEmriYaslanma.cshtml" />
+    <Content Include="Views\Sayim\SayimBaslat.cshtml" />
+    <Content Include="Views\Sayim\SayimParcaEkle.cshtml" />
+    <Content Include="Views\Sayim\_GridSayimParcaEkle.cshtml" />
+    <Content Include="Views\Sayim\SayimParcaSec.cshtml" />
+    <Content Include="Views\ServiceReport\IsEmriYaslanmaPdf.cshtml" />
+    <Content Include="Views\IsEmri\IsEmriStokAl.cshtml" />
+    <Content Include="Views\ServiceReport\YedekParcaHareket.cshtml" />
+    <Content Include="Views\ServiceReport\YedekParcaHareketPdf.cshtml" />
+    <Content Include="Views\Admin\MagicScreen.cshtml" />
+    <Content Include="Views\ServiceReport\ServisAracTakip.cshtml" />
+    <Content Include="Views\ServiceReport\ServisAracTakipPdf.cshtml" />
+    <Content Include="Views\Stok\StokKartiTanimlariv2.cshtml" />
+    <Content Include="Views\Stok\_GridStokKartlari.cshtml" />
+    <Content Include="Views\ChangeRequest\Index.cshtml" />
+    <Content Include="Views\ChangeRequest\Create.cshtml" />
+    <Content Include="Views\ServiceReport\FOParcaListesi.cshtml" />
+    <Content Include="Views\ServiceReport\FOParcaListesiPdf.cshtml" />
+    <Content Include="Views\Ticket\Open.cshtml" />
+    <Content Include="Views\Ticket\Tickets.cshtml" />
+    <Content Include="Views\Ticket\Edit.cshtml" />
+    <Content Include="Views\Ticket\DetailEdit.cshtml" />
+    <Content Include="Views\Admin\CreateArizaBildirim.cshtml" />
+    <Content Include="Views\Admin\CreateTamirParca.cshtml" />
+    <Content Include="Views\Admin\TamirParca.cshtml" />
+    <Content Include="Views\Admin\ArizaBildirim.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Images\AracBelgeleri\" />
+    <Folder Include="Images\IsEmirBelgeleri\" />
+    <Folder Include="Images\OrderPhotos\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\Company\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\JetSms\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>54763</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:54763/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Bu proje bu bilgisayarda olmayan NuGet paketlerine başvuru yapıyor. Bunları indirmek için NuGet Paket Geri Yükleme'yi kullanın. Daha fazla bilgi için, bkz. http://go.microsoft.com/fwlink/?LinkID=322105. Eksik dosya: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

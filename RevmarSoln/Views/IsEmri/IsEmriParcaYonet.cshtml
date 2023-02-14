@@ -1,0 +1,401 @@
+﻿@model SahinRektefiyeSoln.Models.IsEmirleri
+
+@{
+	Layout = null;
+	string TeslimAdetMesaj = string.Empty;
+	string StokDusmeyenAdetMesaj = string.Empty;
+	decimal ParcaTeslimToplamAdet = 0;
+	decimal ParcaTeslimAdet = 0;
+	decimal ParcaStokDusmeyenAdet = 0;
+	decimal ParcaIadeAdet = 0;
+}
+
+<style>
+	#tableIsEmriKalemleri {
+		font-family: tahoma;
+	}
+</style>
+
+<script>
+    $(document).ready(function () {
+
+		        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		$('#tableIsEmriKalemleriYonet').DataTable({
+			"processing": true,
+			"filter": true,
+			"order": [[3, "asc"]],
+			"language": {
+
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+
+				"sSearch": "",
+
+				"selectAll": "Tümünü Seç",
+
+				"sSearchPlaceholder": "Filtrele",
+
+				"sLengthMenu": "_MENU_",
+
+				"sLoadingRecords": "Yükleniyor...",
+
+				"sProcessing": "İşleniyor...",
+
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+
+				"sInfoEmpty": "Kayıt Yok",
+
+				"sInfoPostFix": "",
+
+				"sInfoThousands": ".",
+
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+		
+        $("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+		$('#btnTopluParcaTeslimEt').click(function () {
+			WaitBlockUI(2000, 'Bütün parçalar teslim ediliyor...');
+
+			var urlParcaTeslimEt = '@Url.Action("IsEmriTopluParcaTeslimEt", "IsEmri")';
+
+			var danismanId = $('#DanismanId').val();
+
+			if (danismanId == "") {
+				alert("Lüften Teslim Ediceğiniz Danışman/Teknisyen Seçiniz !");
+				return false;
+			}
+
+			var data = {
+				_isEmriId: @Model.IsEmriId,
+				danismanId: danismanId
+			};
+
+			$.ajax({
+				type: "POST",
+				url: urlParcaTeslimEt,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function (d) {
+					if (d.result == 1) {
+						setTimeout(function () {
+							WaitBlockUI(1000, 'Parçalar teslim edildi.');
+						}, 1500);
+						$('#divParcaYonet').load('@Url.Action("IsEmriParcaYonet", "IsEmri", new { IsEmriId  = Model.IsEmriId})');
+					}
+					else {
+						setTimeout(function () {
+							alert(d.message);
+						}, 1500);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);// TODO: Show error
+				}
+			});
+
+
+		});
+	});
+
+	function btnTeslimEt_click(el) {
+		debugger;
+		// Kalem Id'yi bulmam lazım
+		var isEmriKalemId = $(el)[0].getAttribute('IsEmriKalemId');
+		// Teslim Edilecek sayıyı bulmam lazım.
+		var teslimParcaAdet = $('#kalemId-' + isEmriKalemId).val();
+		//console.log(string, el);
+		var danismanId = $('#DanismanId').val();
+
+		var StokdanDus = $('#StokDus-kalemId-' + isEmriKalemId).is(':checked') ;
+
+		if (danismanId == "") {
+			alert("Lüften Teslim Ediceğiniz Danışman/Teknisyen Seçiniz !");
+			return false;
+		}
+
+		if (teslimParcaAdet == "") {
+			alert('Lütfen Teslim Adet Giriniz!');
+			return false;
+		}
+
+		console.log('isEmriKalemId : ' + isEmriKalemId);
+		console.log('teslimParcaAdet : ' + teslimParcaAdet);
+
+
+		WaitBlockUI(1000, 'Parça teslim ediliyor...');
+
+		var urlParcaTeslimEt = '@Url.Action("IsEmriParcaTeslimEt", "IsEmri")';
+
+			var data = {
+				isEmriKalemId: isEmriKalemId ,
+				teslimParcaAdet: teslimParcaAdet,
+				danismanId: danismanId,
+				StokdanDus: StokdanDus
+			};
+
+			$.ajax({
+				type: "POST",
+				url: urlParcaTeslimEt,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function (d) {
+					if (d.result == 1) {
+						setTimeout(function () {
+							WaitBlockUI(1000, 'Parça teslim edildi.');
+						}, 1500);
+						$('#divParcaYonet').load('@Url.Action("IsEmriParcaYonet", "IsEmri", new { IsEmriId  = Model.IsEmriId})');
+					}
+					else {
+						setTimeout(function () {
+							alert(d.message);
+						}, 1500);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);// TODO: Show error
+				}
+			});
+
+	}
+
+	function btnIadeEt_click(el) {
+		// Kalem Id
+		var isEmriKalemId = $(el)[0].getAttribute('IsEmriKalemId');
+		// İade Edilecek sayıyı
+		var iadeParcaAdet = $('#IadekalemId-' + isEmriKalemId).val();
+
+		var danismanId = $('#DanismanId').val();
+
+		var StokdanDus = $('#StokDus-kalemId-' + isEmriKalemId).is(':checked');
+
+		if (danismanId == "") {
+			alert("Lüften İade Ediceğiniz Danışman/Teknisyen Seçiniz !");
+			return false;
+		}
+
+		if (iadeParcaAdet == "") {
+			alert('Lütfen İade Adet Giriniz!');
+			return false;
+		}
+
+		console.log('isEmriKalemId : ' + isEmriKalemId);
+		console.log('iadeParcaAdet : ' + iadeParcaAdet);
+
+		WaitBlockUI(1000, 'Parça iade ediliyor...');
+
+		var urlIsEmriParcaIadeEt = '@Url.Action("IsEmriParcaIadeEt", "IsEmri")';
+
+		var data = {
+			isEmriKalemId: isEmriKalemId,
+			iadeParcaAdet: iadeParcaAdet,
+			danismanId: danismanId,
+			StokdanDus: StokdanDus
+		};
+
+		$.ajax({
+			type: "POST",
+			url: urlIsEmriParcaIadeEt ,
+			content: "application/json; charset=utf-8",
+			dataType: "json",
+			data: data,
+			success: function (d) {
+				if (d.result == 1) {
+					setTimeout(function () {
+						WaitBlockUI(1000, 'Parça iade edildi.');
+					}, 1500);
+					$('#divParcaYonet').load('@Url.Action("IsEmriParcaYonet", "IsEmri", new { IsEmriId  = Model.IsEmriId})');
+				}
+				else {
+					setTimeout(function () {
+						alert(d.message);
+					}, 1500);
+				}
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				alert('Error2 \n' + data);// TODO: Show error
+			}
+		});
+
+	}
+
+
+
+	function btnStokDusumunuSifirla_click(el) {
+
+		// Kalem Id
+		var isEmriKalemId = $(el)[0].getAttribute('IsEmriKalemId');
+
+		console.log('isEmriKalemId : ' + isEmriKalemId);
+		
+		WaitBlockUI(1000, 'Parça Stok Düşünü Sıfırlanıyor...');
+
+		var urlIsEmriParcaStokDusumunuSifirla = '@Url.Action("IsEmriParcaStokDusumunuSifirla", "IsEmri")';
+
+		var data = {
+			isEmriKalemId: isEmriKalemId
+		};
+
+		$.ajax({
+			type: "POST",
+			url: urlIsEmriParcaStokDusumunuSifirla ,
+			content: "application/json; charset=utf-8",
+			dataType: "json",
+			data: data,
+			success: function (d) {
+				if (d.result == 1) {
+					setTimeout(function () {
+						WaitBlockUI(1000, 'Parça Stok düşümü sıfırlandı.');
+					}, 1500);
+
+					$('#divParcaYonet').load('@Url.Action("IsEmriParcaYonet", "IsEmri", new { IsEmriId  = Model.IsEmriId})');
+				}
+				else {
+					setTimeout(function () {
+						alert(d.message);
+					}, 1500);
+				}
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				alert('Error2 \n' + data);// TODO: Show error
+			}
+		});
+
+	}
+</script>
+
+<div class="w3-row w3-margin-bottom">
+	@*<div class="w3-left">
+
+		</div>*@
+	<div class="w3-row w3-padding">
+		@using (Html.BeginForm("IsEmriTopluParcaTeslimEt", "IsEmri", FormMethod.Post))
+		{
+			<div class="w3-threequarter">
+				<label>Parça Teslim Edilecek Danışman/Teknisyen Seçiniz</label>
+				@Html.DropDownList("DanismanId", (SelectList)ViewBag.Danismanlar, "Danışman Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "DanismanId", required = "required" })
+			</div>
+			<div class="w3-quarter w3-padding-left">
+				<br />
+				<input type="hidden" value="@Model.IsEmriId" name="isEmriId" />
+				<button type="button" id="btnTopluParcaTeslimEt" class="w3-btn w3-green w3-round"><i class="fa fa-check" aria-hidden="true"></i>&nbsp; Bütün Parçaları Teslim Et</button>
+			</div>
+		}
+	</div>
+</div>
+<table id="tableIsEmriKalemleriYonet">
+	<thead>
+		<tr>
+			@*<th width="20%">Parça Tipi</th>*@
+			<th width="16%">Parça No</th>
+			<th width="16%">Parça Adı</th>
+			<th width="16%">Talep Edilen </th>
+			<th width="16%">Teslim Edilen </th>
+			<th width="16%">Stokdan Düşme</th>
+			<th width="16%">Teslim Et</th>
+			<th width="10%">#</th>
+			<th width="16%">İade Adet</th>
+			<th width="5%">#</th>
+			<th width="5%">#</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var kalem in Model.IsEmriKalemleri.Where(x => x.KalepTipi == "P").ToList())
+		{
+			ParcaTeslimAdet = 0; ParcaStokDusmeyenAdet = 0; TeslimAdetMesaj = string.Empty; StokDusmeyenAdetMesaj = string.Empty;
+
+
+			ParcaTeslimToplamAdet = kalem.IsEmriKalemleriTeslimLogs.Where(x => x.Type == "T").Sum(x => x.Adet);
+			ParcaIadeAdet = kalem.IsEmriKalemleriTeslimLogs.Where(x => x.Type == "I").Sum(x => x.Adet);
+			ParcaTeslimAdet = ParcaTeslimToplamAdet - ParcaIadeAdet;
+			ParcaStokDusmeyenAdet = kalem.IsEmriKalemleriTeslimLogs.Where(x => x.SwStokDus == false && x.Type == "T").Sum(x => x.Adet);
+
+			TeslimAdetMesaj = ParcaTeslimAdet + " adet parça teslim edildi.";
+			StokDusmeyenAdetMesaj = (ParcaStokDusmeyenAdet == 0 ? "Stokdan bütün parçalar düşülecek." : ParcaStokDusmeyenAdet + " adet stokdan düşülmeyecek. ");
+
+			<tr title="@(TeslimAdetMesaj + " - " + StokDusmeyenAdetMesaj)">
+				@*<td>@kalem.StokKarti.ParcaTipleri.ParcaTipAciklamasi</td>*@
+				<td>@kalem.StokKarti.ParcaNo</td>
+				<td>@kalem.StokKarti.ParcaAdi</td>
+				<td>@kalem.BirimSaatAdet</td>
+				<td>
+					@(ParcaTeslimAdet.ToString().Replace(",", "."))
+				</td>
+				<td class="w3-center w3-text-center">
+					<input type="checkbox" class="w3-check" id="StokDus-kalemId-@kalem.IsEmriKalemId" />
+				</td>
+				<td>
+					<input type="number" class="onlynumeric w3-input w3-border w3-round" id="kalemId-@kalem.IsEmriKalemId" />
+					@*onkeypress="return isNumberKey(event)" value="@(kalem.TeslimEdilenMiktar.ToString().Replace(",", "."))"*@
+				</td>
+
+				<td>
+					<button class="btn-login w3-blue w3-btn " title="Teslim Et" IsEmriKalemId="@kalem.IsEmriKalemId" onclick="btnTeslimEt_click(this)"><i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Teslim Et</button>
+				</td>
+				<td>
+					<input type="number" class="onlynumeric w3-input w3-border w3-round" id="IadekalemId-@kalem.IsEmriKalemId" onkeypress="return isNumberKey(event)" />
+				</td>
+				<td>
+					<button class="btn-login w3-blue w3-btn " title="İade Et" IsEmriKalemId="@kalem.IsEmriKalemId" onclick="btnIadeEt_click(this)"><i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> İade Et</button>
+				</td>
+				<td>
+					<button class="btn-login w3-blue w3-btn " title="Stok Düşümünü Sıfırla" IsEmriKalemId="@kalem.IsEmriKalemId" onclick="btnStokDusumunuSifirla_click(this)"><i class="fa fa-minus-square-o w3-small" aria-hidden="true"></i> Stok Düşümünü Sıfırla</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.ViewModels.ServiceReport.ServisAracTakipResponse>
+@{
+	Layout = null;
+
+	string Firma = null, CurrentFirma = null;
+	List<string> rowColors = new List<string>();
+	rowColors.Add("w3-light-gray");
+	rowColors.Add("w3-blue");
+	int CurrentColorIndex = 0;
+	string RowColor = "w3-light-gray";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ServisAracTakipPdf</title>
+    <link rel="stylesheet" href="~/Styles/w3.css">
+</head>
+<body>
+    <div>
+        <table class="w3-table-all w3-margin-top w3-margin-bottom ">
+			<tbody>
+				<tr>
+					<th>Firma İsmi</th>
+					<th>İş Emri Tipi</th>
+					<th>Araç Cinsi</th>
+					<th>Plaka</th>
+					<th>Arıza</th>
+					<th>Durumu</th>
+					<th>Geliş Tarihi</th>
+				</tr>
+				@foreach (var item in Model.OrderBy(x => x.FirmaIsmi).ThenByDescending(x => x.GelisTarihi))
+				{
+					if (CurrentFirma != item.FirmaIsmi)
+					{
+						RowColor = rowColors[CurrentColorIndex == 0 ? 1 : 0];
+						CurrentColorIndex = CurrentColorIndex == 0 ? 1 : 0;
+					}
+					<tr class="@RowColor">
+						<td>@item.FirmaIsmi</td>
+						<td>@item.IsEmriTipi</td>
+						<td>@item.AracCinsi</td>
+						<td>@item.Plaka</td>
+						<td>@item.Ariza</td>
+						<td>@item.Durumu</td>
+						<td>@item.GelisTarihi</td>
+					</tr>
+
+					CurrentFirma = item.FirmaIsmi;
+				}
+			</tbody>
+        </table>
+    </div>
+</body>
+</html>

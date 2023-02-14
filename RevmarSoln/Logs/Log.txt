@@ -1,0 +1,60 @@
+19.02.2022 23:25:18      Export Çağrıldı.
+19.02.2022 23:25:18      Konfigürasyonlar Çekildi.
+19.02.2022 23:25:18      İş Emri Veritabanından Çekildi.
+19.02.2022 23:25:18      Rapor Adı ve pdf adı verild..
+19.02.2022 23:25:18      BelirtiKodlu Pdf çağrıldı
+19.02.2022 23:25:21      SaveWithPdf'e Geldi
+19.02.2022 23:25:21      Konfig Çekildi
+19.02.2022 23:25:21      İş Emri Db'den bulundu
+19.02.2022 23:25:21      ViewBag doldu.
+19.02.2022 23:25:21      View'e gönderildi..
+19.02.2022 23:29:06      Export Çağrıldı.
+19.02.2022 23:29:06      Konfigürasyonlar Çekildi.
+19.02.2022 23:29:06      İş Emri Veritabanından Çekildi.
+19.02.2022 23:29:06      Rapor Adı ve pdf adı verild..
+19.02.2022 23:29:06      BelirtiKodlu Pdf çağrıldı
+19.02.2022 23:29:24      Export Çağrıldı.
+19.02.2022 23:29:24      Konfigürasyonlar Çekildi.
+19.02.2022 23:29:24      İş Emri Veritabanından Çekildi.
+19.02.2022 23:29:24      Rapor Adı ve pdf adı verild..
+19.02.2022 23:29:24      BelirtiKodlu Pdf çağrıldı
+19.02.2022 23:30:18      Export Çağrıldı.
+19.02.2022 23:30:18      Konfigürasyonlar Çekildi.
+19.02.2022 23:30:18      İş Emri Veritabanından Çekildi.
+19.02.2022 23:30:18      Rapor Adı ve pdf adı verild..
+19.02.2022 23:30:18      BelirtiKodlu Pdf çağrıldı
+19.02.2022 23:30:34      Export Çağrıldı.
+19.02.2022 23:30:36      Konfigürasyonlar Çekildi.
+19.02.2022 23:30:36      İş Emri Veritabanından Çekildi.
+19.02.2022 23:30:40      Rapor Adı ve pdf adı verild..
+19.02.2022 23:30:42      BelirtiKodlu Pdf çağrıldı
+19.02.2022 23:36:37      Export Çağrıldı.
+19.02.2022 23:36:37      Konfigürasyonlar Çekildi.
+19.02.2022 23:36:38      İş Emri Veritabanından Çekildi.
+19.02.2022 23:36:38      Rapor Adı ve pdf adı verild..
+19.02.2022 23:36:38      BelirtiKodlu Pdf çağrıldı
+19.02.2022 23:36:55      SaveWithPdf'e Geldi
+19.02.2022 23:36:57      Konfig Çekildi
+19.02.2022 23:36:58      İş Emri Db'den bulundu
+19.02.2022 23:37:01      ViewBag doldu.
+19.02.2022 23:37:06      View'e gönderildi..
+19.02.2022 23:40:45      Export Çağrıldı.
+19.02.2022 23:40:45      Konfigürasyonlar Çekildi.
+19.02.2022 23:40:45      İş Emri Veritabanından Çekildi.
+19.02.2022 23:40:45      Rapor Adı ve pdf adı verild..
+19.02.2022 23:40:45      BelirtiKodlu Pdf çağrıldı
+19.02.2022 23:40:46      SaveWithPdf'e Geldi
+19.02.2022 23:40:46      Konfig Çekildi
+19.02.2022 23:40:46      İş Emri Db'den bulundu
+19.02.2022 23:40:46      ViewBag doldu.
+19.02.2022 23:40:46      View'e gönderildi..
+19.02.2022 23:41:06      Export Çağrıldı.
+19.02.2022 23:41:06      Konfigürasyonlar Çekildi.
+19.02.2022 23:41:06      İş Emri Veritabanından Çekildi.
+19.02.2022 23:41:06      Rapor Adı ve pdf adı verild..
+19.02.2022 23:41:06      Normal Pdf Çağrıldı
+19.02.2022 23:41:07      SaveWithPdf'e Geldi
+19.02.2022 23:41:07      Konfig Çekildi
+19.02.2022 23:41:07      İş Emri Db'den bulundu
+19.02.2022 23:41:07      ViewBag doldu.
+19.02.2022 23:41:07      View'e gönderildi..

@@ -1,0 +1,89 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Reports.DenemePartTableViewModel
+
+@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>PagedList Paging MVC</title>
+	<link rel="stylesheet" href="~/Styles/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+	<script src="~/Scripts/jquery.mask.js"></script>
+	<script src="~/Scripts/jquery.blockUI.js"></script>
+
+	<!--Toaster-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+
+	<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+	<style>
+		.ul.pagination {
+			display: inline-block;
+			padding: 0;
+			margin: 0;
+		}
+
+		ul.pagination li {
+			display: inline;
+		}
+
+			ul.pagination li a {
+				border: 1px solid #ccc;
+				color: black;
+				float: left;
+				padding: 8px 16px;
+				text-decoration: none;
+				transition: background-color .3s;
+			}
+
+				ul.pagination li a.active {
+				}
+
+				ul.pagination li a:hover:not(.active) {
+					background-color: #ddd;
+				}
+	</style>
+</head>
+<body>
+	@using (Ajax.BeginForm("DenemePartTable", "Reports", FormMethod.Post, new AjaxOptions { OnSuccess = "loadCust" }))
+	{
+		<table>
+			<tr>
+				<td>UserName</td>
+				<td>
+					@Html.TextBoxFor(model => Model.ParcaAdi, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "UserName" })
+				</td>
+			</tr>
+			<tr>
+				<td>telno</td>
+				<td>
+					@Html.TextBoxFor(model => Model.ParcaNo, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "PhoneNumber" })
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" value="Search" /></td>
+			</tr>
+		</table>
+	}
+	<div id="datatable-users">
+		@Html.Partial("_ReportPartTable", Model)
+	</div>
+	<script>
+		function loadCust(result) {
+
+			$('#datatable-users').html(result);
+
+		}
+	</script>
+</body>
+</html>

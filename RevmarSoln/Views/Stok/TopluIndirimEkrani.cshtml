@@ -1,0 +1,290 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Stok.TopluIndirimEkraniPageModel
+@{
+	ViewBag.Title = "TopluIndirimEkrani";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	string UserName = Session["UserName"].ToString();
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Toplu İndirim Ekranı", pagePermission = "XXXXX" })
+@using Vereyon.Web;
+
+
+@*<script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>*@
+
+
+<script>
+    $(document).ready(function () {
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+		var table = $('#tableStokKartlari').DataTable({
+			//"dom": 'Bfrtip',
+			//"buttons": ['copy', 'excel', 'pdf'],
+			"processing": true,
+			"filter": true,
+			"language": {
+
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+
+				"sSearch": "",
+
+				"selectAll": "Tümünü Seç",
+
+				"sSearchPlaceholder": "Filtrele",
+
+				"sLengthMenu": "_MENU_",
+
+				"sLoadingRecords": "Yükleniyor...",
+
+				"sProcessing": "İşleniyor...",
+
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+
+				"sInfoEmpty": "Kayıt Yok",
+
+				"sInfoPostFix": "",
+
+				"sInfoThousands": ".",
+
+				"sDecimal": ","
+
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+		 $("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+		//table.buttons().container()
+		//	.appendTo($('div.eight.column:eq(0)', table.table().container()));
+
+		$('#btnIndirim').click(function () {
+
+			document.getElementById('IndirimModal').style.display = 'block';
+
+			var parcaTipId = $('#ParcaTipId').val();
+			var indirimOrani = $('#IndirimOrani').val();
+
+			var innerText;
+
+			if (parcaTipId == 0) {
+				if (indirimOrani == 0) {
+					alert('Lütfen indirim oranı giriniz!');
+					document.getElementById('IndirimModal').style.display = 'none';
+					return false;
+				} else {
+					$('#ParcaTipiIndirimLabel').html('Tüm parçalara % <b>' + indirimOrani + ' </b> indirimi onaylıyor musunuz ?');
+				}
+			} else {
+				innerText = $("#ParcaTipId option:selected").text();
+				$('#ParcaTipiIndirimLabel').html(innerText + ' tipinde ki parçalara % <b>' + indirimOrani + ' </b> indirimi onaylıyor musunuz ?');
+			}
+
+
+			return false;
+		});
+		$('#btnApprove').click(function () {
+			var form = $('#__AjaxAntiForgeryForm');
+			var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+			var disCountRate = $('#IndirimOrani').val();
+			var ParcaTipId = $('#ParcaTipId').val();
+			var userName = '@UserName';
+
+			var data = {
+				disCountRate: disCountRate,
+				ParcaTipId: ParcaTipId,
+				userName: userName,
+				__RequestVerificationToken: token
+			};
+
+			var urlStokKartiIndirim = '@Url.Action("StokKartitopluIndirim", "Stok")';
+
+			$.ajax({
+				type: "POST",
+				url: urlStokKartiIndirim,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,//JSON.stringify(),
+				success: function (d) {
+					if (d.result == 1)
+						$('#btnGetir').trigger("click");
+					else 
+						alert(d.message);
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);// TODO: Show error
+				}
+			});
+
+			return false;
+		});
+	});
+</script>
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		<div class="w3-row w3-row-padding  w3-margin-top">
+			@Html.RenderFlashMessages()
+
+		</div>
+
+		<div class="w3-row">
+			@using (Html.BeginForm("TopluIndirimEkrani", "Stok", FormMethod.Post))
+			{
+				<div class="w3-row">
+					<div class="w3-quarter w3-padding">
+						<label>Parça Tipi</label>
+						@Html.DropDownList("ParcaTipId", (SelectList)ViewBag.ParcaTipleri, "Tüm Parçalar", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "ParcaTipId" })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<br />
+						<button class="w3-btn w3-ripple w3-blue w3-left w3-round" id="btnGetir">Parçaları Getir</button>
+					</div>
+				</div>
+			}
+			<div class="w3-half w3-padding ">
+				@if (Model.stokKartlari != null)
+				{
+					if (Model.stokKartlari.Count > 0)
+					{
+
+
+						<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom w3-small " id="tableStokKartlari">
+							<thead>
+								<tr>
+									<th>Parça No</th>
+									<th>Parça Adı</th>
+									<th>Fiyat</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var stokKart in Model.stokKartlari)
+								{
+									<tr>
+										<td>@stokKart.ParcaNo</td>
+										<td>@stokKart.ParcaAdi</td>
+										<td>@stokKart.SatisBirimFiyati ₺</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+
+
+
+					}
+					else
+					{
+						<div class="w3-row w3-yellow">
+							Stok kartı bulunamadı.
+						</div>
+					}
+
+				}
+				else
+				{
+					<div class="w3-row">
+						Lütfen Parça Tipi Seçiniz
+					</div>
+				}
+			</div>
+			<div class="w3-half w3-padding">
+				<div class="w3-row w3-margin-bottom">
+					<label>Seçilen parçalara toplu indirim uygulayın</label>
+				</div>
+
+				<div class="w3-row">
+					<div class="w3-quarter w3-padding-right">
+						<label>İndirim Oranı %</label>
+						@Html.EditorFor(model => model.IndirimOrani, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+					</div>
+					<div class="w3-quarter w3-padding-right">
+						<label>&nbsp;</label>
+						<button class="w3-btn w3-round w3-ripple w3-blue" id="btnIndirim"><i class="fa fa-cart-arrow-down w3-large "></i>&nbsp;Genel İskonto Ekle</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+</div>
+
+<div id="IndirimModal" class="w3-modal w3-fade w3-animate-opacity">
+	<div class="w3-modal-content w3-card-4" style="max-width:600px">
+		<header class="w3-container w3-teal">
+			<span onclick="document.getElementById('IndirimModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h5>İndirim Detay</h5>
+		</header>
+		<div class="w3-container">
+			<div class="w3-row w3-margin" id="IndirimModalContent">
+				@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+				{
+					@Html.AntiForgeryToken()
+				}
+				<div class="w3-row">
+					<h3 id="ParcaTipiIndirimLabel"> </h3>
+				</div>
+			</div>
+			<div class="w3-row w3-margin-bottom">
+				<span onclick="document.getElementById('IndirimModal').style.display='none'" class="w3-button w3-red w3-left">İptal</span>
+				<span onclick="document.getElementById('IndirimModal').style.display='none'" class="w3-button w3-green w3-right" id="btnApprove">Onaylıyorum</span>
+			</div>
+		</div>
+
+	</div>
+</div>
+

@@ -1,0 +1,216 @@
+﻿
+@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.IsEmriParcaEkleViewModel
+@{
+	Layout = null;
+}
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.sortElements.js"></script>
+<script src="~/Scripts/Table2Excel/jquery.table2excel.js"></script>
+
+<style>
+	.fontDuzgun {
+		font-family: tahoma;
+	}
+
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 60px;
+		height: 34px;
+	}
+
+		.switch input {
+			display: none;
+		}
+
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+	}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 26px;
+			width: 26px;
+			left: 4px;
+			bottom: 4px;
+			background-color: white;
+			-webkit-transition: .4s;
+			transition: .4s;
+		}
+
+	input:checked + .slider {
+		background-color: #2196F3;
+	}
+
+	input:focus + .slider {
+		box-shadow: 0 0 1px #2196F3;
+	}
+
+	input:checked + .slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+	}
+
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 34px;
+	}
+
+		.slider.round:before {
+			border-radius: 50%;
+		}
+</style>
+<script type="text/javascript">
+	$(document).ready(function () {
+		var selectedIds = [];
+		var ParcaAdlari = [];
+
+		$('#ParcaNo').change(function () {
+			setCookie('IsEmriParcaSecParcaNo', $(this).val(), 10);
+			$("#btnSubmitStokKartAra").trigger("click");
+		});
+
+		$('#ParcaAdi').change(function () {
+			setCookie('IsEmriParcaSecParcaAdi', $(this).val(), 10);
+			$("#btnSubmitStokKartAra").trigger("click");
+		});
+
+		$('#ParcaTipiId').change(function () {
+			setCookie('IsEmriParcaSecParcaTipiId', $(this).val(), 10);
+			$("#btnSubmitStokKartAra").trigger("click");
+		});
+
+		btnParcaEkle_click = function (string, el) {
+			var stokKartId = $(el)[0].getAttribute('stokKart');
+			var ParcaAdi = $(el)[0].getAttribute('ParcaAdi');
+
+			console.log('stokKartId : ' + stokKartId);
+
+			
+
+			var index = $.inArray(stokKartId, selectedIds);
+			debugger;
+			if (index === -1) {
+				WaitBlockUI(1000, stokKartId + ' Parça ekleniyor...');
+				ParcaAdlari.push(ParcaAdi);
+				selectedIds.push(stokKartId);
+				
+			} else {
+				WaitBlockUI(1000, stokKartId + ' Parça çıkarılıyor...');
+				ParcaAdlari.splice(index,1);
+				selectedIds.splice(index, 1);
+			}
+
+			$(this).toggleClass('selected');
+
+			console.log(selectedIds);
+			$('#ParcaAdlari').val(ParcaAdlari);
+			$('#kalemIds').val(selectedIds).trigger("change");
+			
+		}
+
+	});
+
+	//function btnParcaEkle_click(string, el) {
+
+	//	var stokKartId = $(el)[0].getAttribute('stokKart');
+
+	//	console.log('stokKartId : ' + stokKartId);
+
+	//	WaitBlockUI(1000, stokKartId + ' Parça ekleniyor...');
+
+	//	var index = $.inArray(stokKartId, selectedIds);
+
+	//	if (index === -1) {
+	//		selectedIds.push(stokKartId);
+	//	} else {
+	//		selectedIds.splice(stokKartId, 1);
+	//	}
+
+	//	$(this).toggleClass('selected');
+
+	//	console.log(selectedIds);
+
+	//}
+
+	function WaitBlockUI(milisaniye, message) {
+
+		$.blockUI({
+			css: {
+				border: 'none',
+				padding: '15px',
+				backgroundColor: '#000',
+				'-webkit-border-radius': '10px',
+				'-moz-border-radius': '10px',
+				opacity: .5,
+				color: '#fff'
+			},
+			message: message
+		});
+
+		setTimeout($.unblockUI, milisaniye);
+
+	}
+</script>
+
+<div class="w3-row">
+	<div class="w3-padding">
+		@using (Ajax.BeginForm("SayimParcaSec", "Sayim", FormMethod.Post, new AjaxOptions { OnSuccess = "loadStokKart" }, new { name = "theForm" }))
+		{
+			<div class="w3-row w3-padding-top">
+				<div class="w3-third w3-padding-right">
+					<label>
+						Parça Tipi
+					</label>
+					@Html.DropDownList("ParcaTipiId", (SelectList)ViewBag.BelirtiKodlari, "Parça Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "ParcaTipiId", name = "ParcaTipiId" })
+				</div>
+				<div class="w3-third w3-padding-right">
+					<label>
+						Parça No
+					</label>
+					@Html.TextBoxFor(model => Model.ParcaNo, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "ParcaNo" })
+				</div>
+				<div class="w3-third w3-padding-right">
+					<label>
+						Parça Adı
+					</label>
+					@Html.TextBoxFor(model => Model.ParcaAdi, new { @class = "w3-input w3-border w3-round", autocomplete = "off", @Id = "ParcaAdi" })
+				</div>
+				<div class="w3-hide">
+
+					<div class="w3-right w3-padding-right">
+						<br />
+						<button class="w3-btn w3-ripple w3-blue w3-left w3-round w3-block" type="submit" id="btnSubmitStokKartAra">Sorgula</button>
+					</div>
+				</div>
+
+			</div>
+
+		}
+		<div id="datatable-loadStokKart">
+			@Html.Partial("_GridSayimParcaEkle", Model)
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script>
+	function loadStokKart(result) {
+		debugger;
+		$('#datatable-loadStokKart').html(result);
+	}
+</script>

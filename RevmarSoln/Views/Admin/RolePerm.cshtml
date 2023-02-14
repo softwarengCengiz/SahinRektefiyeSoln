@@ -1,0 +1,53 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.FilterModels.CreateRolePermission>
+
+@{
+	ViewBag.Title = "Role Yetki";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Role Yetki", pagePermission = "EMP_02" })
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		@using (Html.BeginForm())
+	{
+			<hidden value="@ViewBag.RoleId" name="RoleId"></hidden> 
+		<div class="w3-row">
+			<div class="w3-quarter w3-padding">
+				<table>
+					<tr>
+						<td>
+							Role adı
+						</td>
+						<td>
+							<b>@ViewBag.RoleName</b>
+						</td>
+					</tr>
+				</table>
+
+
+			</div>
+		</div>
+		<div class="w3-row">
+			<div class="w3-third w3-padding">
+				<table class="w3-table-all w3-hoverable">
+					<tbody>
+						@foreach (var perm in Model)
+					{
+						<tr>
+							<td><label>@perm.PermissionName </label></td>
+							<td><label>@perm.PermissionDesc</label></td>
+							<td>@Html.CheckBox("selectedPerms", perm.ischecked ,new { value = perm.PermissionId } )</td>
+						</tr>
+				}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="w3-quarter w3-padding">
+			<label>&nbsp; </label>
+			<button class="w3-btn w3-ripple w3-green w3-left w3-round-large">Kaydet</button>
+		</div>
+
+}
+	</div>
+</div>

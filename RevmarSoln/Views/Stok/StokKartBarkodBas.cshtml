@@ -1,0 +1,69 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Stok.StokKartBarkodBasPageModel
+@{
+	Layout = null;
+	string classfloat = string.Empty;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>StokKartBarkodBas</title>
+	<script>
+		window.print();
+	</script>
+	@*<link href="~/Styles/Print.css" rel="stylesheet" />*@
+	<link href="~/Styles/BarkodPrint.css" rel="stylesheet" />
+	<link href="~/Styles/Deneme/DenemeStylePrint.css" rel="stylesheet" />
+</head>
+<body>
+
+	<section class="two">
+		@for (int i = 1; i <= Model.Adet; i++)
+		{
+
+			<div class="column w3-row w3-center">
+				<img src="@Url.Action("GenerateQrCode","Stok",new { ProductId=Model.parca.ParcaNo, width = 200 , height=80})" alt="code" /><br />
+				<label class="barkodCompanySize">@Model.parca.ParcaAdi -	</label>
+				@foreach (var item in Model.parca.CompanyStoks)
+				{
+					<label class="barkodCompanySize">@item.Companies.Name &nbsp;&nbsp;</label>
+				}
+
+			</div>
+
+
+			<count />
+			if (i % 20 == 0)
+			{
+				<div class="page-break">
+
+				</div>
+			}
+		}
+	</section>
+	@*<div class="row">
+			@for (int i = 1; i <= Model.Adet; i++)
+			{
+
+				<div class="column w3-row w3-center">
+					<img src="@Url.Action("GenerateQrCode","Stok",new { ProductId=Model.parca.ParcaNo, width = 200 , height=80})" alt="code" /><br />
+					<label class="barkodCompanySize">@Model.parca.ParcaAdi -	</label>
+					@foreach (var item in Model.parca.CompanyStoks)
+					{
+						<label class="barkodCompanySize">@item.Companies.Name &nbsp;&nbsp;</label>
+					}
+
+				</div>
+
+				if (i % 2 == 0)
+				{
+
+					<br />
+				}
+
+			}
+		</div>*@
+</body>
+</html>

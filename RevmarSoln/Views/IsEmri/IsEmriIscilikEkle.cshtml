@@ -1,0 +1,447 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.Iscilikler>
+@{
+	Layout = null;
+}
+<style>
+	#tableIscilikNormal {
+		font-family: tahoma;
+	}
+</style>
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="~/Scripts/jquery.sortElements.js"></script>
+
+<style>
+
+	.ui-draggable, .ui-droppable {
+		background-position: top;
+	}
+</style>
+
+<script>
+	$(document).ready(function () {
+
+		var BelirtiKodu = $('#BelirtiKodu').val('@ViewBag.BelirtiKodu');
+
+		$.widget("custom.combobox", {
+			_create: function () {
+				this.wrapper = $("<span>")
+					//.addClass("custom-combobox")
+					.css({ 'position': 'relative' })
+					.css({ 'width': "auto!important" })
+					.insertAfter(this.element);
+
+				this.element.hide();
+				this._createAutocomplete();
+				this._createShowAllButton();
+			},
+
+			_createAutocomplete: function () {
+				var selected = this.element.children(":selected"),
+					value = selected.val() ? selected.text() : "";
+
+				this.input = $("<input>")
+					.appendTo(this.wrapper)
+					.val(value)
+					.attr("title", "")
+					//.addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+					.addClass("w3-select w3-border w3-round w3-padding")
+					.autocomplete({
+						delay: 0,
+						minLength: 0,
+						source: $.proxy(this, "_source")
+					})
+					.tooltip({
+						classes: {
+							"ui-tooltip": "ui-state-highlight"
+						}
+					});
+
+				this._on(this.input, {
+					autocompleteselect: function (event, ui) {
+						ui.item.option.selected = true;
+						this._trigger("select", event, {
+							item: ui.item.option
+						});
+					},
+
+					autocompletechange: "_removeIfInvalid"
+				});
+			},
+
+			_createShowAllButton: function () {
+				var input = this.input,
+					wasOpen = false;
+
+				$("<a>")
+					.attr("tabIndex", -1)
+					.attr("title", "Tümünü Göster")
+					.tooltip()
+					.appendTo(this.wrapper)
+					.button({
+						icons: {
+							primary: "ui-icon-triangle-1-s"
+						},
+						text: false
+					})
+					.css('margin-right', 3)
+					.removeClass("ui-button ui-corner-all ui-widget ui-button-icon-only ")
+					//.addClass("custom-combobox-toggle ui-corner-right")
+					.addClass("w3-display-right")
+					.on("mousedown", function () {
+						wasOpen = input.autocomplete("widget").is(":visible");
+					})
+					.on("click", function () {
+						input.trigger("focus");
+
+						// Close if already visible
+						if (wasOpen) {
+							return;
+						}
+
+						// Pass empty string as value to search for, displaying all results
+						input.autocomplete("search", "");
+					});
+			},
+
+			_source: function (request, response) {
+				var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+				var i = 0;
+				response(this.element.children("option").map(function () {
+					var text = $(this).text();
+					if (this.value && (!request.term || matcher.test(text))) {
+						i += 1;
+						if (i <= 5) {
+							return {
+								label: text,
+								value: text,
+								option: this
+							};
+						}
+
+					}
+
+				}));
+			},
+
+			_removeIfInvalid: function (event, ui) {
+
+				// Selected an item, nothing to do
+				if (ui.item) {
+					return;
+				}
+
+				// Search for a match (case-insensitive)
+				var value = this.input.val(),
+					valueLowerCase = value.toLowerCase(),
+					valid = false;
+				this.element.children("option").each(function () {
+					if ($(this).text().toLowerCase() === valueLowerCase) {
+						this.selected = valid = true;
+						return false;
+					}
+				});
+
+				// Found a match, nothing to do
+				if (valid) {
+					return;
+				}
+
+				this.input.val(value.toUpperCase());
+
+				// Remove invalid value
+				this.input
+					//.val("")
+					.attr("title", value + " işçiliği seçildi.")
+					.tooltip("open");
+				this.element.val(value);
+				this._delay(function () {
+					this.input.tooltip("close").attr("title", "");
+				}, 2500);
+				console.log('value : ' + value);
+				$("#txtManuelIscilikAdi").val(value);
+
+				//this.input.autocomplete("instance").term = "";
+			},
+
+			_destroy: function () {
+				this.wrapper.remove();
+				this.element.show();
+			},
+
+			change: function () {
+				//alert(' ');
+			}
+		});
+
+		$("#txtManuelIscilikAdi").combobox({
+			select: function (event, ui) {
+				//console.log(event);
+				//console.log(ui.item.value);
+				$('#txtManuelIscilikAdi').val(ui.item.value);
+				$('#txtManuelIscilikAdi').trigger("change");
+			}
+			//select: function (event, ui) {
+			//	var newTag = $(this).val();
+			//	$(this).val("");
+			//	$(this).parent().append("<span>" + newTag + "<a href=\"#\">[x]</a> </span>");
+			//	event.preventDefault();
+			//}
+
+		});
+		$("#toggle").on("click", function () {
+			$("#txtManuelIscilikAdi").toggle();
+        });
+
+		jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            'locale-compare-asc': function (a, b) {
+                return a.localeCompare(b, 'cs', { sensitivity: 'case' })
+            },
+            'locale-compare-desc': function (a, b) {
+                return b.localeCompare(a, 'cs', { sensitivity: 'case' })
+            }
+        })
+
+        jQuery.fn.dataTable.ext.type.search['locale-compare'] = function (data) {
+            return NeutralizeAccent(data);
+        }
+
+        function NeutralizeAccent(data) {
+            return !data
+                ? ''
+                : typeof data === 'string'
+                    ? data
+                        .replace(/\n/g, ' ')
+                        .replace(/[éÉěĚèêëÈÊË]/g, 'e')
+                        .replace(/[šŠ]/g, 's')
+                        .replace(/[čČ]/g, 'c')
+                        .replace(/[řŘ]/g, 'r')
+                        .replace(/[žŽ]/g, 'z')
+                        .replace(/[ýÝ]/g, 'y')
+                        .replace(/[áÁâàÂÀ]/g, 'a')
+                        .replace(/[íÍîïÎİÏ]/g, 'i')
+                        .replace(/[ťŤ]/g, 't')
+                        .replace(/[ďĎ]/g, 'd')
+                        .replace(/[ňŇ]/g, 'n')
+                        .replace(/[óÓ]/g, 'o')
+                        .replace(/[úÚůŮ]/g, 'u')
+                    : data
+        }
+
+
+		$('#tableIscilikNormal').DataTable({
+			"processing": true,
+			"filter": true,
+			"language": {
+				"sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+				"oPaginate": { "sFirst": "İlk", "sLast": "Son", "sNext": "İleri", "sPrevious": "Geri" },
+				"select": { "rows": { "_": "%d kayıt seçildi", "0": "", "1": "1 kayıt seçildi" } },
+				"sSearch": "",
+				"selectAll": "Tümünü Seç",
+				"sSearchPlaceholder": "Filtrele",
+				"sLengthMenu": "_MENU_",
+				"sLoadingRecords": "Yükleniyor...",
+				"sProcessing": "İşleniyor...",
+				"sZeroRecords": "Eşleşen kayıt bulunamadı...",
+				"sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar.",
+				"sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+				"sInfoEmpty": "Kayıt Yok",
+				"sInfoPostFix": "",
+				"sInfoThousands": ".",
+				"sDecimal": ","
+			},
+            columnDefs : [
+							 { targets: 0, type: 'locale-compare' },
+						  ]
+        });
+
+		$("input[type='search']").keyup(function () {
+            table.search(
+                jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
+            )
+                .draw()
+
+        });
+
+		$('#btnManuelIscilikEkle').click(function () {
+			debugger;
+			var isEmriId = @ViewBag.IsEmriId;
+
+
+			var ManuelIscilikAdi = $('.ui-autocomplete-input').val();//$('#txtManuelIscilikAdi').val();
+			var ManuelIscilikBirimSaat = $('#txtManuelIscilikBirimSaat').val();
+			var ManuelIscilikBirimFiyat = $('#txtManuelIscilikBirimFiyat').val();
+
+			if (ManuelIscilikAdi == "") {
+				alert('Lütfen işçilik adı giriniz!');
+				return false;
+			}
+
+			if (ManuelIscilikBirimSaat == "") {
+				alert('Lütfen birim saat giriniz!');
+				return false;
+			}
+
+			if (ManuelIscilikBirimFiyat == "") {
+				alert('Lütfen birim fiyat giriniz!');
+				return false;
+			}
+			console.log('isEmriId : ' + isEmriId);
+			console.log('ManuelIscilikAdi : ' + ManuelIscilikAdi);
+			console.log('ManuelIscilikBirimSaat : ' + ManuelIscilikBirimSaat);
+			console.log('ManuelIscilikBirimFiyat : ' + ManuelIscilikBirimFiyat);
+
+			WaitBlockUI(2000, 'Manuel İşçilik ekleniyor...');
+
+			var urlManuelIscilikEkle = '@Url.Action("IsEmriManuelIscilikEkleme", "IsEmri")';
+
+			var data = {
+				IsEmriId: isEmriId ,
+				ManuelIscilikAdi: ManuelIscilikAdi ,
+				ManuelIscilikBirimSaat: ManuelIscilikBirimSaat ,
+				ManuelIscilikBirimFiyat: ManuelIscilikBirimFiyat,
+				BelirtiKodu: BelirtiKodu.val()
+			};
+
+			console.log(data);
+
+			$.ajax({
+				type: "POST",
+				url: urlManuelIscilikEkle,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function (d) {
+					if (d.result == 1)
+
+						WaitBlockUI(750, 'İşçilik Eklendi');
+
+					else {
+						setTimeout(function () {
+							alert(d.message);
+						}, 1500);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);// TODO: Show error
+				}
+			});
+
+		});
+
+	});
+
+	function btnIscilikEkle_click(string, el) {
+
+		var stokKartId = $(el)[0].getAttribute('Iscilik');
+		var isEmriId = @ViewBag.IsEmriId;
+		var parcaAdet = $('#IscilikId-' + stokKartId).val();
+		
+		if (parcaAdet == "") {
+			alert('Lütfen Adet Giriniz!');
+			return false;
+		}
+
+		var BelirtiKodu = $('#BelirtiKodu').val();
+
+		console.log('stokKartId : ' + stokKartId);
+		console.log('isEmriId : ' + isEmriId);
+		console.log('parcaAdet : ' + parcaAdet);
+
+		WaitBlockUI(2000, 'İşçilik ekleniyor...');
+
+		var urlParcaEkle = '@Url.Action("IsEmriIscilikEkleme", "IsEmri")';
+
+			var data = {
+				IsEmriId: isEmriId*1 ,
+				IscilikId: stokKartId * 1,
+				Adet: parcaAdet,
+				BelirtiKodu: BelirtiKodu
+			};
+		console.log("Post : " + data);
+
+		$.ajax({
+				type: "POST",
+				url: urlParcaEkle,
+				content: "application/json; charset=utf-8",
+				dataType: "json",
+				data: data,//JSON.stringify(),
+				success: function (d) {
+					if (d.result == 1)
+						//alert(d.responseText);
+
+						WaitBlockUI(750, 'İşçilik Eklendi');
+
+					else {
+						setTimeout(function () {
+							alert(d.message);
+						}, 1500);
+					}
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					alert('Error2 \n' + data);// TODO: Show error
+				}
+			});
+
+	}
+</script>
+
+<div class="w3-row w3-margin-top w3-margin-bottom">
+	<input type="hidden" id="BelirtiKodu" />
+	<div class="w3-col m5 l5  w3-padding-left">
+		<label>İşçilik Adı</label>
+		@*<input type="text" class="w3-input w3-round w3-border" id="txtManuelIscilikAdi" placeholder="İşçilik Adı">*@
+		@Html.DropDownList("txtManuelIscilikAdi", (SelectList)ViewBag.manuelEklenenIscilikler, htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "txtManuelIscilikAdi" })
+	</div>
+	<div class="w3-col m2 l2  w3-padding-left">
+		<label>Saat</label>
+		<input type="text" class="w3-input w3-round w3-border" id="txtManuelIscilikBirimSaat" placeholder="Saat">
+	</div>
+	<div class="w3-col m2 l2  w3-padding-left">
+		<label>Birim Fiyat</label>
+		<input type="text" class="w3-input w3-round w3-border" id="txtManuelIscilikBirimFiyat" placeholder="Fiyat">
+	</div>
+	<div class="w3-col m1 l1">
+		<br />
+		<button class="btn-login w3-blue w3-btn " id="btnManuelIscilikEkle" title="Ekle"><i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Ekle</button>
+	</div>
+</div>
+
+<table id="tableIscilikNormal">
+	<thead>
+		<tr>
+			<th>İşçilik Adı</th>
+			<th>Kodu</th>
+			<th>Birim Saat</th>
+			<th>Açıklaması</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var iscilik in Model)
+		{
+			<tr>
+				<td>
+					@iscilik.IscilikAdi
+				</td>
+				<td>
+					@iscilik.IscilikKodu
+				</td>
+				<td>
+					@iscilik.BirimSaat
+				</td>
+				<td>
+					@iscilik.IscilikTipleri.Aciklamasi
+				</td>
+				<td>
+					<input type="number" class="onlynumeric w3-input w3-border w3-round" id="IscilikId-@iscilik.IscilikId" onkeypress="return isNumberKey(event)" />
+				</td>
+				<td>
+					<button class="btn-login w3-blue w3-btn " title="Parça Seç" Iscilik="@iscilik.IscilikId"  onclick="btnIscilikEkle_click('month', this)"><i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Ekle</button>
+				</td>
+			</tr>
+
+		}
+	</tbody>
+</table>

@@ -1,0 +1,57 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model SahinRektefiyeSoln.Models.ViewModels.Reports.DenemePartTableViewModel
+@{
+	string Alternatifler = string.Empty;
+}
+<table>
+	<tr>
+		<th width="20%">Parça Tipi</th>
+		<th width="20%">Parça No</th>
+		<th width="30%">Parça Adı</th>
+		<th width="10%">Stok</th>
+		<th width="10%">Satış Fiyatı</th>
+		<th width="10%">Miktar</th>
+		<th width="10%"></th>
+	</tr>
+	@foreach (var item in Model.parcalar)
+	{
+		Alternatifler = "Alternatifler \n";
+		foreach (var detay in item.StokKartiAlternatif1.ToList())
+		{
+			Alternatifler += detay.StokKarti.ParcaAdi + "-" + detay.StokKarti.ParcaNo + "\n";
+		}
+		<tr>
+			<td>
+				@item.ParcaTipleri.ParcaTipAciklamasi
+			</td>
+			<td>
+				@item.ParcaNo
+			</td>
+			<td>
+				<label title="@Alternatifler">@item.ParcaAdi</label>
+			</td>
+			<td>@item.ToplamStok</td>
+			<td>
+				<input class="onlynumeric w3-input w3-border w3-round" value="@item.SatisBirimFiyati" id="stokKartIdSatisFiyat-@item.StokKartiId" />
+			</td>
+			<td>
+				<input type="number" class="onlynumeric w3-input w3-border w3-round" value="1" id="stokKartId-@item.StokKartiId" onkeypress="return isNumberKey(event)" />
+			</td>
+			<td><button class="btn-login w3-blue w3-btn " title="Parça Seç" stokKart="@item.StokKartiId" onclick="btnParcaEkle_click('month', this)"><i class="fa fa-arrow-circle-o-right w3-small" aria-hidden="true"></i> Ekle</button></td>
+		</tr>
+	}
+</table>
+<div class="pagination">
+	Page @(Model.parcalar.PageCount < Model.parcalar.PageNumber ? 0 : Model.parcalar.PageNumber) of @Model.parcalar.PageCount
+	@Html.PagedListPager(Model.parcalar, page => Url.Action("DenemePartTable",
+											   new
+											   {
+												   ParcaAdi = Model.ParcaAdi,
+												   Musteri = Model.ParcaNo,
+												   page
+											   }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions()
+											   {
+												   UpdateTargetId = "datatable-users"
+											   }))
+</div>

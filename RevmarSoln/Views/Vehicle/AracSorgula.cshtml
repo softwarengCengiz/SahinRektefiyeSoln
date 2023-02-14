@@ -1,0 +1,187 @@
+﻿@using SahinRektefiyeSoln.Models.PagingModels;
+@model SahinRektefiyeSoln.Models.ViewModels.Vehicle.VehicleSearchPageModel
+@{
+	ViewBag.Title = "AracSorgula";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Araç Sorgulama Ekranı", pagePermission = "XXXXX" })
+
+<div class="w3-panel">
+	<div class="w3-row-padding w3-card">
+		@using (Html.BeginForm("AracSorgula", "Vehicle", FormMethod.Post))
+		{
+			<div class="w3-row">
+				<div class="w3-row">
+					<div class="w3-quarter w3-padding">
+						<label>
+							Plaka
+						</label>
+						@Html.EditorFor(model => model.filter.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase", maxlength = "16", autocomplete = "off", id = "ParcaNo" } })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<label>Şasi no</label>
+						@Html.EditorFor(model => model.filter.SaseNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase", maxlength = "17", autocomplete = "off" } })
+					</div>
+					<div class="w3-quarter w3-padding">
+						<label>Motor No</label>
+						@Html.EditorFor(model => model.filter.MotorNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round uppercase", maxlength = "12", autocomplete = "off" } })
+					</div>
+					<div class="w3-quarter w3-padding">
+
+						<div class="w3-half">	<br /><button class="w3-btn w3-ripple w3-blue w3-left w3-round">Araç Sorgula</button></div>
+						<div class="w3-half">	<br /><a href="/Vehicle/Create" class="w3-btn w3-ripple w3-green  w3-round"><i class="fa fa-car fa-car"></i>&nbsp;Yeni Araç Ekle</a></div>
+
+					</div>
+				</div>
+
+			</div>
+			<div class="w3-row">
+
+
+			</div>
+
+		}
+		<div class="w3-padding">
+			@if (Model == null)
+			{
+				<div class="w3-panel w3-pale-blue w3-border">
+					<h3>Information!</h3>
+					<p>Araç bilgilerini yukarıda aratarak araç bilgilerini burada görüntüleyebilirsiniz..</p>
+				</div>
+			}
+			else
+			{
+				if (Model.araclar.Count() == 0) //Aranan Araç bulunamadığı için yeni oluşturmak istermisiniz
+				{
+					<div class="w3-panel w3-pale-blue w3-border">
+						<h3>Aranan Araç Bulunamadı!</h3>
+						<p>Aradığınız aracı oluşturmak için buraya tıklayın.</p>
+					</div>
+				}
+				else
+				{
+					<table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom w3-small">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Şasi No		 </th>
+								<th>Moto No		 </th>
+								<th>Plaka		 </th>
+								<th>Marka		 </th>
+								<th>Ana Model	 </th>
+								<th>Baz Model Adı</th>
+								<th>Araç Grubu   </th>
+								<th>Müşteri Cari Adı	</th>
+								<th>Kurum Kontak Kişi	</th>
+								<th>Kontak Tel			</th>
+								@*<th>Şirket Tel			</th>*@
+								<th>İl					</th>
+								<th>Trafiğe Çıkış Trh	</th>
+								<th>Kayıt Tarihi		</th>
+								@*<th>Not               	</th>*@
+
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var arac in Model.araclar)
+							{
+								<tr>
+									<td>
+										<a href="/Vehicle/AracDuzenle?AracId=@arac.AracId" title="Araç Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+										&nbsp;
+										
+										<a href="/IsEmri/IsEmriOlustur?AracId=@arac.AracId&MusteriId=@(arac.MusteriAraclari.Where(x=>x.SwAktif==true).FirstOrDefault() != null ? arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().MusteriId : 0)" title="İş Emri Açmak İçin Tıklayın."><i class="fa fa-wrench w3-hover-opacity" aria-hidden="true"></i></a>
+									</td>
+									<td>@arac.SaseNo</td>
+									<td>@arac.MotorNo</td>
+									<td>@arac.Plaka</td>
+									<td>@arac.Companies.Name</td>
+									<td>@arac.Vehicles.Name</td>
+									<td>@arac.AracModelAdi</td>
+									<td>@(arac.AracGrubu != null ? arac.AracGrubu.Aciklamasi:"")</td>
+									<td>
+										@if (arac.MusteriAraclari.Count > 0)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+											{
+												if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTipi == "B")
+												{
+													<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriAdi @arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriSoyadi</label>
+												}
+												else
+												{
+													<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.KurumAdi</label>
+												}
+											}
+											else
+											{
+												<label></label>
+											}
+										}
+										else
+										{
+											<label></label>
+										}
+									</td>
+									<td>
+										@if (arac.MusteriAraclari.Count > 0)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+											{
+												if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTipi == "K")
+												{
+													<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.KontakAdi @arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.KontakSoyadi</label>
+												}
+											}
+										}
+									</td>
+									<td>
+										@if (arac.MusteriAraclari.Count > 0)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+											{
+												if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTelefon != null)
+												{
+													if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTelefon.Count > 0)
+													{
+														<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi</label>
+													}
+												}
+
+											}
+										}
+									</td>
+									<td>
+										@if (arac.MusteriAraclari.Count > 0)
+										{
+											if (arac.MusteriAraclari.Where(x => x.SwAktif == true) != null)
+											{
+												if (arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.iller != null)
+												{
+													<label>@arac.MusteriAraclari.Where(x => x.SwAktif == true).FirstOrDefault().Musteri.iller.sehir</label>
+												}
+											}
+										}
+									</td>
+									<td>@(arac.AracDetay.TrafigeCikisTarihi.HasValue == true ? arac.AracDetay.TrafigeCikisTarihi.Value.ToShortDateString() : "")</td>
+									<td>@arac.CreatedDate.Value.ToShortDateString()	  </td>
+								</tr>
+							}
+						</tbody>
+						<tfoot>
+							<tr><td class="w3-center w3-padding-4" colspan="100%"> @Html.Pager(Model.araclar.PageSize, Model.araclar.PageNumber, Model.araclar.TotalItemCount)</td></tr>
+						</tfoot>
+					</table>
+				}
+
+			}
+
+		</div>
+
+
+
+	</div>
+
+</div>
+

@@ -1,0 +1,40 @@
+﻿@media print {
+	@page {
+		
+	}
+
+	body {
+		margin: 20mm 15mm 15mm 15mm;
+	}
+
+	footer {
+		page-break-after: always;
+	}
+
+	h1 {
+		page-break-before: always
+	}
+
+	.page-break {
+		display: block;
+		page-break-before: always;
+	}
+
+	@page {
+		size: A4; /* DIN A4 standard, Europe */
+		margin: 50px;
+	}
+
+	html, body {
+		width: 210mm;
+		/* height: 297mm; */
+		height: 282mm;
+		font-size: 11px;
+		background: #FFF;
+		overflow: visible;
+	}
+
+	body {
+		padding-top: 2mm;
+	}
+}
