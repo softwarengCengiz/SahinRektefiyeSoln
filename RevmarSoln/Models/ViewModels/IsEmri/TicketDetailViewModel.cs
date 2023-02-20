@@ -16,7 +16,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
             ParcalarId = new List<string>(); 
         }
         public int Id { get; set; }
-        public int TicketId { get; set; }
+        public int TalepId { get; set; }
         public string MotorDolapNo { get; set; }
         public string KapakDolapNo { get; set; }
         public Nullable<System.DateTime> BildirimTarihi { get; set; }

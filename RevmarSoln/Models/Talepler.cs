@@ -14,6 +14,12 @@ namespace SahinRektefiyeSoln.Models
     
     public partial class Talepler
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Talepler()
+        {
+            this.TalepDetay = new HashSet<TalepDetay>();
+        }
+    
         public int TalepId { get; set; }
         public int MusteriId { get; set; }
         public int PartId { get; set; }
@@ -36,5 +42,7 @@ namespace SahinRektefiyeSoln.Models
         public virtual Parts Parts { get; set; }
         public virtual Users Users { get; set; }
         public virtual Vehicles Vehicles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TalepDetay> TalepDetay { get; set; }
     }
 }
