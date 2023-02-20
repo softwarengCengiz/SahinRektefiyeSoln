@@ -682,6 +682,9 @@
     <Compile Include="Models\Suppliers.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TalepDetay.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Talepler.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>

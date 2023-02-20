@@ -1,4 +1,7 @@
-﻿using SahinRektefiyeSoln.Components;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using PagedList;
+using Remotion.Reflection;
+using SahinRektefiyeSoln.Components;
 using SahinRektefiyeSoln.Helpers;
 using SahinRektefiyeSoln.Infrastructure;
 using SahinRektefiyeSoln.Models;
@@ -96,11 +99,82 @@ namespace SahinRektefiyeSoln.Controllers
         public ActionResult DetailEdit(int id)
         {
             var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+            var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
             TicketDetailViewModel model = new TicketDetailViewModel();
-            model.TicketId = id;
-            FillIsEmriCombos();
-            model.Ariza = ArizaListesi();
-            model.Parcalar = TamirListesi();
+            model.TalepId = id;
+
+            var ariza = ArizaListesi();
+            var tamir = TamirListesi();
+
+            model.KM = talepler.Km ?? 0;
+            model.VinNo = talepler.VinNo ?? "";
+            model.Plaka = talepler.Plate ?? "";
+            model.Marka = talepler.Vehicles.Companies.Name;
+            model.Model = talepler.Vehicles.Name;
+
+            if (talepDetay != null)
+            {
+                model.MotorDolapNo = talepDetay.MotorDolapNo;
+                model.KapakDolapNo = talepDetay.KapakDolapNo;
+                model.BildirimTarihi = talepDetay.BildirimTarihi;
+                model.ServisAdı = talepDetay.ServisAdı;
+                model.Marka = talepDetay.Marka;
+                model.Model = talepDetay.Model;
+                model.MotorTipi = talepDetay.MotorTipi;
+                model.YakıtTipi = talepDetay.YakıtTipi.Value;
+                model.SilindirSayisi = talepDetay.SilindirSayisi.Value;
+                model.Garanti = talepDetay.Garanti.Value == 0 ? false : true;
+                model.Revizyon = talepDetay.Revizyon.Value == 0 ? false : true;
+                model.RevizyonAciklama = talepDetay.RevizyonAciklama;
+                model.ServisNo = talepDetay.ServisNo;
+                model.AlınanIs = talepDetay.AlınanIs.Value;
+                model.Plaka = talepDetay.Plaka;
+                model.KM = talepDetay.KM.Value;
+                model.VinNo = talepDetay.VinNo;
+                model.MotorNo = talepDetay.MotorNo;
+                model.SupapSayisi = talepDetay.SupapSayisi;
+                model.MusteriNot = talepDetay.MusteriNot;
+                model.ArizaDiger = talepDetay.ArizaDiger;
+                model.ParcaDiger = talepDetay.ParcaDiger;
+                model.ParcaAdet = talepDetay.ParcaAdet;
+                model.ParcalarText = new List<string>();
+                var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
+                var tamirList = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
+                talepDetay.ParcaListAdet = talepDetay.ParcaListAdet;
+                //"1-1;3-5;5-3;13-9;"
+                foreach (var item in ariza)
+                {
+                    if (arizalist != null)
+                    {
+                        foreach (var itemList in arizalist)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+                var adetList = talepDetay.ParcaListAdet.Split(';');
+                foreach (var item in tamir)
+                {
+                    if (tamirList != null)
+                    {
+                        foreach (var itemList in tamirList)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+
+                    if (adetList.Any(x => x.Split('-')[0] == item.Value))
+                        model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
+                    else
+                        model.ParcalarText.Add("0");
+
+                }
+            }
+
+            model.Ariza = ariza;
+            model.Parcalar = tamir;
 
             return View(model);
         }
@@ -109,6 +183,9 @@ namespace SahinRektefiyeSoln.Controllers
         [HttpPost]
         public ActionResult DetailEdit(TicketDetailViewModel model)
         {
+
+            var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == model.TalepId);
+            //"1-1;3-5;5-3;13-9;"
             string parcaTextMap = "";
 
             for (int i = 0; i < model.ParcalarText.Count; i++)
@@ -118,6 +195,84 @@ namespace SahinRektefiyeSoln.Controllers
                     parcaTextMap = parcaTextMap + model.ParcalarId[i] + "-" + model.ParcalarText[i] + ";";
                 }
             }
+
+            if (talepDetay == null)
+            {
+                using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+                {
+                    using (var transaction = context.Database.BeginTransaction())
+                    //using blokları arasında transaction'ımızı açtık ve artık transaction'ımız bir commit() fonksiyonunu kullanana kadar işlem yaptığımız tabloyu kilitleyecek.
+                    {
+                        //2. Bilet 
+                        TalepDetay yeniTalep = talepDetay ?? new TalepDetay();
+                        yeniTalep.TalepId = model.TalepId;
+                        yeniTalep.MotorDolapNo = model.MotorDolapNo;
+                        yeniTalep.KapakDolapNo = model.KapakDolapNo;
+                        yeniTalep.BildirimTarihi = model.BildirimTarihi;
+                        yeniTalep.ServisAdı = model.ServisAdı;
+                        yeniTalep.Marka = model.Marka;
+                        yeniTalep.Model = model.Model;
+                        yeniTalep.MotorTipi = model.MotorTipi;
+                        yeniTalep.YakıtTipi = model.YakıtTipi;
+                        yeniTalep.SilindirSayisi = model.SilindirSayisi;
+                        yeniTalep.Garanti = model.Garanti == false ? 0 : 1;
+                        yeniTalep.Revizyon = model.Revizyon == false ? 0 : 1;
+                        yeniTalep.RevizyonAciklama = model.RevizyonAciklama;
+                        yeniTalep.ServisNo = model.ServisNo;
+                        yeniTalep.AlınanIs = model.AlınanIs;
+                        yeniTalep.Plaka = model.Plaka;
+                        yeniTalep.KM = model.KM;
+                        yeniTalep.VinNo = model.VinNo;
+                        yeniTalep.MotorNo = model.MotorNo;
+                        yeniTalep.SupapSayisi = model.SupapSayisi;
+                        yeniTalep.MusteriNot = model.MusteriNot;
+                        yeniTalep.ArizaDiger = model.ArizaDiger;
+                        yeniTalep.ParcaDiger = model.ParcaDiger;
+                        yeniTalep.ParcaAdet = model.ParcaAdet;
+                        yeniTalep.ArizaList = string.Join(",", model.ArizaChck);
+                        yeniTalep.ParcaList = string.Join(",", model.ParcalarChck);
+                        yeniTalep.ParcaListAdet = parcaTextMap;
+
+                        context.TalepDetay.Add(yeniTalep);
+
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                }
+            }
+            else
+            {
+                talepDetay.TalepId = model.TalepId;
+                talepDetay.MotorDolapNo = model.MotorDolapNo;
+                talepDetay.KapakDolapNo = model.KapakDolapNo;
+                talepDetay.BildirimTarihi = model.BildirimTarihi;
+                talepDetay.ServisAdı = model.ServisAdı;
+                talepDetay.Marka = model.Marka;
+                talepDetay.Model = model.Model;
+                talepDetay.MotorTipi = model.MotorTipi;
+                talepDetay.YakıtTipi = model.YakıtTipi;
+                talepDetay.SilindirSayisi = model.SilindirSayisi;
+                talepDetay.Garanti = model.Garanti == false ? 0 : 1;
+                talepDetay.Revizyon = model.Revizyon == false ? 0 : 1;
+                talepDetay.RevizyonAciklama = model.RevizyonAciklama;
+                talepDetay.ServisNo = model.ServisNo;
+                talepDetay.AlınanIs = model.AlınanIs;
+                talepDetay.Plaka = model.Plaka;
+                talepDetay.KM = model.KM;
+                talepDetay.VinNo = model.VinNo;
+                talepDetay.MotorNo = model.MotorNo;
+                talepDetay.SupapSayisi = model.SupapSayisi;
+                talepDetay.MusteriNot = model.MusteriNot;
+                talepDetay.ArizaDiger = model.ArizaDiger;
+                talepDetay.ParcaDiger = model.ParcaDiger;
+                talepDetay.ParcaAdet = model.ParcaAdet;
+                talepDetay.ArizaList = string.Join(",", model.ArizaChck);
+                talepDetay.ParcaList = string.Join(",", model.ParcalarChck);
+                talepDetay.ParcaListAdet = parcaTextMap;
+                db.SaveChanges();
+            }
+
+
 
             return View(model);
         }

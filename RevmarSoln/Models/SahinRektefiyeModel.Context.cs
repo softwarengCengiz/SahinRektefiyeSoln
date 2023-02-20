@@ -120,6 +120,7 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<YakitTipi> YakitTipi { get; set; }
         public virtual DbSet<ArizaBildirim> ArizaBildirim { get; set; }
         public virtual DbSet<TamirParca> TamirParca { get; set; }
+        public virtual DbSet<TalepDetay> TalepDetay { get; set; }
     
         public virtual int AutoCreateUserMenu(string userName)
         {
