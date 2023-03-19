@@ -1052,6 +1052,7 @@
           <Property Name="Creator" Type="nvarchar" MaxLength="50" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="Modifier" Type="nvarchar" MaxLength="50" />
+          <Property Name="Durum" Type="int" />
         </EntityType>
         <EntityType Name="TamirParca">
           <Key>
@@ -3317,7 +3318,6 @@
           <EntitySet Name="SupplierCompany" EntityType="SahinRektefiyeDbModel.SupplierCompany" />
           <EntitySet Name="SupplierParts" EntityType="SahinRektefiyeDbModel.SupplierParts" />
           <EntitySet Name="Suppliers" EntityType="SahinRektefiyeDbModel.Suppliers" />
-          <EntitySet Name="Talepler" EntityType="SahinRektefiyeDbModel.Talepler" />
           <EntitySet Name="Tasks" EntityType="SahinRektefiyeDbModel.Tasks" />
           <EntitySet Name="TeklifKalemleri" EntityType="SahinRektefiyeDbModel.TeklifKalemleri" />
           <EntitySet Name="Teklifler" EntityType="SahinRektefiyeDbModel.Teklifler" />
@@ -3386,10 +3386,6 @@
           <AssociationSet Name="FK_Teklifler_Arac" Association="SahinRektefiyeDbModel.FK_Teklifler_Arac">
             <End Role="Arac" EntitySet="Arac" />
             <End Role="Teklifler" EntitySet="Teklifler" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Talepler_AracGrubu" Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu">
-            <End Role="AracGrubu" EntitySet="AracGrubu" />
-            <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           <AssociationSet Name="FK_SupplierCompany_Companies" Association="SahinRektefiyeDbModel.FK_SupplierCompany_Companies">
             <End Role="Companies" EntitySet="Companies" />
@@ -3591,10 +3587,6 @@
             <End Role="Musteri" EntitySet="Musteri" />
             <End Role="MusteriTelefon" EntitySet="MusteriTelefon" />
           </AssociationSet>
-          <AssociationSet Name="FK_Talepler_Musteri" Association="SahinRektefiyeDbModel.FK_Talepler_Musteri">
-            <End Role="Musteri" EntitySet="Musteri" />
-            <End Role="Talepler" EntitySet="Talepler" />
-          </AssociationSet>
           <AssociationSet Name="FK_Teklifler_Musteri" Association="SahinRektefiyeDbModel.FK_Teklifler_Musteri">
             <End Role="Musteri" EntitySet="Musteri" />
             <End Role="Teklifler" EntitySet="Teklifler" />
@@ -3622,10 +3614,6 @@
           <AssociationSet Name="FK_SupplierParts_PartReviewType" Association="SahinRektefiyeDbModel.FK_SupplierParts_PartReviewType">
             <End Role="PartReviewType" EntitySet="PartReviewType" />
             <End Role="SupplierParts" EntitySet="SupplierParts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Talepler_Part" Association="SahinRektefiyeDbModel.FK_Talepler_Part">
-            <End Role="Parts" EntitySet="Parts" />
-            <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           <AssociationSet Name="FK_WayBillParts_Parts" Association="SahinRektefiyeDbModel.FK_WayBillParts_Parts">
             <End Role="Parts" EntitySet="Parts" />
@@ -3711,10 +3699,6 @@
             <End Role="Suppliers" EntitySet="Suppliers" />
             <End Role="WayBills" EntitySet="WayBills" />
           </AssociationSet>
-          <AssociationSet Name="FK_Talepler_Users" Association="SahinRektefiyeDbModel.FK_Talepler_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Talepler" EntitySet="Talepler" />
-          </AssociationSet>
           <AssociationSet Name="FK_WorkOrders_Tasks" Association="SahinRektefiyeDbModel.FK_WorkOrders_Tasks">
             <End Role="Tasks" EntitySet="Tasks" />
             <End Role="WorkOrders" EntitySet="WorkOrders" />
@@ -3755,16 +3739,33 @@
             <End Role="WayBills" EntitySet="WayBills" />
             <End Role="WayBillParts" EntitySet="WayBillParts" />
           </AssociationSet>
-          <AssociationSet Name="FK_Talepler_Vehicle" Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle">
-            <End Role="Vehicles" EntitySet="Vehicles" />
-            <End Role="Talepler" EntitySet="Talepler" />
-          </AssociationSet>
           <EntitySet Name="ArizaBildirim" EntityType="SahinRektefiyeDbModel.ArizaBildirim" />
           <EntitySet Name="TamirParca" EntityType="SahinRektefiyeDbModel.TamirParca" />
           <EntitySet Name="TalepDetay" EntityType="SahinRektefiyeDbModel.TalepDetay" />
+          <EntitySet Name="Talepler" EntityType="SahinRektefiyeDbModel.Talepler" />
+          <AssociationSet Name="FK_Talepler_AracGrubu" Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu">
+            <End Role="AracGrubu" EntitySet="AracGrubu" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Talepler_Musteri" Association="SahinRektefiyeDbModel.FK_Talepler_Musteri">
+            <End Role="Musteri" EntitySet="Musteri" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Talepler_Part" Association="SahinRektefiyeDbModel.FK_Talepler_Part">
+            <End Role="Parts" EntitySet="Parts" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
           <AssociationSet Name="FK_TalepId" Association="SahinRektefiyeDbModel.FK_TalepId">
             <End Role="Talepler" EntitySet="Talepler" />
             <End Role="TalepDetay" EntitySet="TalepDetay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Talepler_Users" Association="SahinRektefiyeDbModel.FK_Talepler_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Talepler_Vehicle" Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle">
+            <End Role="Vehicles" EntitySet="Vehicles" />
+            <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="EnCokSatilanParcalar_Result">
@@ -4502,8 +4503,8 @@
           <NavigationProperty Name="MusteriAraclari" Relationship="SahinRektefiyeDbModel.FK_MusteriAraclari_Musteri" FromRole="Musteri" ToRole="MusteriAraclari" />
           <NavigationProperty Name="MusteriMail" Relationship="SahinRektefiyeDbModel.FK_MusteriMail_Musteri" FromRole="Musteri" ToRole="MusteriMail" />
           <NavigationProperty Name="MusteriTelefon" Relationship="SahinRektefiyeDbModel.FK_MusteriTelefon_Musteri" FromRole="Musteri" ToRole="MusteriTelefon" />
-          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Musteri" ToRole="Talepler" />
           <NavigationProperty Name="Teklifler" Relationship="SahinRektefiyeDbModel.FK_Teklifler_Musteri" FromRole="Musteri" ToRole="Teklifler" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Musteri" ToRole="Talepler" />
         </EntityType>
         <EntityType Name="MusteriAraclari">
           <Key>
@@ -4639,8 +4640,8 @@
           <Property Name="PartCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
           <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_Part" FromRole="Parts" ToRole="Talepler" />
           <NavigationProperty Name="WayBillParts" Relationship="SahinRektefiyeDbModel.FK_WayBillParts_Parts" FromRole="Parts" ToRole="WayBillParts" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_Part" FromRole="Parts" ToRole="Talepler" />
         </EntityType>
         <EntityType Name="Permissions">
           <Key>
@@ -4926,33 +4927,6 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="WayBills" Relationship="SahinRektefiyeDbModel.FK_WayBills_Suppliers" FromRole="Suppliers" ToRole="WayBills" />
         </EntityType>
-        <EntityType Name="Talepler">
-          <Key>
-            <PropertyRef Name="TalepId" />
-          </Key>
-          <Property Name="TalepId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MusteriId" Type="Int32" Nullable="false" />
-          <Property Name="PartId" Type="Int32" Nullable="false" />
-          <Property Name="ArayanKisi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MusteriAramaTarihi" Type="DateTime" Precision="3" />
-          <Property Name="Note" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
-          <Property Name="AtananSofor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Km" Type="Int32" />
-          <Property Name="VinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AracGrupId" Type="Int32" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="Modifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AracGrubu" Relationship="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" FromRole="Talepler" ToRole="AracGrubu" />
-          <NavigationProperty Name="Musteri" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Talepler" ToRole="Musteri" />
-          <NavigationProperty Name="Parts" Relationship="SahinRektefiyeDbModel.FK_Talepler_Part" FromRole="Talepler" ToRole="Parts" />
-          <NavigationProperty Name="Users" Relationship="SahinRektefiyeDbModel.FK_Talepler_Users" FromRole="Talepler" ToRole="Users" />
-          <Property Name="Plate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="VehicleId" Type="Int32" />
-          <NavigationProperty Name="Vehicles" Relationship="SahinRektefiyeDbModel.FK_Talepler_Vehicle" FromRole="Talepler" ToRole="Vehicles" />
-          <NavigationProperty Name="TalepDetay" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="Talepler" ToRole="TalepDetay" />
-        </EntityType>
         <EntityType Name="Tasks">
           <Key>
             <PropertyRef Name="TaskId" />
@@ -5137,10 +5111,10 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
           <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ProfilePhotoUrl" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_Users" FromRole="Users" ToRole="Talepler" />
           <NavigationProperty Name="UserAllowedIsEmriTip" Relationship="SahinRektefiyeDbModel.FK_UserAllowedIsEmriTip_Users" FromRole="Users" ToRole="UserAllowedIsEmriTip" />
           <NavigationProperty Name="UserMenus" Relationship="SahinRektefiyeDbModel.FK_UserMenus_Users" FromRole="Users" ToRole="UserMenus" />
           <NavigationProperty Name="UserRoles" Relationship="SahinRektefiyeDbModel.FK_UserRoles_Users" FromRole="Users" ToRole="UserRoles" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_Users" FromRole="Users" ToRole="Talepler" />
         </EntityType>
         <EntityType Name="Vehicles">
           <Key>
@@ -5436,18 +5410,6 @@
             </Principal>
             <Dependent Role="Teklifler">
               <PropertyRef Name="AracId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Talepler_AracGrubu">
-          <End Type="SahinRektefiyeDbModel.AracGrubu" Role="AracGrubu" Multiplicity="0..1" />
-          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AracGrubu">
-              <PropertyRef Name="AracGrubuId" />
-            </Principal>
-            <Dependent Role="Talepler">
-              <PropertyRef Name="AracGrupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6051,18 +6013,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Talepler_Musteri">
-          <End Type="SahinRektefiyeDbModel.Musteri" Role="Musteri" Multiplicity="1" />
-          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Musteri">
-              <PropertyRef Name="MusteriId" />
-            </Principal>
-            <Dependent Role="Talepler">
-              <PropertyRef Name="MusteriId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Teklifler_Musteri">
           <End Type="SahinRektefiyeDbModel.Musteri" Role="Musteri" Multiplicity="1" />
           <End Type="SahinRektefiyeDbModel.Teklifler" Role="Teklifler" Multiplicity="*" />
@@ -6144,18 +6094,6 @@
             </Principal>
             <Dependent Role="SupplierParts">
               <PropertyRef Name="PartReviewTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Talepler_Part">
-          <End Type="SahinRektefiyeDbModel.Parts" Role="Parts" Multiplicity="1" />
-          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Parts">
-              <PropertyRef Name="PartId" />
-            </Principal>
-            <Dependent Role="Talepler">
-              <PropertyRef Name="PartId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6411,18 +6349,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Talepler_Users">
-          <End Type="SahinRektefiyeDbModel.Users" Role="Users" Multiplicity="0..1" />
-          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="UserName" />
-            </Principal>
-            <Dependent Role="Talepler">
-              <PropertyRef Name="AtananSofor" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_WorkOrders_Tasks">
           <End Type="SahinRektefiyeDbModel.Tasks" Role="Tasks" Multiplicity="1" />
           <End Type="SahinRektefiyeDbModel.WorkOrders" Role="WorkOrders" Multiplicity="*" />
@@ -6543,18 +6469,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Talepler_Vehicle">
-          <End Type="SahinRektefiyeDbModel.Vehicles" Role="Vehicles" Multiplicity="0..1" />
-          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Vehicles">
-              <PropertyRef Name="VehicleId" />
-            </Principal>
-            <Dependent Role="Talepler">
-              <PropertyRef Name="VehicleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="ArizaBildirim">
           <Key>
             <PropertyRef Name="ArizaBildirimId" />
@@ -6602,12 +6516,76 @@
           <Property Name="ArizaDiger" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="ParcaDiger" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="ParcaAdet" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="TalepDetay" ToRole="Talepler" />
           <Property Name="ArizaList" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="ParcaList" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="ParcaListAdet" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="ParcaListId" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="TalepDetay" ToRole="Talepler" />
         </EntityType>
+        <EntityType Name="Talepler">
+          <Key>
+            <PropertyRef Name="TalepId" />
+          </Key>
+          <Property Name="TalepId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MusteriId" Type="Int32" Nullable="false" />
+          <Property Name="PartId" Type="Int32" Nullable="false" />
+          <Property Name="ArayanKisi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleId" Type="Int32" />
+          <Property Name="MusteriAramaTarihi" Type="DateTime" Precision="3" />
+          <Property Name="Note" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="AtananSofor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Km" Type="Int32" />
+          <Property Name="VinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Plate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AracGrupId" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="Creator" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="Modifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Durum" Type="Int32" />
+          <NavigationProperty Name="AracGrubu" Relationship="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" FromRole="Talepler" ToRole="AracGrubu" />
+          <NavigationProperty Name="Musteri" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Talepler" ToRole="Musteri" />
+          <NavigationProperty Name="Parts" Relationship="SahinRektefiyeDbModel.FK_Talepler_Part" FromRole="Talepler" ToRole="Parts" />
+          <NavigationProperty Name="TalepDetay" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="Talepler" ToRole="TalepDetay" />
+          <NavigationProperty Name="Users" Relationship="SahinRektefiyeDbModel.FK_Talepler_Users" FromRole="Talepler" ToRole="Users" />
+          <NavigationProperty Name="Vehicles" Relationship="SahinRektefiyeDbModel.FK_Talepler_Vehicle" FromRole="Talepler" ToRole="Vehicles" />
+        </EntityType>
+        <Association Name="FK_Talepler_AracGrubu">
+          <End Type="SahinRektefiyeDbModel.AracGrubu" Role="AracGrubu" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AracGrubu">
+              <PropertyRef Name="AracGrubuId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="AracGrupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Talepler_Musteri">
+          <End Type="SahinRektefiyeDbModel.Musteri" Role="Musteri" Multiplicity="1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Musteri">
+              <PropertyRef Name="MusteriId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="MusteriId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Talepler_Part">
+          <End Type="SahinRektefiyeDbModel.Parts" Role="Parts" Multiplicity="1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Parts">
+              <PropertyRef Name="PartId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="PartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TalepId">
           <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="1" />
           <End Type="SahinRektefiyeDbModel.TalepDetay" Role="TalepDetay" Multiplicity="*" />
@@ -6617,6 +6595,30 @@
             </Principal>
             <Dependent Role="TalepDetay">
               <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Talepler_Users">
+          <End Type="SahinRektefiyeDbModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserName" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="AtananSofor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Talepler_Vehicle">
+          <End Type="SahinRektefiyeDbModel.Vehicles" Role="Vehicles" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehicles">
+              <PropertyRef Name="VehicleId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="VehicleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7720,28 +7722,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Talepler">
-            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
-              <MappingFragment StoreEntitySet="Talepler">
-                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
-                <ScalarProperty Name="Plate" ColumnName="Plate" />
-                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="AracGrupId" ColumnName="AracGrupId" />
-                <ScalarProperty Name="VinNo" ColumnName="VinNo" />
-                <ScalarProperty Name="Km" ColumnName="Km" />
-                <ScalarProperty Name="AtananSofor" ColumnName="AtananSofor" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="MusteriAramaTarihi" ColumnName="MusteriAramaTarihi" />
-                <ScalarProperty Name="ArayanKisi" ColumnName="ArayanKisi" />
-                <ScalarProperty Name="PartId" ColumnName="PartId" />
-                <ScalarProperty Name="MusteriId" ColumnName="MusteriId" />
-                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Tasks">
               <MappingFragment StoreEntitySet="Tasks">
@@ -8112,6 +8092,29 @@
                 <ScalarProperty Name="MotorDolapNo" ColumnName="MotorDolapNo" />
                 <ScalarProperty Name="TalepId" ColumnName="TalepId" />
                 <ScalarProperty Name="TalepDetayId" ColumnName="TalepDetayId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Talepler">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
+              <MappingFragment StoreEntitySet="Talepler">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="AracGrupId" ColumnName="AracGrupId" />
+                <ScalarProperty Name="Plate" ColumnName="Plate" />
+                <ScalarProperty Name="VinNo" ColumnName="VinNo" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="AtananSofor" ColumnName="AtananSofor" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="MusteriAramaTarihi" ColumnName="MusteriAramaTarihi" />
+                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+                <ScalarProperty Name="ArayanKisi" ColumnName="ArayanKisi" />
+                <ScalarProperty Name="PartId" ColumnName="PartId" />
+                <ScalarProperty Name="MusteriId" ColumnName="MusteriId" />
+                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

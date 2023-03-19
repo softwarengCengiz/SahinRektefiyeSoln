@@ -72,7 +72,7 @@
                     <div class="w3-col s12 m4 l4 w3-padding">
                         <div class="w3-threequarter">
                             <label>Müşteri Adı veya Kurum Adı</label>
-                            @Html.EditorFor(model => model.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off", id = "HizliIsEmriVehicleMusteriText" } })
+                            @Html.EditorFor(model => model.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off", id = "HizliIsEmriVehicleMusteriText" , required = "required" } })
                         </div>
                         <div class="w3-quarter">
                             <br />
@@ -90,7 +90,7 @@
                     </div>*@
                     <div class="w3-col s12 m2 l2 w3-padding">
                         <label>Müşteri Telefon </label>
-                        @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "325", autocomplete = "off", id = "MusteriTelefon" } })
+                        @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "325", autocomplete = "off", id = "MusteriTelefon" , required = "required" } })
                     </div>
                     <div class="w3-col s12 m4 l4 w3-padding">
                         <label>Müşteri Tipi</label>
@@ -145,7 +145,7 @@
                     <div class="w3-col s12 m2 l2  w3-padding">
                         <label>Araç model Kodu</label><br />
                         <select class="w3-input  w3-border w3-round" id="VehicleId" name="VehicleId" required="required">
-                            <option disabled="disabled" selected="selected">Model Marka Seçiniz</option>
+                            <option disabled="disabled" selected="selected" required = "required">Model Marka Seçiniz</option>
                             @foreach (var item in (List<Companies>)ViewBag.Markalar)
                             {
 
@@ -204,11 +204,11 @@
                     </div>
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Kayıt Tarihi</label>
-                        @Html.EditorFor(model => model.KayitTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "KayitTarihi", autocomplete = "off" } })
+                        @Html.EditorFor(model => model.KayitTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "KayitTarihi", autocomplete = "off", required = "required" } })
                     </div>
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Müşteri Arama Tarihi</label>
-                        @Html.EditorFor(model => model.MusteriAramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "MusteriAramaTarihi", autocomplete = "off" } })
+                        @Html.EditorFor(model => model.MusteriAramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "MusteriAramaTarihi", autocomplete = "off", required = "required" } })
                     </div>
                 </div>
                 <div class="w3-row w3-margin-lr">

@@ -12,5 +12,6 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public DateTime? MusteriAramaTarihi { get; set; }
         public string AtananKisi { get; set; }
         public string OlustuanKisi { get; set; }
+        public string Durum { get; set; }
     }
 }

@@ -17,8 +17,8 @@ namespace SahinRektefiyeSoln.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Parts()
         {
-            this.Talepler = new HashSet<Talepler>();
             this.WayBillParts = new HashSet<WayBillParts>();
+            this.Talepler = new HashSet<Talepler>();
         }
     
         public int PartId { get; set; }
@@ -28,8 +28,8 @@ namespace SahinRektefiyeSoln.Models
         public string CreatedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Talepler> Talepler { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WayBillParts> WayBillParts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Talepler> Talepler { get; set; }
     }
 }
