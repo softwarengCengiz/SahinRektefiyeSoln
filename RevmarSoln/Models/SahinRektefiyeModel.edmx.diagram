@@ -74,7 +74,6 @@
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.SupplierCompany" Width="1.5" PointX="8.25" PointY="82.75" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.SupplierParts" Width="1.5" PointX="10.5" PointY="49.625" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.Suppliers" Width="1.5" PointX="0.75" PointY="7.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Talepler" Width="1.5" PointX="7.5" PointY="42.875" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.Tasks" Width="1.5" PointX="8.25" PointY="27.75" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.TeklifKalemleri" Width="1.5" PointX="18" PointY="44.125" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.Teklifler" Width="1.5" PointX="15.75" PointY="43" />
@@ -108,7 +107,6 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_IsEmirleri_Arac" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriAraclari_Arac" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Teklifler_Arac" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierCompany_Companies" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_Companies" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Vehicles_Companies" />
@@ -159,7 +157,6 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriAraclari_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriMail_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriTelefon_Musteri" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Teklifler_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_PaketIscilikleri_Paketler" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_PaketStokKartlari_Paketler" />
@@ -167,7 +164,6 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_StokKarti_ParcaTipleri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_PartReviewResult" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_PartReviewType" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Part" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBillParts_Parts" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_RolePermissions_Permissions" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_RevisionType" />
@@ -189,7 +185,6 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_SupplierCompany" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBills_Suppliers" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Users" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WorkOrders_Tasks" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_TeklifKalemleri_Teklifler" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Teklifler_Statu" />
@@ -200,11 +195,16 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_VehicleStoks_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WorkOrders_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBillParts_WayBills" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.ArizaBildirim" Width="1.5" PointX="17.375" PointY="5.75" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.TamirParca" Width="1.5" PointX="18.375" PointY="0.75" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.TalepDetay" Width="1.5" PointX="9.75" PointY="101.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Talepler" Width="1.5" PointX="13.25" PointY="53.625" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Musteri" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Part" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_TalepId" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Users" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

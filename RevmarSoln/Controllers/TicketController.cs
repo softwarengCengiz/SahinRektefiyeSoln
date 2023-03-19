@@ -13,6 +13,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Description;
+using static SahinRektefiyeSoln.Helpers.SFHelper;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace SahinRektefiyeSoln.Controllers
@@ -52,7 +53,8 @@ namespace SahinRektefiyeSoln.Controllers
                     Musteri = item.Musteri.MusteriTipi == "B" ? (item.Musteri.MusteriAdi.ToString() + " " + item.Musteri.MusteriSoyadi.ToString()) : item.Musteri.KurumAdi.ToString(),
                     MusteriAramaTarihi = item.MusteriAramaTarihi,
                     OlustuanKisi = item.Creator,
-                    TalepNo = item.TalepId
+                    TalepNo = item.TalepId,
+                    Durum = item.Durum != null ?  ((TalepStatus)item.Durum).ToString() : ""
                 });
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");
@@ -95,7 +97,6 @@ namespace SahinRektefiyeSoln.Controllers
             return View(model);
         }
 
-        [SessionAuthorization]
         public ActionResult DetailEdit(int id)
         {
             var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
@@ -178,9 +179,9 @@ namespace SahinRektefiyeSoln.Controllers
 
             return View(model);
         }
+    
 
-
-        [HttpPost]
+            [HttpPost]
         public ActionResult DetailEdit(TicketDetailViewModel model)
         {
 
@@ -203,6 +204,9 @@ namespace SahinRektefiyeSoln.Controllers
                     using (var transaction = context.Database.BeginTransaction())
                     //using blokları arasında transaction'ımızı açtık ve artık transaction'ımız bir commit() fonksiyonunu kullanana kadar işlem yaptığımız tabloyu kilitleyecek.
                     {
+
+                        Talepler talep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
+                        talep.Durum = (int)TalepStatus.TesilmAlindi;
                         //2. Bilet 
                         TalepDetay yeniTalep = talepDetay ?? new TalepDetay();
                         yeniTalep.TalepId = model.TalepId;
@@ -273,8 +277,13 @@ namespace SahinRektefiyeSoln.Controllers
             }
 
 
+            return RedirectToAction("Tickets");
+        }
 
-            return View(model);
+        public ActionResult PrintAllEmployee()
+        {
+            var report = new Rotativa.ActionAsPdf("DetailEdit", new {id = 7 });
+            return report;
         }
 
 
@@ -299,10 +308,12 @@ namespace SahinRektefiyeSoln.Controllers
             yeniTalep.Plate = model.Plate;
             yeniTalep.PartId = model.PartId;
             yeniTalep.VehicleId = model.VehicleId;
+            yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
 
             db.SaveChanges();
             FillIsEmriCombos();
-            return View(model);
+
+            return RedirectToAction("Tickets");
         }
 
         [HttpPost]
@@ -334,6 +345,7 @@ namespace SahinRektefiyeSoln.Controllers
                     yeniTalep.Plate = model.Plate;
                     yeniTalep.PartId = model.PartId;
                     yeniTalep.VehicleId = model.VehicleId;
+                    yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
 
                     context.Talepler.Add(yeniTalep);
                     context.SaveChanges();
@@ -341,7 +353,8 @@ namespace SahinRektefiyeSoln.Controllers
                 }
             }
 
-            return View();
+
+            return RedirectToAction("Tickets");
         }
 
         public void FillIsEmriCombos()

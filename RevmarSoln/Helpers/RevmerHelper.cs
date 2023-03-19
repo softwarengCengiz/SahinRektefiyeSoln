@@ -1,6 +1,5 @@
 ﻿
 using SahinRektefiyeSoln.Helpers.LogHelper;
-using SahinRektefiyeSoln.JetSms;
 using SahinRektefiyeSoln.Models;
 using SahinRektefiyeSoln.Models.HelperModels;
 using System;
@@ -457,32 +456,7 @@ namespace SahinRektefiyeSoln.Helpers
 		{
 			try
 			{
-				SMSServiceSoapClient client = new SMSServiceSoapClient();
-
-				ArrayOfString message = new ArrayOfString { SmsBody };
-				ArrayOfString receipents = new ArrayOfString { PhoneNumber };
-
-				SendSMSRequest sendSMSRequest = new SendSMSRequest()
-				{
-					Body = {
-					user = "rev",
-					password="8741-Krz",
-					messages = message,
-					originator = "Revmer",
-					receipents = receipents
-				}
-				};
-
-				SendSMSResult result = client.SendSMS(
-						 "rev",
-						 "8741-Krz",
-						  "REVMER",
-						 "",
-						 System.DateTime.Now.ToString("ddMMyyyyHHmmss"),
-						 System.DateTime.Now.ToString("ddMMyyyyHHmmss"),
-						 message,
-						 receipents);
-
+				
 				return true;
 			}
 			catch (Exception ex)
@@ -552,8 +526,14 @@ namespace SahinRektefiyeSoln.Helpers
 			Console.WriteLine(Message);
 		}
 
+        public enum TalepStatus
+        {
+            Acik = 1,
+            SoforeAtanmis = 2,
+            TesilmAlindi = 3
+        }
 
-		public enum FaturaTipi
+        public enum FaturaTipi
 		{
 			NormalFatura = 10,
 			AcikFatura = 20

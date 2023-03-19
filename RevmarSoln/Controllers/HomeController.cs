@@ -396,8 +396,8 @@ namespace SahinRektefiyeSoln.Controllers
 		}
 
 		public ActionResult GetHizliArama()
-		{
-			string userName= Session["UserName"].ToString();
+        {
+            string userName= Session["UserName"].ToString();
 
 			ViewBag.isRevmerUser = SFHelper.isRevmerUser(userName);
 

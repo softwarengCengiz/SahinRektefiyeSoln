@@ -24,25 +24,26 @@ namespace SahinRektefiyeSoln.Models
         public int MusteriId { get; set; }
         public int PartId { get; set; }
         public string ArayanKisi { get; set; }
+        public Nullable<int> VehicleId { get; set; }
         public Nullable<System.DateTime> MusteriAramaTarihi { get; set; }
         public string Note { get; set; }
         public string AtananSofor { get; set; }
         public Nullable<int> Km { get; set; }
         public string VinNo { get; set; }
+        public string Plate { get; set; }
         public Nullable<int> AracGrupId { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string Creator { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string Modifier { get; set; }
-        public string Plate { get; set; }
-        public Nullable<int> VehicleId { get; set; }
+        public Nullable<int> Durum { get; set; }
     
         public virtual AracGrubu AracGrubu { get; set; }
         public virtual Musteri Musteri { get; set; }
         public virtual Parts Parts { get; set; }
-        public virtual Users Users { get; set; }
-        public virtual Vehicles Vehicles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TalepDetay> TalepDetay { get; set; }
+        public virtual Users Users { get; set; }
+        public virtual Vehicles Vehicles { get; set; }
     }
 }

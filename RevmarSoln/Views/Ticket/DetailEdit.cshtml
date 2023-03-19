@@ -310,22 +310,22 @@
                 <div class="w3-row w3-padding-left  ">
                     <h4>Arıza Bildirimleri </h4>
                 </div>
-                <div class="w3-margin-left"> 
+                <div class="w3-margin-left">
                     @foreach (var item in Model.Ariza)
                     {
                         <div class="w3-half w3-padding">
                             <input type="checkbox"
                                    name="ArizaChck"
                                    value="@item.Value"
-                                   class= "w3-check"
-                                   @if (item.Selected) { <text> checked </text>  } />
+                                   class="w3-check"
+                                   @if (item.Selected) { <text> checked </text> } />
                             <label>@item.Text</label>
                         </div>
                     }
 
                     <div class="w3-half w3-padding">
                         @Html.CheckBox("0", new { @class = "w3-check w3-border w3-round" })
-                        <label>    
+                        <label>
                             @Html.EditorFor(model => model.ArizaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
                         </label>
                     </div>
@@ -351,35 +351,46 @@
                             <label>@item.Text</label>
 
 
-                            
-                            <input type="text"
-                                   name="ParcalarText"
-                                   value="@Model.ParcalarText[count]"
-                                   class="w3-border w3-round onlynumeric"
-                                   style="float: right;text-align: right;"
-                                   placeholder="adet / takım" />
+                            @if (Model.ParcalarText != null && Model.ParcalarText.Count > 0)
+                            {
+                                <input type="text"
+                                       name="ParcalarText"
+                                       value="@Model.ParcalarText[count]"
+                                       class="w3-border w3-round onlynumeric"
+                                       style="float: right;text-align: right;"
+                                       placeholder="adet / takım" />
+                            }
+                            else
+                            {
+                                <input type="text"
+                                       name="ParcalarText"
+                                       value="0"
+                                       class="w3-border w3-round onlynumeric"
+                                       style="float: right;text-align: right;"
+                                       placeholder="adet / takım" />
+                            }
 
                             <input type="text"
                                    name="ParcalarId"
                                    value="@item.Value" hidden />
-                           @{ 
-                               count++;
+                            @{
+                                count++;
                             }
                             @*@Html.TextBox("tamiradet" + item.Value, null, new { @class = "w3-border w3-round onlynumeric",
         @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
                         </div>
 
-                            }
+                    }
 
-                        <div class="w3-half w3-padding">
-                            @Html.CheckBox("0", new { @class = "w3-check w3-border w3-round" })
-                            <label>
-                                @Html.EditorFor(model => model.ParcaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
-                                @Html.EditorFor(model => model.ParcaAdet, new { @class = "w3-border w3-round onlynumeric", style = "float: right;text-align: right;", placeholder = "adet / takım" })
-                            </label>
-                        </div>
-
+                    <div class="w3-half w3-padding">
+                        @Html.CheckBox("0", new { @class = "w3-check w3-border w3-round" })
+                        <label>
+                            @Html.EditorFor(model => model.ParcaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
+                            @Html.EditorFor(model => model.ParcaAdet, new { @class = "w3-border w3-round onlynumeric", style = "float: right;text-align: right;", placeholder = "adet / takım" })
+                        </label>
                     </div>
+
+                </div>
 
             </div>
             <div class="w3-row">

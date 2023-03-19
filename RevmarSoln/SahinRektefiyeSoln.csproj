@@ -171,40 +171,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ArrayOfString.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportOriginatorResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportQuotaResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportSMSResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.ReportSMSResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendSMSAdvancedResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendSMSResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendSMSResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Connected Services\JetSms\SahinRektefiyeSoln.JetSms.SendTCKNSMSResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Connected Services\JetSms\soapsms.disco" />
-    <None Include="Connected Services\JetSms\configuration91.svcinfo" />
-    <None Include="Connected Services\JetSms\configuration.svcinfo" />
-    <None Include="Connected Services\JetSms\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Content\KaliteKontrol.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Global.asax" />
@@ -261,7 +227,6 @@
     </Content>
     <Content Include="App_Browsers\qt.browser" />
     <Content Include="ExampleExcels\OrnekExcel.xlsx" />
-    <None Include="Connected Services\JetSms\soapsms.wsdl" />
     <EntityDeploy Include="Models\LogoModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LogoModel.Designer.cs</LastGenOutput>
@@ -358,11 +323,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Components\LogActionFilter.cs" />
     <Compile Include="Components\SessionAuthorizationAttribute.cs" />
-    <Compile Include="Connected Services\JetSms\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -866,7 +826,6 @@
     <Content Include="Views\Admin\Tasks.cshtml" />
     <Content Include="Views\WorkOrder\Create.cshtml" />
     <Content Include="Views\WorkOrder\Index.cshtml" />
-    <Content Include="Views\WorkOrder\Order.cshtml" />
     <Content Include="Views\WorkOrder\KlimaFixing.cshtml" />
     <Content Include="Views\WorkOrder\AddPartToOrder.cshtml" />
     <Content Include="Views\WorkOrder\AddPhotoToOrder.cshtml" />
@@ -979,7 +938,6 @@
     <Content Include="Views\Service\PaketDuzenle.cshtml" />
     <Content Include="Views\Service\Paketler.cshtml" />
     <Content Include="Views\IsEmri\IsEmriOlustur.cshtml" />
-    <Content Include="Views\IsEmri\IsEmriDuzenle.cshtml" />
     <Content Include="Views\IsEmri\IsEmriIscilikEkle.cshtml" />
     <Content Include="Views\IsEmri\IsEmriStokKartEkle.cshtml" />
     <Content Include="Views\IsEmri\IsEmriPaketEkle.cshtml" />
@@ -1124,9 +1082,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\JetSms\" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
