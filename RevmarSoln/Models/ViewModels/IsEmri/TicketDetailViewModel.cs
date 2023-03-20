@@ -47,5 +47,6 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public string ArizaDiger { get; set; }
         public string ParcaDiger { get; set; }
         public string ParcaAdet { get; set; }
+        public int IsLogoEnable { get; set; }
     }
 }

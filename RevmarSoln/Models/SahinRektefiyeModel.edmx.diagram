@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0926d4efd4c84ce9b79e1b6a8baf2ef9" Name="Diagram1" ZoomLevel="59">
+      <Diagram DiagramId="0926d4efd4c84ce9b79e1b6a8baf2ef9" Name="Diagram1" ZoomLevel="72">
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.AktarmaTipi" Width="1.5" PointX="6" PointY="73.75" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.Arac" Width="1.5" PointX="8.25" PointY="12.375" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.AracDetay" Width="1.5" PointX="6" PointY="26.875" />
@@ -197,14 +197,14 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBillParts_WayBills" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.ArizaBildirim" Width="1.5" PointX="17.375" PointY="5.75" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.TamirParca" Width="1.5" PointX="18.375" PointY="0.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TalepDetay" Width="1.5" PointX="9.75" PointY="101.5" />
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.Talepler" Width="1.5" PointX="13.25" PointY="53.625" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Part" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_TalepId" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Users" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TalepDetay" Width="1.5" PointX="15.5" PointY="52.875" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_TalepId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

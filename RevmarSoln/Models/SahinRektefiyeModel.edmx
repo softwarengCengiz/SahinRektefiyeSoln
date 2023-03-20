@@ -1031,6 +1031,7 @@
           <Property Name="ParcaList" Type="varchar" MaxLength="150" />
           <Property Name="ParcaListAdet" Type="varchar" MaxLength="150" />
           <Property Name="ParcaListId" Type="varchar" MaxLength="150" />
+          <Property Name="IsLogoEnable" Type="int" />
         </EntityType>
         <EntityType Name="Talepler">
           <Key>
@@ -3741,7 +3742,6 @@
           </AssociationSet>
           <EntitySet Name="ArizaBildirim" EntityType="SahinRektefiyeDbModel.ArizaBildirim" />
           <EntitySet Name="TamirParca" EntityType="SahinRektefiyeDbModel.TamirParca" />
-          <EntitySet Name="TalepDetay" EntityType="SahinRektefiyeDbModel.TalepDetay" />
           <EntitySet Name="Talepler" EntityType="SahinRektefiyeDbModel.Talepler" />
           <AssociationSet Name="FK_Talepler_AracGrubu" Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu">
             <End Role="AracGrubu" EntitySet="AracGrubu" />
@@ -3755,10 +3755,6 @@
             <End Role="Parts" EntitySet="Parts" />
             <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
-          <AssociationSet Name="FK_TalepId" Association="SahinRektefiyeDbModel.FK_TalepId">
-            <End Role="Talepler" EntitySet="Talepler" />
-            <End Role="TalepDetay" EntitySet="TalepDetay" />
-          </AssociationSet>
           <AssociationSet Name="FK_Talepler_Users" Association="SahinRektefiyeDbModel.FK_Talepler_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Talepler" EntitySet="Talepler" />
@@ -3766,6 +3762,11 @@
           <AssociationSet Name="FK_Talepler_Vehicle" Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle">
             <End Role="Vehicles" EntitySet="Vehicles" />
             <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <EntitySet Name="TalepDetay" EntityType="SahinRektefiyeDbModel.TalepDetay" />
+          <AssociationSet Name="FK_TalepId" Association="SahinRektefiyeDbModel.FK_TalepId">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="TalepDetay" EntitySet="TalepDetay" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="EnCokSatilanParcalar_Result">
@@ -6487,41 +6488,6 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
           <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="TalepDetay">
-          <Key>
-            <PropertyRef Name="TalepDetayId" />
-          </Key>
-          <Property Name="TalepDetayId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TalepId" Type="Int32" Nullable="false" />
-          <Property Name="MotorDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="KapakDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BildirimTarihi" Type="DateTime" Precision="3" />
-          <Property Name="ServisAdı" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="Marka" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="Model" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="MotorTipi" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="YakıtTipi" Type="Int32" />
-          <Property Name="SilindirSayisi" Type="Int32" />
-          <Property Name="Garanti" Type="Int32" />
-          <Property Name="Revizyon" Type="Int32" />
-          <Property Name="RevizyonAciklama" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ServisNo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="AlınanIs" Type="Int32" />
-          <Property Name="Plaka" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="KM" Type="Int32" />
-          <Property Name="VinNo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="MotorNo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="SupapSayisi" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="MusteriNot" Type="String" MaxLength="1150" FixedLength="false" Unicode="false" />
-          <Property Name="ArizaDiger" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ParcaDiger" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ParcaAdet" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ArizaList" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ParcaList" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ParcaListAdet" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <Property Name="ParcaListId" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="TalepDetay" ToRole="Talepler" />
-        </EntityType>
         <EntityType Name="Talepler">
           <Key>
             <PropertyRef Name="TalepId" />
@@ -6546,9 +6512,9 @@
           <NavigationProperty Name="AracGrubu" Relationship="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" FromRole="Talepler" ToRole="AracGrubu" />
           <NavigationProperty Name="Musteri" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Talepler" ToRole="Musteri" />
           <NavigationProperty Name="Parts" Relationship="SahinRektefiyeDbModel.FK_Talepler_Part" FromRole="Talepler" ToRole="Parts" />
-          <NavigationProperty Name="TalepDetay" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="Talepler" ToRole="TalepDetay" />
           <NavigationProperty Name="Users" Relationship="SahinRektefiyeDbModel.FK_Talepler_Users" FromRole="Talepler" ToRole="Users" />
           <NavigationProperty Name="Vehicles" Relationship="SahinRektefiyeDbModel.FK_Talepler_Vehicle" FromRole="Talepler" ToRole="Vehicles" />
+          <NavigationProperty Name="TalepDetay" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="Talepler" ToRole="TalepDetay" />
         </EntityType>
         <Association Name="FK_Talepler_AracGrubu">
           <End Type="SahinRektefiyeDbModel.AracGrubu" Role="AracGrubu" Multiplicity="0..1" />
@@ -6586,18 +6552,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TalepId">
-          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="1" />
-          <End Type="SahinRektefiyeDbModel.TalepDetay" Role="TalepDetay" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Talepler">
-              <PropertyRef Name="TalepId" />
-            </Principal>
-            <Dependent Role="TalepDetay">
-              <PropertyRef Name="TalepId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Talepler_Users">
           <End Type="SahinRektefiyeDbModel.Users" Role="Users" Multiplicity="0..1" />
           <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
@@ -6619,6 +6573,54 @@
             </Principal>
             <Dependent Role="Talepler">
               <PropertyRef Name="VehicleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TalepDetay">
+          <Key>
+            <PropertyRef Name="TalepDetayId" />
+          </Key>
+          <Property Name="TalepDetayId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TalepId" Type="Int32" Nullable="false" />
+          <Property Name="MotorDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KapakDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BildirimTarihi" Type="DateTime" Precision="3" />
+          <Property Name="ServisAdı" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Marka" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Model" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="MotorTipi" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="YakıtTipi" Type="Int32" />
+          <Property Name="SilindirSayisi" Type="Int32" />
+          <Property Name="Garanti" Type="Int32" />
+          <Property Name="Revizyon" Type="Int32" />
+          <Property Name="RevizyonAciklama" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ServisNo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="AlınanIs" Type="Int32" />
+          <Property Name="Plaka" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="KM" Type="Int32" />
+          <Property Name="VinNo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="MotorNo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="SupapSayisi" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="MusteriNot" Type="String" MaxLength="1150" FixedLength="false" Unicode="false" />
+          <Property Name="ArizaDiger" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaDiger" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaAdet" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ArizaList" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaList" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaListAdet" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaListId" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="IsLogoEnable" Type="Int32" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="TalepDetay" ToRole="Talepler" />
+        </EntityType>
+        <Association Name="FK_TalepId">
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="1" />
+          <End Type="SahinRektefiyeDbModel.TalepDetay" Role="TalepDetay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="TalepDetay">
+              <PropertyRef Name="TalepId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -8060,9 +8062,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Talepler">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
+              <MappingFragment StoreEntitySet="Talepler">
+                <ScalarProperty Name="Durum" ColumnName="Durum" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="AracGrupId" ColumnName="AracGrupId" />
+                <ScalarProperty Name="Plate" ColumnName="Plate" />
+                <ScalarProperty Name="VinNo" ColumnName="VinNo" />
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="AtananSofor" ColumnName="AtananSofor" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="MusteriAramaTarihi" ColumnName="MusteriAramaTarihi" />
+                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
+                <ScalarProperty Name="ArayanKisi" ColumnName="ArayanKisi" />
+                <ScalarProperty Name="PartId" ColumnName="PartId" />
+                <ScalarProperty Name="MusteriId" ColumnName="MusteriId" />
+                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="TalepDetay">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.TalepDetay">
               <MappingFragment StoreEntitySet="TalepDetay">
+                <ScalarProperty Name="IsLogoEnable" ColumnName="IsLogoEnable" />
                 <ScalarProperty Name="ParcaListId" ColumnName="ParcaListId" />
                 <ScalarProperty Name="ParcaListAdet" ColumnName="ParcaListAdet" />
                 <ScalarProperty Name="ParcaList" ColumnName="ParcaList" />
@@ -8092,29 +8118,6 @@
                 <ScalarProperty Name="MotorDolapNo" ColumnName="MotorDolapNo" />
                 <ScalarProperty Name="TalepId" ColumnName="TalepId" />
                 <ScalarProperty Name="TalepDetayId" ColumnName="TalepDetayId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Talepler">
-            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
-              <MappingFragment StoreEntitySet="Talepler">
-                <ScalarProperty Name="Durum" ColumnName="Durum" />
-                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="Creator" ColumnName="Creator" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="AracGrupId" ColumnName="AracGrupId" />
-                <ScalarProperty Name="Plate" ColumnName="Plate" />
-                <ScalarProperty Name="VinNo" ColumnName="VinNo" />
-                <ScalarProperty Name="Km" ColumnName="Km" />
-                <ScalarProperty Name="AtananSofor" ColumnName="AtananSofor" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="MusteriAramaTarihi" ColumnName="MusteriAramaTarihi" />
-                <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
-                <ScalarProperty Name="ArayanKisi" ColumnName="ArayanKisi" />
-                <ScalarProperty Name="PartId" ColumnName="PartId" />
-                <ScalarProperty Name="MusteriId" ColumnName="MusteriId" />
-                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

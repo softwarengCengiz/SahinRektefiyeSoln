@@ -43,7 +43,8 @@ namespace SahinRektefiyeSoln.Models
         public string ParcaList { get; set; }
         public string ParcaListAdet { get; set; }
         public string ParcaListId { get; set; }
-    
+        public int IsLogoEnable { get; set; }
+
         public virtual Talepler Talepler { get; set; }
     }
 }

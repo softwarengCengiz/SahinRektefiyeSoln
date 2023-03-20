@@ -23,6 +23,23 @@
 
         });
 
+        if ($('#gmyLogo').is(':checked')) {
+            $('label[for="labelGmyLogo"]').text('Görünür');
+        }
+        else {
+            $('label[for="labelGmyLogo"]').text('Görünmez');
+        }
+
+        $('#gmyLogo').change(function () {
+            if (this.checked) {
+                $('label[for="labelGmyLogo"]').text('Görünür');
+                $('#gmyLogo').val(1);
+            } else {
+                $('label[for="labelGmyLogo"]').text('Görünmez');
+                $('#gmyLogo').val(0);
+            }
+        });
+
         $('.btnModelMusteriSec').click(function () {
             var MusteriId = $(this).attr('MusteriId');
 			var MusteriDesc = $(this).attr('MusteriDesc');
@@ -92,9 +109,9 @@
                         @Html.EditorFor(model => model.ServisAdı, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "ServisAdı" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                            <label>Müşteri Mail </label>
-                            @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                        </div>*@
+                        <label>Müşteri Mail </label>
+                        @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                    </div>*@
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Plaka </label>
                         @Html.EditorFor(model => model.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "20", autocomplete = "off", id = "Plaka" } })
@@ -246,13 +263,13 @@
                                         <label>Evet</label>
                                     </td>
                                     <td>
-                                        @Html.RadioButtonFor(model => model.Garanti, 0, new { @id = "GarantiE", @class = " w3-radio  w3-margin-right", name = "GarantiE" })
+                                        @Html.RadioButtonFor(model => model.Garanti, true, new { @id = "GarantiE", @class = " w3-radio  w3-margin-right", name = "GarantiE" })
                                     </td>
                                     <td>
                                         <label>Hayır</label>
                                     </td>
                                     <td>
-                                        @Html.RadioButtonFor(model => model.Garanti, 1, new { @id = "GarantiH", @class = " w3-radio  w3-margin-right", name = "GarantiH" })
+                                        @Html.RadioButtonFor(model => model.Garanti, false, new { @id = "GarantiH", @class = " w3-radio  w3-margin-right", name = "GarantiH" })
                                     </td>
                                 </tr>
                             </table>
@@ -268,13 +285,13 @@
                                         <label>Evet</label>
                                     </td>
                                     <td>
-                                        @Html.RadioButtonFor(model => model.Revizyon, 0, new { @id = "RevizyonE", @class = " w3-radio  w3-margin-right", name = "RevizyonE" })
+                                        @Html.RadioButtonFor(model => model.Revizyon, true, new { @id = "RevizyonE", @class = " w3-radio  w3-margin-right", name = "RevizyonE" })
                                     </td>
                                     <td>
                                         <label>Hayır</label>
                                     </td>
                                     <td>
-                                        @Html.RadioButtonFor(model => model.Revizyon, 1, new { @id = "RevizyonH", @class = " w3-radio  w3-margin-right", name = "RevizyonH" })
+                                        @Html.RadioButtonFor(model => model.Revizyon, false, new { @id = "RevizyonH", @class = " w3-radio  w3-margin-right", name = "RevizyonH" })
                                     </td>
                                 </tr>
                             </table>
@@ -377,7 +394,7 @@
                                 count++;
                             }
                             @*@Html.TextBox("tamiradet" + item.Value, null, new { @class = "w3-border w3-round onlynumeric",
-        @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
+                            @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
                         </div>
 
                     }
@@ -389,10 +406,26 @@
                             @Html.EditorFor(model => model.ParcaAdet, new { @class = "w3-border w3-round onlynumeric", style = "float: right;text-align: right;", placeholder = "adet / takım" })
                         </label>
                     </div>
-
                 </div>
-
             </div>
+
+            <div class="w3-row w3-margin-lr">
+                <div class="w3-row w3-padding-left  ">
+                    <h4>GMY Logo</h4>
+                </div>
+                <div class="w3-margin-left">
+                    <div class="w3-half w3-padding">
+                        <input type="checkbox"
+                               name="IsLogoEnable"
+                               class="w3-check"
+                               id="gmyLogo"
+                               @if (Model.IsLogoEnable == 1) { <text> checked </text> } />
+                        <label for="labelGmyLogo"></label>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="w3-row">
                 <div class="w3-quarter w3-padding w3-right">
                     <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Onayla</button>

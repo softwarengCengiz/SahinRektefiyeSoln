@@ -46,8 +46,8 @@
                             <tr>
                                 @if (ViewBag.CanEdit)
                                 {
-                                    <th></th>
-                                    <th></th>
+                                    <th>İşlemler</th>
+                                    @*<th></th>*@
                                 }
                                 <th>Talep Numarası</th>
                                 <th>Müşteri</th>
@@ -60,11 +60,19 @@
                             @foreach (var talep in Model)
                             {
                                 <tr>
+                                    @*@if (ViewBag.CanEdit)
+                                        {
+                                            <td class="w3-small"><a href="/Ticket/Edit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a></td>
+                                            <td class="w3-small"><a href="/Ticket/DetailEdit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-comment w3-hover-opacity" aria-hidden="true"></i></a></td>
+
+                                        }*@
+
                                     @if (ViewBag.CanEdit)
                                     {
-                                        <td class="w3-small"><a href="/Ticket/Edit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a></td>
-                                        <td class="w3-small"><a href="/Ticket/DetailEdit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-comment w3-hover-opacity" aria-hidden="true"></i></a></td>
-
+                                        <td class="w3-small">
+                                    <a href="/Ticket/Edit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                    <a href="/Ticket/DetailEdit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-comment w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                    <a href="/Ticket/CreatePdf?id=@talep.TalepNo" title="Pdf İndir"><i class="fa fa-file-pdf-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a></td>
                                     }
                                     <td>@talep.TalepNo </td>
                                     <td>@talep.Musteri </td>
