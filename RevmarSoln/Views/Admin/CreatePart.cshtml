@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Ürün Tanımlama", pagePermission = "EMP_01" })
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Hizmet Talebi Tanımlama", pagePermission = "EMP_01" })
 <script>
 	$(document).ready(function () {
 		if (@ViewBag.Result ==1 || @ViewBag.Result ==null ) {

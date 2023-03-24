@@ -242,7 +242,7 @@
     </Content>
     <EntityDeploy Include="Models\SahinRektefiyeModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-	  <LastGenOutput>SahinRektefiyeModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>SahinRektefiyeModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
     <Content Include="Models\SahinRektefiyeModel.edmx.diagram">
       <DependentUpon>SahinRektefiyeModel.edmx</DependentUpon>
@@ -1070,6 +1070,8 @@
     <Content Include="Views\Admin\CreateTamirParca.cshtml" />
     <Content Include="Views\Admin\TamirParca.cshtml" />
     <Content Include="Views\Admin\ArizaBildirim.cshtml" />
+    <Content Include="Views\Admin\EditTamirParca.cshtml" />
+    <Content Include="Views\Admin\EditArizaBildirim.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

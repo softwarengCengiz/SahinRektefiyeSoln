@@ -65,7 +65,14 @@
 						<a href="/Admin/EditPart?PartId=@item.PartId" class="w3-btn w3-ripple w3-blue"><i class="fa fa-cop"></i>&nbsp; Düzenle </a>
 						
 					</td>
-					<td><a href="/Admin/DeletePart?PartId=@item.PartId" class="w3-btn w3-ripple w3-red" onclick="if (!confirm('Silmek istediğinizden emin misiniz?')) return false;"><i class="fa fa-trash"></i>&nbsp; Parça Sil </a></td>
+                    <td>
+                        @using (Html.BeginForm("DeletePart", "Admin", FormMethod.Post))
+                        {
+                            @Html.Hidden("id", item.PartId)
+                            <button type="submit" class="w3-btn w3-ripple w3-red"><i class="fa fa-trash"></i>&nbsp; Parça Sil </button>
+                        }
+                   
+                    </td>
 				</tr>
 		}
 
