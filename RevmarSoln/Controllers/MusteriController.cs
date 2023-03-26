@@ -201,14 +201,26 @@ namespace SahinRektefiyeSoln.Controllers
 			if (!string.IsNullOrEmpty(model.filter.MusteriAdi))
 			{	
 				List<Musteri> kurumlar = new List<Musteri>();
-				kurumlar = musteriler.Where(x=>x.KurumAdi.ToUpper().Contains(model.filter.MusteriAdi.ToUpper())).ToList();
+				//kurumlar = musteriler.Where(x=>x.KurumAdi.ToUpper().Contains(model.filter.MusteriAdi.ToUpper())).ToList();
+				kurumlar = musteriler.Where(x => model.filter.MusteriAdi == null ||
+									(x.KurumAdi != null && x.KurumAdi.Contains(model.filter.MusteriAdi))).ToList();
 
 				List<Musteri> musteriAdi = new List<Musteri>();
-				musteriAdi = musteriler.Where(x => (x.MusteriAdi != null ? x.MusteriAdi.ToUpper() : "" + x.MusteriSoyadi != null ? x.MusteriSoyadi.ToUpper() : "").Contains(model.filter.MusteriAdi.ToUpper())).ToList();
+				var filterMusteriAdi = model.filter.MusteriAdi.Trim();
+				if (filterMusteriAdi.Contains(" "))
+                {
+					filterMusteriAdi = filterMusteriAdi.Replace(" ", "");
+				}
+				//var x = musteriler[1].MusteriAdi + musteriler[1].MusteriSoyadi;
+				//musteriAdi = musteriler.Where(x => (x.MusteriAdi != null ? x.MusteriAdi.ToUpper() : "" + x.MusteriSoyadi != null ? x.MusteriSoyadi.ToUpper() : "").Contains(model.filter.MusteriAdi.ToUpper())).ToList();
+				musteriAdi = musteriler.Where(x => (x.MusteriAdi + x.MusteriSoyadi)
+				.Contains(filterMusteriAdi != null ? filterMusteriAdi : "")).ToList();
 
 				List<Musteri> kontakAdi = new List<Musteri>();
 
-				kontakAdi = musteriler.Where(x=>(x.KontakAdi != null ? x.KontakAdi.ToUpper() : " " ).Contains(model.filter.MusteriAdi.ToUpper())).ToList();
+				//kontakAdi = musteriler.Where(x=>(x.KontakAdi != null ? x.KontakAdi.ToUpper() : " " ).Contains(model.filter.MusteriAdi.ToUpper())).ToList();
+				kontakAdi = musteriler.Where(x => (x.KontakAdi != null ? x.KontakAdi : " ")
+				.Contains(model.filter.MusteriAdi != null ? model.filter.MusteriAdi : " ")).ToList();
 
 				result = kurumlar.Concat(musteriAdi).Concat(kontakAdi).ToList();
 
@@ -229,9 +241,13 @@ namespace SahinRektefiyeSoln.Controllers
 			if (!string.IsNullOrEmpty(model.filter.TCKN))
 			{
 				List<Musteri> tcVergiNo = new List<Musteri>();
-				tcVergiNo = musteriler.Where(x => x.TCKN.ToUpper().Contains(model.filter.TCKN.ToUpper()) ||
-												   x.VergiNo.ToUpper().Contains(model.filter.TCKN.ToUpper())
-												   ).ToList();
+				tcVergiNo = musteriler.Where(x => (model.filter.TCKN == null || (x.TCKN != null && x.TCKN.Contains(model.filter.TCKN.Trim()))) ).ToList();
+
+				if (tcVergiNo.Count == 0)
+                {
+					model.filter.VergiNo = model.filter.TCKN;
+					tcVergiNo = musteriler.Where(x => (model.filter.VergiNo == null || (x.VergiNo != null && x.VergiNo.Contains(model.filter.VergiNo.Trim())))).ToList();
+                } 
 
 				result = result.Concat(tcVergiNo).ToList();
 			}

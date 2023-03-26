@@ -56,7 +56,7 @@ namespace SahinRektefiyeSoln.Controllers
                     MusteriAramaTarihi = item.MusteriAramaTarihi,
                     OlustuanKisi = item.Creator,
                     TalepNo = item.TalepId,
-                    Durum = item.Durum != null ?  ((TalepStatus)item.Durum).ToString() : ""
+                    Durum = item.Durum != null ? ((TalepStatus)item.Durum).ToString() : ""
                 });
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");
@@ -182,7 +182,7 @@ namespace SahinRektefiyeSoln.Controllers
 
             return View(model);
         }
-    
+
 
         [HttpPost]
         public ActionResult DetailEdit(TicketDetailViewModel model)
@@ -284,7 +284,7 @@ namespace SahinRektefiyeSoln.Controllers
 
         public ActionResult PrintAllEmployee()
         {
-            var report = new Rotativa.ActionAsPdf("DetailEdit", new {id = 7 });
+            var report = new Rotativa.ActionAsPdf("DetailEdit", new { id = 7 });
             return report;
         }
 
@@ -618,6 +618,13 @@ namespace SahinRektefiyeSoln.Controllers
             ViewBag.Soforler = new SelectList(db.UserRoles.Where(x => x.Roles.RoleName == "DANISMAN").OrderBy(x => x.UserName).Select(x => new { UserName = x.UserName, DanismanAdi = x.Users.FirstName + " " + x.Users.FirstName }).ToList(), "UserName", "DanismanAdi");
             ViewBag.Parts = new SelectList(db.Parts.Select(x => new { PartId = x.PartId, PartName = x.Name }).ToList(), "PartId", "PartName");
             ViewBag.Markalar = db.Companies.ToList();
+            ViewBag.TalepSekli = new SelectList(new List<SelectListItem>()
+            {
+                new SelectListItem { Value = "1", Text = "Telefon ile talep" },
+                new SelectListItem { Value = "2", Text = "Email ile talep" },
+                new SelectListItem { Value = "3", Text = "Müşteri kendi getirdi" },
+                new SelectListItem { Value = "4", Text = "Kargo ile geldi" }
+            }, "Value", "Text").ToList();
         }
 
         private IList<SelectListItem> ArizaListesi()

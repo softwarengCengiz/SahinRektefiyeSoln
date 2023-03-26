@@ -408,18 +408,9 @@
 								<label>Doğum Tarihi</label>
 								@Html.EditorFor(model => model.musteri.DogumTarihi, new { id = "DogumTarihi", htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
 							</div>
-							<div class="w3-third w3-padding-right">
+							<div class="w3-twothird">
 								<label>Meslek</label>
-								@Html.DropDownList("MeslekId", (SelectList)ViewBag.Meslekler, "Meslek Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "MeslekId" ,  autocomplete = "off" })
-							</div>
-							<div class="w3-third">
-								<label>Cinsiyet</label>
-								@Html.DropDownListFor(model => model.musteri.Cinsiyet, new List<SelectListItem>
-{
-new SelectListItem{ Text="Cinsiyet Seçiniz", Value = "0" },
-new SelectListItem{ Text="Kadın", Value = "K" },
-new SelectListItem{ Text="Erkek", Value = "E" },
-}, htmlAttributes: new { @class = "w3-select w3-border w3-round" })
+								@Html.DropDownList("MeslekId", (SelectList)ViewBag.Meslekler, "Meslek Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", maxlength = "124", @Id = "MeslekId" ,  autocomplete = "off" })
 							</div>
 						</div>
 						<div class="w3-row">
@@ -432,16 +423,25 @@ new SelectListItem{ Text="Erkek", Value = "E" },
 								@Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off" } })
 							</div>
 						</div>
-						<div class="w3-row">
-								<div class="w3-third w3-padding-right">
-									<label>İl</label>
-									@Html.DropDownList("IlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlId", @onchange = "onChangeIl();" })
-								</div>
-								<div class="w3-third">
-									<label>İlçe</label>
-									@Html.DropDownList("IlceId", Enumerable.Empty<SelectListItem>(), "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlceId" })
-								</div>
-						</div>
+                        <div class="w3-row">
+                            <div class="w3-third w3-padding-right">
+                                <label>Cinsiyet</label>
+                                @Html.DropDownListFor(model => model.musteri.Cinsiyet, new List<SelectListItem>
+{
+new SelectListItem{ Text="Cinsiyet Seçiniz", Value = "0" },
+new SelectListItem{ Text="Kadın", Value = "K" },
+new SelectListItem{ Text="Erkek", Value = "E" },
+}, htmlAttributes: new { @class = "w3-select w3-border w3-round" })
+                            </div>
+                            <div class="w3-third w3-padding-right">
+                                <label>İl</label>
+                                @Html.DropDownList("IlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlId", @onchange = "onChangeIl();" })
+                            </div>
+                            <div class="w3-third">
+                                <label>İlçe</label>
+                                @Html.DropDownList("IlceId", Enumerable.Empty<SelectListItem>(), "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlceId" })
+                            </div>
+                        </div>
 						<div class="w3-row">
 							<div class="w3-row w3-row w3-padding-top">
 								@Html.TextAreaFor(model => model.musteri.Adres, new { @class = "w3-input w3-border w3-round", maxlength = "512", rows = "6", cols = "300", placeholder = "Adres giriniz" })

@@ -71,8 +71,8 @@
         if (ViewBag.Cat30Cnt > 0)
         {
             <a href="#" class="w3-bar-item w3-button" onclick="myAccFunc('30')"><i class="fa fa-pagelines fa-fw"></i>Form Tanımlama İşlemleri</a>
-            <div id="30" class="w3-hide">
-                @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 30))
+            <div id="30" class="w3-hide">                
+                @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 30).OrderBy(x=>x.Menus.Title))
                 {
                     <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
                 }
@@ -90,16 +90,6 @@
                 }
             </div>
         }
-
-
-
     }
 
-
-
-
-
-
-
 </div>
-
