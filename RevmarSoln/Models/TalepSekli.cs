@@ -12,24 +12,20 @@ namespace SahinRektefiyeSoln.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Parts
+    public partial class TalepSekli
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Parts()
+        public TalepSekli()
         {
             this.Talepler = new HashSet<Talepler>();
-            this.WayBillParts = new HashSet<WayBillParts>();
         }
     
-        public int PartId { get; set; }
-        public string Name { get; set; }
-        public string PartCode { get; set; }
+        public int TalepSekliId { get; set; }
+        public string TalepSekliAciklama { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string CreatedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Talepler> Talepler { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<WayBillParts> WayBillParts { get; set; }
     }
 }

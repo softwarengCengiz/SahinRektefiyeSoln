@@ -5,96 +5,102 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="0926d4efd4c84ce9b79e1b6a8baf2ef9" Name="Diagram1" ZoomLevel="72">
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AktarmaTipi" Width="1.5" PointX="6" PointY="73.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Arac" Width="1.5" PointX="8.25" PointY="12.375" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AracDetay" Width="1.5" PointX="6" PointY="26.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AracGrubu" Width="1.5" PointX="6" PointY="80" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AracTipi" Width="1.5" PointX="6" PointY="23.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ChangeRequest" Width="1.5" PointX="7.75" PointY="1.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ChangeRequestStatus" Width="1.5" PointX="7.75" PointY="5.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Companies" Width="1.5" PointX="6" PointY="51.375" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Danismanlar" Width="1.5" PointX="8.25" PointY="77.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.DepoRafTanim" Width="1.5" PointX="10.75" PointY="8.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.DpfRevisionTypes" Width="1.5" PointX="0.75" PointY="12.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Irsaliyeler" Width="1.5" PointX="7.5" PointY="62.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Iscilikler" Width="1.5" PointX="16.5" PointY="19.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IscilikTipleri" Width="1.5" PointX="14.25" PointY="20.25" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmirleri" Width="1.5" PointX="10.5" PointY="33.25" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriBelirtiKodlari" Width="1.5" PointX="15.75" PointY="38.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriDosyalari" Width="1.5" PointX="15.75" PointY="34.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriKalemleri" Width="1.5" PointX="18.75" PointY="29.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriStatu" Width="1.5" PointX="8.25" PointY="51.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriTipleri" Width="1.5" PointX="8.25" PointY="73.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ilceler" Width="1.5" PointX="3" PointY="39" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.iller" Width="1.5" PointX="0.75" PointY="39.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.JobDetails" Width="1.5" PointX="13" PointY="2.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Jobs" Width="1.5" PointX="10.75" PointY="1.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KlimaFixing" Width="1.5" PointX="18.75" PointY="38" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KlimaRevisionTypes" Width="1.5" PointX="2.75" PointY="12.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KontakKategorileri" Width="1.5" PointX="3" PointY="44.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KurumTipleri" Width="1.5" PointX="3" PointY="35.375" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KvkMusteriLogs" Width="1.5" PointX="7.5" PointY="35.25" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Logs" Width="1.5" PointX="4.75" PointY="12.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Mail" Width="1.5" PointX="10.75" PointY="12.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MailAdresleri" Width="1.5" PointX="8" PointY="7.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MailGruplari" Width="1.5" PointX="5.75" PointY="7.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MarsMotorFixing" Width="1.5" PointX="12.75" PointY="37.25" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MarsMotorRevisionTypes" Width="1.5" PointX="12.75" PointY="7.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Menus" Width="1.5" PointX="8.25" PointY="93.25" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Meslekler" Width="1.5" PointX="3" PointY="42.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Messages" Width="1.5" PointX="12.75" PointY="11.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Musteri" Width="1.5" PointX="5.25" PointY="34.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MusteriAraclari" Width="1.5" PointX="7.5" PointY="38.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MusteriMail" Width="1.5" PointX="7.5" PointY="68.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MusteriTelefon" Width="1.5" PointX="7.5" PointY="57.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PaketIscilikleri" Width="1.5" PointX="21.75" PointY="24.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Paketler" Width="1.5" PointX="8.25" PointY="31.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PaketStokKartlari" Width="1.5" PointX="21.75" PointY="27.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ParcaTipleri" Width="1.5" PointX="14.25" PointY="25.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PartReviewResult" Width="1.5" PointX="8.25" PointY="54.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PartReviewType" Width="1.5" PointX="8.25" PointY="86.375" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Parts" Width="1.5" PointX="5.25" PointY="55.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Permissions" Width="1.5" PointX="8.25" PointY="97.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Renkler" Width="1.5" PointX="6" PointY="48.25" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.RevisionType" Width="1.5" PointX="8.25" PointY="48.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.RolePermissions" Width="1.5" PointX="10.5" PointY="89.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Roles" Width="1.5" PointX="8.25" PointY="89.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SanzimanFixing" Width="1.5" PointX="12.75" PointY="31.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SanzimanRevisionTypes" Width="1.5" PointX="14.75" PointY="7.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimDetail" Width="1.5" PointX="18.75" PointY="15" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimHeader" Width="1.5" PointX="3" PointY="3.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimStatu" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimTipi" Width="1.5" PointX="0.75" PointY="4" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SensorRevisionTypes" Width="1.5" PointX="14.75" PointY="10.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Services" Width="1.5" PointX="8.25" PointY="24.25" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKarti" Width="1.5" PointX="16.5" PointY="24.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKartiAlternatif" Width="1.5" PointX="18.75" PointY="11.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKartiDetay" Width="1.5" PointX="18.75" PointY="8.375" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKartiSayimLoglari" Width="1.5" PointX="5.25" PointY="3.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SupplierCompany" Width="1.5" PointX="8.25" PointY="82.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SupplierParts" Width="1.5" PointX="10.5" PointY="49.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Suppliers" Width="1.5" PointX="0.75" PointY="7.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Tasks" Width="1.5" PointX="8.25" PointY="27.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TeklifKalemleri" Width="1.5" PointX="18" PointY="44.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Teklifler" Width="1.5" PointX="15.75" PointY="43" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TeklifStatu" Width="1.5" PointX="13.5" PointY="50.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TurboRevisionTypes" Width="1.5" PointX="14.75" PointY="13.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TurboSarjFixing" Width="1.5" PointX="12.75" PointY="43.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UploadedFordExcels" Width="1.5" PointX="15.75" PointY="1.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserAgentInfos" Width="1.5" PointX="0.75" PointY="16.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserAllowedIsEmriTip" Width="1.5" PointX="10.5" PointY="66.875" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserMenus" Width="1.5" PointX="10.5" PointY="59.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserRoles" Width="1.5" PointX="10.5" PointY="56.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Users" Width="1.5" PointX="5.25" PointY="59" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Vehicles" Width="1.5" PointX="6" PointY="20.125" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.VehicleStoks" Width="1.5" PointX="18.75" PointY="23.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.VitesTipi" Width="1.5" PointX="6" PointY="16.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WayBillParts" Width="1.5" PointX="19.5" PointY="19.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WayBills" Width="1.5" PointX="3" PointY="7.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WebErrorLogs" Width="1.5" PointX="2.75" PointY="16.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WebUsageLogs" Width="1.5" PointX="10.75" PointY="16.5" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WorkOrders" Width="1.5" PointX="10.5" PointY="22.625" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.YakitTipi" Width="1.5" PointX="6" PointY="76.875" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AktarmaTipi" Width="1.5" PointX="9" PointY="30.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Arac" Width="1.5" PointX="11.25" PointY="11.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AracDetay" Width="1.5" PointX="9" PointY="77.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AracGrubu" Width="1.5" PointX="9" PointY="23.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.AracTipi" Width="1.5" PointX="9" PointY="12.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ArizaBildirim" Width="1.5" PointX="5.75" PointY="12.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ChangeRequest" Width="1.5" PointX="5.75" PointY="15.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ChangeRequestStatus" Width="1.5" PointX="13.75" PointY="11.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Companies" Width="1.5" PointX="9" PointY="19.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Danismanlar" Width="1.5" PointX="5.25" PointY="31.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.DepoRafTanim" Width="1.5" PointX="13.75" PointY="14.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.DpfRevisionTypes" Width="1.5" PointX="0.75" PointY="17.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Irsaliyeler" Width="1.5" PointX="7.5" PointY="63.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Iscilikler" Width="1.5" PointX="15.75" PointY="20" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IscilikTipleri" Width="1.5" PointX="13.5" PointY="20.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmirleri" Width="1.5" PointX="7.5" PointY="38.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriBelirtiKodlari" Width="1.5" PointX="15.75" PointY="43.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriDosyalari" Width="1.5" PointX="15.75" PointY="39.875" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriKalemleri" Width="1.5" PointX="15.75" PointY="47.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriStatu" Width="1.5" PointX="5.25" PointY="53.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.IsEmriTipleri" Width="1.5" PointX="5.25" PointY="49.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ilceler" Width="1.5" PointX="3" PointY="41" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.iller" Width="1.5" PointX="0.75" PointY="41.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.JobDetails" Width="1.5" PointX="5" PointY="6.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Jobs" Width="1.5" PointX="2.75" PointY="5.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KlimaFixing" Width="1.5" PointX="12.75" PointY="35.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KlimaRevisionTypes" Width="1.5" PointX="2.75" PointY="17.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KontakKategorileri" Width="1.5" PointX="3" PointY="44.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KurumTipleri" Width="1.5" PointX="3" PointY="37.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.KvkMusteriLogs" Width="1.5" PointX="7.5" PointY="74.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Logs" Width="1.5" PointX="17.75" PointY="2.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Mail" Width="1.5" PointX="4.75" PointY="19.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MailAdresleri" Width="1.5" PointX="3" PointY="2.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MailGruplari" Width="1.5" PointX="0.75" PointY="2.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MarsMotorFixing" Width="1.5" PointX="18.75" PointY="36.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MarsMotorRevisionTypes" Width="1.5" PointX="0.75" PointY="21.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Menus" Width="1.5" PointX="8.25" PointY="0.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Meslekler" Width="1.5" PointX="3" PointY="46.875" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Messages" Width="1.5" PointX="20.75" PointY="2.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Musteri" Width="1.5" PointX="5.25" PointY="36.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MusteriAraclari" Width="1.5" PointX="13.5" PointY="40.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MusteriMail" Width="1.5" PointX="7.5" PointY="33.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MusteriTelefon" Width="1.5" PointX="7.5" PointY="69.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PaketIscilikleri" Width="1.5" PointX="18" PointY="21.875" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Paketler" Width="1.5" PointX="11.25" PointY="23.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PaketStokKartlari" Width="1.5" PointX="18" PointY="25.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ParcaTipleri" Width="1.5" PointX="13.5" PointY="26.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PartReviewResult" Width="1.5" PointX="11.25" PointY="54" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.PartReviewType" Width="1.5" PointX="11.25" PointY="59.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Parts" Width="1.5" PointX="8.25" PointY="85.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Permissions" Width="1.5" PointX="18.25" PointY="5.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Renkler" Width="1.5" PointX="9" PointY="27" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.RevisionType" Width="1.5" PointX="11.25" PointY="56.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.RolePermissions" Width="1.5" PointX="20.5" PointY="27.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Roles" Width="1.5" PointX="11.25" PointY="27.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SanzimanFixing" Width="1.5" PointX="9.75" PointY="46.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SanzimanRevisionTypes" Width="1.5" PointX="20.75" PointY="6.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimDetail" Width="1.5" PointX="18" PointY="15.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimHeader" Width="1.5" PointX="13" PointY="3.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimStatu" Width="1.5" PointX="10.75" PointY="1.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SayimTipi" Width="1.5" PointX="10.75" PointY="4.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SensorRevisionTypes" Width="1.5" PointX="20.75" PointY="9.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Services" Width="1.5" PointX="8.25" PointY="93.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKarti" Width="1.5" PointX="15.75" PointY="24.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKartiAlternatif" Width="1.5" PointX="18" PointY="8.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKartiDetay" Width="1.5" PointX="18" PointY="11.875" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.StokKartiSayimLoglari" Width="1.5" PointX="15.25" PointY="4.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SupplierCompany" Width="1.5" PointX="11.25" PointY="20.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.SupplierParts" Width="1.5" PointX="13.5" PointY="54.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Suppliers" Width="1.5" PointX="0.75" PointY="12.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.sysdiagrams" Width="1.5" PointX="20.75" PointY="12.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TalepDetay" Width="1.5" PointX="12.75" PointY="44.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Talepler" Width="1.5" PointX="10.5" PointY="38.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TalepSekli" Width="1.5" PointX="8.25" PointY="4.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TamirParca" Width="1.5" PointX="20.75" PointY="15.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Tasks" Width="1.5" PointX="8.25" PointY="90.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TeklifKalemleri" Width="1.5" PointX="18" PointY="31.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Teklifler" Width="1.5" PointX="15.75" PointY="32.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TeklifStatu" Width="1.5" PointX="13.5" PointY="31.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TurboRevisionTypes" Width="1.5" PointX="20.75" PointY="18.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TurboSarjFixing" Width="1.5" PointX="18.75" PointY="42.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UploadedFordExcels" Width="1.5" PointX="2.75" PointY="23.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserAgentInfos" Width="1.5" PointX="4.75" PointY="23.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserAllowedIsEmriTip" Width="1.5" PointX="10.5" PointY="34" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserMenus" Width="1.5" PointX="10.5" PointY="8.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.UserRoles" Width="1.5" PointX="13.5" PointY="8.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Users" Width="1.5" PointX="8.25" PointY="7.5" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Vehicles" Width="1.5" PointX="9" PointY="53.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.VehicleStoks" Width="1.5" PointX="21" PointY="39.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.VitesTipi" Width="1.5" PointX="9" PointY="57.25" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WayBillParts" Width="1.5" PointX="16.5" PointY="55.625" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WayBills" Width="1.5" PointX="3" PointY="12.375" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WebErrorLogs" Width="1.5" PointX="20.75" PointY="23.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WebUsageLogs" Width="1.5" PointX="22.75" PointY="2.125" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.WorkOrders" Width="1.5" PointX="10.5" PointY="88.75" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.YakitTipi" Width="1.5" PointX="9" PointY="16.25" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Arac_AktarmaTipi" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Arac_AracDetay" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Arac_AracGrubu" />
@@ -107,6 +113,7 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_IsEmirleri_Arac" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriAraclari_Arac" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Teklifler_Arac" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierCompany_Companies" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_Companies" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Vehicles_Companies" />
@@ -157,6 +164,7 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriAraclari_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriMail_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_MusteriTelefon_Musteri" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Teklifler_Musteri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_PaketIscilikleri_Paketler" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_PaketStokKartlari_Paketler" />
@@ -164,6 +172,7 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_StokKarti_ParcaTipleri" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_PartReviewResult" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_PartReviewType" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Part" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBillParts_Parts" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_RolePermissions_Permissions" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_RevisionType" />
@@ -185,6 +194,10 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_SupplierCompany" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_SupplierParts_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBills_Suppliers" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_TalepId" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_TalepSekliId" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Users" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WorkOrders_Tasks" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_TeklifKalemleri_Teklifler" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_Teklifler_Statu" />
@@ -195,16 +208,6 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_VehicleStoks_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WorkOrders_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBillParts_WayBills" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.ArizaBildirim" Width="1.5" PointX="17.375" PointY="5.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TamirParca" Width="1.5" PointX="18.375" PointY="0.75" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.Talepler" Width="1.5" PointX="13.25" PointY="53.625" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Musteri" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Part" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Users" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_Talepler_Vehicle" />
-        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TalepDetay" Width="1.5" PointX="15.5" PointY="52.875" />
-        <AssociationConnector Association="SahinRektefiyeDbModel.FK_TalepId" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -19,9 +19,9 @@ namespace SahinRektefiyeSoln.Models
         {
             this.Arac = new HashSet<Arac>();
             this.SupplierParts = new HashSet<SupplierParts>();
+            this.Talepler = new HashSet<Talepler>();
             this.VehicleStoks = new HashSet<VehicleStoks>();
             this.WorkOrders = new HashSet<WorkOrders>();
-            this.Talepler = new HashSet<Talepler>();
         }
     
         public int VehicleId { get; set; }
@@ -36,10 +36,10 @@ namespace SahinRektefiyeSoln.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SupplierParts> SupplierParts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Talepler> Talepler { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VehicleStoks> VehicleStoks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorkOrders> WorkOrders { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Talepler> Talepler { get; set; }
     }
 }

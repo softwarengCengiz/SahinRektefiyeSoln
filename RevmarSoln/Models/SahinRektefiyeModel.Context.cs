@@ -32,6 +32,7 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<AracDetay> AracDetay { get; set; }
         public virtual DbSet<AracGrubu> AracGrubu { get; set; }
         public virtual DbSet<AracTipi> AracTipi { get; set; }
+        public virtual DbSet<ArizaBildirim> ArizaBildirim { get; set; }
         public virtual DbSet<ChangeRequest> ChangeRequest { get; set; }
         public virtual DbSet<ChangeRequestStatus> ChangeRequestStatus { get; set; }
         public virtual DbSet<Companies> Companies { get; set; }
@@ -96,6 +97,11 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<SupplierCompany> SupplierCompany { get; set; }
         public virtual DbSet<SupplierParts> SupplierParts { get; set; }
         public virtual DbSet<Suppliers> Suppliers { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<TalepDetay> TalepDetay { get; set; }
+        public virtual DbSet<Talepler> Talepler { get; set; }
+        public virtual DbSet<TalepSekli> TalepSekli { get; set; }
+        public virtual DbSet<TamirParca> TamirParca { get; set; }
         public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<TeklifKalemleri> TeklifKalemleri { get; set; }
         public virtual DbSet<Teklifler> Teklifler { get; set; }
@@ -117,10 +123,6 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<WebUsageLogs> WebUsageLogs { get; set; }
         public virtual DbSet<WorkOrders> WorkOrders { get; set; }
         public virtual DbSet<YakitTipi> YakitTipi { get; set; }
-        public virtual DbSet<ArizaBildirim> ArizaBildirim { get; set; }
-        public virtual DbSet<TamirParca> TamirParca { get; set; }
-        public virtual DbSet<TalepDetay> TalepDetay { get; set; }
-        public virtual DbSet<Talepler> Talepler { get; set; }
     
         public virtual int AutoCreateUserMenu(string userName)
         {

@@ -1,8 +1,8 @@
 ﻿@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.TicketOpenViewModel
 
 @{
-	ViewBag.Title = "Open";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Open";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <link href="~/Styles/jquery-ui.css" rel="stylesheet" />
@@ -72,7 +72,6 @@
             });
 
             $.datetimepicker.setLocale('tr');
-
         });
 
 
@@ -119,37 +118,36 @@
         {
             @Html.HiddenFor(x => x.HizliIsEmriVehicleMusteriId);
 
-        <div class="w3-row">
-            <div class="w3-row w3-padding-left  ">
-                <h6>Talep Şekli</h6>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                @Html.DropDownList("TalepSekli", ViewBag.TalepSekli as SelectList, "Seçiniz", htmlAttributes: new { @id = "talepSekli", @class = "w3-select w3-border w3-round" })
-            </div>
             <div class="w3-row">
-                <div class="w3-col s12 m3 l3 w3-padding" id="divKargoyaVerilis">
-                    <label>Kargoya Veriliş Tarihi</label>
-                    @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id= "idKargoyaVerilis", maxlength = "25", autocomplete = "off" } })
+                <div class="w3-row w3-padding-left  ">
+                    <h6>Talep Şekli</h6>
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding" id="divAramaTarihi">
-                    <label>Arama Tarihi</label>
-                    @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idAramaTarihi", maxlength = "25", autocomplete = "off" } })
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    @Html.DropDownList("TalepSekliId", ViewBag.TalepSekliId as SelectList, "Seçiniz", htmlAttributes: new { @id = "talepSekli", @class = "w3-select w3-border w3-round" })
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding" id="divKargoFirmasi">
-                    <label>Kargo Firması</label>
-                    @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-                </div>
-                <div class="w3-col s12 m3 l3 w3-padding" id="divGonderiKodu">
-                    <label>Gönderi Kodu</label>
-                    @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-                </div>
-                <div class="w3-col s12 m3 l3 w3-padding" id="divMusteriAtolyeGelis">
-                    <label>Müşteri Atölye Geliş Tarihi</label>
-                    @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idMusteriAtolyeGelis", maxlength = "25", autocomplete = "off" } })
+                <div class="w3-row">
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divKargoyaVerilis">
+                        <label>Kargoya Veriliş Tarihi</label>
+                        @Html.EditorFor(model => model.KargoyaVerilisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idKargoyaVerilis", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divAramaTarihi">
+                        <label>Arama Tarihi</label>
+                        @Html.EditorFor(model => model.AramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idAramaTarihi", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divKargoFirmasi">
+                        <label>Kargo Firması</label>
+                        @Html.EditorFor(model => model.KargoFirmasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divGonderiKodu">
+                        <label>Gönderi Kodu</label>
+                        @Html.EditorFor(model => model.GönderiKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divMusteriAtolyeGelis">
+                        <label>Müşteri Atölye Geliş Tarihi</label>
+                        @Html.EditorFor(model => model.MusteriAtolyeGelisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idMusteriAtolyeGelis", maxlength = "25", autocomplete = "off" } })
+                    </div>
                 </div>
             </div>
-        </div>
-
 
             <div class="w3-row">
                 <div class="w3-row w3-padding-left  ">
@@ -212,6 +210,56 @@
             </div>
 
 
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left  ">
+                    <h6>Araç Bilgileri</h6>
+                </div>
+                <div class="w3-row w3-padding-left- w3-padding-right w3-margin-right">
+                    @*<div class="w3-col s12 m2 l2 w3-padding">
+                        <label>Arayan Kişi Ad Soyad</label>
+                        @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                    </div>*@
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Araç Grubu</label>
+                        @Html.DropDownList("AracGrubuId", (SelectList)ViewBag.AracGrubu, "Araç Grubunu Seçiniz", htmlAttributes: new
+                        {
+                            @class = "w3-select w3-border w3-round",
+                            @Id = "AracGrubuId",
+                            required = "required"@*, @onchange = "onIsEmriChanged();"*@})
+                    </div>
+                    <div class="w3-col s12 m2 l2  w3-padding">
+                        <label>Araç model Kodu</label><br />
+                        <select class="w3-input  w3-border w3-round" id="VehicleId" name="VehicleId" required="required">
+                            <option disabled="disabled" selected="selected" required="required">Model Marka Seçiniz</option>
+                            @foreach (var item in (List<Companies>)ViewBag.Markalar)
+                            {
+
+                                <optgroup label="@item.Name">
+                                    @foreach (var vehicle in item.Vehicles)
+                                    {
+                                        <option value="@vehicle.VehicleId">@vehicle.Name</option>
+                                    }
+                                </optgroup>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="w3-row w3-padding-left- w3-padding-right w3-margin-right">
+
+                    <div class="w3-quarter w3-padding">
+                        <label>Şase No</label>
+                        @Html.EditorFor(model => model.SaseNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", required = "required", maxlength = "17" } })
+                    </div>
+                    <div class="w3-quarter w3-padding">
+                        <label>Plaka</label>
+                        @Html.EditorFor(model => model.Plate, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", required = "required" } })
+                    </div>
+                    <div class="w3-quarter w3-padding">
+                        <label>KM</label>
+                        @Html.EditorFor(model => model.KM, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", required = "required" } })
+                    </div>
+                </div>
+            </div>
 
             <div class="w3-row w3-margin-top">
                 <div class="w3-row w3-padding-left  ">
@@ -319,17 +367,17 @@
 
 
 <div id="MusteriSecModal" class="w3-modal w3-animate-opacity">
-	<div class="w3-modal-content w3-card-4">
-		<header class="w3-container w3-teal">
-			<span onclick="document.getElementById('MusteriSecModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
-			<h5>Müşteri Seç</h5>
-		</header>
-		<div class="w3-container">
-			<div class="w3-row w3-margin" id="MusteriModalContent">
+    <div class="w3-modal-content w3-card-4">
+        <header class="w3-container w3-teal">
+            <span onclick="document.getElementById('MusteriSecModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>
+            <h5>Müşteri Seç</h5>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-margin" id="MusteriModalContent">
 
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>

@@ -21,10 +21,15 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
 		public int AracGrubuId { get; set; }
         public int PartId { get; set; }
         public int VehicleId { get; set; }
+        public int TalepSekliId { get; set; }
         public Nullable<System.DateTime> KayitTarihi { get; set; }
         public Nullable<System.DateTime> MusteriAramaTarihi { get; set; }
         public string Not { get; set; }
-
 		public string SoforUserName { get; set; }
+		public Nullable<System.DateTime> KargoyaVerilisTarihi { get; set; }
+		public Nullable<System.DateTime> AramaTarihi { get; set; }
+		public string KargoFirmasi { get; set; }
+		public string GönderiKodu { get; set; }
+		public Nullable<System.DateTime> MusteriAtolyeGelisTarihi { get; set; }
 	}
 }

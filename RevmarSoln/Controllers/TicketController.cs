@@ -90,9 +90,15 @@ namespace SahinRektefiyeSoln.Controllers
                 model.SaseNo = talepler.VinNo;
                 model.SoforUserName = talepler.AtananSofor;
                 model.PartId = talepler.PartId;
-                model.VehicleId = talepler.VehicleId.HasValue ? talepler.VehicleId.Value : 0; ;
+                model.VehicleId = talepler.VehicleId.HasValue ? talepler.VehicleId.Value : 0;
                 model.AracGrubuId = talepler.AracGrupId.HasValue ? talepler.AracGrupId.Value : 0;
                 model.Id = talepler.TalepId;
+                model.TalepSekliId = talepler.TalepSekliId.HasValue ? talepler.TalepSekliId.Value : 0;
+                model.KargoyaVerilisTarihi = talepler.KargoyaVerilisTarihi;
+                model.AramaTarihi = talepler.AramaTarihi;
+                model.KargoFirmasi = talepler.KargoFirmasi;
+                model.GönderiKodu = talepler.GönderiKodu;
+                model.MusteriAtolyeGelisTarihi = talepler.MusteriAtolyeGelisTarihi;
             }
 
             FillIsEmriCombos();
@@ -140,7 +146,7 @@ namespace SahinRektefiyeSoln.Controllers
                 model.ArizaDiger = talepDetay.ArizaDiger;
                 model.ParcaDiger = talepDetay.ParcaDiger;
                 model.ParcaAdet = talepDetay.ParcaAdet;
-                model.IsLogoEnable = talepDetay.IsLogoEnable;
+                model.IsLogoEnable = (int)talepDetay.IsLogoEnable;
                 model.ParcalarText = new List<string>();
                 var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
                 var tamirList = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
@@ -311,6 +317,12 @@ namespace SahinRektefiyeSoln.Controllers
             yeniTalep.PartId = model.PartId;
             yeniTalep.VehicleId = model.VehicleId;
             yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
+            yeniTalep.TalepSekliId = model.TalepSekliId;
+            yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
+            yeniTalep.AramaTarihi = model.AramaTarihi;
+            yeniTalep.KargoFirmasi = model.KargoFirmasi;
+            yeniTalep.GönderiKodu = model.GönderiKodu;
+            yeniTalep.MusteriAtolyeGelisTarihi = model.MusteriAtolyeGelisTarihi;
 
             db.SaveChanges();
             FillIsEmriCombos();
@@ -321,13 +333,13 @@ namespace SahinRektefiyeSoln.Controllers
         [HttpPost]
         public ActionResult Open(TicketOpenViewModel model)
         {
-
             FillIsEmriCombos();
             using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
             {
                 using (var transaction = context.Database.BeginTransaction())
                 //using blokları arasında transaction'ımızı açtık ve artık transaction'ımız bir commit() fonksiyonunu kullanana kadar işlem yaptığımız tabloyu kilitleyecek.
                 {
+                    var talepSekli = db.TalepSekli.ToList();
                     db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
                     var musteriModel = context.Musteri.Find(model.HizliIsEmriVehicleMusteriId);
                     //2. Bilet 
@@ -348,6 +360,12 @@ namespace SahinRektefiyeSoln.Controllers
                     yeniTalep.PartId = model.PartId;
                     yeniTalep.VehicleId = model.VehicleId;
                     yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
+                    yeniTalep.TalepSekliId = model.TalepSekliId;
+                    yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
+                    yeniTalep.AramaTarihi = model.AramaTarihi;
+                    yeniTalep.KargoFirmasi = model.KargoFirmasi;
+                    yeniTalep.GönderiKodu = model.GönderiKodu;
+                    yeniTalep.MusteriAtolyeGelisTarihi = model.MusteriAtolyeGelisTarihi;
 
                     context.Talepler.Add(yeniTalep);
                     context.SaveChanges();
@@ -618,13 +636,7 @@ namespace SahinRektefiyeSoln.Controllers
             ViewBag.Soforler = new SelectList(db.UserRoles.Where(x => x.Roles.RoleName == "DANISMAN").OrderBy(x => x.UserName).Select(x => new { UserName = x.UserName, DanismanAdi = x.Users.FirstName + " " + x.Users.FirstName }).ToList(), "UserName", "DanismanAdi");
             ViewBag.Parts = new SelectList(db.Parts.Select(x => new { PartId = x.PartId, PartName = x.Name }).ToList(), "PartId", "PartName");
             ViewBag.Markalar = db.Companies.ToList();
-            ViewBag.TalepSekli = new SelectList(new List<SelectListItem>()
-            {
-                new SelectListItem { Value = "1", Text = "Telefon ile talep" },
-                new SelectListItem { Value = "2", Text = "Email ile talep" },
-                new SelectListItem { Value = "3", Text = "Müşteri kendi getirdi" },
-                new SelectListItem { Value = "4", Text = "Kargo ile geldi" }
-            }, "Value", "Text").ToList();
+            ViewBag.TalepSekliId = new SelectList(db.TalepSekli.ToList(), "TalepSekliId", "TalepSekliAciklama");
         }
 
         private IList<SelectListItem> ArizaListesi()

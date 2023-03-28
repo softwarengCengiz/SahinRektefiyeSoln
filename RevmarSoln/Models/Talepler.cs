@@ -37,12 +37,19 @@ namespace SahinRektefiyeSoln.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public string Modifier { get; set; }
         public Nullable<int> Durum { get; set; }
+        public Nullable<int> TalepSekliId { get; set; }
+        public Nullable<System.DateTime> KargoyaVerilisTarihi { get; set; }
+        public Nullable<System.DateTime> AramaTarihi { get; set; }
+        public string KargoFirmasi { get; set; }
+        public string GönderiKodu { get; set; }
+        public Nullable<System.DateTime> MusteriAtolyeGelisTarihi { get; set; }
     
         public virtual AracGrubu AracGrubu { get; set; }
         public virtual Musteri Musteri { get; set; }
         public virtual Parts Parts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TalepDetay> TalepDetay { get; set; }
+        public virtual TalepSekli TalepSekli { get; set; }
         public virtual Users Users { get; set; }
         public virtual Vehicles Vehicles { get; set; }
     }

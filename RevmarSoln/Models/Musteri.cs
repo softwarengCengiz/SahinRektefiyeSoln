@@ -26,8 +26,8 @@ namespace SahinRektefiyeSoln.Models
             this.MusteriAraclari = new HashSet<MusteriAraclari>();
             this.MusteriMail = new HashSet<MusteriMail>();
             this.MusteriTelefon = new HashSet<MusteriTelefon>();
-            this.Teklifler = new HashSet<Teklifler>();
             this.Talepler = new HashSet<Talepler>();
+            this.Teklifler = new HashSet<Teklifler>();
         }
     
         public int MusteriId { get; set; }
@@ -90,8 +90,8 @@ namespace SahinRektefiyeSoln.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MusteriTelefon> MusteriTelefon { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Teklifler> Teklifler { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Talepler> Talepler { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Teklifler> Teklifler { get; set; }
     }
 }

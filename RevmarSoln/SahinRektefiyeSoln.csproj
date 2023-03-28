@@ -650,10 +650,16 @@
     <Compile Include="Models\Suppliers.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TalepDetay.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Talepler.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TalepSekli.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TamirParca.cs">
