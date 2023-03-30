@@ -109,9 +109,9 @@
                         @Html.EditorFor(model => model.ServisAdı, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "ServisAdı" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                        <label>Müşteri Mail </label>
-                        @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                    </div>*@
+                            <label>Müşteri Mail </label>
+                            @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                        </div>*@
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Plaka </label>
                         @Html.EditorFor(model => model.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "20", autocomplete = "off", id = "Plaka" } })
@@ -394,7 +394,7 @@
                                 count++;
                             }
                             @*@Html.TextBox("tamiradet" + item.Value, null, new { @class = "w3-border w3-round onlynumeric",
-                            @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
+                                @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
                         </div>
 
                     }
@@ -431,13 +431,50 @@
                     <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Onayla</button>
                 </div>
             </div>
-
         }
+
+        <div class="w3-row">
+            <div class="w3-quarter w3-padding w3-right">
+                <button class="w3-btn w3-ripple w3-blue-gray w3-right" id="btnDownloadPdf">Pdf İndir</button>
+            </div>
+        </div>
         <hr />
     </div>
 </div>
 
 
+<div id="CheckDownloadPdfModal" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4" style="width: 30%; height: 15%;">
+        <header class="w3-container w3-teal">
+            @*<span onclick="document.getElementById('MusteriSecModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>*@
+            <h5>Değişiklikler kaydedilecek ve Pdf indirilecek. Onaylıyor musunuz ?</h5>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-margin" id="MusteriModalContent">
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button id="btnOnaylaPdf" class="w3-btn w3-ripple w3-green">Onayla</button>
+                    <button id="btnVazgecPdf" class="w3-btn w3-ripple w3-red">Vazgeç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#btnDownloadPdf').on('click', function () {
+        document.getElementById("CheckDownloadPdfModal").style.display = "block";
+    });
+
+    $('#btnVazgecPdf').on('click', function () {
+        document.getElementById("CheckDownloadPdfModal").style.display = "none";
+    });
+
+    $('#btnOnaylaPdf').on('click', function () {
+        let id = $('#TicketId').val();
+        $('#btnOlustur').click();
+        window.open('@Url.Action("CreatePdf","Ticket")?id=' + id, '_blank');
+    });
+</script>
 
 
 <script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>

@@ -1,30 +1,30 @@
 ﻿@model IEnumerable<SahinRektefiyeSoln.Models.UserMenus>
 @{
-	/**/
-	string userName = Session["UserName"].ToString();
-	List<string> muhasebeList = new List<string>();
-	muhasebeList.Add("icolpan");
-	muhasebeList.Add("zkarakas");
-	muhasebeList.Add("muhasebe");
-	muhasebeList.Add("chasgul");
+    /**/
+    string userName = Session["UserName"].ToString();
+    List<string> muhasebeList = new List<string>();
+    muhasebeList.Add("icolpan");
+    muhasebeList.Add("zkarakas");
+    muhasebeList.Add("muhasebe");
+    muhasebeList.Add("chasgul");
 
-	Layout = null;
-	int i;
+    Layout = null;
+    int i;
 }
 
 
 <script>
-	function myAccFunc(index) {
-		var x = document.getElementById(index);
-		if (x.className.indexOf("w3-show") == -1) {
-			x.className += " w3-show";
-			x.previousElementSibling.className += " w3-green";
-		} else {
-			x.className = x.className.replace(" w3-show", "");
-			x.previousElementSibling.className =
-				x.previousElementSibling.className.replace(" w3-green", "");
-		}
-	}
+    function myAccFunc(index) {
+        var x = document.getElementById(index);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-green";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" w3-green", "");
+        }
+    }
 
 </script>
 <div class="w3-bar-block w3-margin-bottom ">
@@ -71,8 +71,8 @@
         if (ViewBag.Cat30Cnt > 0)
         {
             <a href="#" class="w3-bar-item w3-button" onclick="myAccFunc('30')"><i class="fa fa-pagelines fa-fw"></i>Form Tanımlama İşlemleri</a>
-            <div id="30" class="w3-hide">                
-                @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 30).OrderBy(x=>x.Menus.Title))
+            <div id="30" class="w3-hide">
+                @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 30).OrderBy(x => x.Menus.Title))
                 {
                     <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
                 }
@@ -90,6 +90,14 @@
                 }
             </div>
         }
+
+        <a href="#" class="w3-bar-item w3-button" onclick="myAccFunc('110')"><i class="fa fa-car fa-fw"></i>Tanım İşlemleri</a>
+        <div id="110" class="w3-hide" style="padding-bottom: 64px!important;">
+            @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 110))
+            {
+                <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
+            }
+        </div>
     }
 
 </div>

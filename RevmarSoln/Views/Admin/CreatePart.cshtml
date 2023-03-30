@@ -1,7 +1,7 @@
 ﻿@model SahinRektefiyeSoln.Models.Parts
 
 @{
-    ViewBag.Title = "Ürün Tanımla";
+    ViewBag.Title = "Hizmet Tanımla";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -33,13 +33,13 @@
 
         <div class="w3-row">
             <div class="w3-third w3-padding">
-                <label>Parça Adı</label>
+                <label>Hizmet Adı</label>
                 @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "200", autocomplete = "off" , required = "required" } })
             </div>
         </div>
         <div class="w3-row">
             <div class="w3-third w3-padding">
-                <label>Parça Kodu</label>
+                <label>Hizmet Kodu</label>
                 @Html.EditorFor(model => model.PartCode, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "50", autocomplete = "off" , required = "required" } })
             </div>
         </div>
@@ -58,7 +58,7 @@
 
             </div>
             <div class="w3-quarter  w3-padding">
-                <button class="w3-btn w3-ripple w3-green w3-right" id="btnSave">Parça Ekle</button>
+                <button class="w3-btn w3-ripple w3-green w3-right" id="btnSave">Hizmet Ekle</button>
             </div>
         </div>
 

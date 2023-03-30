@@ -58,7 +58,7 @@ namespace SahinRektefiyeSoln.Controllers
 				{
 					using (var transaction = context.Database.BeginTransaction())
 					{
-						
+						model.musteri.Email = model.Mail;
 						//Musteriyi Oluştur
 
 						if (model.musteri.MusteriTipi == "B")
@@ -78,8 +78,6 @@ namespace SahinRektefiyeSoln.Controllers
 							model.musteri.IlceId = SFHelper.ReturnNullableInt(model.IlceId);
 							//model.musteri.VergiDairesiIlId = RevmerHelper.ReturnNullableInt(model.VergiDaireIlId);
 							//model.musteri.VergiDairesiIlceId = RevmerHelper.ReturnNullableInt(model.VergiDaireIlceId);
-
-
 						}
 						else if (model.musteri.MusteriTipi == "K")
 						{
@@ -319,7 +317,6 @@ namespace SahinRektefiyeSoln.Controllers
 				musteri.MusteriSoyadi = model.musteri.MusteriSoyadi;
 				musteri.TCKN = model.musteri.TCKN;
 
-
 				musteri.IlId = SFHelper.ReturnNullableInt(model.IlId);
 				musteri.IlceId = SFHelper.ReturnNullableInt(model.IlceId);
 
@@ -366,6 +363,9 @@ namespace SahinRektefiyeSoln.Controllers
 			musteri.ParcaIskonto = model.musteri.ParcaIskonto;
 			musteri.IscilikIskonto = model.musteri.IscilikIskonto;
 			musteri.Note = model.musteri.Note;
+			musteri.Sube = model.musteri.Sube;
+			musteri.Dahili = model.musteri.Dahili;
+			musteri.PostaKodu = model.musteri.PostaKodu;
 
 			musteri.DtModified = System.DateTime.Now;
 			musteri.Modifier = currentUser;

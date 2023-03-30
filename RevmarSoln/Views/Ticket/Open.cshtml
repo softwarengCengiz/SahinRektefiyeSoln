@@ -26,13 +26,17 @@
         $("#divMusteriAtolyeGelis").hide();
 
         $(function () {
-            $('#talepSekli').change(function () {
+            $('#TalepSekliId').change(function () {
+                debugger;
                 var selectedValue = $(this).val();
                 if (selectedValue == 4) {
                     $("#divKargoyaVerilis").show();
                     $("#divAramaTarihi").show();
                     $("#divKargoFirmasi").show();
                     $("#divGonderiKodu").show();
+                    $("#divMusteriAramaTarihi").hide();
+                    $("#divPersonelAtamasi").hide();
+                    $("#divHizmet").hide();
                 }
                 else {
                     $("#divKargoyaVerilis").hide();
@@ -43,9 +47,18 @@
 
                 if (selectedValue == 3) {
                     $("#divMusteriAtolyeGelis").show();
+                    $("#divMusteriAramaTarihi").hide();
+                    $("#divPersonelAtamasi").hide();
+                    $("#divHizmet").hide();
                 }
                 else {
                     $("#divMusteriAtolyeGelis").hide();
+                }
+
+                if (!(selectedValue == 3 || selectedValue == 4)) {
+                    $("#divMusteriAramaTarihi").show();
+                    $("#divPersonelAtamasi").show();
+                    $("#divHizmet").show();
                 }
             });
         });
@@ -123,29 +136,7 @@
                     <h6>Talep Şekli</h6>
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
-                    @Html.DropDownList("TalepSekliId", ViewBag.TalepSekliId as SelectList, "Seçiniz", htmlAttributes: new { @id = "talepSekli", @class = "w3-select w3-border w3-round" })
-                </div>
-                <div class="w3-row">
-                    <div class="w3-col s12 m3 l3 w3-padding" id="divKargoyaVerilis">
-                        <label>Kargoya Veriliş Tarihi</label>
-                        @Html.EditorFor(model => model.KargoyaVerilisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idKargoyaVerilis", maxlength = "25", autocomplete = "off" } })
-                    </div>
-                    <div class="w3-col s12 m3 l3 w3-padding" id="divAramaTarihi">
-                        <label>Arama Tarihi</label>
-                        @Html.EditorFor(model => model.AramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idAramaTarihi", maxlength = "25", autocomplete = "off" } })
-                    </div>
-                    <div class="w3-col s12 m3 l3 w3-padding" id="divKargoFirmasi">
-                        <label>Kargo Firması</label>
-                        @Html.EditorFor(model => model.KargoFirmasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-                    </div>
-                    <div class="w3-col s12 m3 l3 w3-padding" id="divGonderiKodu">
-                        <label>Gönderi Kodu</label>
-                        @Html.EditorFor(model => model.GönderiKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-                    </div>
-                    <div class="w3-col s12 m3 l3 w3-padding" id="divMusteriAtolyeGelis">
-                        <label>Müşteri Atölye Geliş Tarihi</label>
-                        @Html.EditorFor(model => model.MusteriAtolyeGelisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idMusteriAtolyeGelis", maxlength = "25", autocomplete = "off" } })
-                    </div>
+                    @Html.DropDownList("TalepSekliId", (SelectList)ViewBag.TalepSekliId, "Seçiniz", htmlAttributes: new { @id = "TalepSekliId", @class = "w3-select w3-border w3-round" })
                 </div>
             </div>
 
@@ -157,7 +148,7 @@
                     <div class="w3-col s12 m4 l4 w3-padding">
                         <div class="w3-threequarter">
                             <label>Müşteri Adı veya Kurum Adı</label>
-                            @Html.EditorFor(model => model.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off", id = "HizliIsEmriVehicleMusteriText", required = "required" } })
+                            @Html.EditorFor(model => model.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", id = "HizliIsEmriVehicleMusteriText", required = "required" } })
                         </div>
                         <div class="w3-quarter">
                             <br />
@@ -170,12 +161,16 @@
                         @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off", id = "ArayanKisiAdSoyad", @disabled = "disabled" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                        <label>Müşteri Mail </label>
-                        @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                    </div>*@
+                            <label>Müşteri Mail </label>
+                            @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                        </div>*@
                     <div class="w3-col s12 m2 l2 w3-padding">
                         <label>Müşteri Telefon </label>
                         @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "325", autocomplete = "off", id = "MusteriTelefon", required = "required" } })
+                    </div>
+                    <div class="w3-col s12 m2 l2 w3-padding" id="divMusteriAramaTarihi">
+                        <label>Müşteri Arama Tarihi</label>
+                        @Html.EditorFor(model => model.MusteriAramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "MusteriAramaTarihi", autocomplete = "off", required = "required" } })
                     </div>
                     <div class="w3-col s12 m4 l4 w3-padding">
                         <label>Müşteri Tipi</label>
@@ -216,9 +211,9 @@
                 </div>
                 <div class="w3-row w3-padding-left- w3-padding-right w3-margin-right">
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                        <label>Arayan Kişi Ad Soyad</label>
-                        @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                    </div>*@
+                            <label>Arayan Kişi Ad Soyad</label>
+                            @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                        </div>*@
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Araç Grubu</label>
                         @Html.DropDownList("AracGrubuId", (SelectList)ViewBag.AracGrubu, "Araç Grubunu Seçiniz", htmlAttributes: new
@@ -267,24 +262,42 @@
                 </div>
                 <div class="w3-row w3-padding-left- w3-padding-right w3-margin-right">
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                        <label>Arayan Kişi Ad Soyad</label>
-                        @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                    </div>*@
-                    <div class="w3-col s12 m3 l3 w3-padding">
+                            <label>Arayan Kişi Ad Soyad</label>
+                            @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                        </div>*@
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divPersonelAtamasi">
                         <label>Personel Ataması</label>
                         @Html.DropDownList("SoforUserName", (SelectList)ViewBag.Soforler, "Şöför Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "SoforUserName", required = "required" })
                     </div>
-                    <div class="w3-col s12 m3 l3 w3-padding">
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divHizmet">
                         <label>Hizmet</label>
-                        @Html.DropDownList("PartId", (SelectList)ViewBag.Parts, "Ürün Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "PartId", required = "required" })
+                        @Html.DropDownList("PartId", (SelectList)ViewBag.Parts, "Hizmet Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "PartId", required = "required" })
                     </div>
                     @*<div class="w3-col s12 m3 l3 w3-padding">
-                        <label>Kayıt Tarihi</label>
-                        @Html.EditorFor(model => model.KayitTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "KayitTarihi", autocomplete = "off", required = "required" } })
-                    </div>*@
-                    <div class="w3-col s12 m3 l3 w3-padding">
-                        <label>Müşteri Arama Tarihi</label>
-                        @Html.EditorFor(model => model.MusteriAramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "MusteriAramaTarihi", autocomplete = "off", required = "required" } })
+                            <label>Kayıt Tarihi</label>
+                            @Html.EditorFor(model => model.KayitTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "KayitTarihi", autocomplete = "off", required = "required" } })
+                        </div>*@
+                    <div class="w3-row">
+                        <div class="w3-col s12 m3 l3 w3-padding" id="divKargoyaVerilis">
+                            <label>Kargoya Veriliş Tarihi</label>
+                            @Html.EditorFor(model => model.KargoyaVerilisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idKargoyaVerilis", maxlength = "25", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-col s12 m3 l3 w3-padding" id="divAramaTarihi">
+                            <label>Arama Tarihi</label>
+                            @Html.EditorFor(model => model.AramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idAramaTarihi", maxlength = "25", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-col s12 m3 l3 w3-padding" id="divKargoFirmasi">
+                            <label>Kargo Firması</label>
+                            @Html.EditorFor(model => model.KargoFirmasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-col s12 m3 l3 w3-padding" id="divGonderiKodu">
+                            <label>Gönderi Kodu</label>
+                            @Html.EditorFor(model => model.GönderiKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-col s12 m3 l3 w3-padding" id="divMusteriAtolyeGelis">
+                            <label>Müşteri Atölye Geliş Tarihi</label>
+                            @Html.EditorFor(model => model.MusteriAtolyeGelisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idMusteriAtolyeGelis", maxlength = "25", autocomplete = "off" } })
+                        </div>
                     </div>
                 </div>
                 <div class="w3-row w3-margin-lr">
@@ -306,62 +319,62 @@
 
         <hr />
         @*<div class="w3-row w3-threequarter w3-padding w3-border">
-            <table class="w3-table w3-bordered">
-                <tr>
-                    <td>Bildirim Tarihi</td>
-                    <td>@System.DateTime.Now.ToShortDateString() - @System.DateTime.Now.ToShortTimeString()</td>
-                    <td>Alınan İş</td>
-                    <td><input type="checkbox" /> Motor</td>
-                    <td><input type="checkbox" /> Kapak</td>
-                </tr>
-                <tr>
-                    <td>Servis Adı</td>
-                    <td><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                    <td><b>Plaka</b></td>
-                    <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                </tr>
-                <tr>
-                    <td>Marka/Model</td>
-                    <td></td>
-                    <td>Araç Km</td>
-                    <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                </tr>
-                <tr>
-                    <td>Motor Tipi</td>
-                    <td><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                    <td>Şasi No</td>
-                    <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                </tr>
-                <tr>
-                    <td>Yakıt tipi</td>
-                    <td></td>
-                    <td>Motor No</td>
-                    <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray-0 w3-hover-light-gray w3-input w3-round" /></td>
-                </tr>
-                <tr>
-                    <td>Silindir Sayısı</td>
-                    <td><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                    <td>Supap Sayısı</td>
-                    <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Araç Üretici Firma Garantisi Altında mı ?</td>
-                    <td colspan="3"><input type="checkbox" /> Evet <input type="checkbox" /> Hayır</td>
-                </tr>
-                <tr>
-                    <td colspan="2">Motorda Daha Önce Revizyon Yapılmış mı ?</td>
-                    <td colspan="3"><input type="checkbox" /> Evet <input type="checkbox" /> Hayır</td>
-                </tr>
-                <tr>
-                    <td colspan="2">Revizyon Yapılmış İse Açıklama </td>
-                    <td colspan="3"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Servis Tarafından Verilen İş Emri No (İKK)</td>
-                    <td colspan="3"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
-                </tr>
-            </table>
-        </div>*@
+                <table class="w3-table w3-bordered">
+                    <tr>
+                        <td>Bildirim Tarihi</td>
+                        <td>@System.DateTime.Now.ToShortDateString() - @System.DateTime.Now.ToShortTimeString()</td>
+                        <td>Alınan İş</td>
+                        <td><input type="checkbox" /> Motor</td>
+                        <td><input type="checkbox" /> Kapak</td>
+                    </tr>
+                    <tr>
+                        <td>Servis Adı</td>
+                        <td><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                        <td><b>Plaka</b></td>
+                        <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                    </tr>
+                    <tr>
+                        <td>Marka/Model</td>
+                        <td></td>
+                        <td>Araç Km</td>
+                        <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                    </tr>
+                    <tr>
+                        <td>Motor Tipi</td>
+                        <td><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                        <td>Şasi No</td>
+                        <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                    </tr>
+                    <tr>
+                        <td>Yakıt tipi</td>
+                        <td></td>
+                        <td>Motor No</td>
+                        <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray-0 w3-hover-light-gray w3-input w3-round" /></td>
+                    </tr>
+                    <tr>
+                        <td>Silindir Sayısı</td>
+                        <td><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                        <td>Supap Sayısı</td>
+                        <td colspan="2"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Araç Üretici Firma Garantisi Altında mı ?</td>
+                        <td colspan="3"><input type="checkbox" /> Evet <input type="checkbox" /> Hayır</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Motorda Daha Önce Revizyon Yapılmış mı ?</td>
+                        <td colspan="3"><input type="checkbox" /> Evet <input type="checkbox" /> Hayır</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Revizyon Yapılmış İse Açıklama </td>
+                        <td colspan="3"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Servis Tarafından Verilen İş Emri No (İKK)</td>
+                        <td colspan="3"><input type="text" class="w3-border-0 w3-hover-light-gray w3-input w3-round" /></td>
+                    </tr>
+                </table>
+            </div>*@
     </div>
 </div>
 

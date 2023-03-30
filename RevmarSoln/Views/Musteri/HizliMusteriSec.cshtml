@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<SahinRektefiyeSoln.Models.Musteri>
 @{
-	Layout = null;
+    Layout = null;
 }
 
 <style>
-	#example {
-		font-family: tahoma;
-	}
+    #example {
+        font-family: tahoma;
+    }
 </style>
 
 <script>
@@ -26,11 +26,13 @@
             var MusteriTel = $(this).attr('MusteriTel');
             var MusteriAdres = $(this).attr('MusteriAdres');
             var MusteriTip = $(this).attr('MusteriTip');
+            var MusteriKontak = $(this).attr('MusteriKontak');
 
             $('#HizliIsEmriVehicleMusteriId').val(MusteriId);
             $('#HizliIsEmriVehicleMusteriText').val(MusteriDesc);
             $('#MusteriTelefon').val(MusteriTel);
             $('#Adres').val(MusteriAdres);
+            $('#ArayanKisiAdSoyad').val(MusteriKontak);
 
 			if (MusteriTip == "K") {
 				$('#ArayanKisiAdSoyad').removeAttr('disabled');
@@ -137,52 +139,66 @@
 </script>
 
 <div class="w3-row w3-padding-bottom">
-	<div class="w3-half">
-		<button type="button" id="btnrefresh" class="w3-btn w3-green w3-round"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp; Müşteri Yenile</button>
-	</div>
-	<div class="w3-half w3-right"><a href="/Musteri/Create" class="w3-btn w3-ripple w3-green  w3-round w3-right " target="_blank"><i class="fa fa-user-plus"></i>&nbsp;Yeni Müşteri Ekle</a></div>
+    <div class="w3-half">
+        <button type="button" id="btnrefresh" class="w3-btn w3-green w3-round"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp; Müşteri Yenile</button>
+    </div>
+    <div class="w3-half w3-right"><a href="/Musteri/Create" class="w3-btn w3-ripple w3-green  w3-round w3-right " target="_blank"><i class="fa fa-user-plus"></i>&nbsp;Yeni Müşteri Ekle</a></div>
 </div>
-	
-<table id="example">
-	<thead>
-		<tr>
-			<th width="20%"></th>
-			<th width="60%">
-				Müşteri Adı
-			</th>
-			<th width="20%">
-				Tc/Vergi No
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var musteri in Model)
-		{
-			<tr>
-				<td><button class="btn-login w3-blue w3-btn btnModelMusteriSec" title="Müşteri Seç" MusteriAdres ="@musteri.Adres" MusteriTel="@musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi" MusteriTip="@musteri.MusteriTipi" MusteriId="@musteri.MusteriId" MusteriDesc="@(musteri.MusteriTipi == "B" ? (musteri.MusteriAdi.ToString() +" "+ musteri.MusteriSoyadi.ToString()):musteri.KurumAdi.ToString())"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button></td>
-				<td>
-					@if (musteri.MusteriTipi == "B")
-					{
-						<label>@musteri.MusteriAdi @musteri.MusteriSoyadi</label>
-					}
-					else
-					{
-						<label>@musteri.KurumAdi</label>
-					}
-				</td>
-				<td>
-					@if (musteri.MusteriTipi == "B")
-					{
-					<label>@musteri.TCKN</label>
-					}
-					else
-					{
-					<label>@musteri.VergiNo</label>
-					}
-					
-				</td>
-			</tr>
 
-		}
-	</tbody>
+<table id="example">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Müşteri Adı</th>
+            <th>Tc/Vergi No</th>
+            <th>Bireysel/Kurumsal</th>
+            <th>İlgili Kişi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var musteri in Model)
+        {
+            <tr>
+                <td><button class="btn-login w3-blue w3-btn btnModelMusteriSec" title="Müşteri Seç" MusteriAdres="@musteri.Adres" MusteriTel="@musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi" MusteriTip="@musteri.MusteriTipi" MusteriKontak="@musteri.KontakAdi @musteri.KontakSoyadi" MusteriId="@musteri.MusteriId" MusteriDesc="@(musteri.MusteriTipi == "B" ? (musteri.MusteriAdi.ToString() +" "+ musteri.MusteriSoyadi.ToString()):musteri.KurumAdi.ToString())"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button></td>
+                <td>
+                    @if (musteri.MusteriTipi == "B")
+                    {
+                        <label>@musteri.MusteriAdi @musteri.MusteriSoyadi</label>
+                    }
+                    else
+                    {
+                        <label>@musteri.KurumAdi</label>
+                    }
+                </td>
+                <td>
+                    @if (musteri.MusteriTipi == "B")
+                    {
+                        <label>@musteri.TCKN</label>
+                    }
+                    else
+                    {
+                        <label>@musteri.VergiNo</label>
+                    }
+
+                </td>
+                <td>
+                    @if (musteri.MusteriTipi == "B")
+                    {
+                        <label>Bireysel</label>
+                    }
+                    else
+                    {
+                        <label>Kurumsal</label>
+                    }
+                </td>
+                <td>
+                    @if (musteri.MusteriTipi == "K")
+                    {
+                        <label>@musteri.KontakAdi @musteri.KontakSoyadi</label>
+                    }
+                </td>
+            </tr>
+
+        }
+    </tbody>
 </table>

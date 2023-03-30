@@ -1,27 +1,27 @@
 ﻿@model SahinRektefiyeSoln.Models.ViewModels.Customer.MusteriEditPageModel
 @{
-	ViewBag.Title = "Musteri Duzenle";
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	string musteriTip = Model.musteri.MusteriTipi.ToString();
+    ViewBag.Title = "Musteri Duzenle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string musteriTip = Model.musteri.MusteriTipi.ToString();
 
-	int telefonAdet = 0, mailAdet = 0;
+    int telefonAdet = 0, mailAdet = 0;
 
-	if (Model.musteri.MusteriTelefon != null)
-	{
-		telefonAdet = Model.musteri.MusteriTelefon.Count();
-	}
-	if (Model.musteri.MusteriMail != null)
-	{
-		mailAdet = Model.musteri.MusteriMail.Count();
-	}
+    if (Model.musteri.MusteriTelefon != null)
+    {
+        telefonAdet = Model.musteri.MusteriTelefon.Count();
+    }
+    if (Model.musteri.MusteriMail != null)
+    {
+        mailAdet = Model.musteri.MusteriMail.Count();
+    }
 
-	int MusteriAracCounter = 1;
-	int MusteriIrsaliyeCounter = 1;
-	int MusteriIsEmriCounter = 1;
+    int MusteriAracCounter = 1;
+    int MusteriIrsaliyeCounter = 1;
+    int MusteriIsEmriCounter = 1;
 
-	int musteriAracCount = (Model.musteri.MusteriAraclari != null ? Model.musteri.MusteriAraclari.Count : 0);
-	int musteriIrsaliyeCount = (Model.musteri.Irsaliyeler != null ? Model.musteri.Irsaliyeler.Count : 0);
-	int musteriIsEmriCount = (Model.musteri.IsEmirleri != null ? Model.musteri.IsEmirleri.Count : 0);
+    int musteriAracCount = (Model.musteri.MusteriAraclari != null ? Model.musteri.MusteriAraclari.Count : 0);
+    int musteriIrsaliyeCount = (Model.musteri.Irsaliyeler != null ? Model.musteri.Irsaliyeler.Count : 0);
+    int musteriIsEmriCount = (Model.musteri.IsEmirleri != null ? Model.musteri.IsEmirleri.Count : 0);
 
 }
 @Html.Action("SetPageHeader", "Admin", new { pageTitle = "Müşteri Düzenleme Ekranı", pagePermission = "XXXXX" })
@@ -459,422 +459,436 @@
 
 </script>
 <div class="w3-panel">
-	<div class="w3-row-padding w3-card">
-		<div class="w3-row w3-row-padding  w3-margin-top">
-			@Html.RenderFlashMessages()
-		</div>
-		@using (Html.BeginForm("MusteriDuzenle", "Musteri", FormMethod.Post))
-		{
-			@Html.HiddenFor(x => x.musteri.MusteriId);
-			@Html.HiddenFor(x => x.musteri.MusteriTipi);
-			<div class="w3-row w3-margin-bottom">
-				<!--Left Side-->
-				<div class="w3-half">
-					<div class="w3-row w3-padding">
-						<div class="w3-row">
-							@if (musteriTip == "B")
-							{
-							<a href="javascript:void(0)">
-								@*onclick="openCity(event, 'divbireysel','B');"*@
-								<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">Bireysel Müşteri</div>
-							</a>
-							}
-							else if (musteriTip == "K")
-							{
-							<a href="javascript:void(0)">
-								@*onclick="openCity(event, 'divkurumsal','K');"*@
-								<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">Kurumsal Müşteri</div>
-							</a>
-							}
-							<a href="/Vehicle/Create?MusteriId=@Model.musteri.MusteriId">
-								<div class="w3-third w3-bottombar w3-hover-light-grey w3-padding w3-border-blue">Müşteri'ye Araç Ekle</div>
-							</a>
-						</div>
-						@if (musteriTip == "B")
-						{
-							<div class="w3-row w3-padding tab" id="divbireysel">
-								<div class="w3-row">
-									<div class="w3-third w3-padding-right">
-										<label>Müşteri Adı</label>
-										@Html.EditorFor(model => model.musteri.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-									</div>
-									<div class="w3-third w3-padding-right">
-										<label>Müşteri Soyadı</label>
-										@Html.EditorFor(model => model.musteri.MusteriSoyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-									</div>
-									<div class="w3-third w3-padding-right">
-										<label>Tc Kimlik Numarası</label>
-										@Html.EditorFor(model => model.musteri.TCKN, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "11", autocomplete = "off" } })
-									</div>
-								</div>
-							</div>
-						}
-						else if (musteriTip == "K")
-						{
-							<div class="w3-row w3-padding tab" id="divkurumsal">
-								<div class="w3-row">
-									<div class="w3-twothird w3-padding-right">
-										<label>Kurum Adı</label>
-										@Html.EditorFor(model => model.musteri.KurumAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "150", autocomplete = "off" } })
-									</div>
-									<div class="w3-third">
-										<label>Kurum Tipi</label>
-										@Html.DropDownList("KurumTipId", (SelectList)ViewBag.KurumTipleri, "Kurum Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "KurumTipId" })
-									</div>
-								</div>
-								<div class="w3-row">
+    <div class="w3-row-padding w3-card">
+        <div class="w3-row w3-row-padding  w3-margin-top">
+            @Html.RenderFlashMessages()
+        </div>
+        @using (Html.BeginForm("MusteriDuzenle", "Musteri", FormMethod.Post))
+        {
+            @Html.HiddenFor(x => x.musteri.MusteriId);
+            @Html.HiddenFor(x => x.musteri.MusteriTipi);
+            <div class="w3-row w3-margin-bottom">
+                <!--Left Side-->
+                <div class="w3-half">
+                    <div class="w3-row w3-padding">
+                        <div class="w3-row">
+                            @if (musteriTip == "B")
+                            {
+                                <a href="javascript:void(0)">
+                                    @*onclick="openCity(event, 'divbireysel','B');"*@
+                                    <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">Bireysel Müşteri</div>
+                                </a>
+                            }
+                            else if (musteriTip == "K")
+                            {
+                                <a href="javascript:void(0)">
+                                    @*onclick="openCity(event, 'divkurumsal','K');"*@
+                                    <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">Kurumsal Müşteri</div>
+                                </a>
+                            }
+                            <a href="/Vehicle/Create?MusteriId=@Model.musteri.MusteriId">
+                                <div class="w3-third w3-bottombar w3-hover-light-grey w3-padding w3-border-blue">Müşteri'ye Araç Ekle</div>
+                            </a>
+                        </div>
+                        @if (musteriTip == "B")
+                        {
+                            <div class="w3-row w3-padding tab" id="divbireysel">
+                                <div class="w3-row">
+                                    <div class="w3-third w3-padding-right">
+                                        <label>Müşteri Adı</label>
+                                        @Html.EditorFor(model => model.musteri.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                                    </div>
+                                    <div class="w3-third w3-padding-right">
+                                        <label>Müşteri Soyadı</label>
+                                        @Html.EditorFor(model => model.musteri.MusteriSoyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                                    </div>
+                                    <div class="w3-third w3-padding-right">
+                                        <label>Tc Kimlik Numarası</label>
+                                        @Html.EditorFor(model => model.musteri.TCKN, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "11", autocomplete = "off" } })
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (musteriTip == "K")
+                        {
+                            <div class="w3-row w3-padding tab" id="divkurumsal">
+                                <div class="w3-row">
+                                    <div class="w3-twothird w3-padding-right">
+                                        <label>Kurum Adı</label>
+                                        @Html.EditorFor(model => model.musteri.KurumAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "150", autocomplete = "off" } })
+                                    </div>
+                                    <div class="w3-third">
+                                        <label>Kurum Tipi</label>
+                                        @Html.DropDownList("KurumTipId", (SelectList)ViewBag.KurumTipleri, "Kurum Tipi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "KurumTipId" })
+                                    </div>
+                                </div>
+                                <div class="w3-row">
 
-								</div>
-								<div class="w3-row">
-									<div class="w3-third w3-padding-right">
-										<label>İlgili Ad</label>
-										@Html.EditorFor(model => model.musteri.KontakAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-									</div>
-									<div class="w3-third w3-padding-right">
-										<label>İlgili Soyad</label>
-										@Html.EditorFor(model => model.musteri.KontakSoyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-									</div>
-									<div class="w3-third">
-										<label>İlgili Kategori</label>
-										@Html.DropDownList("KontakKatId", (SelectList)ViewBag.KontakKategorileri, "İlgili Kategorisi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "KontakKatId" })
-									</div>
-								</div>
-							</div>
-						}
-						<div class="w3-row w3-padding ">
-							<div class="w3-row">
-								<div class="w3-third w3-padding-right">
-									<label>Doğum Tarihi</label>
-									@Html.EditorFor(model => model.musteri.DogumTarihi, new { id = "DogumTarihi", htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
-								</div>
-								<div class="w3-third w3-padding-right">
-									<label>Meslek</label>
-									@Html.DropDownList("MeslekId", (SelectList)ViewBag.Meslekler, "Meslek Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "MeslekId" })
-								</div>
-								<div class="w3-third">
-									<label>Cinsiyet</label>
-									@Html.DropDownListFor(model => model.musteri.Cinsiyet, new List<SelectListItem>
+                                </div>
+                                <div class="w3-row">
+                                    <div class="w3-third w3-padding-right">
+                                        <label>İlgili Ad</label>
+                                        @Html.EditorFor(model => model.musteri.KontakAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                                    </div>
+                                    <div class="w3-third w3-padding-right">
+                                        <label>İlgili Soyad</label>
+                                        @Html.EditorFor(model => model.musteri.KontakSoyadi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                                    </div>
+                                    <div class="w3-third">
+                                        <label>İlgili Kategori</label>
+                                        @Html.DropDownList("KontakKatId", (SelectList)ViewBag.KontakKategorileri, "İlgili Kategorisi Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "KontakKatId" })
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="w3-row w3-padding ">
+                            <div class="w3-row">
+                                <div class="w3-third w3-padding-right">
+                                    <label>Doğum Tarihi</label>
+                                    @Html.EditorFor(model => model.musteri.DogumTarihi, new { id = "DogumTarihi", htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+                                </div>
+                                <div class="w3-third w3-padding-right">
+                                    <label>Meslek</label>
+                                    @Html.DropDownList("MeslekId", (SelectList)ViewBag.Meslekler, "Meslek Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "MeslekId" })
+                                </div>
+                                <div class="w3-third">
+                                    <label>Cinsiyet</label>
+                                    @Html.DropDownListFor(model => model.musteri.Cinsiyet, new List<SelectListItem>
 {
 new SelectListItem{ Text="Cinsiyet Seçiniz", Value = "0" },
 new SelectListItem{ Text="Kadın", Value = "K" },
 new SelectListItem{ Text="Erkek", Value = "E" },
 }, htmlAttributes: new { @class = "w3-select w3-border w3-round" })
-								</div>
-							</div>
-							<div class="w3-row">
-								<div class="w3-third w3-padding-right ">
-									<label>Telefon Numarası</label>
-									@Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off", disabled = "disabled" } })
-									<label class="w3-small w3-padding-left">@telefonAdet adet telefon kayıtlı</label>
-								</div>
-								<div class="w3-twothird ">
-									<label>Mail Adresi</label>
-									@Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", disabled = "disabled" } })
-									<label class="w3-small w3-padding-left">@mailAdet adet mail kayıtlı</label>
-								</div>
+                                </div>
+                            </div>
+                            <div class="w3-row">
+                                <div class="w3-third w3-padding-right ">
+                                    <label>Telefon Numarası</label>
+                                    @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off", disabled = "disabled" } })
+                                    <label class="w3-small w3-padding-left">@telefonAdet adet telefon kayıtlı</label>
+                                </div>
+                                <div class="w3-twothird ">
+                                    <label>Mail Adresi</label>
+                                    @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", disabled = "disabled" } })
+                                    <label class="w3-small w3-padding-left">@mailAdet adet mail kayıtlı</label>
+                                </div>
 
-							</div>
-							<div class="w3-row w3-margin-top w3-margin-bottom">
-								<a href="/Musteri/MusteriKvkIzinYonet?MusteriId=@Model.musteri.MusteriId" class="btn-login w3-green w3-btn w3-round w3-block">Müşteri Telefon Mail İzinlerini Yönet</a>
-							</div>
-							<div class="w3-row">
-								<div class="w3-third w3-padding-right">
-									<label>İl</label>
-									@Html.DropDownList("IlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlId", required = "required", @onchange = "onChangeIl();" })
-								</div>
-								<div class="w3-third">
-									<label>İlçe</label>
-									@Html.DropDownList("IlceId", (SelectList)ViewBag.Ilceler, "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlceId", required = "required" })
-								</div>
-							</div>
-							<div class="w3-row">
-								<div class="w3-row w3-row w3-padding-top">
-									@Html.TextAreaFor(model => model.musteri.Adres, new { @class = "w3-input w3-border w3-round", maxlength = "512", rows = "6", cols = "300", placeholder = "Adres giriniz" })
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!--Right Side-->
-				<div class="w3-half">
-					<div class="w3-row w3-padding">
-						<div class="w3-col m5 l5">
-							<img src="~/Images/eFatura.png" class="w3-round" style="width:50px!important;height:50px!important;" />
+                            </div>
+                            <div class="w3-row w3-margin-top w3-margin-bottom">
+                                <a href="/Musteri/MusteriKvkIzinYonet?MusteriId=@Model.musteri.MusteriId" class="btn-login w3-green w3-btn w3-round w3-block">Müşteri Telefon Mail İzinlerini Yönet</a>
+                            </div>
+                            <div class="w3-row">
+                                <div class="w3-third w3-padding-right">
+                                    <label>İl</label>
+                                    @Html.DropDownList("IlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlId", required = "required", @onchange = "onChangeIl();" })
+                                </div>
+                                <div class="w3-third">
+                                    <label>İlçe</label>
+                                    @Html.DropDownList("IlceId", (SelectList)ViewBag.Ilceler, "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "IlceId", required = "required" })
+                                </div>
+                            </div>
+                            <div class="w3-row">
+                                <div class="w3-row w3-row w3-padding-top">
+                                    @Html.TextAreaFor(model => model.musteri.Adres, new { @class = "w3-input w3-border w3-round", maxlength = "512", rows = "6", cols = "300", placeholder = "Adres giriniz" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Right Side-->
+                <div class="w3-half">
+                    <div class="w3-row w3-padding">
+                        <div class="w3-col m5 l5">
+                            <img src="~/Images/eFatura.png" class="w3-round" style="width:50px!important;height:50px!important;" />
 
-							@Html.CheckBoxFor(model => model.musteri.SWEFaturaMukellefi, new { @class = "w3-check" })
-							<label>E-fatura Mükellefi</label>
-						</div>
-						<div class="w3-col m5 l5">
-							<img src="~/Images/Earsiv.png" class="w3-round" style="width:50px!important;height:50px!important;" />
-							@Html.CheckBoxFor(model => model.musteri.SWEArsivMukellefi, new { @class = "w3-check" })
-							<label>E-Arşiv Mükellefi</label>
-						</div>
-					</div>
-					<div class="w3-row">
-						<div class="w3-third w3-padding-right">
-							<label>Vergi No</label>
-							@Html.EditorFor(model => model.musteri.VergiNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "15", autocomplete = "off" } })
-						</div>
-						<div class="w3-twothird w3-padding-right">
-							<label>Vergi Dairesi</label>
-							@Html.EditorFor(model => model.musteri.VergiDairesi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
-						</div>
-						@*<div class="w3-third w3-padding-right">
-			<label>Vergi Daire İl</label>
-			@Html.DropDownList("VergiDaireIlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VergiDaireIlId", @onchange = "onChangeVergiDaireIl();" })
-		</div>
-		<div class="w3-third">
-			<label>Vergi Daire İlçe</label>
-			@Html.DropDownList("VergiDaireIlceId", (SelectList)ViewBag.VergiIlceler, "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VergiDaireIlceId" })
-		</div>*@
-					</div>
-					<div class="w3-row">
-						<div class="w3-third w3-padding-right">
-							<label>Muhasebe Kodu</label>
-							@Html.EditorFor(model => model.musteri.MuhasebeKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-						</div>
-						<div class="w3-third w3-padding-right">
-							<label>Vade</label>
-							@Html.EditorFor(model => model.musteri.Vade, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
-						</div>
-						<div class="w3-third w3-padding-right">
-							<label>Cari Kod</label>
-							@Html.EditorFor(model => model.musteri.CariKod, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off", required = "required" } })
-						</div>
-					</div>
-					<div class="w3-row">
-						<div class="w3-third w3-padding-right">
-							<label>Parça İskontosu</label>
-							@Html.EditorFor(model => model.musteri.ParcaIskonto, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
-						</div>
-						<div class="w3-third w3-padding-right">
-							<label>İşçilik İskontosu</label>
-							@Html.EditorFor(model => model.musteri.IscilikIskonto, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
-						</div>
-						<div class="w3-third "></div>
-					</div>
-					<div class="w3-row w3-padding-top">
-						@Html.TextAreaFor(model => model.musteri.Note, new { @class = "w3-input w3-border w3-round", maxlength = "512", rows = "6", cols = "300", placeholder = "Notları buraya girebilirsiniz" })
-					</div>
-				</div>
-			</div>
-			<div class="w3-row">
-				<div class="w3-quarter w3-left w3-margin">
-					<a href="/Musteri/MusteriAra" class="w3-btn w3-ripple w3-green w3-round w3-left">&nbsp; Geri</a>
-				</div>
-				<div class="w3-quarter w3-right w3-margin">
-					<button class="w3-btn w3-ripple w3-green w3-round w3-right" id="btnKaydet">Kaydet</button>
-				</div>
-			</div>
-		}
-		<style>
-			#example {
-				font-family: tahoma;
-			}
-		</style>
+                            @Html.CheckBoxFor(model => model.musteri.SWEFaturaMukellefi, new { @class = "w3-check" })
+                            <label>E-fatura Mükellefi</label>
+                        </div>
+                        <div class="w3-col m5 l5">
+                            <img src="~/Images/Earsiv.png" class="w3-round" style="width:50px!important;height:50px!important;" />
+                            @Html.CheckBoxFor(model => model.musteri.SWEArsivMukellefi, new { @class = "w3-check" })
+                            <label>E-Arşiv Mükellefi</label>
+                        </div>
+                    </div>
+                    <div class="w3-row">
+                        <div class="w3-third w3-padding-right">
+                            <label>Vergi No</label>
+                            @Html.EditorFor(model => model.musteri.VergiNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "15", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-twothird w3-padding-right">
+                            <label>Vergi Dairesi</label>
+                            @Html.EditorFor(model => model.musteri.VergiDairesi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "54", autocomplete = "off" } })
+                        </div>
+                        @*<div class="w3-third w3-padding-right">
+                                <label>Vergi Daire İl</label>
+                                @Html.DropDownList("VergiDaireIlId", (SelectList)ViewBag.Iller, "İl Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VergiDaireIlId", @onchange = "onChangeVergiDaireIl();" })
+                            </div>
+                            <div class="w3-third">
+                                <label>Vergi Daire İlçe</label>
+                                @Html.DropDownList("VergiDaireIlceId", (SelectList)ViewBag.VergiIlceler, "İlçe Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "VergiDaireIlceId" })
+                            </div>*@
+                    </div>
+                    <div class="w3-row">
+                        <div class="w3-third w3-padding-right">
+                            <label>Muhasebe Kodu</label>
+                            @Html.EditorFor(model => model.musteri.MuhasebeKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-third w3-padding-right">
+                            <label>Vade</label>
+                            @Html.EditorFor(model => model.musteri.Vade, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-third w3-padding-right">
+                            <label>Cari Kod</label>
+                            @Html.EditorFor(model => model.musteri.CariKod, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off", required = "required" } })
+                        </div>
+                    </div>
+                    <div class="w3-row">
+                        <div class="w3-third w3-padding-right">
+                            <label>Parça İskontosu</label>
+                            @Html.EditorFor(model => model.musteri.ParcaIskonto, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-third w3-padding-right">
+                            <label>İşçilik İskontosu</label>
+                            @Html.EditorFor(model => model.musteri.IscilikIskonto, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-third "></div>
+                    </div>
+                    <div class="w3-row">
+                        <div class="w3-third w3-padding-right">
+                            <label>Şube</label>
+                            @Html.EditorFor(model => model.musteri.Sube, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-third w3-padding-right">
+                            <label>Dahili</label>
+                            @Html.EditorFor(model => model.musteri.Dahili, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+                        </div>
+                        <div class="w3-third w3-padding-right">
+                            <label>Posta Kodu</label>
+                            @Html.EditorFor(model => model.musteri.PostaKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "24", autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="w3-row w3-padding-top">
+                        @Html.TextAreaFor(model => model.musteri.Note, new { @class = "w3-input w3-border w3-round", maxlength = "512", rows = "6", cols = "300", placeholder = "Notları buraya girebilirsiniz" })
+                    </div>
+                </div>
+            </div>
+            <div class="w3-row">
+                <div class="w3-quarter w3-left w3-margin">
+                    <a href="/Musteri/MusteriAra" class="w3-btn w3-ripple w3-green w3-round w3-left">&nbsp; Geri</a>
+                </div>
+                <div class="w3-quarter w3-right w3-margin">
+                    <button class="w3-btn w3-ripple w3-green w3-round w3-right" id="btnKaydet">Kaydet</button>
+                </div>
+            </div>
+        }
+        <style>
+            #example {
+                font-family: tahoma;
+            }
+        </style>
 
-		<div class="w3-row w3-margin-bottom w3-border w3-round">
-			<div class="w3-row">
-				<a href="javascript:void(0)" onclick="openCity(event, 'divMusteriAraclari');">
-					<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-blue">Araçlar ( @musteriAracCount )</div>
-				</a>
-				<a href="javascript:void(0)" onclick="openCity(event, 'divIsKartlari');">
-					<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding ">İş Kartları ( @musteriIsEmriCount )</div>
-				</a>
-				<a href="javascript:void(0)" onclick="openCity(event, 'divIrsaliyeler');">
-					<div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding ">İrsaliyeler ( @musteriIrsaliyeCount ) </div>
-				</a>
-			</div>
-			<div class="w3-row w3-padding w3-margin-top tab" id="divMusteriAraclari">
-				@if (Model.musteri.MusteriAraclari != null)
-				{
-					if (Model.musteri.MusteriAraclari.Count > 0)
-					{
-						<table id="MusteriAraclari">
-							<thead>
-								<tr>
-									<th></th>
-									<th>Şasi No</th>
-									<th>Motor No</th>
-									<th>Plaka</th>
-									<th>Marka</th>
-									<th>Model</th>
-									<th>Araç Grubu</th>
-									<th>Aktif/Pasif</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach (var musteriArac in Model.musteri.MusteriAraclari)
-								{
-									<tr>
-										<td class="w3-center">
-											@MusteriAracCounter  @{MusteriAracCounter++;}
+        <div class="w3-row w3-margin-bottom w3-border w3-round">
+            <div class="w3-row">
+                <a href="javascript:void(0)" onclick="openCity(event, 'divMusteriAraclari');">
+                    <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-blue">Araçlar ( @musteriAracCount )</div>
+                </a>
+                <a href="javascript:void(0)" onclick="openCity(event, 'divIsKartlari');">
+                    <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding ">İş Kartları ( @musteriIsEmriCount )</div>
+                </a>
+                <a href="javascript:void(0)" onclick="openCity(event, 'divIrsaliyeler');">
+                    <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding ">İrsaliyeler ( @musteriIrsaliyeCount ) </div>
+                </a>
+            </div>
+            <div class="w3-row w3-padding w3-margin-top tab" id="divMusteriAraclari">
+                @if (Model.musteri.MusteriAraclari != null)
+                {
+                    if (Model.musteri.MusteriAraclari.Count > 0)
+                    {
+                        <table id="MusteriAraclari">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Şasi No</th>
+                                    <th>Motor No</th>
+                                    <th>Plaka</th>
+                                    <th>Marka</th>
+                                    <th>Model</th>
+                                    <th>Araç Grubu</th>
+                                    <th>Aktif/Pasif</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var musteriArac in Model.musteri.MusteriAraclari)
+                                {
+                                    <tr>
+                                        <td class="w3-center">
+                                            @MusteriAracCounter  @{MusteriAracCounter++;}
 
-										</td>
-										<td class="w3-center">
-											<a href="/Vehicle/AracDuzenle?AracId=@musteriArac.AracId" title="Araç Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
-											&nbsp;&nbsp;&nbsp; @musteriArac.Arac.SaseNo
-										</td>
-										<td class="w3-center">@musteriArac.Arac.MotorNo</td>
-										<td class="w3-center">@musteriArac.Arac.Plaka</td>
-										<td class="w3-center">@musteriArac.Arac.Companies.Name</td>
-										<td class="w3-center">@musteriArac.Arac.Vehicles.Name</td>
-										<td class="w3-center">@(musteriArac.Arac.AracTipi == null ? "" : musteriArac.Arac.AracTipi.Aciklamasi)</td>
-										<td class="w3-center"><i class="fa @(musteriArac.SwAktif == false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i><br /></td>
-									</tr>
+                                        </td>
+                                        <td class="w3-center">
+                                            <a href="/Vehicle/AracDuzenle?AracId=@musteriArac.AracId" title="Araç Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+                                            &nbsp;&nbsp;&nbsp; @musteriArac.Arac.SaseNo
+                                        </td>
+                                        <td class="w3-center">@musteriArac.Arac.MotorNo</td>
+                                        <td class="w3-center">@musteriArac.Arac.Plaka</td>
+                                        <td class="w3-center">@musteriArac.Arac.Companies.Name</td>
+                                        <td class="w3-center">@musteriArac.Arac.Vehicles.Name</td>
+                                        <td class="w3-center">@(musteriArac.Arac.AracTipi == null ? "" : musteriArac.Arac.AracTipi.Aciklamasi)</td>
+                                        <td class="w3-center"><i class="fa @(musteriArac.SwAktif == false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i><br /></td>
+                                    </tr>
 
-								}
-							</tbody>
-						</table>
-					}
-					else
-					{
-						<div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Müşteriye ait araç kaydı bulunamadı</div>
-					}
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Müşteriye ait araç kaydı bulunamadı</div>
+                    }
 
 
-				}
-			</div>
-			<div class="w3-row w3-padding w3-margin-top tab" id="divIsKartlari" style="display:none">
+                }
+            </div>
+            <div class="w3-row w3-padding w3-margin-top tab" id="divIsKartlari" style="display:none">
 
-				@if (Model.musteri.IsEmirleri != null)
-				{
-					if (Model.musteri.IsEmirleri.Count > 0)
-					{
-						<table id="MusteriIsEmirleri">
-							<thead>
-								<tr>
-									<th>Sıra</th>
+                @if (Model.musteri.IsEmirleri != null)
+                {
+                    if (Model.musteri.IsEmirleri.Count > 0)
+                    {
+                        <table id="MusteriIsEmirleri">
+                            <thead>
+                                <tr>
+                                    <th>Sıra</th>
 
-									<th>İş Emri Tarihi</th>
-									<th>Tip</th>
-									<th>Plaka</th>
-									<th>Durum</th>
-									<th>Vip</th>
-									<th>İnteraktif</th>
-									<th>Tekrarlı İş</th>
-									<th>Teslim Eden</th>
-									<th>Teslim Alan</th>
-									<th>Kdv'li Toplam Tutar</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach (var musteriIsEmri in Model.musteri.IsEmirleri)
-								{
-									<tr>
-										<td class="w3-center">
-											@MusteriIsEmriCounter  @{MusteriIsEmriCounter++;}
-										</td>
+                                    <th>İş Emri Tarihi</th>
+                                    <th>Tip</th>
+                                    <th>Plaka</th>
+                                    <th>Durum</th>
+                                    <th>Vip</th>
+                                    <th>İnteraktif</th>
+                                    <th>Tekrarlı İş</th>
+                                    <th>Teslim Eden</th>
+                                    <th>Teslim Alan</th>
+                                    <th>Kdv'li Toplam Tutar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var musteriIsEmri in Model.musteri.IsEmirleri)
+                                {
+                                    <tr>
+                                        <td class="w3-center">
+                                            @MusteriIsEmriCounter  @{MusteriIsEmriCounter++;}
+                                        </td>
 
-										<td>
-											<a href="/IsEmri/IsEmriDuzenle?IsEmriId=@musteriIsEmri.IsEmriId" title="İş Emri Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
-											&nbsp;&nbsp;&nbsp; @musteriIsEmri.CreatedDate.ToShortDateString()
-										</td>
-										<td>@musteriIsEmri.IsEmriTipleri.Aciklamasi</td>
-										<td>
-											@if (musteriIsEmri.Arac != null)
-											{
-												<label>@musteriIsEmri.Arac.Plaka</label>
-											}
-										</td>
-										<td>@musteriIsEmri.IsEmriStatu.Aciklamasi</td>
-										<td class="w3-center"><i class="fa @(musteriIsEmri.SwVip== false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i></td>
-										<td class="w3-center"><i class="fa @(musteriIsEmri.SwInteraktif== false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i></td>
-										<td class="w3-center"><i class="fa @(musteriIsEmri.SwTekrarlananIs== false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i></td>
-										<td>@(musteriIsEmri.AraciTeslimEdenMusteriId != null ? musteriIsEmri.Musteri1.MusteriAdi.ToString() + " " + musteriIsEmri.Musteri1.MusteriSoyadi.ToString() : "Belirtilmemiş")</td>
-										<td>@(musteriIsEmri.AraciTeslimAlanMusteriId != null ? musteriIsEmri.Musteri2.MusteriAdi.ToString() + " " + musteriIsEmri.Musteri2.MusteriSoyadi.ToString() : "Belirtilmemiş")</td>
-										<td>@(musteriIsEmri.IsEmriKalemleri.Sum(x => x.KdvliKalemTutar))</td>
-									</tr>
+                                        <td>
+                                            <a href="/IsEmri/IsEmriDuzenle?IsEmriId=@musteriIsEmri.IsEmriId" title="İş Emri Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+                                            &nbsp;&nbsp;&nbsp; @musteriIsEmri.CreatedDate.ToShortDateString()
+                                        </td>
+                                        <td>@musteriIsEmri.IsEmriTipleri.Aciklamasi</td>
+                                        <td>
+                                            @if (musteriIsEmri.Arac != null)
+                                            {
+                                                <label>@musteriIsEmri.Arac.Plaka</label>
+                                            }
+                                        </td>
+                                        <td>@musteriIsEmri.IsEmriStatu.Aciklamasi</td>
+                                        <td class="w3-center"><i class="fa @(musteriIsEmri.SwVip== false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i></td>
+                                        <td class="w3-center"><i class="fa @(musteriIsEmri.SwInteraktif== false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i></td>
+                                        <td class="w3-center"><i class="fa @(musteriIsEmri.SwTekrarlananIs== false ? "fa-times-circle w3-text-red" : "fa-check-circle w3-text-green") w3-large" aria-hidden="true"></i></td>
+                                        <td>@(musteriIsEmri.AraciTeslimEdenMusteriId != null ? musteriIsEmri.Musteri1.MusteriAdi.ToString() + " " + musteriIsEmri.Musteri1.MusteriSoyadi.ToString() : "Belirtilmemiş")</td>
+                                        <td>@(musteriIsEmri.AraciTeslimAlanMusteriId != null ? musteriIsEmri.Musteri2.MusteriAdi.ToString() + " " + musteriIsEmri.Musteri2.MusteriSoyadi.ToString() : "Belirtilmemiş")</td>
+                                        <td>@(musteriIsEmri.IsEmriKalemleri.Sum(x => x.KdvliKalemTutar))</td>
+                                    </tr>
 
-								}
-							</tbody>
-						</table>
-					}
-				}
-				else
-				{
-					<div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Müşteriye ait iş emri kaydı bulunamadı.</div>
-				}
+                                }
+                            </tbody>
+                        </table>
+                    }
+                }
+                else
+                {
+                    <div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Müşteriye ait iş emri kaydı bulunamadı.</div>
+                }
 
-			</div>
-			<div class="w3-row w3-padding w3-margin-top tab" id="divIrsaliyeler" style="display:none">
-				<div class="w3-row w3-padding w3-panel">
-					@if (Model.musteri.Irsaliyeler != null)
-					{
-						if (Model.musteri.Irsaliyeler.Count > 0)
-						{
-							<table id="MusteriIrsaliyeleri">
-								<thead>
-									<tr>
-										<th>Sıra</th>
-										<th>Düzenle</th>
-										<th>Durum</th>
-										<th>Fatura / E-Fatura Numarası</th>
-										<th>Vade</th>
-										<th>Fatura Tarihi</th>
-										<th>Giriş Tarihi</th>
-										<th>Toplam Tutar</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var musteriIrsaliye in Model.musteri.Irsaliyeler)
-									{
-										<tr>
-											<td class="w3-center">
-												@MusteriIrsaliyeCounter  @{MusteriIrsaliyeCounter++;}
-											</td>
-											<td class="w3-center">
-												<a href="/Service/IrsaliyeTanim?irsaliyeId=@musteriIrsaliye.IrsaliyeId" title="İrsaliye Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
-												&nbsp;&nbsp;&nbsp;
-											</td>
-											<td class="w3-center">
-												@switch (musteriIrsaliye.IrsaliyeStatu)
-												{
-													case 0:
-														<i class="fa fa-list-ol w3-text-yellow w3-large" aria-hidden="true"></i><br />
-														@*<span>Taslak</span>*@
-														break;
-													case 1:
-														<i class="fa fa-check-circle-o w3-text-green w3-large" aria-hidden="true"></i><br />
-														@*<span>Tamamlandı</span>*@
-														break;
-													case 2:
-														<i class="fa fa-times-circle w3-text-red w3-large" aria-hidden="true"></i><br />
-														@*<span>İptal</span>*@
-														break;
-													case 3:
-														<i class="fa fa-registered  w3-text-red w3-large" aria-hidden="true"></i><br />
-														@*<span>İade</span>*@
-														break;
-													default:
-														<span>Hata Var</span>
-														break;
-												}
-											</td>
-											<td class="w3-center">@musteriIrsaliye.FaturaNo</td>
-											<td class="w3-center">@musteriIrsaliye.Vade</td>
-											<td class="w3-center">@musteriIrsaliye.FaturaTarihi.ToShortDateString()</td>
-											<td class="w3-center">@musteriIrsaliye.KayitTarihi.ToShortDateString()</td>
-											<td class="w3-center">@musteriIrsaliye.ToplamTutar</td>
-										</tr>
+            </div>
+            <div class="w3-row w3-padding w3-margin-top tab" id="divIrsaliyeler" style="display:none">
+                <div class="w3-row w3-padding w3-panel">
+                    @if (Model.musteri.Irsaliyeler != null)
+                    {
+                        if (Model.musteri.Irsaliyeler.Count > 0)
+                        {
+                            <table id="MusteriIrsaliyeleri">
+                                <thead>
+                                    <tr>
+                                        <th>Sıra</th>
+                                        <th>Düzenle</th>
+                                        <th>Durum</th>
+                                        <th>Fatura / E-Fatura Numarası</th>
+                                        <th>Vade</th>
+                                        <th>Fatura Tarihi</th>
+                                        <th>Giriş Tarihi</th>
+                                        <th>Toplam Tutar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var musteriIrsaliye in Model.musteri.Irsaliyeler)
+                                    {
+                                        <tr>
+                                            <td class="w3-center">
+                                                @MusteriIrsaliyeCounter  @{MusteriIrsaliyeCounter++;}
+                                            </td>
+                                            <td class="w3-center">
+                                                <a href="/Service/IrsaliyeTanim?irsaliyeId=@musteriIrsaliye.IrsaliyeId" title="İrsaliye Bilgilerini Görüntülemek ve Düzenlemek için tıklayın."><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a>
+                                                &nbsp;&nbsp;&nbsp;
+                                            </td>
+                                            <td class="w3-center">
+                                                @switch (musteriIrsaliye.IrsaliyeStatu)
+                                                {
+                                                    case 0:
+                                                        <i class="fa fa-list-ol w3-text-yellow w3-large" aria-hidden="true"></i><br />
+                                                        @*<span>Taslak</span>*@
+                                                        break;
+                                                    case 1:
+                                                        <i class="fa fa-check-circle-o w3-text-green w3-large" aria-hidden="true"></i><br />
+                                                        @*<span>Tamamlandı</span>*@
+                                                        break;
+                                                    case 2:
+                                                        <i class="fa fa-times-circle w3-text-red w3-large" aria-hidden="true"></i><br />
+                                                        @*<span>İptal</span>*@
+                                                        break;
+                                                    case 3:
+                                                        <i class="fa fa-registered  w3-text-red w3-large" aria-hidden="true"></i><br />
+                                                        @*<span>İade</span>*@
+                                                        break;
+                                                    default:
+                                                        <span>Hata Var</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td class="w3-center">@musteriIrsaliye.FaturaNo</td>
+                                            <td class="w3-center">@musteriIrsaliye.Vade</td>
+                                            <td class="w3-center">@musteriIrsaliye.FaturaTarihi.ToShortDateString()</td>
+                                            <td class="w3-center">@musteriIrsaliye.KayitTarihi.ToShortDateString()</td>
+                                            <td class="w3-center">@musteriIrsaliye.ToplamTutar</td>
+                                        </tr>
 
-									}
-								</tbody>
-							</table>
-						}
-					}
-					else
-					{
-						<div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Müşteriye ait irsaliye kaydı bulunamadı.</div>
-					}
-					@*@foreach (var item in Model.musteri.Irsaliyeler)
-						{
-							<h1>@item.FaturaTarihi</h1>
-						}*@
-				</div>
-			</div>
-		</div>
-	</div>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    }
+                    else
+                    {
+                        <div class="w3-row w3-padding w3-panel w3-round w3-light-gray w3-text-red">Müşteriye ait irsaliye kaydı bulunamadı.</div>
+                    }
+                    @*@foreach (var item in Model.musteri.Irsaliyeler)
+                        {
+                            <h1>@item.FaturaTarihi</h1>
+                        }*@
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>

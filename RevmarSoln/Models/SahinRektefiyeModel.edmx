@@ -635,6 +635,10 @@
           <Property Name="KurumAdi" Type="nvarchar" MaxLength="150" />
           <Property Name="MusteriLogoId" Type="int" />
           <Property Name="VergiDairesi" Type="nvarchar" MaxLength="100" />
+          <Property Name="Sube" Type="nvarchar" MaxLength="50" />
+          <Property Name="Dahili" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="PostaKodu" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="MusteriAraclari">
           <Key>
@@ -4564,6 +4568,10 @@
           <NavigationProperty Name="MusteriTelefon" Relationship="SahinRektefiyeDbModel.FK_MusteriTelefon_Musteri" FromRole="Musteri" ToRole="MusteriTelefon" />
           <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Musteri" ToRole="Talepler" />
           <NavigationProperty Name="Teklifler" Relationship="SahinRektefiyeDbModel.FK_Teklifler_Musteri" FromRole="Musteri" ToRole="Teklifler" />
+          <Property Name="Sube" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Dahili" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PostaKodu" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MusteriAraclari">
           <Key>
@@ -7394,6 +7402,10 @@
           <EntitySetMapping Name="Musteri">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Musteri">
               <MappingFragment StoreEntitySet="Musteri">
+                <ScalarProperty Name="PostaKodu" ColumnName="PostaKodu" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Dahili" ColumnName="Dahili" />
+                <ScalarProperty Name="Sube" ColumnName="Sube" />
                 <ScalarProperty Name="VergiDairesi" ColumnName="VergiDairesi" />
                 <ScalarProperty Name="MusteriLogoId" ColumnName="MusteriLogoId" />
                 <ScalarProperty Name="KurumAdi" ColumnName="KurumAdi" />

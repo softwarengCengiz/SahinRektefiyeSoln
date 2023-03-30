@@ -34,19 +34,23 @@
                     $("#divAramaTarihi").show();
                     $("#divKargoFirmasi").show();
                     $("#divGonderiKodu").show();
+                    $("#divMusteriAramaTarihi").hide();
                 }
                 else {
                     $("#divKargoyaVerilis").hide();
                     $("#divAramaTarihi").hide();
                     $("#divKargoFirmasi").hide();
                     $("#divGonderiKodu").hide();
+                    $("#divMusteriAramaTarihi").show();
                 }
 
                 if (selectedValue == 3) {
                     $("#divMusteriAtolyeGelis").show();
+                    $("#divMusteriAramaTarihi").hide();
                 }
                 else {
                     $("#divMusteriAtolyeGelis").hide();
+                    $("#divMusteriAramaTarihi").show();
                 }
             });
         });
@@ -123,7 +127,7 @@
                     <h6>Talep Şekli</h6>
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">                   
-                    @Html.DropDownList("TalepSekliId", (SelectList)ViewBag.TalepSekliId, "Seçiniz", htmlAttributes: new { @id = "TalepSekliId", @class = "w3-select w3-border w3-round" , required = "required" })
+                    @Html.DropDownList("TalepSekliId", (SelectList)ViewBag.TalepSekliId, "Seçiniz", htmlAttributes: new { @Id = "TalepSekliId", @class = "w3-select w3-border w3-round" , required = "required" })
                 </div>
                 <div class="w3-row">
                     <div class="w3-col s12 m3 l3 w3-padding" id="divKargoyaVerilis">
@@ -151,7 +155,7 @@
 
             <div class="w3-row">
                 <div class="w3-row w3-padding-left  ">
-                    <h6>Müşteri Bilgileri <i class="fa fa-trash-o " id="btnClearMusteriId" aria-hidden="true" style="cursor: pointer;"></i></h6>
+                    <h6>Müşteri Bilgileri <i id="btnClearMusteriId" aria-hidden="true" style="cursor: pointer;"></i></h6>
                 </div>
                 <div class="w3-row w3-padding-left w3-padding-right">
                     <div class="w3-col s12 m4 l4 w3-padding">
@@ -279,11 +283,11 @@
                         <label>Ürün</label>
                         @Html.DropDownList("PartId", (SelectList)ViewBag.Parts, "Ürün Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "PartId", required = "required" })
                     </div>
-                    <div class="w3-col s12 m3 l3 w3-padding">
+                    @*<div class="w3-col s12 m3 l3 w3-padding">
                         <label>Kayıt Tarihi</label>
                         @Html.EditorFor(model => model.KayitTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "KayitTarihi", autocomplete = "off" } })
-                    </div>
-                    <div class="w3-col s12 m3 l3 w3-padding">
+                    </div>*@
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divMusteriAramaTarihi">
                         <label>Müşteri Arama Tarihi</label>
                         @Html.EditorFor(model => model.MusteriAramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "MusteriAramaTarihi", autocomplete = "off" } })
                     </div>
@@ -325,7 +329,13 @@
 </div>
 
 
-
+<script>
+    $(window).load(function () {
+        console.log($("#TalepSekliId").val());
+        console.log($("#AracGrubuId").val());
+        console.log($("#PartId").val());
+    });
+</script>
 
 <script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>
 <script src="~/Scripts/DatetimePicker/bootstrap-datetimepicker.tr.js"></script>
