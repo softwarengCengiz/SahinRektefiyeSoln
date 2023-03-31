@@ -99,6 +99,7 @@ namespace SahinRektefiyeSoln.Controllers
                 model.KargoFirmasi = talepler.KargoFirmasi;
                 model.GönderiKodu = talepler.GönderiKodu;
                 model.MusteriAtolyeGelisTarihi = talepler.MusteriAtolyeGelisTarihi;
+                ViewBag.CurrentTalepSekli = model.TalepSekliId.ToString();
             }
 
             FillIsEmriCombos();
@@ -349,16 +350,26 @@ namespace SahinRektefiyeSoln.Controllers
                     yeniTalep.MusteriAramaTarihi = model.MusteriAramaTarihi;
                     yeniTalep.Note = model.Not;
                     yeniTalep.AtananSofor = model.SoforUserName;
-                    yeniTalep.AracGrupId = model.AracGrubuId;
                     yeniTalep.CreatedDate = model.KayitTarihi ?? System.DateTime.Now;
                     yeniTalep.Creator = this.userName;
                     yeniTalep.Modifier = null;
                     yeniTalep.ModifiedDate = null;
-                    yeniTalep.Km = model.KM;
-                    yeniTalep.VinNo = model.SaseNo;
-                    yeniTalep.Plate = model.Plate;
-                    yeniTalep.PartId = model.PartId;
-                    yeniTalep.VehicleId = model.VehicleId;
+                    //Araç bilgileri taşınacak. Geçici olarak 1
+                    yeniTalep.AracGrupId = 1;
+                    yeniTalep.VehicleId = 1;
+                    //yeniTalep.AracGrupId = model.AracGrubuId;
+                    //yeniTalep.VehicleId = model.VehicleId;
+                    //yeniTalep.Km = model.KM;
+                    //yeniTalep.VinNo = model.SaseNo;
+                    //yeniTalep.Plate = model.Plate;
+                    if (model.TalepSekliId == 3 || model.TalepSekliId == 4)
+                    {
+                        yeniTalep.PartId = 1;
+                    }
+                    else
+                    {
+                        yeniTalep.PartId = model.PartId;
+                    }
                     yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
                     yeniTalep.TalepSekliId = model.TalepSekliId;
                     yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
@@ -637,6 +648,7 @@ namespace SahinRektefiyeSoln.Controllers
             ViewBag.Parts = new SelectList(db.Parts.Select(x => new { PartId = x.PartId, PartName = x.Name }).ToList(), "PartId", "PartName");
             ViewBag.Markalar = db.Companies.ToList();
             ViewBag.TalepSekliId = new SelectList(db.TalepSekli.ToList(), "TalepSekliId", "TalepSekliAciklama");
+            //ViewBag.TalepSekliId = new SelectList(db.TalepSekli.Select(x => new { TalepSekliId = x.TalepSekliId, TalepSekliAciklama = x.TalepSekliAciklama }).ToList(), "TalepSekliId", "TalepSekliAciklama");
         }
 
         private IList<SelectListItem> ArizaListesi()
