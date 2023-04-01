@@ -39,8 +39,8 @@
 					</th>
 					<th>Oluşturan Kullanıcı</th>
 					<th>Oluşturma Tarihi</th>
-					<th></th>
-					<th></th>
+					@*<th></th>
+					<th></th>*@
 				</tr>
 
 				@foreach (var item in Model)
@@ -52,7 +52,7 @@
 
 					<td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
 					<td>@Convert.ToDateTime(item.CreatedDate).ToShortDateString()</td>
-					<td>
+					@*<td>
 						<a href="/Admin/EditArizaBildirim?arizaBildirimId=@item.ArizaBildirimId" class="w3-btn w3-ripple w3-blue"><i class="fa fa-cop"></i>&nbsp; Düzenle </a>
 						
 					</td>
@@ -62,7 +62,7 @@
                             @Html.Hidden("id", item.ArizaBildirimId)
                             <button type="submit" class="w3-btn w3-ripple w3-red"><i class="fa fa-trash"></i>&nbsp; Parça Sil </button>
                         }
-                    </td>
+                    </td>*@
 				</tr>
 		}
 			</table>

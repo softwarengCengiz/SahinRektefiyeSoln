@@ -74,7 +74,7 @@
 @Html.Action("SetPageHeader", "Admin", new { pageTitle = "Arıza Bildirim Formu", pagePermission = "XXXXX" })
 <div class="w3-panel">
     <div class="w3-row-padding w3-card w3-padding-top ">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm("DetailEdit", "Ticket", FormMethod.Post, new { id = "formArizaBildirim" })) 
         {
             @Html.HiddenFor(x => x.Id);
             @Html.HiddenFor(x => x.TalepId);
@@ -109,9 +109,9 @@
                         @Html.EditorFor(model => model.ServisAdı, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "ServisAdı" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                            <label>Müşteri Mail </label>
-                            @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                        </div>*@
+                        <label>Müşteri Mail </label>
+                        @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                    </div>*@
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Plaka </label>
                         @Html.EditorFor(model => model.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "20", autocomplete = "off", id = "Plaka" } })
@@ -394,7 +394,7 @@
                                 count++;
                             }
                             @*@Html.TextBox("tamiradet" + item.Value, null, new { @class = "w3-border w3-round onlynumeric",
-                                @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
+                            @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
                         </div>
 
                     }
@@ -431,13 +431,15 @@
                     <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Onayla</button>
                 </div>
             </div>
+
+            <div class="w3-row">
+                <div class="w3-quarter w3-padding w3-right">
+                    <button class="w3-btn w3-ripple w3-blue-gray w3-right" type="button" id="btnDownloadPdf">Pdf İndir</button>
+                </div>
+            </div>
         }
 
-        <div class="w3-row">
-            <div class="w3-quarter w3-padding w3-right">
-                <button class="w3-btn w3-ripple w3-blue-gray w3-right" id="btnDownloadPdf">Pdf İndir</button>
-            </div>
-        </div>
+
         <hr />
     </div>
 </div>
@@ -470,10 +472,32 @@
     });
 
     $('#btnOnaylaPdf').on('click', function () {
-        let id = $('#TicketId').val();
-        $('#btnOlustur').click();
-        window.open('@Url.Action("CreatePdf","Ticket")?id=' + id, '_blank');
+        $('#btnDownloadPdf').attr('type', 'submit');
+        $('#formArizaBildirim').submit();
+        $('#btnDownloadPdf').attr('type', 'button');
+        document.getElementById("CheckDownloadPdfModal").style.display = "none";
     });
+
+    $('#btnDownloadPdf').on('click', function () {
+        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEditWithPdf", "Ticket")');
+    });
+
+    $('#btnOlustur').on('click', function () {
+        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEdit", "Ticket")');
+        $('#formArizaBildirim').submit();
+    });
+
+
+    @*$(function () {
+        $("#myForm").submit(function (event) {
+            if ($("#btnOlustur").is(":focus")) {
+                $(this).attr("action", "@Url.Action("DetailEdit", "Ticket")");
+            } else if ($("#btnDownloadPdf").is(":focus")) {
+                $(this).attr("action", "@Url.Action("DetailEditWithPdf", "Ticket")");
+            }
+            console.log($(this).attr("action"));
+        });
+    });*@
 </script>
 
 

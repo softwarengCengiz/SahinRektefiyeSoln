@@ -75,6 +75,7 @@ namespace SahinRektefiyeSoln.Controllers
             if (talepler != null)
             {
                 model.HizliIsEmriVehicleMusteriId = talepler.MusteriId;
+                model.MusteriDesc = talepler.Musteri.MusteriTipi == "B" ? (talepler.Musteri.MusteriAdi.ToString() + " " + talepler.Musteri.MusteriSoyadi.ToString()) : talepler.Musteri.KurumAdi.ToString();
                 model.MusteriTipi = talepler.Musteri.MusteriTipi;
                 model.MusteriAdi = talepler.Musteri.MusteriAdi;
                 model.MusteriSoyadi = talepler.Musteri.MusteriSoyadi;
@@ -389,6 +390,105 @@ namespace SahinRektefiyeSoln.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult DetailEditWithPdf(TicketDetailViewModel model)
+        {
+            var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == model.TalepId);
+            //"1-1;3-5;5-3;13-9;"
+            string parcaTextMap = "";
+
+            for (int i = 0; i < model.ParcalarText.Count; i++)
+            {
+                if (model.ParcalarText[i] != "0")
+                {
+                    parcaTextMap = parcaTextMap + model.ParcalarId[i] + "-" + model.ParcalarText[i] + ";";
+                }
+            }
+
+            if (talepDetay == null)
+            {
+                using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+                {
+                    using (var transaction = context.Database.BeginTransaction())
+                    //using blokları arasında transaction'ımızı açtık ve artık transaction'ımız bir commit() fonksiyonunu kullanana kadar işlem yaptığımız tabloyu kilitleyecek.
+                    {
+
+                        Talepler talep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
+                        talep.Durum = (int)TalepStatus.TesilmAlindi;
+                        //2. Bilet 
+                        TalepDetay yeniTalep = talepDetay ?? new TalepDetay();
+                        yeniTalep.TalepId = model.TalepId;
+                        yeniTalep.MotorDolapNo = model.MotorDolapNo;
+                        yeniTalep.KapakDolapNo = model.KapakDolapNo;
+                        yeniTalep.BildirimTarihi = model.BildirimTarihi;
+                        yeniTalep.ServisAdı = model.ServisAdı;
+                        yeniTalep.Marka = model.Marka;
+                        yeniTalep.Model = model.Model;
+                        yeniTalep.MotorTipi = model.MotorTipi;
+                        yeniTalep.YakıtTipi = model.YakıtTipi;
+                        yeniTalep.SilindirSayisi = model.SilindirSayisi;
+                        yeniTalep.Garanti = model.Garanti == false ? 0 : 1;
+                        yeniTalep.Revizyon = model.Revizyon == false ? 0 : 1;
+                        yeniTalep.RevizyonAciklama = model.RevizyonAciklama;
+                        yeniTalep.ServisNo = model.ServisNo;
+                        yeniTalep.AlınanIs = model.AlınanIs;
+                        yeniTalep.Plaka = model.Plaka;
+                        yeniTalep.KM = model.KM;
+                        yeniTalep.VinNo = model.VinNo;
+                        yeniTalep.MotorNo = model.MotorNo;
+                        yeniTalep.SupapSayisi = model.SupapSayisi;
+                        yeniTalep.MusteriNot = model.MusteriNot;
+                        yeniTalep.ArizaDiger = model.ArizaDiger;
+                        yeniTalep.ParcaDiger = model.ParcaDiger;
+                        yeniTalep.ParcaAdet = model.ParcaAdet;
+                        yeniTalep.ArizaList = string.Join(",", model.ArizaChck);
+                        yeniTalep.ParcaList = string.Join(",", model.ParcalarChck);
+                        yeniTalep.ParcaListAdet = parcaTextMap;
+                        yeniTalep.IsLogoEnable = model.IsLogoEnable;
+
+                        context.TalepDetay.Add(yeniTalep);
+
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                }
+            }
+            else
+            {
+                talepDetay.TalepId = model.TalepId;
+                talepDetay.MotorDolapNo = model.MotorDolapNo;
+                talepDetay.KapakDolapNo = model.KapakDolapNo;
+                talepDetay.BildirimTarihi = model.BildirimTarihi;
+                talepDetay.ServisAdı = model.ServisAdı;
+                talepDetay.Marka = model.Marka;
+                talepDetay.Model = model.Model;
+                talepDetay.MotorTipi = model.MotorTipi;
+                talepDetay.YakıtTipi = model.YakıtTipi;
+                talepDetay.SilindirSayisi = model.SilindirSayisi;
+                talepDetay.Garanti = model.Garanti == false ? 0 : 1;
+                talepDetay.Revizyon = model.Revizyon == false ? 0 : 1;
+                talepDetay.RevizyonAciklama = model.RevizyonAciklama;
+                talepDetay.ServisNo = model.ServisNo;
+                talepDetay.AlınanIs = model.AlınanIs;
+                talepDetay.Plaka = model.Plaka;
+                talepDetay.KM = model.KM;
+                talepDetay.VinNo = model.VinNo;
+                talepDetay.MotorNo = model.MotorNo;
+                talepDetay.SupapSayisi = model.SupapSayisi;
+                talepDetay.MusteriNot = model.MusteriNot;
+                talepDetay.ArizaDiger = model.ArizaDiger;
+                talepDetay.ParcaDiger = model.ParcaDiger;
+                talepDetay.ParcaAdet = model.ParcaAdet;
+                talepDetay.ArizaList = string.Join(",", model.ArizaChck);
+                talepDetay.ParcaList = string.Join(",", model.ParcalarChck);
+                talepDetay.ParcaListAdet = parcaTextMap;
+                talepDetay.IsLogoEnable = model.IsLogoEnable;
+                db.SaveChanges();
+            }
+            return RedirectToAction("CreatePDF",new {id= model.TalepId }); 
+        }
+
+
         public ActionResult CreatePDF(int id)
         {
             var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
@@ -489,20 +589,63 @@ namespace SahinRektefiyeSoln.Controllers
                     AcroFields formFields = pdfStamper.AcroFields;
 
                     formFields.SetField("IsEmriNo", id.ToString());
-                    formFields.SetField("KapakDolapNo", model.KapakDolapNo);
-                    formFields.SetField("MotorDolapNo", model.MotorDolapNo);
-                    formFields.SetField("BildirimTarihi", model.BildirimTarihi.ToString());
-                    formFields.SetField("ServisAdi", model.ServisAdı);
-                    formFields.SetField("MarkaModel", model.Marka);
-                    formFields.SetField("MotorTipi", model.MotorTipi);
-                    formFields.SetField("PlakaNo", model.Plaka);
-                    formFields.SetField("AracKm", model.KM.ToString());
-                    formFields.SetField("SasiNo", model.VinNo);
-                    formFields.SetField("MotorNo", model.MotorNo);
-                    formFields.SetField("SupapSayisi", model.SupapSayisi);
-                    formFields.SetField("RevizyonAciklama", model.RevizyonAciklama);
-                    formFields.SetField("IKK", model.ServisNo);
-                    formFields.SetField("MusteriOzelIstek", model.MusteriNot);
+                    if (!string.IsNullOrEmpty(model.KapakDolapNo))
+                    {
+                        formFields.SetField("KapakDolapNo", model.KapakDolapNo);
+                    }
+                    if (!string.IsNullOrEmpty(model.MotorDolapNo))
+                    {
+                        formFields.SetField("MotorDolapNo", model.MotorDolapNo);
+                    }
+                    if (!string.IsNullOrEmpty(model.BildirimTarihi.ToString()))
+                    {
+                        formFields.SetField("BildirimTarihi", model.BildirimTarihi.ToString());
+                    }
+                    if (!string.IsNullOrEmpty(model.ServisAdı))
+                    {
+                        formFields.SetField("ServisAdi", model.ServisAdı);
+                    }
+                    if (!string.IsNullOrEmpty(model.Marka))
+                    {
+                        formFields.SetField("MarkaModel", model.Marka);
+                    }
+                    if (!string.IsNullOrEmpty(model.MotorTipi))
+                    {
+                        formFields.SetField("MotorTipi", model.MotorTipi);
+                    }
+                    if (!string.IsNullOrEmpty(model.Plaka))
+                    {
+                        formFields.SetField("PlakaNo", model.Plaka);
+                    }
+                    if (!string.IsNullOrEmpty(model.KM.ToString()))
+                    {
+                        formFields.SetField("AracKm", model.KM.ToString());
+                    }
+                    if (!string.IsNullOrEmpty(model.VinNo))
+                    {
+                        formFields.SetField("SasiNo", model.VinNo);
+                    }
+                    if (!string.IsNullOrEmpty(model.MotorNo))
+                    {
+                        formFields.SetField("MotorNo", model.MotorNo);
+                    }
+                    if (!string.IsNullOrEmpty(model.SupapSayisi))
+                    {
+                        formFields.SetField("SupapSayisi", model.SupapSayisi);
+                    }
+                    if (!string.IsNullOrEmpty(model.RevizyonAciklama))
+                    {
+                        formFields.SetField("RevizyonAciklama", model.RevizyonAciklama);
+                    }
+                    if (!string.IsNullOrEmpty(model.ServisNo))
+                    {
+                        formFields.SetField("IKK", model.ServisNo);
+                    }
+                    if (!string.IsNullOrEmpty(model.MusteriNot))
+                    {
+                        formFields.SetField("MusteriOzelIstek", model.MusteriNot);
+                    }
+                    
 
                     if (model.AlınanIs == 0)
                     {

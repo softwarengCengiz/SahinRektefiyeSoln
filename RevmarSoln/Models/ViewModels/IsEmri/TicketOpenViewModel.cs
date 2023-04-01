@@ -9,6 +9,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
     {
         public int Id { get; set; }
         public int HizliIsEmriVehicleMusteriId { get; set; }
+        public string MusteriDesc { get; set; }
         public string MusteriTipi { get; set; }
 		public string MusteriAdi { get; set; }
 		public string MusteriSoyadi { get; set; }

@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Parça Düzenle", pagePermission = "EMP_01" })
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Hizmet Düzenle", pagePermission = "EMP_01" })
 
 <div class="w3-panel">
 	<div class="w3-row-padding w3-card">
@@ -15,14 +15,14 @@
 
 		<div class="w3-row">
 			<div class="w3-third w3-padding">
-				<label>Parça Adı</label>
+				<label>Hizmet Adı</label>
 				@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off", required = "required" } })
 			</div>
 		</div>
 
 		<div class="w3-row">
 			<div class="w3-third w3-padding">
-				<label>Parça Kodu</label>
+				<label>Hizmet Kodu</label>
 				@Html.EditorFor(model => model.PartCode, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", required = "required" } })
 			</div>
 		</div>
