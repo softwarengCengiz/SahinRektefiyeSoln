@@ -308,16 +308,29 @@ namespace SahinRektefiyeSoln.Controllers
             yeniTalep.MusteriAramaTarihi = model.MusteriAramaTarihi;
             yeniTalep.Note = model.Not;
             yeniTalep.AtananSofor = model.SoforUserName;
-            yeniTalep.AracGrupId = model.AracGrubuId;
             yeniTalep.CreatedDate = model.KayitTarihi ?? System.DateTime.Now;
             yeniTalep.Creator = this.userName;
             yeniTalep.Modifier = null;
             yeniTalep.ModifiedDate = null;
-            yeniTalep.Km = model.KM;
-            yeniTalep.VinNo = model.SaseNo;
-            yeniTalep.Plate = model.Plate;
-            yeniTalep.PartId = model.PartId;
-            yeniTalep.VehicleId = model.VehicleId;
+
+            //yeniTalep.PartId = model.PartId;
+            if (model.TalepSekliId == 3 || model.TalepSekliId == 4)
+            {
+                yeniTalep.PartId = 1;
+            }
+            else
+            {
+                yeniTalep.PartId = model.PartId;
+            }
+
+            //Araç bilgileri taşınacak. Geçici olarak 1
+            yeniTalep.AracGrupId = 1;
+            yeniTalep.VehicleId = 1;
+            //yeniTalep.AracGrupId = model.AracGrubuId;
+            //yeniTalep.VehicleId = model.VehicleId;
+            //yeniTalep.Km = model.KM;
+            //yeniTalep.VinNo = model.SaseNo;
+            //yeniTalep.Plate = model.Plate;
             yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
             yeniTalep.TalepSekliId = model.TalepSekliId;
             yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
