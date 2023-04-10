@@ -15,7 +15,6 @@
 
 <script>
 	function myAccFuncForMobile(index) {
-		debugger;
 		var x = document.getElementById(index);
 		if (x.className.indexOf("w3-show") == -1) {
 			x.className += " w3-show";
@@ -81,7 +80,7 @@
         }
 
 
-        if (ViewBag.Cat80Cnt > 0)
+        @*if (ViewBag.Cat80Cnt > 0)
         {
             <a href="#" class="w3-bar-item w3-button" onclick="myAccFuncForMobile('80m')"><i class="fa fa-car fa-fw"></i>Servis</a>
             <div id="80m" class="w3-hide" style="padding-bottom: 64px!important;">
@@ -90,7 +89,7 @@
                     <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
                 }
             </div>
-        }
+        }*@
 
         <a href="#" class="w3-bar-item w3-button" onclick="myAccFuncForMobile('110m')"><i class="fa fa-car fa-fw"></i>Tanım İşlemleri</a>
         <div id="110m" class="w3-hide" style="padding-bottom: 64px!important;">
