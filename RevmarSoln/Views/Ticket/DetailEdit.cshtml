@@ -10,7 +10,6 @@
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-8r/UOZJMQNwOBV6UdWEqm3x+7zorJh5uX7zF2AZ8zhR7Ch+Y1aJ5+IHmMU5xg7zOG5n33u5DUVc5gQWR8ZG+eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 
 <style>
@@ -636,10 +635,11 @@
 
                     var button = document.createElement("button");
                     button.className = "removeButton";
-                    button.style.width = img.width + "px";
+                    button.style.width = "40px";
                     button.style.backgroundColor = "red";
                     button.style.color = "white";
-                    button.innerText = "Kaldır";
+                    button.innerText = "X";
+                    button.textAlign = "center";
                     button.addEventListener("click", function () {
                         var index = fileList.indexOf(theFile);
                         fileList.splice(index, 1);
@@ -661,7 +661,7 @@
     }
 
     fileInput.addEventListener("change", function () {
-        // remove existing previews
+
         var previews = document.getElementsByClassName("previewItem");
         while (previews.length > 0) {
             previews[0].parentNode.removeChild(previews[0]);
@@ -670,10 +670,8 @@
         fileList = [];
         handleFileSelect(event);
 
-        // update the fileList variable with the new file list
         fileList = Array.from(fileInput.files);
 
-        // update the fileInput value with the new file list
         fileInput.value = "";
         var newFileList = new DataTransfer();
         for (var i = 0; i < fileList.length; i++) {

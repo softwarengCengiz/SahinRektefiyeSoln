@@ -28,9 +28,7 @@
 
 </script>
 <div class="w3-bar-block w3-margin-bottom ">
-    @*style="max-height:@(Model.Count() * 24)px;"*@
-    @*<a href="/Ticket/Open" class="w3-bar-item w3-button" ><i class="fa fa-money fa-fw"></i> Talep Aç</a>*@
-    @*@if (ViewBag.isMuhasebeUser == true)*@
+
     @if (muhasebeList.Contains(userName))
     {
         if (ViewBag.Cat100Cnt > 0)

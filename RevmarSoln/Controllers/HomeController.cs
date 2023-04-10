@@ -341,11 +341,12 @@ namespace SahinRektefiyeSoln.Controllers
 			ViewBag.Cat70Cnt = usermenus.Where(x => x.Menus.MenuRank == 70).Count();
 			ViewBag.Cat80Cnt = usermenus.Where(x => x.Menus.MenuRank == 80).Count();
 			ViewBag.Cat90Cnt = usermenus.Where(x => x.Menus.MenuRank == 90).Count();
-
+			ViewBag.Cat100Cnt = usermenus.Where(x => x.Menus.MenuRank == 100).Count();
 			//if (CheckMyRole("Fiat Bayi Yetkilisi") || CheckMyRole("Fiat Merkez Rolü"))
 			//	ViewBag.FiatBayiMenuShow = true;
 
 
+			ViewBag.isMuhasebeUser = false;
 			return View(usermenus);
 		}
 
