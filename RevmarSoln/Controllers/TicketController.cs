@@ -202,15 +202,18 @@ namespace SahinRektefiyeSoln.Controllers
         [HttpPost]
         public ActionResult DetailEdit(TicketDetailViewModel model)
         {
-            var processedFileInput = ProcessFileInput(model.FileInput);
-
-            var json = JsonConvert.SerializeObject(new
+            if (model.FileInput[0] != null)
             {
-                FileInput = processedFileInput,
-                TalepId = model.TalepId
-            });
+                var processedFileInput = ProcessFileInput(model.FileInput);
 
-            TempData["UploadModel"] = json as object;
+                var json = JsonConvert.SerializeObject(new
+                {
+                    FileInput = processedFileInput,
+                    TalepId = model.TalepId
+                });
+
+                TempData["UploadModel"] = json as object;
+            }        
 
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == model.TalepId);
             //"1-1;3-5;5-3;13-9;"
@@ -305,7 +308,15 @@ namespace SahinRektefiyeSoln.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("UploadFiles");
+            if (model.FileInput[0] != null)
+            {
+                return RedirectToAction("UploadFiles");
+            }
+            else
+            {
+                return RedirectToAction("Tickets");
+            }
+
         }
 
 
@@ -355,7 +366,7 @@ namespace SahinRektefiyeSoln.Controllers
                         {
                             TalepDosya talepDosya = new TalepDosya();
                             talepDosya.TalepDosyaSekliId = 1;
-                            talepDosya.TalepDosyaUrl = formattedImages; //TODO: Yeni gelen resmi mevcut resimlerin yanına ekle.
+                            talepDosya.TalepDosyaUrl = formattedImages; //Yeni dosyalar eklenir
 
                             context.TalepDosya.Add(talepDosya);
                             context.SaveChanges();
@@ -367,7 +378,7 @@ namespace SahinRektefiyeSoln.Controllers
                         else
                         {                         
                             var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talep.TalepDosyaId);
-                            talepDosya.TalepDosyaUrl = formattedImages;
+                            talepDosya.TalepDosyaUrl += ";" + formattedImages;  //Daha önceden kayıt var ise mevcut dosyaların yanına eklenir.
                             db.SaveChanges();
                             transaction.Commit();
                         }
@@ -425,7 +436,7 @@ namespace SahinRektefiyeSoln.Controllers
             //yeniTalep.Km = model.KM;
             //yeniTalep.VinNo = model.SaseNo;
             //yeniTalep.Plate = model.Plate;
-            yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
+            yeniTalep.Durum = (int)TicketStatus.TicketOpened;
             yeniTalep.TalepSekliId = model.TalepSekliId;
             yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
             yeniTalep.AramaTarihi = model.AramaTarihi;
@@ -556,7 +567,7 @@ namespace SahinRektefiyeSoln.Controllers
                     {
 
                         Talepler talep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
-                        talep.Durum = (int)TalepStatus.TesilmAlindi;
+                        talep.Durum = (int)TicketStatus.TicketOpened;
                         //2. Bilet 
                         TalepDetay yeniTalep = talepDetay ?? new TalepDetay();
                         yeniTalep.TalepId = model.TalepId;

@@ -12,6 +12,42 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-8r/UOZJMQNwOBV6UdWEqm3x+7zorJh5uX7zF2AZ8zhR7Ch+Y1aJ5+IHmMU5xg7zOG5n33u5DUVc5gQWR8ZG+eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+
+<style>
+    #preview {
+        display: flex;
+        flex-wrap: wrap;
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+
+    .previewItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        max-width: 200px;
+        text-align: center;
+        position: relative;
+        height: 200px; /* Burada resmin yüksekliği belirlenir */
+    }
+
+    .thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Resim, resmin boyutlarına göre ölçeklenecek şekilde ayarlanır */
+    }
+
+    .removeButton {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 10px;
+    }
+</style>
+
 <script>
 	$(document).ready(function () {
 		$('#btnMusteriSec').click(function () {
@@ -553,16 +589,10 @@
     //--------- Dosya yükleme - boyutlandırma (Cengiz)
     var fileList = [];
     var fileInput = document.getElementById("FileInput");
+    var preview = document.getElementById("preview");
 
     function handleFileSelect(evt) {
-        if (!preview) {
-            preview = document.createElement("div");
-            preview.id = "preview";
-            fileInput.parentNode.insertBefore(preview, fileInput.nextSibling);
-        }
-
         var files = evt.target.files;
-
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
             fileList.push(file);
@@ -611,7 +641,8 @@
                     button.style.color = "white";
                     button.innerText = "Kaldır";
                     button.addEventListener("click", function () {
-                        fileList.splice(fileList.indexOf(file), 1);
+                        var index = fileList.indexOf(theFile);
+                        fileList.splice(index, 1);
                         div.remove();
 
                         var newFileList = new DataTransfer();
@@ -627,16 +658,29 @@
 
             reader.readAsDataURL(file);
         }
+    }
 
+    fileInput.addEventListener("change", function () {
+        // remove existing previews
+        var previews = document.getElementsByClassName("previewItem");
+        while (previews.length > 0) {
+            previews[0].parentNode.removeChild(previews[0]);
+        }
+
+        fileList = [];
+        handleFileSelect(event);
+
+        // update the fileList variable with the new file list
+        fileList = Array.from(fileInput.files);
+
+        // update the fileInput value with the new file list
+        fileInput.value = "";
         var newFileList = new DataTransfer();
         for (var i = 0; i < fileList.length; i++) {
             newFileList.items.add(fileList[i]);
         }
-
         fileInput.files = newFileList.files;
-    }
-
-    fileInput.addEventListener("change", handleFileSelect, false);
+    }, false);
 
     //-----------------------
 
