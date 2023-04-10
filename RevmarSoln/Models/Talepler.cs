@@ -22,7 +22,7 @@ namespace SahinRektefiyeSoln.Models
     
         public int TalepId { get; set; }
         public int MusteriId { get; set; }
-        public int PartId { get; set; }
+        public Nullable<int> PartId { get; set; }
         public string ArayanKisi { get; set; }
         public Nullable<int> VehicleId { get; set; }
         public Nullable<System.DateTime> MusteriAramaTarihi { get; set; }
@@ -43,12 +43,14 @@ namespace SahinRektefiyeSoln.Models
         public string KargoFirmasi { get; set; }
         public string GönderiKodu { get; set; }
         public Nullable<System.DateTime> MusteriAtolyeGelisTarihi { get; set; }
+        public Nullable<int> TalepDosyaId { get; set; }
     
         public virtual AracGrubu AracGrubu { get; set; }
         public virtual Musteri Musteri { get; set; }
         public virtual Parts Parts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TalepDetay> TalepDetay { get; set; }
+        public virtual TalepDosya TalepDosya { get; set; }
         public virtual TalepSekli TalepSekli { get; set; }
         public virtual Users Users { get; set; }
         public virtual Vehicles Vehicles { get; set; }

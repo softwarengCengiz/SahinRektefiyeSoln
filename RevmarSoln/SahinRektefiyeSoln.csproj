@@ -347,6 +347,7 @@
     </Compile>
     <Compile Include="Helpers\DirectoryHelper.cs" />
     <Compile Include="Helpers\EncryptionHelper.cs" />
+    <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\LogHelper\LogBase.cs" />
     <Compile Include="Helpers\LogHelper\LogHelper.cs" />
     <Compile Include="Helpers\LogHelper\WebErrorLogsHelper.cs" />
@@ -654,6 +655,12 @@
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TalepDetay.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TalepDosya.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TalepDosyaSekli.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Talepler.cs">
@@ -1087,6 +1094,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\TicketImages\" />
     <Folder Include="Images\AracBelgeleri\" />
     <Folder Include="Images\IsEmirBelgeleri\" />
     <Folder Include="Images\OrderPhotos\" />

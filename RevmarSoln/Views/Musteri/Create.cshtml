@@ -416,11 +416,11 @@
 						<div class="w3-row">
 							<div class="w3-third w3-padding-right ">
 								<label>Telefon Numarası</label>
-								@Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off" } })
+								@Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off",  required= "required" } })
 							</div>
 							<div class="w3-twothird ">
 								<label>Mail Adresi</label>
-								@Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off" } })
+								@Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", required = "required" } })
 							</div>
 						</div>
                         <div class="w3-row">

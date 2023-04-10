@@ -48,5 +48,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public string ParcaDiger { get; set; }
         public string ParcaAdet { get; set; }
         public int IsLogoEnable { get; set; }
+        public HttpPostedFileBase[] FileInput { get; set; }
+        public string FileInputView { get; set; }
     }
 }

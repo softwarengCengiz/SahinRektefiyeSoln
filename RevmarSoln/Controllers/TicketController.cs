@@ -1,10 +1,13 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
 using iTextSharp.text.pdf;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PagedList;
 using PdfSharp.Pdf.IO;
 using Remotion.Reflection;
 using SahinRektefiyeSoln.Components;
 using SahinRektefiyeSoln.Helpers;
+using SahinRektefiyeSoln.Helpers.Enums;
 using SahinRektefiyeSoln.Infrastructure;
 using SahinRektefiyeSoln.Models;
 using SahinRektefiyeSoln.Models.ViewModels.IsEmri;
@@ -56,7 +59,7 @@ namespace SahinRektefiyeSoln.Controllers
                     MusteriAramaTarihi = item.MusteriAramaTarihi,
                     OlustuanKisi = item.Creator,
                     TalepNo = item.TalepId,
-                    Durum = item.Durum != null ? ((TalepStatus)item.Durum).ToString() : ""
+                    Durum = item.Durum != null ? ((TicketStatus)item.Durum).GetTicketStatusText() : TicketStatus.TicketOpened.GetTicketStatusText()
                 });
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");
@@ -90,7 +93,7 @@ namespace SahinRektefiyeSoln.Controllers
                 model.KM = talepler.Km.HasValue ? talepler.Km.Value : 0;
                 model.SaseNo = talepler.VinNo;
                 model.SoforUserName = talepler.AtananSofor;
-                model.PartId = talepler.PartId;
+                model.PartId = (int)talepler.PartId;
                 model.VehicleId = talepler.VehicleId.HasValue ? talepler.VehicleId.Value : 0;
                 model.AracGrubuId = talepler.AracGrupId.HasValue ? talepler.AracGrupId.Value : 0;
                 model.Id = talepler.TalepId;
@@ -111,6 +114,7 @@ namespace SahinRektefiyeSoln.Controllers
         {
             var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
+            var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talepler.TalepDosyaId);
             TicketDetailViewModel model = new TicketDetailViewModel();
             model.TalepId = id;
 
@@ -149,6 +153,10 @@ namespace SahinRektefiyeSoln.Controllers
                 model.ParcaDiger = talepDetay.ParcaDiger;
                 model.ParcaAdet = talepDetay.ParcaAdet;
                 model.IsLogoEnable = (int)talepDetay.IsLogoEnable;
+                if (talepDosya != null)
+                {
+                    model.FileInputView = talepDosya.TalepDosyaUrl;
+                } 
                 model.ParcalarText = new List<string>();
                 var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
                 var tamirList = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
@@ -181,7 +189,6 @@ namespace SahinRektefiyeSoln.Controllers
                         model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
                     else
                         model.ParcalarText.Add("0");
-
                 }
             }
 
@@ -195,6 +202,16 @@ namespace SahinRektefiyeSoln.Controllers
         [HttpPost]
         public ActionResult DetailEdit(TicketDetailViewModel model)
         {
+            var processedFileInput = ProcessFileInput(model.FileInput);
+
+            var json = JsonConvert.SerializeObject(new
+            {
+                FileInput = processedFileInput,
+                TalepId = model.TalepId
+            });
+
+            TempData["UploadModel"] = json as object;
+
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == model.TalepId);
             //"1-1;3-5;5-3;13-9;"
             string parcaTextMap = "";
@@ -214,9 +231,8 @@ namespace SahinRektefiyeSoln.Controllers
                     using (var transaction = context.Database.BeginTransaction())
                     //using blokları arasında transaction'ımızı açtık ve artık transaction'ımız bir commit() fonksiyonunu kullanana kadar işlem yaptığımız tabloyu kilitleyecek.
                     {
-
                         Talepler talep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
-                        talep.Durum = (int)TalepStatus.TesilmAlindi;
+                        talep.Durum = (int)TicketStatus.TicketOpened;
                         //2. Bilet 
                         TalepDetay yeniTalep = talepDetay ?? new TalepDetay();
                         yeniTalep.TalepId = model.TalepId;
@@ -285,8 +301,86 @@ namespace SahinRektefiyeSoln.Controllers
                 talepDetay.ParcaList = string.Join(",", model.ParcalarChck);
                 talepDetay.ParcaListAdet = parcaTextMap;
                 talepDetay.IsLogoEnable = model.IsLogoEnable;
+
                 db.SaveChanges();
             }
+
+            return RedirectToAction("UploadFiles");
+        }
+
+
+        public ActionResult UploadFiles()
+        {
+            var json = TempData["UploadModel"].ToString();
+
+            var data = JsonConvert.DeserializeAnonymousType(json, new
+            {
+                FileInput = new[]
+                {
+                    new
+                    {
+                        ContentType = "",
+                        FileName = "",
+                        InputStream = new byte[0],
+                        ContentLength = 0
+                    }
+                },
+                TalepId = 0
+            });
+
+            string folderPath = Server.MapPath("~/Content/TicketImages/" + data.TalepId);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+            List<string> fileUrls = new List<string>();
+            foreach (var file in data.FileInput)
+            {
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                string filePath = Path.Combine(folderPath, fileName);
+                System.IO.File.WriteAllBytes(filePath, file.InputStream);
+                fileUrls.Add(fileName);
+            }
+
+            string formattedImages = string.Join(";", fileUrls);
+
+            using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var talep = db.Talepler.FirstOrDefault(x => x.TalepId == data.TalepId);
+                        if (string.IsNullOrEmpty(talep.TalepDosyaId.ToString())) //Eğer kayıt oluşturumamış ise
+                        {
+                            TalepDosya talepDosya = new TalepDosya();
+                            talepDosya.TalepDosyaSekliId = 1;
+                            talepDosya.TalepDosyaUrl = formattedImages; //TODO: Yeni gelen resmi mevcut resimlerin yanına ekle.
+
+                            context.TalepDosya.Add(talepDosya);
+                            context.SaveChanges();
+                            transaction.Commit();
+
+                            talep.TalepDosyaId = talepDosya.TalepDosyaId;
+                            db.SaveChanges();
+                        }
+                        else
+                        {                         
+                            var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talep.TalepDosyaId);
+                            talepDosya.TalepDosyaUrl = formattedImages;
+                            db.SaveChanges();
+                            transaction.Commit();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw ex;
+                    }
+                }
+            }
+
             return RedirectToAction("Tickets");
         }
 
@@ -384,7 +478,7 @@ namespace SahinRektefiyeSoln.Controllers
                     {
                         yeniTalep.PartId = model.PartId;
                     }
-                    yeniTalep.Durum = (int)TalepStatus.SoforeAtanmis;
+                    yeniTalep.Durum = (int)TicketStatus.TicketOpened;
                     yeniTalep.TalepSekliId = model.TalepSekliId;
                     yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
                     yeniTalep.AramaTarihi = model.AramaTarihi;
@@ -398,6 +492,41 @@ namespace SahinRektefiyeSoln.Controllers
                 }
             }
 
+
+            return RedirectToAction("Tickets");
+        }
+
+
+        [HttpPost]
+        public ActionResult ApproveTicket(int id)
+        {
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+
+            if (talep.TalepSekliId == 1 || talep.TalepSekliId == 2)
+            {
+                talep.Durum = (int)TicketStatus.DriverAppointed;
+            }
+            else
+            {
+                talep.Durum = (int)TicketStatus.EngineAcceptance;
+            }
+
+            db.SaveChanges();
+            return RedirectToAction("Tickets");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RejectTicket(int id)
+        {
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+
+            if (talep != null)
+            {
+                db.Talepler.Remove(talep);
+                db.SaveChanges();
+            }
 
             return RedirectToAction("Tickets");
         }
@@ -498,7 +627,7 @@ namespace SahinRektefiyeSoln.Controllers
                 talepDetay.IsLogoEnable = model.IsLogoEnable;
                 db.SaveChanges();
             }
-            return RedirectToAction("CreatePDF",new {id= model.TalepId }); 
+            return RedirectToAction("CreatePDF", new { id = model.TalepId });
         }
 
 
@@ -658,7 +787,7 @@ namespace SahinRektefiyeSoln.Controllers
                     {
                         formFields.SetField("MusteriOzelIstek", model.MusteriNot);
                     }
-                    
+
 
                     if (model.AlınanIs == 0)
                     {
@@ -831,5 +960,34 @@ namespace SahinRektefiyeSoln.Controllers
             }
             return listitem;
         }
+
+        #region FileProcess
+
+        private static object ProcessFileInput(IEnumerable<HttpPostedFileBase> files)
+        {
+            List<object> processedFiles = new List<object>();
+            foreach (var file in files)
+            {
+                processedFiles.Add(new
+                {
+                    ContentType = file.ContentType,
+                    FileName = file.FileName,
+                    InputStream = ReadFully(file.InputStream),
+                    ContentLength = file.ContentLength
+                });
+            }
+            return processedFiles;
+        }
+
+        private static byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
+        #endregion
     }
 }

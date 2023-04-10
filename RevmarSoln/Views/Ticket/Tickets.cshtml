@@ -5,6 +5,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .icon-container {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+
+    .icon-button {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+</style>
+
 <link href="~/Styles/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
@@ -47,32 +62,40 @@
                                 @if (ViewBag.CanEdit)
                                 {
                                     <th>İşlemler</th>
-                                    @*<th></th>*@
                                 }
                                 <th>Talep Numarası</th>
                                 <th>Müşteri</th>
                                 <th>Müşteri Arama Tarihi</th>
                                 <th>Atanan Kişi</th>
                                 <th>Oluşturan Kişi</th>
+                                <th>Talep Statüsü</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var talep in Model)
                             {
                                 <tr>
-                                    @*@if (ViewBag.CanEdit)
-                                        {
-                                            <td class="w3-small"><a href="/Ticket/Edit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true"></i></a></td>
-                                            <td class="w3-small"><a href="/Ticket/DetailEdit?id=@talep.TalepNo" title="Görüntüle"><i class="fa fa-comment w3-hover-opacity" aria-hidden="true"></i></a></td>
-
-                                        }*@
 
                                     @if (ViewBag.CanEdit)
                                     {
                                         <td class="w3-small">
-                                            <a href="/Ticket/Edit?id=@talep.TalepNo" title="Talep Görüntüle"><i class="fa fa-pencil-square-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
-                                            <a href="/Ticket/DetailEdit?id=@talep.TalepNo" title="Arıza Bildirim Formu"><i class="fa fa-comment w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                            <a href="/Ticket/Edit?id=@talep.TalepNo" title="Talep Görüntüle"><i class="fa fa-eye w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                            <a href="/Ticket/DetailEdit?id=@talep.TalepNo" title="Arıza Bildirim Formu"><i class="fa fa-file-text-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
                                             <a href="/Ticket/CreatePdf?id=@talep.TalepNo" title="Arıza Bildirim Formu İndir"><i class="fa fa-file-pdf-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                            <div class="icon-container">
+                                                <form method="post" action="@Url.Action("ApproveTicket","Ticket",new {id= talep.TalepNo})">
+                                                    <button type="submit" class="icon-button" title="Talebi Onayla">
+                                                        <i class="fa fa-check-circle w3-text-green w3-hover-opacity" aria-hidden="true"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+
+                                            <div class="icon-container">
+                                                <button type="button" class="icon-button btnRejectTicket" title="Talebi Reddet" data-id="@talep.TalepNo">
+                                                    <i class="fa fa-times-circle w3-text-red w3-hover-opacity" aria-hidden="true"></i>
+                                                </button>
+                                            </div>
+                                            @*<a href="@Url.Action("ApproveTicket","Ticket",new {id= talep.TalepNo})" title="Talebi Onayla"><i class="fa fa-check-circle w3-text-green w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>*@
                                         </td>
                                     }
                                     <td>@talep.TalepNo </td>
@@ -88,6 +111,16 @@
                                     }
                                     <td>@talep.AtananKisi </td>
                                     <td>@talep.OlustuanKisi </td>
+
+                                    @if (talep.Durum == "Talep Açıldı")
+                                    {
+                                        <td style="color:cornflowerblue">@talep.Durum</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="color:green">@talep.Durum</td>
+                                    }
+
                                 </tr>
                             }
                         </tbody>
@@ -98,15 +131,55 @@
                 }
             }
 
-
-
-
         </div>
     </div>
 </div>
 
 
+<div id="RejectTicketModal" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4" style="width: 30%; height: 15%;">
+        <header class="w3-container w3-teal">
+            <h5>Talep silinecektir. Onaylıyor musunuz ?</h5>
+        </header>
+        <div class="w3-container">
+            <div class="w3-row w3-margin" id="MusteriModalContent">
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button id="btnOnayla" class="w3-btn w3-ripple w3-green">Onayla</button>
+                    <button id="btnVazgec" class="w3-btn w3-ripple w3-red">Vazgeç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+
+<script>
+    $(document).ready(function () {
+        $('.btnRejectTicket').on('click', function () {
+            $("#RejectTicketModal").show();
+        });
+    });
+
+    $('#btnVazgec').on('click', function () {
+        document.getElementById("RejectTicketModal").style.display = "none";
+    });
+
+    $('#btnOnayla').on('click', function () {
+        var talepId = $(this).data('id');
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("RejectTicket","Ticket")',
+            data: { id: talepId },
+            success: function () {
+                alert('oldu');
+            },
+            error: function () {
+                alert('Talebin detay kaydı olduğundan talep silinemez!');
+            }
+        });
+        document.getElementById("RejectTicketModal").style.display = "none";
+    });
+</script>
 
 
 

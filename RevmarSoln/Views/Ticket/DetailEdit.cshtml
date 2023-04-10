@@ -10,6 +10,7 @@
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-8r/UOZJMQNwOBV6UdWEqm3x+7zorJh5uX7zF2AZ8zhR7Ch+Y1aJ5+IHmMU5xg7zOG5n33u5DUVc5gQWR8ZG+eg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script>
 	$(document).ready(function () {
@@ -71,10 +72,12 @@
 		});
 	});
 </script>
+
+
 @Html.Action("SetPageHeader", "Admin", new { pageTitle = "Arıza Bildirim Formu", pagePermission = "XXXXX" })
 <div class="w3-panel">
     <div class="w3-row-padding w3-card w3-padding-top ">
-        @using (Html.BeginForm("DetailEdit", "Ticket", FormMethod.Post, new { id = "formArizaBildirim" })) 
+        @using (Html.BeginForm("DetailEdit", "Ticket", FormMethod.Post, new { id = "formArizaBildirim", enctype = "multipart/form-data" }))
         {
             @Html.HiddenFor(x => x.Id);
             @Html.HiddenFor(x => x.TalepId);
@@ -109,9 +112,9 @@
                         @Html.EditorFor(model => model.ServisAdı, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "ServisAdı" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                        <label>Müşteri Mail </label>
-                        @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                    </div>*@
+                            <label>Müşteri Mail </label>
+                            @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                        </div>*@
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Plaka </label>
                         @Html.EditorFor(model => model.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "20", autocomplete = "off", id = "Plaka" } })
@@ -394,7 +397,7 @@
                                 count++;
                             }
                             @*@Html.TextBox("tamiradet" + item.Value, null, new { @class = "w3-border w3-round onlynumeric",
-                            @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
+                                @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
                         </div>
 
                     }
@@ -405,6 +408,41 @@
                             @Html.EditorFor(model => model.ParcaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
                             @Html.EditorFor(model => model.ParcaAdet, new { @class = "w3-border w3-round onlynumeric", style = "float: right;text-align: right;", placeholder = "adet / takım" })
                         </label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="w3-row w3-margin-lr">
+                <div class="w3-row w3-padding-left  ">
+                    <h4>Talep Resimleri</h4>
+                </div>
+                <div class="w3-margin-left">
+                    <div id="dropzone" class="w3-border w3-round w3-padding-32">
+                        <p class="w3-center"><a href="#" onclick="document.getElementById('FileInput').click()">Resim seçmek için buraya tıklayın</a></p>
+                        <input type="file" id="FileInput" name="FileInput" style="display: none;" multiple="multiple" required accept="image/*" capture />
+                        @{
+                            if (!string.IsNullOrEmpty(Model.FileInputView))
+                            {
+                                <div style="display: flex; flex-wrap: wrap;">
+                                    @foreach (var imageName in Model.FileInputView.Split(';'))
+                                    {
+                                        if (!string.IsNullOrEmpty(imageName))
+                                        {
+                                            string imagePath = $"~/Content/TicketImages/{Model.TalepId}/{imageName}";
+                                            <div style="margin-right: 10px; margin-bottom: 10px; position: relative;">
+                                                @*İndirilebilir resim*@
+                                                <a href="@Url.Content(imagePath)" download>
+                                                    <img src="@Url.Content(imagePath)" alt="" onload="scaleImage(this)" style="margin-right: 10px !important; display: inline-block !important;" />
+                                                </a>
+                                                @*<button type="button" class="remove-image" style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: red; color: white; border: none; padding: 5px;">Kaldır</button>*@
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                        }
+                        <div id="preview"></div>                        
                     </div>
                 </div>
             </div>
@@ -463,6 +501,31 @@
 </div>
 
 <script>
+
+    $(document).ready(function () {
+        $('.remove-image').click(function () {
+            $(this).parent().remove();
+        });
+    });
+
+    function scaleImage(img) {
+        // Boyutları 200x200 olarak ayarla
+        var width = 200;
+        var height = 200;
+
+        // Yeniden boyutlandırma oranını hesapla
+        var scale = Math.min(width / img.width, height / img.height);
+
+        // Görüntünün yeni boyutlarını hesapla
+        var newWidth = img.width * scale;
+        var newHeight = img.height * scale;
+
+        // Boyutlandırılmış boyutları ayarla
+        img.width = newWidth;
+        img.height = newHeight;
+    }
+
+
     $('#btnDownloadPdf').on('click', function () {
         document.getElementById("CheckDownloadPdfModal").style.display = "block";
     });
@@ -487,17 +550,96 @@
         $('#formArizaBildirim').submit();
     });
 
+    //--------- Dosya yükleme - boyutlandırma (Cengiz)
+    var fileList = [];
+    var fileInput = document.getElementById("FileInput");
 
-    @*$(function () {
-        $("#myForm").submit(function (event) {
-            if ($("#btnOlustur").is(":focus")) {
-                $(this).attr("action", "@Url.Action("DetailEdit", "Ticket")");
-            } else if ($("#btnDownloadPdf").is(":focus")) {
-                $(this).attr("action", "@Url.Action("DetailEditWithPdf", "Ticket")");
-            }
-            console.log($(this).attr("action"));
-        });
-    });*@
+    function handleFileSelect(evt) {
+        if (!preview) {
+            preview = document.createElement("div");
+            preview.id = "preview";
+            fileInput.parentNode.insertBefore(preview, fileInput.nextSibling);
+        }
+
+        var files = evt.target.files;
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            fileList.push(file);
+
+            var reader = new FileReader();
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    var div = document.createElement("div");
+                    div.className = "previewItem";
+                    preview.appendChild(div);
+
+                    var img = document.createElement("img");
+                    img.className = "thumbnail";
+                    img.src = e.target.result;
+                    img.alt = theFile.name.replace(/\.[^/.]+$/, "");
+                    img.style.marginRight = "10px";
+                    div.appendChild(img);
+
+                    var image = new Image();
+                    image.src = e.target.result;
+
+                    image.onload = function () {
+                        var canvas = document.createElement("canvas");
+                        var ctx = canvas.getContext("2d");
+
+                        var width = 200;
+                        var height = 200;
+
+                        var scale = Math.min(width / image.width, height / image.height);
+
+                        var newWidth = image.width * scale;
+                        var newHeight = image.height * scale;
+
+                        canvas.width = newWidth;
+                        canvas.height = newHeight;
+                        ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+                        var resizedUrl = canvas.toDataURL("image/png");
+                        img.src = resizedUrl;
+                    };
+
+                    var button = document.createElement("button");
+                    button.className = "removeButton";
+                    button.style.width = img.width + "px";
+                    button.style.backgroundColor = "red";
+                    button.style.color = "white";
+                    button.innerText = "Kaldır";
+                    button.addEventListener("click", function () {
+                        fileList.splice(fileList.indexOf(file), 1);
+                        div.remove();
+
+                        var newFileList = new DataTransfer();
+                        for (var i = 0; i < fileList.length; i++) {
+                            newFileList.items.add(fileList[i]);
+                        }
+
+                        fileInput.files = newFileList.files;
+                    });
+                    div.appendChild(button);
+                };
+            })(file);
+
+            reader.readAsDataURL(file);
+        }
+
+        var newFileList = new DataTransfer();
+        for (var i = 0; i < fileList.length; i++) {
+            newFileList.items.add(fileList[i]);
+        }
+
+        fileInput.files = newFileList.files;
+    }
+
+    fileInput.addEventListener("change", handleFileSelect, false);
+
+    //-----------------------
+
 </script>
 
 
