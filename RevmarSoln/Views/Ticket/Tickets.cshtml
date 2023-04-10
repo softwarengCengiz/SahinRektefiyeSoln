@@ -167,21 +167,20 @@
         document.getElementById("RejectTicketModal").style.display = "none";
     });
 
-    $('#btnOnayla').on('click', function () {
+    @*$('#btnOnayla').on('click', function () {
         var talepId = $(this).data('id');
         $.ajax({
             type: 'POST',
             url: '@Url.Action("RejectTicket","Ticket")',
             data: { id: talepId },
             success: function () {
-                alert('oldu');
             },
             error: function () {
                 alert('Talebin detay kaydı olduğundan talep silinemez!');
             }
         });
         document.getElementById("RejectTicketModal").style.display = "none";
-    });
+    });*@
 </script>
 
 
