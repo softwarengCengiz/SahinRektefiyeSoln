@@ -7,6 +7,9 @@
     #example {
         font-family: tahoma;
     }
+    .dataTables_filter input {
+        border: 2px solid black !important;
+    }
 </style>
 
 <script>
@@ -128,12 +131,12 @@
 							 { targets: 0, type: 'locale-compare' },
 						  ]
         });
+
 		$("input[type='search']").keyup(function () {
             table.search(
                 jQuery.fn.dataTable.ext.type.search.string(NeutralizeAccent(this.value))
             )
                 .draw()
-
         });
 	});
 </script>
@@ -159,7 +162,7 @@
         @foreach (var musteri in Model)
         {
             <tr>
-                <td><button class="btn-login w3-blue w3-btn btnModelMusteriSec" title="Müşteri Seç" MusteriAdres="@musteri.Adres" MusteriTel="@musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi" MusteriTip="@musteri.MusteriTipi" MusteriKontak="@musteri.KontakAdi @musteri.KontakSoyadi" MusteriId="@musteri.MusteriId" MusteriDesc="@(musteri.MusteriTipi == "B" ? (musteri.MusteriAdi.ToString() +" "+ musteri.MusteriSoyadi.ToString()):musteri.KurumAdi.ToString())"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button></td>
+                <td><button class="btn-login w3-blue w3-btn btnModelMusteriSec" title="Müşteri Seç" MusteriSube="@(musteri.Sube != null ? musteri.Sube : "")" MusteriAdres="@musteri.Adres" MusteriTel="@(musteri.MusteriTelefon.FirstOrDefault() != null ? musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi : "")" MusteriTip="@musteri.MusteriTipi" MusteriKontak="@musteri.KontakAdi @musteri.KontakSoyadi" MusteriId="@musteri.MusteriId" MusteriDesc="@(musteri.MusteriTipi == "B" ? (musteri.MusteriAdi.ToString() +" "+ musteri.MusteriSoyadi.ToString()):musteri.KurumAdi.ToString())"><i class="fa fa-user-circle-o w3-small" aria-hidden="true"></i> Seç</button></td>
                 <td>
                     @if (musteri.MusteriTipi == "B")
                     {

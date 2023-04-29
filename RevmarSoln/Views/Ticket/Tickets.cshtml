@@ -47,15 +47,6 @@
                 }
                 else
                 {
-
-                    @*
-                                                public int TalepNo { get; set; }
-                        public string Musteri { get; set; }
-                        public DateTime MusteriAramaTarihi { get; set; }
-                        public string AtananKisi { get; set; }
-                        public string OlustuanKisi { get; set; }
-                    *@
-
                     <table class="w3-table-all w3-hoverable w3-margin-top w3-margin-bottom w3-small">
                         <thead>
                             <tr>
@@ -68,6 +59,7 @@
                                 <th>Müşteri Arama Tarihi</th>
                                 <th>Atanan Kişi</th>
                                 <th>Oluşturan Kişi</th>
+                                <th>Oluşturulma Tarihi</th>
                                 <th>Talep Statüsü</th>
                             </tr>
                         </thead>
@@ -78,10 +70,13 @@
 
                                     @if (ViewBag.CanEdit)
                                     {
-                                        <td class="w3-small">
+                                        <td class="w3-large">
                                             <a href="/Ticket/Edit?id=@talep.TalepNo" title="Talep Görüntüle"><i class="fa fa-eye w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
                                             <a href="/Ticket/DetailEdit?id=@talep.TalepNo" title="Arıza Bildirim Formu"><i class="fa fa-file-text-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
-                                            <a href="/Ticket/CreatePdf?id=@talep.TalepNo" title="Arıza Bildirim Formu İndir"><i class="fa fa-file-pdf-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                            @if (talep.IsDetailAvailable == true)
+                                            {
+                                                <a href="/Ticket/CreatePdf?id=@talep.TalepNo" title="Arıza Bildirim Formu İndir"><i class="fa fa-file-pdf-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                            }
                                             @if (talep.Durum == "Talep Açıldı")
                                             {
                                                 <div class="icon-container">
@@ -114,6 +109,7 @@
                                     }
                                     <td>@talep.AtananKisi </td>
                                     <td>@talep.OlustuanKisi </td>
+                                    <td>@talep.OlusturmaTarihi </td>
 
                                     @if (talep.Durum == "Talep Açıldı")
                                     {

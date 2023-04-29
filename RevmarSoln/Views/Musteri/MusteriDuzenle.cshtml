@@ -564,12 +564,12 @@ new SelectListItem{ Text="Erkek", Value = "E" },
                             <div class="w3-row">
                                 <div class="w3-third w3-padding-right ">
                                     <label>Telefon Numarası</label>
-                                    @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off", disabled = "disabled" } })
+                                    @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off", required="required" } })
                                     <label class="w3-small w3-padding-left">@telefonAdet adet telefon kayıtlı</label>
                                 </div>
                                 <div class="w3-twothird ">
                                     <label>Mail Adresi</label>
-                                    @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", disabled = "disabled" } })
+                                    @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", required = "required" } })
                                     <label class="w3-small w3-padding-left">@mailAdet adet mail kayıtlı</label>
                                 </div>
 

@@ -46,20 +46,27 @@ namespace SahinRektefiyeSoln.Controllers
         [SessionAuthorization]
         public ActionResult Tickets()
         {
-            var talepler = db.Talepler.ToList();
+            var talepler = db.Talepler.ToList().OrderByDescending(x => x.CreatedDate);
             var model = new List<TicketListModel>();
             var isDanisman = SFHelper.CheckMyRole(currentUser, "DANISMAN");
-
+            bool tempBool = false;
             foreach (var item in talepler)
             {
+                var talepDetay = db.TalepDetay.Where(x => x.TalepId == item.TalepId).FirstOrDefault();
+                if (talepDetay != null)
+                {
+                    tempBool = true;
+                }
                 model.Add(new TicketListModel
                 {
                     AtananKisi = item.AtananSofor,
                     Musteri = item.Musteri.MusteriTipi == "B" ? (item.Musteri.MusteriAdi.ToString() + " " + item.Musteri.MusteriSoyadi.ToString()) : item.Musteri.KurumAdi.ToString(),
                     MusteriAramaTarihi = item.MusteriAramaTarihi,
                     OlustuanKisi = item.Creator,
+                    OlusturmaTarihi = item.CreatedDate,
                     TalepNo = item.TalepId,
-                    Durum = item.Durum != null ? ((TicketStatus)item.Durum).GetTicketStatusText() : TicketStatus.TicketOpened.GetTicketStatusText()
+                    Durum = item.Durum != null ? ((TicketStatus)item.Durum).GetTicketStatusText() : TicketStatus.TicketOpened.GetTicketStatusText(),
+                    IsDetailAvailable = tempBool
                 });
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");
@@ -156,7 +163,7 @@ namespace SahinRektefiyeSoln.Controllers
                 if (talepDosya != null)
                 {
                     model.FileInputView = talepDosya.TalepDosyaUrl;
-                } 
+                }
                 model.ParcalarText = new List<string>();
                 var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
                 var tamirList = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
@@ -213,7 +220,7 @@ namespace SahinRektefiyeSoln.Controllers
                 });
 
                 TempData["UploadModel"] = json as object;
-            }        
+            }
 
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == model.TalepId);
             //"1-1;3-5;5-3;13-9;"
@@ -227,6 +234,13 @@ namespace SahinRektefiyeSoln.Controllers
                 }
             }
 
+            Talepler talep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
+            if ((talep.TalepSekliId != 3 && talep.TalepSekliId != 4) && model.FlagSave == 1)
+            {
+                talep.Durum = (int)TicketStatus.Received;
+                db.SaveChanges();
+            }
+
             if (talepDetay == null)
             {
                 using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
@@ -234,8 +248,6 @@ namespace SahinRektefiyeSoln.Controllers
                     using (var transaction = context.Database.BeginTransaction())
                     //using blokları arasında transaction'ımızı açtık ve artık transaction'ımız bir commit() fonksiyonunu kullanana kadar işlem yaptığımız tabloyu kilitleyecek.
                     {
-                        Talepler talep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
-                        talep.Durum = (int)TicketStatus.TicketOpened;
                         //2. Bilet 
                         TalepDetay yeniTalep = talepDetay ?? new TalepDetay();
                         yeniTalep.TalepId = model.TalepId;
@@ -376,7 +388,7 @@ namespace SahinRektefiyeSoln.Controllers
                             db.SaveChanges();
                         }
                         else
-                        {                         
+                        {
                             var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talep.TalepDosyaId);
                             talepDosya.TalepDosyaUrl += ";" + formattedImages;  //Daha önceden kayıt var ise mevcut dosyaların yanına eklenir.
                             db.SaveChanges();
@@ -419,13 +431,9 @@ namespace SahinRektefiyeSoln.Controllers
             yeniTalep.ModifiedDate = null;
 
             //yeniTalep.PartId = model.PartId;
-            if (model.TalepSekliId == 3 || model.TalepSekliId == 4)
+            if (model.TalepSekliId != 3 && model.TalepSekliId != 4)
             {
                 yeniTalep.PartId = 1;
-            }
-            else
-            {
-                yeniTalep.PartId = model.PartId;
             }
 
             //Araç bilgileri taşınacak. Geçici olarak 1

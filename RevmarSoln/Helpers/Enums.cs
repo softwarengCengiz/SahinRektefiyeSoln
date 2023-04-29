@@ -9,7 +9,8 @@ namespace SahinRektefiyeSoln.Helpers.Enums
 	{
 		TicketOpened, //Talep Açıldı
 		DriverAppointed, //Şoför Atandı
-		EngineAcceptance //Motor Kabulde
+		EngineAcceptance, //Motor Kabulde
+		Received //Teslim Alındı-Yolda
 	}
 
 	public static class TicketStatusExtensions
@@ -18,7 +19,8 @@ namespace SahinRektefiyeSoln.Helpers.Enums
 	{
 		{ TicketStatus.TicketOpened, "Talep Açıldı" },
 		{ TicketStatus.DriverAppointed, "Şoför Atandı" },
-		{ TicketStatus.EngineAcceptance, "Motor Kabulde" }
+		{ TicketStatus.EngineAcceptance, "Motor Kabulde" },
+		{ TicketStatus.Received, "Teslim Alındı-Yolda" }
 	};
 
 		public static string GetTicketStatusText(this TicketStatus ticketStatus)

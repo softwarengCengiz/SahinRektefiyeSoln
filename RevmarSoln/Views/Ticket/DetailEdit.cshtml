@@ -147,9 +147,9 @@
                         @Html.EditorFor(model => model.ServisAdı, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "ServisAdı" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                            <label>Müşteri Mail </label>
-                            @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                        </div>*@
+                        <label>Müşteri Mail </label>
+                        @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                    </div>*@
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Plaka </label>
                         @Html.EditorFor(model => model.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "20", autocomplete = "off", id = "Plaka" } })
@@ -432,7 +432,7 @@
                                 count++;
                             }
                             @*@Html.TextBox("tamiradet" + item.Value, null, new { @class = "w3-border w3-round onlynumeric",
-                                @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
+                            @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
                         </div>
 
                     }
@@ -455,20 +455,21 @@
                 <div class="w3-margin-left">
                     <div id="dropzone" class="w3-border w3-round w3-padding-32">
                         <p class="w3-center"><a href="#" onclick="document.getElementById('FileInput').click()">Resim seçmek için buraya tıklayın</a></p>
-                        <input type="file" id="FileInput" name="FileInput" style="display: none;" multiple="multiple" required accept="image/*" capture />
+                        <input type="file" id="FileInput" name="FileInput" style="display: none;" multiple="multiple" required accept="image/*" />
                         @{
                             if (!string.IsNullOrEmpty(Model.FileInputView))
                             {
-                                <div style="display: flex; flex-wrap: wrap;">
+                                <div>
                                     @foreach (var imageName in Model.FileInputView.Split(';'))
                                     {
                                         if (!string.IsNullOrEmpty(imageName))
                                         {
                                             string imagePath = $"~/Content/TicketImages/{Model.TalepId}/{imageName}";
-                                            <div style="margin-right: 10px; margin-bottom: 10px; position: relative;">
+                                            <div style="margin-bottom: 10px;">
                                                 @*İndirilebilir resim*@
-                                                <a href="@Url.Content(imagePath)" download>
-                                                    <img src="@Url.Content(imagePath)" alt="" onload="scaleImage(this)" style="margin-right: 10px !important; display: inline-block !important;" />
+                                                <a href="@Url.Content(imagePath)" download style="color:blue">
+                                                    <p>@imageName</p>
+                                                    @*<img src="@Url.Content(imagePath)" alt="" onload="scaleImage(this)" style="margin-right: 10px !important; display: inline-block !important;" />*@
                                                 </a>
                                                 @*<button type="button" class="remove-image" style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: red; color: white; border: none; padding: 5px;">Kaldır</button>*@
                                             </div>
@@ -477,7 +478,7 @@
                                 </div>
                             }
                         }
-                        <div id="preview"></div>                        
+                        <div id="preview"></div>
                     </div>
                 </div>
             </div>
@@ -498,6 +499,14 @@
                 </div>
             </div>
 
+
+
+            <div class="w3-row">
+                <div class="w3-quarter w3-padding w3-right">
+                    <input id="FlagSave" type="hidden" name="FlagSave" value="" />
+                    <button class="w3-btn w3-ripple w3-blue w3-right" type="button" id="btnKaydet">Kaydet</button>
+                </div>
+            </div>
 
             <div class="w3-row">
                 <div class="w3-quarter w3-padding w3-right">
@@ -537,6 +546,37 @@
 
 <script>
 
+    $('#btnKaydet').on('click', function () {
+        $('#FlagSave').val(1);
+        $('#btnKaydet').attr('type', 'submit');
+        $('#formArizaBildirim').submit();
+        $('#btnKaydet').attr('type', 'button');
+    });
+
+     $('#btnDownloadPdf').on('click', function () {
+        document.getElementById("CheckDownloadPdfModal").style.display = "block";
+    });
+
+    $('#btnVazgecPdf').on('click', function () {
+        document.getElementById("CheckDownloadPdfModal").style.display = "none";
+    });
+
+    $('#btnOnaylaPdf').on('click', function () {
+        $('#btnDownloadPdf').attr('type', 'submit');
+        $('#formArizaBildirim').submit();
+        $('#btnDownloadPdf').attr('type', 'button');
+        document.getElementById("CheckDownloadPdfModal").style.display = "none";
+    });
+
+    $('#btnDownloadPdf').on('click', function () {
+        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEditWithPdf", "Ticket")');
+    });
+
+    $('#btnOlustur').on('click', function () {
+        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEdit", "Ticket")');
+        $('#formArizaBildirim').submit();
+    });
+
     $(document).ready(function () {
         $('.remove-image').click(function () {
             $(this).parent().remove();
@@ -560,30 +600,6 @@
         img.height = newHeight;
     }
 
-
-    $('#btnDownloadPdf').on('click', function () {
-        document.getElementById("CheckDownloadPdfModal").style.display = "block";
-    });
-
-    $('#btnVazgecPdf').on('click', function () {
-        document.getElementById("CheckDownloadPdfModal").style.display = "none";
-    });
-
-    $('#btnOnaylaPdf').on('click', function () {
-        $('#btnDownloadPdf').attr('type', 'submit');
-        $('#formArizaBildirim').submit();
-        $('#btnDownloadPdf').attr('type', 'button');
-        document.getElementById("CheckDownloadPdfModal").style.display = "none";
-    });
-
-    $('#btnDownloadPdf').on('click', function () {
-        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEditWithPdf", "Ticket")');
-    });
-
-    $('#btnOlustur').on('click', function () {
-        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEdit", "Ticket")');
-        $('#formArizaBildirim').submit();
-    });
 
     //--------- Dosya yükleme - boyutlandırma (Cengiz)
     var fileList = [];

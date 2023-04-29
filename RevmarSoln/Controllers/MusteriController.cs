@@ -304,6 +304,7 @@ namespace SahinRektefiyeSoln.Controllers
 		public ActionResult MusteriDuzenle(MusteriEditPageModel model)
 		{
 			Musteri musteri = db.Musteri.Where(x => x.MusteriId == model.musteri.MusteriId).FirstOrDefault();
+			MusteriMail musteriMail = db.MusteriMail.Where(x => x.MusteriId == musteri.MusteriId).FirstOrDefault();
 			if (model.musteri.MusteriTipi == "B")
 			{
 				#region KurumsaldanGelenBilgilerTemizlenir
@@ -366,6 +367,12 @@ namespace SahinRektefiyeSoln.Controllers
 			musteri.Sube = model.musteri.Sube;
 			musteri.Dahili = model.musteri.Dahili;
 			musteri.PostaKodu = model.musteri.PostaKodu;
+			musteri.MusteriTelefon.FirstOrDefault().TelefonNumarasi = model.Telefon;
+			musteri.Email = model.Mail;
+			if (musteriMail != null)
+            {
+				musteriMail.MailAdresi = model.Mail;
+            }
 
 			musteri.DtModified = System.DateTime.Now;
 			musteri.Modifier = currentUser;

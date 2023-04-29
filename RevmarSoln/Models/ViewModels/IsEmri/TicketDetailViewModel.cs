@@ -50,5 +50,6 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public int IsLogoEnable { get; set; }
         public HttpPostedFileBase[] FileInput { get; set; }
         public string FileInputView { get; set; }
+        public int FlagSave { get; set; }
     }
 }
