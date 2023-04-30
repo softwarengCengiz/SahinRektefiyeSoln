@@ -66,7 +66,8 @@ namespace SahinRektefiyeSoln.Controllers
                     OlusturmaTarihi = item.CreatedDate,
                     TalepNo = item.TalepId,
                     Durum = item.Durum != null ? ((TicketStatus)item.Durum).GetTicketStatusText() : TicketStatus.TicketOpened.GetTicketStatusText(),
-                    IsDetailAvailable = tempBool
+                    IsDetailAvailable = tempBool,
+                    MusteriAtolyeGelisTarihi = item.MusteriAtolyeGelisTarihi
                 });
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");

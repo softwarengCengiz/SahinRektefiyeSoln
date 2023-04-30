@@ -2278,7 +2278,9 @@ namespace SahinRektefiyeSoln.Controllers
                 if (CheckMyPermission("ADM_00"))
                 {
                     Users editedUser = db.Users.Where(x => x.UserName == UserName).FirstOrDefault();
+                    var userRoleId = editedUser.UserRoles.FirstOrDefault().RoleId;
                     ViewBag.Services = new SelectList(db.Services.ToList(), "ServiceId", "Name");
+                    ViewBag.Roles = new SelectList(db.Roles.Where(x => x.RoleName != "ADMIN").ToList(), "RoleId", "RoleName", userRoleId);
                     return View(editedUser);
                 }
                 else
@@ -2292,7 +2294,7 @@ namespace SahinRektefiyeSoln.Controllers
 
         //PERMISSION : ADM_00
         [HttpPost]
-        public ActionResult User(Users user)
+        public ActionResult User(Users user, int RoleId)
         {
             if (isLogin())
             {
@@ -2302,6 +2304,7 @@ namespace SahinRektefiyeSoln.Controllers
                     edituser.FirstName = user.FirstName;
                     edituser.SurName = user.SurName;
                     edituser.PhoneNumber = user.PhoneNumber;
+                    edituser.UserRoles.FirstOrDefault().RoleId = RoleId;
                     db.SaveChanges();
                     return RedirectToAction("Users");
                 }

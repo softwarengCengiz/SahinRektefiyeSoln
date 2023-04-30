@@ -15,5 +15,6 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public DateTime? OlusturmaTarihi { get; set; }
         public string Durum { get; set; }
         public bool IsDetailAvailable { get; set; }
+        public DateTime? MusteriAtolyeGelisTarihi { get; set; }
     }
 }

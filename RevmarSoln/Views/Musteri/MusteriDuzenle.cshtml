@@ -564,13 +564,15 @@ new SelectListItem{ Text="Erkek", Value = "E" },
                             <div class="w3-row">
                                 <div class="w3-third w3-padding-right ">
                                     <label>Telefon Numarası</label>
-                                    @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off", required="required" } })
+                                    @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off", required = "required" } })
                                     <label class="w3-small w3-padding-left">@telefonAdet adet telefon kayıtlı</label>
+                                    <button type="button" class="w3-green" style="border-radius:50%;" id="addPhoneNumber"><i class="fa fa-plus"></i></button>
                                 </div>
                                 <div class="w3-twothird ">
                                     <label>Mail Adresi</label>
                                     @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", required = "required" } })
                                     <label class="w3-small w3-padding-left">@mailAdet adet mail kayıtlı</label>
+                                    <button type="button" class="w3-green" style="border-radius:50%;" id="addMail"><i class="fa fa-plus"></i></button>
                                 </div>
 
                             </div>
@@ -889,7 +891,97 @@ new SelectListItem{ Text="Erkek", Value = "E" },
             </div>
         </div>
     </div>
-
 </div>
+
+
+<div id="AddPhoneNumberModal" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4" style="width: 30%; height: 25%;">
+        <header class="w3-container w3-teal">
+            <h5>Müşteriye Telefon Numarası Ekle</h5>
+        </header>
+        <input id="inpPhoneNumber" class="w3-input w3-border w3-round phone" data-id="@Model.musteri.MusteriId" style="margin-top: 2em;"/>
+        <div class="w3-container">
+            <div class="w3-row w3-margin" id="MusteriModalContent">
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button id="btnPhoneApprove" class="w3-btn w3-ripple w3-green">Onayla</button>
+                    <button id="btnPhoneReject" class="w3-btn w3-ripple w3-red">Vazgeç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="AddMailModal" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4" style="width: 30%; height: 25%;">
+        <header class="w3-container w3-teal">
+            <h5>Müşteriye Mail Adresi Ekle</h5>
+        </header>
+        <input id="inpMail" type="email" class="w3-input w3-border w3-round" data-id="@Model.musteri.MusteriId" style="margin-top: 2em;"/>
+        <div class="w3-container">
+            <div class="w3-row w3-margin" id="MusteriModalContent">
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button id="btnMailApprove" class="w3-btn w3-ripple w3-green">Onayla</button>
+                    <button id="btnMailReject" class="w3-btn w3-ripple w3-red">Vazgeç</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#addPhoneNumber').on('click', function () {
+        document.getElementById("AddPhoneNumberModal").style.display = "block";
+    });
+
+    $('#addMail').on('click', function () {
+        document.getElementById("AddMailModal").style.display = "block";
+    });
+
+    $('#btnPhoneReject').on('click', function () {
+        document.getElementById("AddPhoneNumberModal").style.display = "none";
+    });
+
+    $('#btnMailReject').on('click', function () {
+        document.getElementById("AddMailModal").style.display = "none";
+    });
+
+    $('#btnPhoneApprove').on('click', function () {
+        var phoneNumber = $('#inpPhoneNumber').val();
+        var id = $('#inpPhoneNumber').data('id');
+
+        $.ajax({
+            url: '@Url.Action("AddPhoneNumber","Musteri")',
+            method: 'POST',
+            data: { phoneNumber: phoneNumber, id: id },
+            success: function (response) {
+                // işlem başarılı olduğunda yapılacak işlemler
+            },
+            error: function (xhr, status, error) {
+                // hata durumunda yapılacak işlemler
+            }
+        });
+    });
+
+
+    $('#btnMailApprove').on('click', function () {
+        var mail = $('#inpMail').val();
+        var id = $('#inpMail').data('id');
+
+        $.ajax({
+            url: '@Url.Action("AddMail","Musteri")',
+            method: 'POST',
+            data: { mail: mail, id: id },
+            success: function (response) {
+                // işlem başarılı olduğunda yapılacak işlemler
+            },
+            error: function (xhr, status, error) {
+                // hata durumunda yapılacak işlemler
+            }
+        });
+    });
+
+</script>
+
 <script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>
 <script src="~/Scripts/DatetimePicker/bootstrap-datetimepicker.tr.js"></script>

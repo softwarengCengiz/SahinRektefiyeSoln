@@ -159,6 +159,7 @@
 						<th style="width:150px!important;">
 							Telefon
 						</th>
+						<th>Rol</th>
 						<th>Oluşturma Tarihi</th>
 						<th>Oluşturan Kullanıcı</th>
 						<th></th>
@@ -184,6 +185,9 @@
 							<td>
 								@Html.DisplayFor(modelItem => item.PhoneNumber)
 							</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserRoles.FirstOrDefault().Roles.RoleName)
+                            </td>
 							<td>
 								@Convert.ToDateTime(item.CreatedDate).ToShortDateString()
 							</td>

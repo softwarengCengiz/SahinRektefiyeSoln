@@ -216,8 +216,10 @@
     <Content Include="Images\green.png" />
     <Content Include="Images\Kalite.jpg" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\LogoShort.png" />
     <Content Include="Images\quality-icon-20.jpg" />
     <Content Include="Images\red.png" />
+    <Content Include="Images\shortLogo.png" />
     <Content Include="Images\tenor.gif" />
     <Content Include="Images\user-512.png" />
     <Content Include="logo.ico" />

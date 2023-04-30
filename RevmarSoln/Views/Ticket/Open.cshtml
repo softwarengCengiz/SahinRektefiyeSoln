@@ -66,19 +66,19 @@
         jQuery(document).ready(function () {
             'use strict';
             jQuery('#idAramaTarihi').datetimepicker({
-                timepicker: false,
+                timepicker: true,
                 format: 'd.m.Y',
                 scrollInput: false
             });
 
             jQuery('#idKargoyaVerilis').datetimepicker({
-                timepicker: false,
+                timepicker: true,
                 format: 'd.m.Y',
                 scrollInput: false
             });
 
             jQuery('#idMusteriAtolyeGelis').datetimepicker({
-                timepicker: false,
+                timepicker: true,
                 format: 'd.m.Y',
                 scrollInput: false
             });
@@ -114,7 +114,22 @@
 			jQuery('#MusteriAramaTarihi').datetimepicker(
 				{
 					 value: '@(Model !=null ? Model.MusteriAramaTarihi.Value.Year +"/"+ Model.MusteriAramaTarihi.Value.Month+"/"+ Model.MusteriAramaTarihi.Value.Day +" "+ Model.MusteriAramaTarihi.Value.Hour+":"+Model.MusteriAramaTarihi.Value.Minute+"\'" : null)'
-				});
+                });
+
+            @*jQuery('#idAramaTarihi').datetimepicker(
+				{
+					 value: '@(Model !=null ? Model.AramaTarihi.Value.Year +"/"+ Model.AramaTarihi.Value.Month+"/"+ Model.AramaTarihi.Value.Day +" "+ Model.AramaTarihi.Value.Hour+":"+Model.AramaTarihi.Value.Minute+"\'" : null)'
+                });
+
+            jQuery('#idKargoyaVerilis').datetimepicker(
+				{
+					 value: '@(Model !=null ? Model.KargoyaVerilisTarihi.Value.Year +"/"+ Model.KargoyaVerilisTarihi.Value.Month+"/"+ Model.KargoyaVerilisTarihi.Value.Day +" "+ Model.KargoyaVerilisTarihi.Value.Hour+":"+Model.KargoyaVerilisTarihi.Value.Minute+"\'" : null)'
+                });
+
+            jQuery('#idMusteriAtolyeGelis').datetimepicker(
+				{
+					 value: '@(Model !=null ? Model.MusteriAtolyeGelisTarihi.Value.Year +"/"+ Model.MusteriAtolyeGelisTarihi.Value.Month+"/"+ Model.MusteriAtolyeGelisTarihi.Value.Day +" "+ Model.MusteriAtolyeGelisTarihi.Value.Hour+":"+Model.MusteriAramaTarihi.Value.Minute+"\'" : null)'
+				});*@
 
             jQuery('#KayitTarihi').datetimepicker(
 				{
@@ -224,28 +239,28 @@
                             <label>Kayıt Tarihi</label>
                             @Html.EditorFor(model => model.KayitTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "KayitTarihi", autocomplete = "off", required = "required" } })
                         </div>*@
-                    <div class="w3-row">
-                        <div class="w3-col s12 m3 l3 w3-padding" id="divKargoyaVerilis">
-                            <label>Kargoya Veriliş Tarihi</label>
-                            @Html.EditorFor(model => model.KargoyaVerilisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idKargoyaVerilis", maxlength = "25", autocomplete = "off" } })
-                        </div>
-                        <div class="w3-col s12 m3 l3 w3-padding" id="divAramaTarihi">
-                            <label>Arama Tarihi</label>
-                            @Html.EditorFor(model => model.AramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idAramaTarihi", maxlength = "25", autocomplete = "off" } })
-                        </div>
-                        <div class="w3-col s12 m3 l3 w3-padding" id="divKargoFirmasi">
-                            <label>Kargo Firması</label>
-                            @Html.EditorFor(model => model.KargoFirmasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-                        </div>
-                        <div class="w3-col s12 m3 l3 w3-padding" id="divGonderiKodu">
-                            <label>Gönderi Kodu</label>
-                            @Html.EditorFor(model => model.GönderiKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
-                        </div>
-                        <div class="w3-col s12 m3 l3 w3-padding" id="divMusteriAtolyeGelis">
-                            <label>Müşteri Atölye Geliş Tarihi</label>
-                            @Html.EditorFor(model => model.MusteriAtolyeGelisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idMusteriAtolyeGelis", maxlength = "25", autocomplete = "off" } })
-                        </div>
+                <div class="w3-row">
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divKargoyaVerilis">
+                        <label>Kargoya Veriliş Tarihi</label>
+                        @Html.EditorFor(model => model.KargoyaVerilisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idKargoyaVerilis", maxlength = "25", autocomplete = "off" } })
                     </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divAramaTarihi">
+                        <label>Arama Tarihi</label>
+                        @Html.EditorFor(model => model.AramaTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idAramaTarihi", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divKargoFirmasi">
+                        <label>Kargo Firması</label>
+                        @Html.EditorFor(model => model.KargoFirmasi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divGonderiKodu">
+                        <label>Gönderi Kodu</label>
+                        @Html.EditorFor(model => model.GönderiKodu, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding" id="divMusteriAtolyeGelis">
+                        <label>Müşteri Atölye Geliş Tarihi</label>
+                        @Html.EditorFor(model => model.MusteriAtolyeGelisTarihi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "idMusteriAtolyeGelis", maxlength = "25", autocomplete = "off" } })
+                    </div>
+                </div>
                 </div>
                 <div class="w3-row w3-margin-lr">
                     <div class="w3-margin-left">

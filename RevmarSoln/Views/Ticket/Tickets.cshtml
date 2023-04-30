@@ -56,7 +56,7 @@
                                 }
                                 <th>Talep Numarası</th>
                                 <th>Müşteri</th>
-                                <th>Müşteri Arama Tarihi</th>
+                                <th>Müşteri Arama/Atölyeye Geliş Tarihi</th>
                                 <th>Atanan Kişi</th>
                                 <th>Oluşturan Kişi</th>
                                 <th>Oluşturulma Tarihi</th>
@@ -102,6 +102,10 @@
                                     @if (talep.MusteriAramaTarihi.HasValue)
                                     {
                                         <td>@talep.MusteriAramaTarihi.Value.Date</td>
+                                    }
+                                    else if (talep.MusteriAtolyeGelisTarihi.HasValue)
+                                    {
+                                        <td>@talep.MusteriAtolyeGelisTarihi.Value.Date</td>
                                     }
                                     else
                                     {

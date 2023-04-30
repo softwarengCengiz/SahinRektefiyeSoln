@@ -1625,5 +1625,18 @@ namespace SahinRektefiyeSoln.Controllers
 			FlashMessage.Danger("Message title", "Your danger alert");
 			return View();
 		}
+
+		[HttpPost]
+		public ActionResult AddPhoneNumber(string phoneNumber, string id)
+        {
+			return null;
+        }
+
+		[HttpPost]
+		public ActionResult AddMail(string mail, string id)
+		{
+			return null;
+		}
+
 	}
 }
