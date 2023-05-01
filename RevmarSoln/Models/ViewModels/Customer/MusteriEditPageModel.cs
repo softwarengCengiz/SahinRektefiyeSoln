@@ -9,8 +9,10 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Customer
 	{
 		public Musteri musteri { get; set; }
 
-		public string Telefon { get; set; }
-		public string Mail { get; set; }
+		public List<string> Telefon { get; set; }
+		public List<string> Mail { get; set; }
+		public string NewPhoneNumber { get; set; }
+		public string NewMail { get; set; }
 
 		public int? IlId { get; set; }
 		public int? IlceId { get; set; }

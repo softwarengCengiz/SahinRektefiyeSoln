@@ -194,7 +194,7 @@
                     </div>
                     <div class="w3-col s12 m2 l2 w3-padding">
                         <label>Arayan Kişi (Kurum)</label>
-                        @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off", id = "ArayanKisiAdSoyad"} })
+                        @Html.EditorFor(model => model.ArayanKisiAdSoyad, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "25", autocomplete = "off", id = "ArayanKisiAdSoyad" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
                             <label>Müşteri Mail </label>
@@ -330,9 +330,38 @@
 
 
 <script>
-    $(window).load(function () {
+    var musteriInput = $('#HizliIsEmriVehicleMusteriText');
+    musteriInput.on('keyup', function () {
+    var inputValue = $(this).val();
 
-    });
+    if (inputValue.length > 2) {
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("SearchCustomerByName","Musteri")',
+            data: { search: inputValue },
+            success: function (data) {
+                debugger;
+                // Pop-up penceresini açmak için HTML yapısını oluşturun.
+                var popup = $('<div>').addClass('w3-modal w3-animate-opacity').attr('id', 'popup-container');
+
+                // Yanıt verilerini kullanarak içeriği düzenleyin.
+                var table = $(data).find('#example');
+                var tableCopy = table.clone();
+                var tableContainer = $('<div>').addClass('table-container').append(tableCopy);
+                popup.append(tableContainer);
+
+                // Popup'u input'un hemen altında gösterin.
+                musteriInput.after(popup);
+
+                // Popup'ı göstermek için w3css modülünü kullanın.
+                popup.show();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr.responseText);
+            }
+        });
+    }
+});
 </script>
 
 <script src="~/Scripts/DatetimePicker/jquery.datetimepicker.full.min.js"></script>

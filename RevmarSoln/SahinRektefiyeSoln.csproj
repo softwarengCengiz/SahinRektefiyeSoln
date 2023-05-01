@@ -1087,6 +1087,7 @@
     <Content Include="Views\Admin\ArizaBildirim.cshtml" />
     <Content Include="Views\Admin\EditTamirParca.cshtml" />
     <Content Include="Views\Admin\EditArizaBildirim.cshtml" />
+    <Content Include="Views\Musteri\_SearchCustomerByName.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
