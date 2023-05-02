@@ -182,9 +182,6 @@ namespace SahinRektefiyeSoln.Helpers
 			return true;
 		}
 
-	
-	
-	
 		public static bool CheckMyRole(string UserName, string RoleName)
 		{
 			if (UserName != null) // Giriş yapılmış mı?

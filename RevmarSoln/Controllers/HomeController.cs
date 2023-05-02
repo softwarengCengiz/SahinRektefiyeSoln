@@ -316,12 +316,10 @@ namespace SahinRektefiyeSoln.Controllers
 			//	ViewBag.FiatBayiMenuShow = true;
 
 			ViewBag.isMuhasebeUser = false;
+			TempData["IsSofor"] = SFHelper.CheckMyRole(UserName, "SOFOR");
 
 			//if (CheckMyRole("Ford Bayi Yetkilisi") || CheckMyRole("Ford Merkez Rolü"))
 			//	ViewBag.FordBayiMenuShow = true;
-
-
-
 
 			return View(usermenus);
 			//return View(db.UserMenus.Where(x => x.UserName == UserName).OrderByDescending(x=>x.Menus.Rank).ToList());
@@ -345,7 +343,7 @@ namespace SahinRektefiyeSoln.Controllers
 			//if (CheckMyRole("Fiat Bayi Yetkilisi") || CheckMyRole("Fiat Merkez Rolü"))
 			//	ViewBag.FiatBayiMenuShow = true;
 
-
+			TempData["IsSofor"] = SFHelper.CheckMyRole(UserName, "SOFOR");
 			ViewBag.isMuhasebeUser = false;
 			return View(usermenus);
 		}

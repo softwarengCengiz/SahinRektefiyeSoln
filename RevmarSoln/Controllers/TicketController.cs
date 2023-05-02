@@ -48,7 +48,7 @@ namespace SahinRektefiyeSoln.Controllers
         {
             var talepler = db.Talepler.ToList().OrderByDescending(x => x.CreatedDate);
             var model = new List<TicketListModel>();
-            var isDanisman = SFHelper.CheckMyRole(currentUser, "DANISMAN");
+            var isSofor = SFHelper.CheckMyRole(currentUser, "SOFOR");
             ViewBag.MusteriKabul = SFHelper.CheckMyRole(currentUser, "MUSTERIKABUL");
             bool tempBool = false;
             foreach (var item in talepler)
@@ -73,8 +73,8 @@ namespace SahinRektefiyeSoln.Controllers
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");
 
-            if (isDanisman)
-                model = model.Where(x => x.AtananKisi == currentUser).ToList();
+            if (isSofor)
+                model = model.Where(x => x.AtananKisi == currentUser && x.Durum == "Şoför Atandı").ToList();
 
             return View(model);
         }
@@ -1000,7 +1000,7 @@ namespace SahinRektefiyeSoln.Controllers
         public void FillIsEmriCombos()
         {
             ViewBag.AracGrubu = new SelectList(db.AracGrubu.ToList(), "AracGrubuId", "Aciklamasi");
-            ViewBag.Soforler = new SelectList(db.UserRoles.Where(x => x.Roles.RoleName == "DANISMAN").OrderBy(x => x.UserName).Select(x => new { UserName = x.UserName, DanismanAdi = x.Users.FirstName + " " + x.Users.FirstName }).ToList(), "UserName", "DanismanAdi");
+            ViewBag.Soforler = new SelectList(db.UserRoles.Where(x => x.Roles.RoleName == "SOFOR").OrderBy(x => x.UserName).Select(x => new { UserName = x.UserName, DanismanAdi = x.Users.FirstName + " " + x.Users.SurName }).ToList(), "UserName", "DanismanAdi");
             ViewBag.Parts = new SelectList(db.Parts.Select(x => new { PartId = x.PartId, PartName = x.Name }).ToList(), "PartId", "PartName");
             ViewBag.Markalar = db.Companies.ToList();
             ViewBag.TalepSekliId = new SelectList(db.TalepSekli.ToList(), "TalepSekliId", "TalepSekliAciklama");

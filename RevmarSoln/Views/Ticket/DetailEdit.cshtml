@@ -1,9 +1,10 @@
 ﻿@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.TicketDetailViewModel
-
+@using SahinRektefiyeSoln.Helpers
 @{
     ViewBag.Title = "DetailEdit";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var count = 0;
+    string UserName = Convert.ToString(Session["UserName"]);
 }
 
 <link href="~/Styles/jquery-ui.css" rel="stylesheet" />
@@ -501,19 +502,24 @@
             </div>
 
 
-
-            <div class="w3-row">
-                <div class="w3-quarter w3-padding w3-right">
-                    <input id="FlagSave" type="hidden" name="FlagSave" value="" />
-                    <button class="w3-btn w3-ripple w3-blue w3-right" type="button" id="btnKaydet">Kaydet</button>
+            if (SFHelper.CheckMyRole(UserName, "SOFOR") == true)
+            {
+                <div class="w3-row">
+                    <div class="w3-quarter w3-padding w3-right">
+                        <input id="FlagSave" type="hidden" name="FlagSave" value="" />
+                        <button class="w3-btn w3-ripple w3-blue w3-right" type="button" id="btnKaydet">Kaydet</button>
+                    </div>
                 </div>
-            </div>
+            }
 
-            <div class="w3-row">
-                <div class="w3-quarter w3-padding w3-right">
-                    <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Onayla</button>
+            if (SFHelper.CheckMyRole(UserName, "SOFOR") != true)
+            {
+                <div class="w3-row">
+                    <div class="w3-quarter w3-padding w3-right">
+                        <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Onayla</button>
+                    </div>
                 </div>
-            </div>
+            }
 
             <div class="w3-row">
                 <div class="w3-quarter w3-padding w3-right">
