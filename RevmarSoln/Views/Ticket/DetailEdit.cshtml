@@ -101,8 +101,11 @@
 			'use strict';
 
             jQuery('#BildirimTarihi').datetimepicker(
-				{
-					 value: '@((Model !=null && Model.BildirimTarihi.HasValue) ? Model.BildirimTarihi.Value.Year +"/"+ Model.BildirimTarihi.Value.Month+"/"+ Model.BildirimTarihi.Value.Day +" "+ Model.BildirimTarihi.Value.Hour+":"+Model.BildirimTarihi.Value.Minute+"\'" : null)'
+                {
+                    timepicker: true,
+                    format: 'd.m.Y',
+                    scrollInput: false,
+					value: '@((Model !=null && Model.BildirimTarihi.HasValue) ? Model.BildirimTarihi.Value.Year +"/"+ Model.BildirimTarihi.Value.Month+"/"+ Model.BildirimTarihi.Value.Day +" "+ Model.BildirimTarihi.Value.Hour+":"+Model.BildirimTarihi.Value.Minute+"\'" : null)'
 				});
 		});
 	});
@@ -147,9 +150,9 @@
                         @Html.EditorFor(model => model.ServisAdı, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "ServisAdı" } })
                     </div>
                     @*<div class="w3-col s12 m2 l2 w3-padding">
-                        <label>Müşteri Mail </label>
-                        @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
-                    </div>*@
+                            <label>Müşteri Mail </label>
+                            @Html.EditorFor(model => model.MusteriMail, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "325", autocomplete = "off", id = "MusteriMail" } })
+                        </div>*@
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Plaka </label>
                         @Html.EditorFor(model => model.Plaka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "20", autocomplete = "off", id = "Plaka" } })
@@ -432,7 +435,7 @@
                                 count++;
                             }
                             @*@Html.TextBox("tamiradet" + item.Value, null, new { @class = "w3-border w3-round onlynumeric",
-                            @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
+                                @style = "float: right;text-align: right;", placeholder = "adet / takım" })*@
                         </div>
 
                     }
@@ -446,7 +449,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div class="w3-row w3-margin-lr">
                 <div class="w3-row w3-padding-left  ">
@@ -465,14 +467,13 @@
                                         if (!string.IsNullOrEmpty(imageName))
                                         {
                                             string imagePath = $"~/Content/TicketImages/{Model.TalepId}/{imageName}";
-                                            <div style="margin-bottom: 10px;">
+                                            <span style="margin-bottom: 10px;">
                                                 @*İndirilebilir resim*@
                                                 <a href="@Url.Content(imagePath)" download style="color:blue">
-                                                    <p>@imageName</p>
-                                                    @*<img src="@Url.Content(imagePath)" alt="" onload="scaleImage(this)" style="margin-right: 10px !important; display: inline-block !important;" />*@
+                                                    <img src="@Url.Content(imagePath)" alt="" onload="scaleImage(this)" style="margin-right: 10px !important; display: inline-block !important;" />
                                                 </a>
-                                                @*<button type="button" class="remove-image" style="position: absolute; bottom: 0; left: 0; width: 100%; background-color: red; color: white; border: none; padding: 5px;">Kaldır</button>*@
-                                            </div>
+                                            </span>
+                                            <button type="button" class="w3-red deleteImage" data-id="@Model.TalepId" data-image-name="@imageName"><i class="fa fa-remove"></i></button>
                                         }
                                     }
                                 </div>
@@ -697,6 +698,30 @@
     }, false);
 
     //-----------------------
+
+
+    $('.deleteImage').on('click', function () {
+        var id = $(this).data("id");
+        var imageName = $(this).data("image-name");
+
+        $.blockUI();
+        $.ajax({
+            type: 'post',
+            url: '@Url.Action("DeleteImage","Ticket")',
+            data: { id: id, imageName: imageName },
+            success: function (data) {
+                debugger;
+                $.unblockUI();
+                if (data == true) {
+                    location.reload();
+                }
+            },
+            error: function (xhr, status, error) {
+                $.unblockUI();
+                console.log(xhr.responseText);
+            }
+        });
+    });
 
 </script>
 

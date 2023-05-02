@@ -49,6 +49,7 @@ namespace SahinRektefiyeSoln.Controllers
             var talepler = db.Talepler.ToList().OrderByDescending(x => x.CreatedDate);
             var model = new List<TicketListModel>();
             var isDanisman = SFHelper.CheckMyRole(currentUser, "DANISMAN");
+            ViewBag.MusteriKabul = SFHelper.CheckMyRole(currentUser, "MUSTERIKABUL");
             bool tempBool = false;
             foreach (var item in talepler)
             {
@@ -406,6 +407,56 @@ namespace SahinRektefiyeSoln.Controllers
             }
 
             return RedirectToAction("Tickets");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteImage(int id, string imageName)
+        {
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+            var talepDosyaId = talep.TalepDosyaId;
+            var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talepDosyaId);
+
+            try
+            {
+                //Veritabanı güncelleniyor.
+                string[] talepDosyaUrls = talepDosya.TalepDosyaUrl.Split(';');
+                string newTalepDosyaUrl = "";
+                foreach (var item in talepDosyaUrls)
+                {
+                    if (item != imageName)
+                    {
+                        newTalepDosyaUrl += item + ";";
+                    }
+                }
+                // Son karakter ";" olduğu için siliniyor
+                newTalepDosyaUrl = newTalepDosyaUrl.TrimEnd(';');
+                talepDosya.TalepDosyaUrl = newTalepDosyaUrl;
+                db.SaveChanges();
+
+                //Klasördeki dosya siliniyor.
+                string filePath = Server.MapPath("~/Content/TicketImages/" + id + "/" + imageName);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                //Eğer talebe bağlı dosya kalmadıysa talepten ve talepDosyadan sil.
+                if (string.IsNullOrEmpty(newTalepDosyaUrl))
+                {
+                    talep.TalepDosyaId = null;
+                    db.TalepDosya.Remove(talepDosya);
+                    db.SaveChanges();
+
+                    string path = Server.MapPath("~/Content/TicketImages/" + id);
+                    Directory.Delete(path);
+                }
+
+                return Json(true);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public ActionResult PrintAllEmployee()

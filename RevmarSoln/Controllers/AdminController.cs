@@ -431,7 +431,6 @@ namespace SahinRektefiyeSoln.Controllers
                 {
                     try
                     {
-
                         EncryptionHelper encryption = new EncryptionHelper();
                         model.user.Password = encryption.Encrypt(model.user.UserName + "123");
                         model.user.Creator = Session["UserName"].ToString();
