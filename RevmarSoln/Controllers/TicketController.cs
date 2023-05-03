@@ -50,9 +50,11 @@ namespace SahinRektefiyeSoln.Controllers
             var model = new List<TicketListModel>();
             var isSofor = SFHelper.CheckMyRole(currentUser, "SOFOR");
             ViewBag.MusteriKabul = SFHelper.CheckMyRole(currentUser, "MUSTERIKABUL");
-            bool tempBool = false;
+            ViewBag.MotorKabul = SFHelper.CheckMyRole(currentUser, "MOTORKABUL");
+            ViewBag.Admin = SFHelper.CheckMyRole(currentUser, "ADMIN");
             foreach (var item in talepler)
             {
+                bool tempBool = false;
                 var talepDetay = db.TalepDetay.Where(x => x.TalepId == item.TalepId).FirstOrDefault();
                 if (talepDetay != null)
                 {
@@ -588,19 +590,33 @@ namespace SahinRektefiyeSoln.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult RejectTicket(int id)
         {
             var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
 
             if (talep != null)
             {
-                db.Talepler.Remove(talep);
+                talep.Durum = (int)TicketStatus.Rejected;
                 db.SaveChanges();
             }
 
             return RedirectToAction("Tickets");
         }
+
+        [HttpPost]
+        public ActionResult ApproveReceived(int id)
+        {
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+
+            if (talep != null)
+            {
+                talep.Durum = (int)TicketStatus.EngineAcceptance;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Tickets");
+        }
+        
 
 
         [HttpPost]

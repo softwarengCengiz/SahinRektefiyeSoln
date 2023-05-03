@@ -306,7 +306,7 @@
                     <a href="/Ticket/Tickets" class="w3-bar-item w3-button w3-text-black">Talepler </a>
                 </div>
             </div>
-            @if (SFHelper.CheckMyRole(UserName, "SOFOR") != true)
+            @if (SFHelper.CheckMyRole(UserName, "ADMIN") == true)
             {
                 <div class="w3-dropdown-hover">
                     <button class="w3-button">
