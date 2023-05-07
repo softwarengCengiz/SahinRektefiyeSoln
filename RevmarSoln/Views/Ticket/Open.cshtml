@@ -67,19 +67,19 @@
             'use strict';
             jQuery('#idAramaTarihi').datetimepicker({
                 timepicker: true,
-                format: 'd.m.Y',
+                format: 'd.m.Y H:i:s',
                 scrollInput: false
             });
 
             jQuery('#idKargoyaVerilis').datetimepicker({
                 timepicker: true,
-                format: 'd.m.Y',
+                format: 'd.m.Y H:i:s',
                 scrollInput: false
             });
 
             jQuery('#idMusteriAtolyeGelis').datetimepicker({
                 timepicker: true,
-                format: 'd.m.Y',
+                format: 'd.m.Y H:i:s',
                 scrollInput: false
             });
 
@@ -112,8 +112,11 @@
 			'use strict';
 
 			jQuery('#MusteriAramaTarihi').datetimepicker(
-				{
-					 value: '@(Model !=null ? Model.MusteriAramaTarihi.Value.Year +"/"+ Model.MusteriAramaTarihi.Value.Month+"/"+ Model.MusteriAramaTarihi.Value.Day +" "+ Model.MusteriAramaTarihi.Value.Hour+":"+Model.MusteriAramaTarihi.Value.Minute+"\'" : null)'
+                {
+                    timepicker: true,
+                    format: 'd.m.Y H:i:s',
+                    scrollInput: false
+					 @*value: '@(Model !=null ? Model.MusteriAramaTarihi.Value.Year +"/"+ Model.MusteriAramaTarihi.Value.Month+"/"+ Model.MusteriAramaTarihi.Value.Day +" "+ Model.MusteriAramaTarihi.Value.Hour+":"+Model.MusteriAramaTarihi.Value.Minute+"\'" : null)'*@
                 });
 
             @*jQuery('#idAramaTarihi').datetimepicker(

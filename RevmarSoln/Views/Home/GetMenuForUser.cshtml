@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<SahinRektefiyeSoln.Models.UserMenus>
+@using SahinRektefiyeSoln.Helpers
 @{
     /**/
     string userName = Session["UserName"].ToString();
@@ -11,11 +12,11 @@
     Layout = null;
     int i;
 
-    bool isSofor = false;
-    if (TempData.ContainsKey("IsSofor") && TempData["IsSofor"] != null)
-    {
-        bool.TryParse(TempData["IsSofor"].ToString(), out isSofor);
-    }
+    //bool isSofor = false;
+    //if (TempData.ContainsKey("IsSofor") && TempData["IsSofor"] != null)
+    //{
+    //    bool.TryParse(TempData["IsSofor"].ToString(), out isSofor);
+    //}
 }
 
 
@@ -35,7 +36,7 @@
 </script>
 <div class="w3-bar-block w3-margin-bottom ">
 
-    @if (isSofor != true)
+    @if (SFHelper.CheckMyRole(userName, "ADMIN") == true)
     {
 
         if (muhasebeList.Contains(userName))
@@ -75,8 +76,8 @@
                     </div>
                 }*@
 
-    if (ViewBag.Cat30Cnt > 0)
-    {
+            if (ViewBag.Cat30Cnt > 0)
+            {
                 <a href="#" class="w3-bar-item w3-button" onclick="myAccFunc('30')"><i class="fa fa-pagelines fa-fw"></i>Form Tanımlama İşlemleri</a>
                 <div id="30" class="w3-hide">
                     @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 30).OrderBy(x => x.Menus.Title))
@@ -84,7 +85,7 @@
                         <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
                     }
                 </div>
-    }
+            }
 
 
             @*if (ViewBag.Cat80Cnt > 0)

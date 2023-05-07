@@ -101,20 +101,20 @@
         jQuery(document).ready(function () {
             'use strict';
             jQuery('#idAramaTarihi').datetimepicker({
-                timepicker: false,
-                format: 'd.m.Y',
+                timepicker: true,
+                format: 'd.m.Y H:i:s',
                 scrollInput: false
             });
 
             jQuery('#idKargoyaVerilis').datetimepicker({
-                timepicker: false,
-                format: 'd.m.Y',
+                timepicker: true,
+                format: 'd.m.Y H:i:s',
                 scrollInput: false
             });
 
             jQuery('#idMusteriAtolyeGelis').datetimepicker({
-                timepicker: false,
-                format: 'd.m.Y',
+                timepicker: true,
+                format: 'd.m.Y H:i:s',
                 scrollInput: false
             });
 
@@ -302,7 +302,7 @@
                 </div>
             </div>
 
-            if (SFHelper.CheckMyRole(UserName, "MOTORKABUL") != true)
+            if (SFHelper.CheckMyRole(UserName, "MOTORKABUL") != true && SFHelper.CheckMyRole(UserName, "SOFOR") != true)
             {
                 <div class="w3-row">
                     <div class="w3-quarter w3-padding w3-right">

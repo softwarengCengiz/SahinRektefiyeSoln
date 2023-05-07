@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<SahinRektefiyeSoln.Models.UserMenus>
+@using SahinRektefiyeSoln.Helpers
 @{
     /**/
     string userName = Session["UserName"].ToString();
@@ -10,14 +11,12 @@
     Layout = null;
     int i;
 
-    bool isSofor = false;
-    if (TempData.ContainsKey("IsSofor") && TempData["IsSofor"] != null)
-    {
-        bool.TryParse(TempData["IsSofor"].ToString(), out isSofor);
-    }
+    //bool isSofor = false;
+    //if (TempData.ContainsKey("IsSofor") && TempData["IsSofor"] != null)
+    //{
+    //    bool.TryParse(TempData["IsSofor"].ToString(), out isSofor);
+    //}
 }
-
-
 
 <script>
     function myAccFuncForMobile(index) {
@@ -34,10 +33,10 @@
 
 </script>
 
-
 <div class="w3-bar-block w3-margin-bottom ">
 
-    @if (isSofor != true) { 
+    @if (SFHelper.CheckMyRole(userName, "ADMIN") == true)
+    {
 
         if (muhasebeList.Contains(userName))
         {

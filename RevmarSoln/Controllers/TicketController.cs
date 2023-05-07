@@ -76,7 +76,7 @@ namespace SahinRektefiyeSoln.Controllers
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");
 
             if (isSofor)
-                model = model.Where(x => x.AtananKisi == currentUser && x.Durum == "Şoför Atandı").ToList();
+                model = model.Where(x => x.AtananKisi == currentUser && (x.Durum == "Şoför Atandı" || x.Durum == "Teslim Alındı-Yolda")).ToList();
 
             return View(model);
         }
@@ -126,6 +126,12 @@ namespace SahinRektefiyeSoln.Controllers
             var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
             var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talepler.TalepDosyaId);
+
+            if (talepler.TalepSekliId == 3 || talepler.TalepSekliId == 4)
+            {
+                ViewBag.EditEnable = true;
+            }
+
             TicketDetailViewModel model = new TicketDetailViewModel();
             model.TalepId = id;
 
@@ -239,7 +245,7 @@ namespace SahinRektefiyeSoln.Controllers
             }
 
             Talepler talep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
-            if ((talep.TalepSekliId != 3 && talep.TalepSekliId != 4) && model.FlagSave == 1)
+            if ((talep.TalepSekliId != 3 && talep.TalepSekliId != 4) && model.FlagSave == 0)
             {
                 talep.Durum = (int)TicketStatus.Received;
                 db.SaveChanges();
