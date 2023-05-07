@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SahinRektefiyeSoln.Models.ViewModels.Ticket;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -38,7 +39,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
 		public string SupapSayisi { get; set; }
         public string MusteriNot { get; set; }
         public IList<SelectListItem> Ariza { get; set; }
-        public IList<SelectListItem> Parcalar { get; set; }
+        public IList<SelectListItemWithAttribute> Parcalar { get; set; }
         public IList<string> ParcalarChck { get; set; }
         public IList<string> ArizaChck { get; set; }
         public IList<string> ParcalarText { get; set; }

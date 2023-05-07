@@ -99,10 +99,10 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<Suppliers> Suppliers { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TalepDetay> TalepDetay { get; set; }
-        public virtual DbSet<Talepler> Talepler { get; set; }
-        public virtual DbSet<TalepSekli> TalepSekli { get; set; }
         public virtual DbSet<TalepDosya> TalepDosya { get; set; }
         public virtual DbSet<TalepDosyaSekli> TalepDosyaSekli { get; set; }
+        public virtual DbSet<Talepler> Talepler { get; set; }
+        public virtual DbSet<TalepSekli> TalepSekli { get; set; }
         public virtual DbSet<TamirParca> TamirParca { get; set; }
         public virtual DbSet<Tasks> Tasks { get; set; }
         public virtual DbSet<TeklifKalemleri> TeklifKalemleri { get; set; }

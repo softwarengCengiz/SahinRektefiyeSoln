@@ -412,22 +412,50 @@
 
                             @if (Model.ParcalarText != null && Model.ParcalarText.Count > 0)
                             {
-                                <input type="text"
-                                       name="ParcalarText"
-                                       value="@Model.ParcalarText[count]"
-                                       class="w3-border w3-round onlynumeric"
-                                       style="float: right;text-align: right;"
-                                       placeholder="adet / takım" />
+                                if (item.IsContainPiece != 1)
+                                {
+                                    <input type="text"
+                                           name="ParcalarText"
+                                           value="@Model.ParcalarText[count]"
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="adet / takım"
+                                           hidden />
+                                }
+                                else
+                                {
+                                    <input type="text"
+                                           name="ParcalarText"
+                                           value="@Model.ParcalarText[count]"
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="adet / takım" />
+                                }
+
                             }
                             else
                             {
-                                <input type="text"
-                                       name="ParcalarText"
-                                       value="0"
-                                       class="w3-border w3-round onlynumeric"
-                                       style="float: right;text-align: right;"
-                                       placeholder="adet / takım" />
+                                if (item.IsContainPiece != 1)
+                                {
+                                    <input type="text"
+                                           name="ParcalarText"
+                                           value="0"
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="adet / takım"
+                                           hidden />
+                                }
+                                else
+                                {
+                                    <input type="text"
+                                           name="ParcalarText"
+                                           value="@Model.ParcalarText[count]"
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="adet / takım" />
+                                }
                             }
+
 
                             <input type="text"
                                    name="ParcalarId"

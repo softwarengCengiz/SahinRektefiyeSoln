@@ -10,41 +10,63 @@
 	$(document).ready(function () {
 		if (@ViewBag.Result ==1 || @ViewBag.Result ==null ) {
 			$('#Name').val('');
-			
+
 		}
 	});
 </script>
 <div class="w3-panel">
     <div class="w3-row-padding w3-card">
         @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+        {
+            @Html.AntiForgeryToken()
 
-        <div class="w3-row">
-            <div class="w3-third w3-padding">
-                <label>Parça Adı</label>
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "200", autocomplete = "off" , required = "required" } })
-            </div>
-        </div>
-        @*<div class="w3-row">
-            <div class="w3-third w3-padding">
-                <label>Stok Adedi</label>
-                @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "w3-input w3-border w3-round" ,  type="number", min="0", max="100" , placeholder = "0" } })
-            </div>
-        </div>*@
-        <hr>
+            <div class="w3-row">
+                <div class="w3-third w3-padding">
+                    <label>Parça Adı</label>
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "200", autocomplete = "off", required = "required" } })
+                </div>
 
-        <div class="w3-row">
-            <div class="w3-quarter">&nbsp;</div>
-            <div class="w3-quarter">&nbsp;</div>
-            <div class="w3-quarter w3-padding">
-
+                <label>Parça Adedi Girilebilir Mi?</label>
+                <div class="w3-round">
+                    <table class="">
+                        <tr>
+                            <td>
+                                <label>Evet</label>
+                            </td>
+                            <td>
+                                @Html.RadioButtonFor(model => model.IsContainPiece, 1, new { @id = "isContainPiece", @class = " w3-radio w3-margin-right", name = "IsContainPiece" })
+                            </td>
+                            <td>
+                                <label>Hayır</label>
+                            </td>
+                            <td>
+                                @Html.RadioButtonFor(model => model.IsContainPiece, 0, new { @id = "isContainPiece", @class = " w3-radio w3-margin-right", name = "IsContainPiece" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div class="w3-quarter  w3-padding">
-                <button class="w3-btn w3-ripple w3-green w3-right" id="btnSave">Servis Tamir Parça Ekle</button>
-            </div>
-        </div>
 
-}
+
+            @*<div class="w3-row">
+                    <div class="w3-third w3-padding">
+                        <label>Stok Adedi</label>
+                        @Html.EditorFor(model => model.Stock, new { htmlAttributes = new { @class = "w3-input w3-border w3-round" ,  type="number", min="0", max="100" , placeholder = "0" } })
+                    </div>
+                </div>*@
+            <hr>
+
+            <div class="w3-row">
+                <div class="w3-quarter">&nbsp;</div>
+                <div class="w3-quarter">&nbsp;</div>
+                <div class="w3-quarter w3-padding">
+
+                </div>
+                <div class="w3-quarter  w3-padding">
+                    <button class="w3-btn w3-ripple w3-green w3-right" id="btnSave">Servis Tamir Parça Ekle</button>
+                </div>
+            </div>
+
+        }
     </div>
 </div>

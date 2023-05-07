@@ -1,0 +1,239 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.TicketDetailViewModel
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-BHCtZXbuh0CzFwQYaEJ67tBikRCFMSDlrJfvj7y8hxJx+Sn6XIHGBh+UD5xgOovpKzgxUVVJ79q2hF3J9vQ5sA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+
+        #table-one th {
+            font-size: 20px;
+        }
+
+        #table-two th:first-child, #table-two td:first-child {
+            width: 25%;
+        }
+
+        #table-two th:last-child, #table-two td:last-child {
+            text-align: center;
+        }
+
+        #table-two th, #table-two td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        h5 {
+            font-size: 20px;
+        }
+
+        .x th,
+        .x td {
+            width: 50%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+        <img src="@Url.Content("~/Images/GmyLogo.png")" style="margin-left: 30px; display: inline-block;" />
+        <h2 style="margin:0 0 30px 200px; display:inline-block;"><strong>Arıza Bildirim Formu</strong></h2>
+    </div>
+
+    <table id="table-one" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:2px solid black;">
+        <tr>
+            <th style="padding-left: 30px;">İş Emri No: SN-27 @Model.TalepId</th>
+            <th style="padding-left: 120px;">Kapak Dolap No: @Model.KapakDolapNo</th>
+            <th style="padding-left: 100px; padding-right:80px;">Motor Dolap No: @Model.MotorDolapNo</th>
+        </tr>
+    </table>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
+        <h5><strong>Motor Bilgileri</strong></h5>
+    </div>
+    <table id="table-two" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:1px solid black;">
+        <tr>
+            <th>Bildirim Tarihi:</th>
+            <td>@Model.BildirimTarihi</td>
+            <th>Alınan İş:</th>
+            <td>
+                @if (Model.AlınanIs == 0)
+                {
+                    <span>Motor</span>
+                }
+                else if (Model.AlınanIs == 1)
+                {
+                    <span>Kapak</span>
+                }
+                else
+                {
+                    <span>Motor - Kapak</span>
+                }
+            </td>
+        </tr>
+        <tr>
+            <th>Servis Adı:</th>
+            <td>@Model.ServisAdı</td>
+            <th>Plaka No:</th>
+            <td>@Model.Plaka</td>
+        </tr>
+        <tr>
+            <th>Marka/Model:</th>
+            <td>@Model.Marka</td>
+            <th>Araç KM:</th>
+            <td>@Model.KM</td>
+        </tr>
+        <tr>
+            <th>Motor Tipi:</th>
+            <td>@Model.MotorTipi</td>
+            <th>Şasi No:</th>
+            <td>@Model.VinNo</td>
+        </tr>
+        <tr>
+            <th>Yakıt Tipi:</th>
+            <td>
+                @if (Model.YakıtTipi == 0)
+                {
+                    <span>Benzin</span>
+                }
+                else if (Model.YakıtTipi == 1)
+                {
+                    <span>Dizel</span>
+                }
+                else if (Model.YakıtTipi == 2)
+                {
+                    <span>Lpg</span>
+                }
+            </td>
+            <th>Motor No:</th>
+            <td>@Model.MotorNo</td>
+        </tr>
+        <tr>
+            <th>Silindir Sayısı:</th>
+            <td>@Model.SilindirSayisi</td>
+            <th>Supap Sayısı:</th>
+            <td>@Model.SupapSayisi</td>
+        </tr>
+    </table>
+    <table id="table-three" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:1px solid black;">
+        <tr class="x">
+            <th>Araç Üretici Firma Garantisi Altında Mı?</th>
+            <td>
+                @if (Model.Garanti)
+                {
+                    <span>Evet</span>
+                }
+                else
+                {
+                    <span>Hayır</span>
+                }
+            </td>
+        </tr>
+        <tr class="x">
+            <th>Motorda Daha Önce Revizyon Yapılmış Mı?</th>
+            <td>
+                @if (Model.Revizyon)
+                {
+                    <span>Evet</span>
+                }
+                else
+                {
+                    <span>Hayır</span>
+                }
+            </td>
+        </tr>
+        <tr class="x">
+            <th>Revizyon Yapılmış İse Açıklama</th>
+            <td>@Model.RevizyonAciklama</td>
+        </tr>
+        <tr class="x">
+            <th>Servis Tarafından Verilen İş Emri No (İKK)</th>
+            <td>@Model.ServisNo</td>
+        </tr>
+    </table>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
+        <h5><strong>Arıza Bildirimleri</strong></h5>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center;">
+        @for (int i = 0; i < Model.Ariza.Count; i++)
+        {
+            <label style="display: inline-block; margin-right: 70px; vertical-align: top; text-align: center;">
+                @if (Model.Ariza[i].Selected)
+                {
+                    <i class="fas fa-check-circle"></i>
+                }
+                @Model.Ariza[i].Text
+            </label>
+            if (i % 2 != 0)
+            {
+                <br>
+            }
+        }
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
+        <h5><strong>Müşteri Özel İstekleri</strong></h5>
+    </div>
+    @Model.MusteriNot
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
+        <h5><strong>Servisten Tamir İçin Alınan Parçalar</strong></h5>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center;">
+        @for (var i = 0; i < Model.Parcalar.Count; i++)
+        {
+            <div style="display: inline-block; margin-right: 70px; text-align: center;">
+                @if (Model.Parcalar[i].Selected)
+                {
+                    <i class="fas fa-check-circle"></i>
+                }
+                <span>@Model.Parcalar[i].Text</span>
+                @if (Model.ParcalarText != null && Model.ParcalarText.Count > 0 && Model.Parcalar[i].IsContainPiece == 1 && Model.ParcalarText[i] != "0")
+                {
+                    <span><strong>@Model.ParcalarText[i] adet</strong></span>
+                }
+            </div>
+
+            if (i % 2 != 0)
+            {<br>}
+        }
+    </div>
+
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
+        <h4><strong>Onay</strong></h4>
+    </div>
+    <div style="display: table; width: 100%; table-layout: fixed;">
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 10%; vertical-align: bottom; border: 1px solid black; padding: 5px;">
+                <div style="writing-mode: vertical-rl; text-orientation: mixed;"><strong>Başlangıç</strong></div>
+            </div>
+            <div style="display: table-cell; width: 90%; vertical-align: bottom; border: 1px solid black; padding: 5px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <div><strong>Servis Yetkilisi Ad-Soyad ve İmza:</strong></div>
+                    <div><strong>Teslim Alan Ad-Soyad ve İmza:</strong></div>
+                </div>
+                <br />
+                <div style="writing-mode: vertical-rl; text-orientation: upright;"><strong>Teslim Alınma Tarihi:</strong></div>
+            </div>
+        </div>
+
+        <div style="display: table-row;">
+            <div style="display: table-cell; width: 10%; vertical-align: top; border: 1px solid black; padding: 5px;">
+                <div style="writing-mode: vertical-rl; text-orientation: upright;"><strong>Bitiş</strong></div>
+            </div>
+            <div style="display: table-cell; width: 90%; vertical-align: bottom; border: 1px solid black; padding: 5px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <div><strong>Servis Yetkilisi Ad-Soyad ve İmza:</strong></div>
+                    <div><strong>Teslim Eden Ad-Soyad ve İmza:</strong></div>
+                </div>
+                <br />
+                <div style="writing-mode: vertical-rl; text-orientation: mixed;"><strong>Teslim Edilme Tarihi:</strong></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

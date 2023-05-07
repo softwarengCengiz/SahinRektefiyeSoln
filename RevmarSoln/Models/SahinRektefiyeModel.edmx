@@ -1088,11 +1088,11 @@
           <Property Name="Modifier" Type="nvarchar" MaxLength="50" />
           <Property Name="Durum" Type="int" />
           <Property Name="TalepSekliId" Type="int" />
-          <Property Name="KargoyaVerilisTarihi" Type="date" />
-          <Property Name="AramaTarihi" Type="date" />
+          <Property Name="KargoyaVerilisTarihi" Type="datetime" />
+          <Property Name="AramaTarihi" Type="datetime" />
           <Property Name="KargoFirmasi" Type="nvarchar" MaxLength="100" />
           <Property Name="GönderiKodu" Type="nvarchar" MaxLength="100" />
-          <Property Name="MusteriAtolyeGelisTarihi" Type="date" />
+          <Property Name="MusteriAtolyeGelisTarihi" Type="datetime" />
           <Property Name="TalepDosyaId" Type="int" />
         </EntityType>
         <EntityType Name="TalepSekli">
@@ -1112,6 +1112,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="CreatedDate" Type="date" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsContainPiece" Type="int" />
         </EntityType>
         <EntityType Name="Tasks">
           <Key>
@@ -5150,11 +5151,11 @@
           <Property Name="Modifier" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Durum" Type="Int32" />
           <Property Name="TalepSekliId" Type="Int32" />
-          <Property Name="KargoyaVerilisTarihi" Type="DateTime" Precision="0" />
-          <Property Name="AramaTarihi" Type="DateTime" Precision="0" />
+          <Property Name="KargoyaVerilisTarihi" Type="DateTime" Precision="3" />
+          <Property Name="AramaTarihi" Type="DateTime" Precision="3" />
           <Property Name="KargoFirmasi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="GönderiKodu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MusteriAtolyeGelisTarihi" Type="DateTime" Precision="0" />
+          <Property Name="MusteriAtolyeGelisTarihi" Type="DateTime" Precision="3" />
           <Property Name="TalepDosyaId" Type="Int32" />
           <NavigationProperty Name="AracGrubu" Relationship="SahinRektefiyeDbModel.FK_Talepler_AracGrubu" FromRole="Talepler" ToRole="AracGrubu" />
           <NavigationProperty Name="Musteri" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Talepler" ToRole="Musteri" />
@@ -5183,6 +5184,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
           <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsContainPiece" Type="Int32" />
         </EntityType>
         <EntityType Name="Tasks">
           <Key>
@@ -8059,6 +8061,7 @@
           <EntitySetMapping Name="TamirParca">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.TamirParca">
               <MappingFragment StoreEntitySet="TamirParca">
+                <ScalarProperty Name="IsContainPiece" ColumnName="IsContainPiece" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

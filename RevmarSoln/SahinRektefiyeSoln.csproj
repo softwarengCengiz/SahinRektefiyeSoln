@@ -91,6 +91,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NReco.PdfGenerator, Version=1.2.1.0, Culture=neutral, PublicKeyToken=231663d50a41b451, processorArchitecture=MSIL">
+      <HintPath>..\packages\NReco.PdfGenerator.1.2.1\lib\net45\NReco.PdfGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
     </Reference>
@@ -213,6 +216,7 @@
     <Content Include="Images\FordKlavuz\22.PNG" />
     <Content Include="Images\FordKlavuz\23.PNG" />
     <Content Include="Images\FordKlavuz\24.PNG" />
+    <Content Include="Images\GmyLogo.png" />
     <Content Include="Images\green.png" />
     <Content Include="Images\Kalite.jpg" />
     <Content Include="Images\logo.png" />
@@ -788,6 +792,7 @@
     <Compile Include="Models\ViewModels\Teklif\TeklifIsEmriDonusturPageModel.cs" />
     <Compile Include="Models\ViewModels\Teklif\TeklifOlusturPageModel.cs" />
     <Compile Include="Models\ViewModels\Teklif\TeklifSorgulaPageModel.cs" />
+    <Compile Include="Models\ViewModels\Ticket\SelectListItemWithAttribute.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleCreatePageModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleEditPageModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleSearchPageModel.cs" />
@@ -1088,6 +1093,7 @@
     <Content Include="Views\Admin\EditTamirParca.cshtml" />
     <Content Include="Views\Admin\EditArizaBildirim.cshtml" />
     <Content Include="Views\Musteri\_SearchCustomerByName.cshtml" />
+    <Content Include="Views\Forms\ArizaBildirimFormu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

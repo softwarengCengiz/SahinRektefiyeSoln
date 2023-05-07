@@ -18,5 +18,6 @@ namespace SahinRektefiyeSoln.Models
         public string Name { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public string CreatedBy { get; set; }
+        public Nullable<int> IsContainPiece { get; set; }
     }
 }

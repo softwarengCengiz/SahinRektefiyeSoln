@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,6 +12,7 @@ using SahinRektefiyeSoln.Helpers.Enums;
 using SahinRektefiyeSoln.Infrastructure;
 using SahinRektefiyeSoln.Models;
 using SahinRektefiyeSoln.Models.ViewModels.IsEmri;
+using SahinRektefiyeSoln.Models.ViewModels.Ticket;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -622,7 +624,7 @@ namespace SahinRektefiyeSoln.Controllers
 
             return RedirectToAction("Tickets");
         }
-        
+
 
 
         [HttpPost]
@@ -724,10 +726,410 @@ namespace SahinRektefiyeSoln.Controllers
         }
 
 
-        public ActionResult CreatePDF(int id)
+        //public ActionResult CreatePDF(int id)
+        //{
+        //    var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+        //    var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
+        //    TicketDetailViewModel model = new TicketDetailViewModel();
+        //    model.TalepId = id;
+
+        //    var ariza = ArizaListesi();
+        //    var tamir = TamirListesi();
+
+        //    model.KM = talepler.Km ?? 0;
+        //    model.VinNo = talepler.VinNo ?? "";
+        //    model.Plaka = talepler.Plate ?? "";
+        //    model.Marka = talepler.Vehicles.Companies.Name;
+        //    model.Model = talepler.Vehicles.Name;
+
+        //    if (talepDetay != null)
+        //    {
+        //        model.MotorDolapNo = talepDetay.MotorDolapNo;
+        //        model.KapakDolapNo = talepDetay.KapakDolapNo;
+        //        model.BildirimTarihi = talepDetay.BildirimTarihi;
+        //        model.ServisAdı = talepDetay.ServisAdı;
+        //        model.Marka = talepDetay.Marka;
+        //        model.Model = talepDetay.Model;
+        //        model.MotorTipi = talepDetay.MotorTipi;
+        //        model.YakıtTipi = talepDetay.YakıtTipi.Value;
+        //        model.SilindirSayisi = talepDetay.SilindirSayisi.Value;
+        //        model.Garanti = talepDetay.Garanti.Value == 0 ? false : true;
+        //        model.Revizyon = talepDetay.Revizyon.Value == 0 ? false : true;
+        //        model.RevizyonAciklama = talepDetay.RevizyonAciklama;
+        //        model.ServisNo = talepDetay.ServisNo;
+        //        model.AlınanIs = talepDetay.AlınanIs.Value;
+        //        model.Plaka = talepDetay.Plaka;
+        //        model.KM = talepDetay.KM.Value;
+        //        model.VinNo = talepDetay.VinNo;
+        //        model.MotorNo = talepDetay.MotorNo;
+        //        model.SupapSayisi = talepDetay.SupapSayisi;
+        //        model.MusteriNot = talepDetay.MusteriNot;
+        //        model.ArizaDiger = talepDetay.ArizaDiger;
+        //        model.ParcaDiger = talepDetay.ParcaDiger;
+        //        model.ParcaAdet = talepDetay.ParcaAdet;
+        //        model.ParcalarText = new List<string>();
+        //        var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
+        //        var tamirList = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
+        //        talepDetay.ParcaListAdet = talepDetay.ParcaListAdet;
+        //        //"1-1;3-5;5-3;13-9;"
+        //        foreach (var item in ariza)
+        //        {
+        //            if (arizalist != null)
+        //            {
+        //                foreach (var itemList in arizalist)
+        //                {
+        //                    if (item.Value == itemList)
+        //                        item.Selected = true;
+        //                }
+        //            }
+        //        }
+        //        var adetList = talepDetay.ParcaListAdet.Split(';');
+        //        foreach (var item in tamir)
+        //        {
+        //            if (tamirList != null)
+        //            {
+        //                foreach (var itemList in tamirList)
+        //                {
+        //                    if (item.Value == itemList)
+        //                        item.Selected = true;
+        //                }
+        //            }
+
+        //            if (adetList.Any(x => x.Split('-')[0] == item.Value))
+        //                model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
+        //            else
+        //                model.ParcalarText.Add("0");
+
+        //        }
+        //    }
+
+        //    model.Ariza = ariza;
+        //    model.Parcalar = tamir;
+
+        //    #region PDF
+        //    var templateFilePath = string.Empty;
+        //    if (talepDetay.IsLogoEnable == 1)
+        //    {
+        //        templateFilePath = Server.MapPath("~/Content/PDF/FormArizaBildirim.pdf");
+        //    }
+        //    else
+        //    {
+        //        templateFilePath = Server.MapPath("~/Content/PDF/FormArizaBildirimLogosuz.pdf");
+        //    }
+
+        //    string newFilePath = Server.MapPath("~/Content/PDF/ArizaBildirimFormu.pdf");
+
+        //    using (var pdfReader = new iTextSharp.text.pdf.PdfReader(templateFilePath))
+        //    {
+        //        using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFilePath, FileMode.Create)))
+        //        {
+        //            AcroFields formFields = pdfStamper.AcroFields;
+
+        //            formFields.SetField("IsEmriNo", id.ToString());
+        //            if (!string.IsNullOrEmpty(model.KapakDolapNo))
+        //            {
+        //                formFields.SetField("KapakDolapNo", model.KapakDolapNo);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.MotorDolapNo))
+        //            {
+        //                formFields.SetField("MotorDolapNo", model.MotorDolapNo);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.BildirimTarihi.ToString()))
+        //            {
+        //                formFields.SetField("BildirimTarihi", model.BildirimTarihi.ToString());
+        //            }
+        //            if (!string.IsNullOrEmpty(model.ServisAdı))
+        //            {
+        //                formFields.SetField("ServisAdi", model.ServisAdı);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.Marka))
+        //            {
+        //                formFields.SetField("MarkaModel", model.Marka);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.MotorTipi))
+        //            {
+        //                formFields.SetField("MotorTipi", model.MotorTipi);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.Plaka))
+        //            {
+        //                formFields.SetField("PlakaNo", model.Plaka);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.KM.ToString()))
+        //            {
+        //                formFields.SetField("AracKm", model.KM.ToString());
+        //            }
+        //            if (!string.IsNullOrEmpty(model.VinNo))
+        //            {
+        //                formFields.SetField("SasiNo", model.VinNo);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.MotorNo))
+        //            {
+        //                formFields.SetField("MotorNo", model.MotorNo);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.SupapSayisi))
+        //            {
+        //                formFields.SetField("SupapSayisi", model.SupapSayisi);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.RevizyonAciklama))
+        //            {
+        //                formFields.SetField("RevizyonAciklama", model.RevizyonAciklama);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.ServisNo))
+        //            {
+        //                formFields.SetField("IKK", model.ServisNo);
+        //            }
+        //            if (!string.IsNullOrEmpty(model.MusteriNot))
+        //            {
+        //                formFields.SetField("MusteriOzelIstek", model.MusteriNot);
+        //            }
+
+
+        //            if (model.AlınanIs == 0)
+        //            {
+        //                formFields.SetField("AlinanIsMotor", "Yes");
+        //            }
+        //            else
+        //            {
+        //                formFields.SetField("AlinanIsKapak", "Yes");
+        //            }
+
+        //            if (model.Garanti)
+        //            {
+        //                formFields.SetField("FirmaGarantiEvet", "Yes");
+        //            }
+        //            else
+        //            {
+        //                formFields.SetField("FirmaGarantiHayir", "Yes");
+        //            }
+
+        //            if (model.Revizyon)
+        //            {
+        //                formFields.SetField("MotorRevizyonEvet", "Yes");
+        //            }
+        //            else
+        //            {
+        //                formFields.SetField("MotorRevizyonHayir", "Yes");
+        //            }
+
+        //            if (model.YakıtTipi == 0)
+        //            {
+        //                formFields.SetField("Benzin", "Yes");
+        //            }
+        //            else if (model.YakıtTipi == 1)
+        //            {
+        //                formFields.SetField("Dizel", "Yes");
+        //            }
+        //            else if (model.YakıtTipi == 2)
+        //            {
+        //                formFields.SetField("Lpg", "Yes");
+        //            }
+        //            else
+        //            {
+        //                //Hiçbiri
+        //            }
+
+        //            var SilindirList = new List<int> { 2, 4, 6, 8, 12 };
+        //            foreach (var item in SilindirList)
+        //            {
+        //                if (item == model.SilindirSayisi)
+        //                {
+        //                    formFields.SetField(item.ToString(), "Yes");
+        //                }
+        //            }
+
+
+        //            var ArizaList = new List<string>
+        //            {
+        //                "YagEksiltme",
+        //                "KarterKacagi",
+        //                "YagaSuKaristirma",
+        //                "SuyaYagKaristirma",
+        //                "DigerArizalar",
+        //                "Tekleme",
+        //                "MotordaSes",
+        //                "HararetYapma",
+        //                "KapaktaSes",
+        //                "SuyaKompresyonKacagi"
+        //            };
+
+        //            for (int i = 0; i < ArizaList.Count; i++)
+        //            {
+        //                if (ariza[i].Selected)
+        //                {
+        //                    formFields.SetField(ArizaList[i], "Yes");
+        //                }
+        //            }
+
+        //            var TamirList = new List<string>
+        //            {
+        //                "MotorBlogu",
+        //                "SilindirKapagi",
+        //                "KrankMili",
+        //                "EksantrikMili",
+        //                "BalansMili",
+        //                "Kompresor",
+        //                "Karter",
+        //                "KrankKamasi",
+        //                "Gomlek",
+        //                "Piston",
+        //                "BiyelKolu",
+        //                "TakımSupap",
+        //                "AnaYataklar",
+        //                "KolYataklari",
+        //                "KenarYataklar",
+        //                "AnaYatakKepleri",
+        //                "AnaYatakCivatalari"
+        //            };
+
+        //            var TamirListAdet = new List<string>
+        //            {
+        //                "MotorBloguAdet",
+        //                "SilindirKapagiAdet",
+        //                "KrankMiliAdet",
+        //                "EksantrikMiliAdet",
+        //                "BalansMiliAdet",
+        //                "KompresorAdet",
+        //                "KarterAdet",
+        //                "KrankKamasiAdet",
+        //                "GomlekAdet",
+        //                "PistonAdet",
+        //                "BiyelKoluAdet",
+        //                "TakımSupapAdet",
+        //                "AnaYataklarAdet",
+        //                "KolYataklariAdet",
+        //                "KenarYataklarAdet",
+        //                "AnaYatakKepleriAdet",
+        //                "AnaYatakCivatalariAdet"
+        //            };
+
+        //            for (int i = 0; i < TamirList.Count; i++)
+        //            {
+        //                if (tamir[i].Selected)
+        //                {
+        //                    formFields.SetField(TamirList[i], "Yes"); //checkbox
+        //                }
+        //                formFields.SetField(TamirListAdet[i], model.ParcalarText[i]); //text
+        //            }
+
+        //            pdfStamper.Close();
+        //            pdfReader.Close();
+        //        }
+        //    }
+        //    #endregion
+
+        //    byte[] bytes = System.IO.File.ReadAllBytes(newFilePath);
+        //    return File(bytes, "application/pdf", "ArizaBildirimFormu.pdf");
+        //}
+
+        public void FillIsEmriCombos()
+        {
+            ViewBag.AracGrubu = new SelectList(db.AracGrubu.ToList(), "AracGrubuId", "Aciklamasi");
+            ViewBag.Soforler = new SelectList(db.UserRoles.Where(x => x.Roles.RoleName == "SOFOR").OrderBy(x => x.UserName).Select(x => new { UserName = x.UserName, DanismanAdi = x.Users.FirstName + " " + x.Users.SurName }).ToList(), "UserName", "DanismanAdi");
+            ViewBag.Parts = new SelectList(db.Parts.Select(x => new { PartId = x.PartId, PartName = x.Name }).ToList(), "PartId", "PartName");
+            ViewBag.Markalar = db.Companies.ToList();
+            ViewBag.TalepSekliId = new SelectList(db.TalepSekli.ToList(), "TalepSekliId", "TalepSekliAciklama");
+            //ViewBag.TalepSekliId = new SelectList(db.TalepSekli.Select(x => new { TalepSekliId = x.TalepSekliId, TalepSekliAciklama = x.TalepSekliAciklama }).ToList(), "TalepSekliId", "TalepSekliAciklama");
+        }
+
+        private IList<SelectListItem> ArizaListesi()
+        {
+            var listitem = new List<SelectListItem>();
+
+            var ariza = db.ArizaBildirim.ToList();
+
+            foreach (var item in ariza)
+            {
+                listitem.Add(new SelectListItem { Text = item.Name, Value = item.ArizaBildirimId.ToString() });
+            }
+            return listitem;
+        }
+        private IList<SelectListItemWithAttribute> TamirListesi()
+        {
+            var listitem = new List<SelectListItemWithAttribute>();
+
+            var tamir = db.TamirParca.ToList();
+
+            foreach (var item in tamir)
+            {
+                listitem.Add(new SelectListItemWithAttribute { Text = item.Name, Value = item.TamirParcaId.ToString(), IsContainPiece = item.IsContainPiece });
+            }
+            return listitem;
+        }
+
+        #region FileProcess
+
+        private static object ProcessFileInput(IEnumerable<HttpPostedFileBase> files)
+        {
+            List<object> processedFiles = new List<object>();
+            foreach (var file in files)
+            {
+                processedFiles.Add(new
+                {
+                    ContentType = file.ContentType,
+                    FileName = file.FileName,
+                    InputStream = ReadFully(file.InputStream),
+                    ContentLength = file.ContentLength
+                });
+            }
+            return processedFiles;
+        }
+
+        private static byte[] ReadFully(Stream input)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                input.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
+        #endregion
+
+        public ActionResult CreatePdf(int id)
+        {
+            // ViewModel'i oluştur
+            var model = GetTicketDetails(id);
+
+            // Görünümü HTML kodlarına dönüştür
+            //string cshtmlPath = Server.MapPath("~/Views/Forms/ArizaBildirimFormu.cshtml");
+            var htmlString = GeneratePdfFromView("~/Views/Forms/ArizaBildirimFormu.cshtml", model, ControllerContext);
+
+            // HTML kodlarını PDF'e dönüştür
+            var htmlToPdfConverter = new NReco.PdfGenerator.HtmlToPdfConverter();
+            htmlToPdfConverter.CustomWkHtmlArgs = "--dpi 1200 --encoding utf-8";
+            var pdfBytes = htmlToPdfConverter.GeneratePdf(htmlString);
+
+            // PDF dosyasını kullanıcıya gönder
+            return File(pdfBytes, "application/pdf", "ArizaBildirimFormu.pdf");
+        }
+
+        // Görünümü HTML kodlarına dönüştürmek için yardımcı yöntem
+        public static string GeneratePdfFromView(string viewName, object model, ControllerContext controllerContext)
+        {
+            var viewEngineResult = ViewEngines.Engines.FindPartialView(controllerContext, viewName);
+            if (viewEngineResult.View == null)
+                throw new FileNotFoundException("Görünüm bulunamadı.");
+
+            var viewData = new ViewDataDictionary(model);
+            var tempData = new TempDataDictionary();
+            var viewContext = new ViewContext(controllerContext, viewEngineResult.View, viewData, tempData, TextWriter.Null);
+            var htmlString = new StringWriter();
+            viewEngineResult.View.Render(viewContext, htmlString);
+
+            return htmlString.ToString();
+        }
+
+        private TicketDetailViewModel GetTicketDetails(int id)
         {
             var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
+            var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talepler.TalepDosyaId);
+
+            if (talepler.TalepSekliId == 3 || talepler.TalepSekliId == 4)
+            {
+                ViewBag.EditEnable = true;
+            }
+
             TicketDetailViewModel model = new TicketDetailViewModel();
             model.TalepId = id;
 
@@ -765,6 +1167,11 @@ namespace SahinRektefiyeSoln.Controllers
                 model.ArizaDiger = talepDetay.ArizaDiger;
                 model.ParcaDiger = talepDetay.ParcaDiger;
                 model.ParcaAdet = talepDetay.ParcaAdet;
+                model.IsLogoEnable = (int)talepDetay.IsLogoEnable;
+                if (talepDosya != null)
+                {
+                    model.FileInputView = talepDosya.TalepDosyaUrl;
+                }
                 model.ParcalarText = new List<string>();
                 var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
                 var tamirList = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
@@ -797,290 +1204,14 @@ namespace SahinRektefiyeSoln.Controllers
                         model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
                     else
                         model.ParcalarText.Add("0");
-
                 }
             }
 
             model.Ariza = ariza;
             model.Parcalar = tamir;
 
-            #region PDF
-            var templateFilePath = string.Empty;
-            if (talepDetay.IsLogoEnable == 1)
-            {
-                templateFilePath = Server.MapPath("~/Content/PDF/FormArizaBildirim.pdf");
-            }
-            else
-            {
-                templateFilePath = Server.MapPath("~/Content/PDF/FormArizaBildirimLogosuz.pdf");
-            }
-
-            string newFilePath = Server.MapPath("~/Content/PDF/ArizaBildirimFormu.pdf");
-
-            using (var pdfReader = new iTextSharp.text.pdf.PdfReader(templateFilePath))
-            {
-                using (var pdfStamper = new PdfStamper(pdfReader, new FileStream(newFilePath, FileMode.Create)))
-                {
-                    AcroFields formFields = pdfStamper.AcroFields;
-
-                    formFields.SetField("IsEmriNo", id.ToString());
-                    if (!string.IsNullOrEmpty(model.KapakDolapNo))
-                    {
-                        formFields.SetField("KapakDolapNo", model.KapakDolapNo);
-                    }
-                    if (!string.IsNullOrEmpty(model.MotorDolapNo))
-                    {
-                        formFields.SetField("MotorDolapNo", model.MotorDolapNo);
-                    }
-                    if (!string.IsNullOrEmpty(model.BildirimTarihi.ToString()))
-                    {
-                        formFields.SetField("BildirimTarihi", model.BildirimTarihi.ToString());
-                    }
-                    if (!string.IsNullOrEmpty(model.ServisAdı))
-                    {
-                        formFields.SetField("ServisAdi", model.ServisAdı);
-                    }
-                    if (!string.IsNullOrEmpty(model.Marka))
-                    {
-                        formFields.SetField("MarkaModel", model.Marka);
-                    }
-                    if (!string.IsNullOrEmpty(model.MotorTipi))
-                    {
-                        formFields.SetField("MotorTipi", model.MotorTipi);
-                    }
-                    if (!string.IsNullOrEmpty(model.Plaka))
-                    {
-                        formFields.SetField("PlakaNo", model.Plaka);
-                    }
-                    if (!string.IsNullOrEmpty(model.KM.ToString()))
-                    {
-                        formFields.SetField("AracKm", model.KM.ToString());
-                    }
-                    if (!string.IsNullOrEmpty(model.VinNo))
-                    {
-                        formFields.SetField("SasiNo", model.VinNo);
-                    }
-                    if (!string.IsNullOrEmpty(model.MotorNo))
-                    {
-                        formFields.SetField("MotorNo", model.MotorNo);
-                    }
-                    if (!string.IsNullOrEmpty(model.SupapSayisi))
-                    {
-                        formFields.SetField("SupapSayisi", model.SupapSayisi);
-                    }
-                    if (!string.IsNullOrEmpty(model.RevizyonAciklama))
-                    {
-                        formFields.SetField("RevizyonAciklama", model.RevizyonAciklama);
-                    }
-                    if (!string.IsNullOrEmpty(model.ServisNo))
-                    {
-                        formFields.SetField("IKK", model.ServisNo);
-                    }
-                    if (!string.IsNullOrEmpty(model.MusteriNot))
-                    {
-                        formFields.SetField("MusteriOzelIstek", model.MusteriNot);
-                    }
-
-
-                    if (model.AlınanIs == 0)
-                    {
-                        formFields.SetField("AlinanIsMotor", "Yes");
-                    }
-                    else
-                    {
-                        formFields.SetField("AlinanIsKapak", "Yes");
-                    }
-
-                    if (model.Garanti)
-                    {
-                        formFields.SetField("FirmaGarantiEvet", "Yes");
-                    }
-                    else
-                    {
-                        formFields.SetField("FirmaGarantiHayir", "Yes");
-                    }
-
-                    if (model.Revizyon)
-                    {
-                        formFields.SetField("MotorRevizyonEvet", "Yes");
-                    }
-                    else
-                    {
-                        formFields.SetField("MotorRevizyonHayir", "Yes");
-                    }
-
-                    if (model.YakıtTipi == 0)
-                    {
-                        formFields.SetField("Benzin", "Yes");
-                    }
-                    else if (model.YakıtTipi == 1)
-                    {
-                        formFields.SetField("Dizel", "Yes");
-                    }
-                    else if (model.YakıtTipi == 2)
-                    {
-                        formFields.SetField("Lpg", "Yes");
-                    }
-                    else
-                    {
-                        //Hiçbiri
-                    }
-
-                    var SilindirList = new List<int> { 2, 4, 6, 8, 12 };
-                    foreach (var item in SilindirList)
-                    {
-                        if (item == model.SilindirSayisi)
-                        {
-                            formFields.SetField(item.ToString(), "Yes");
-                        }
-                    }
-
-
-                    var ArizaList = new List<string>
-                    {
-                        "YagEksiltme",
-                        "KarterKacagi",
-                        "YagaSuKaristirma",
-                        "SuyaYagKaristirma",
-                        "DigerArizalar",
-                        "Tekleme",
-                        "MotordaSes",
-                        "HararetYapma",
-                        "KapaktaSes",
-                        "SuyaKompresyonKacagi"
-                    };
-
-                    for (int i = 0; i < ArizaList.Count; i++)
-                    {
-                        if (ariza[i].Selected)
-                        {
-                            formFields.SetField(ArizaList[i], "Yes");
-                        }
-                    }
-
-                    var TamirList = new List<string>
-                    {
-                        "MotorBlogu",
-                        "SilindirKapagi",
-                        "KrankMili",
-                        "EksantrikMili",
-                        "BalansMili",
-                        "Kompresor",
-                        "Karter",
-                        "KrankKamasi",
-                        "Gomlek",
-                        "Piston",
-                        "BiyelKolu",
-                        "TakımSupap",
-                        "AnaYataklar",
-                        "KolYataklari",
-                        "KenarYataklar",
-                        "AnaYatakKepleri",
-                        "AnaYatakCivatalari"
-                    };
-
-                    var TamirListAdet = new List<string>
-                    {
-                        "MotorBloguAdet",
-                        "SilindirKapagiAdet",
-                        "KrankMiliAdet",
-                        "EksantrikMiliAdet",
-                        "BalansMiliAdet",
-                        "KompresorAdet",
-                        "KarterAdet",
-                        "KrankKamasiAdet",
-                        "GomlekAdet",
-                        "PistonAdet",
-                        "BiyelKoluAdet",
-                        "TakımSupapAdet",
-                        "AnaYataklarAdet",
-                        "KolYataklariAdet",
-                        "KenarYataklarAdet",
-                        "AnaYatakKepleriAdet",
-                        "AnaYatakCivatalariAdet"
-                    };
-
-                    for (int i = 0; i < TamirList.Count; i++)
-                    {
-                        if (tamir[i].Selected)
-                        {
-                            formFields.SetField(TamirList[i], "Yes"); //checkbox
-                        }
-                        formFields.SetField(TamirListAdet[i], model.ParcalarText[i]); //text
-                    }
-
-                    pdfStamper.Close();
-                    pdfReader.Close();
-                }
-            }
-            #endregion
-
-            byte[] bytes = System.IO.File.ReadAllBytes(newFilePath);
-            return File(bytes, "application/pdf", "ArizaBildirimFormu.pdf");
+            return model;
         }
 
-        public void FillIsEmriCombos()
-        {
-            ViewBag.AracGrubu = new SelectList(db.AracGrubu.ToList(), "AracGrubuId", "Aciklamasi");
-            ViewBag.Soforler = new SelectList(db.UserRoles.Where(x => x.Roles.RoleName == "SOFOR").OrderBy(x => x.UserName).Select(x => new { UserName = x.UserName, DanismanAdi = x.Users.FirstName + " " + x.Users.SurName }).ToList(), "UserName", "DanismanAdi");
-            ViewBag.Parts = new SelectList(db.Parts.Select(x => new { PartId = x.PartId, PartName = x.Name }).ToList(), "PartId", "PartName");
-            ViewBag.Markalar = db.Companies.ToList();
-            ViewBag.TalepSekliId = new SelectList(db.TalepSekli.ToList(), "TalepSekliId", "TalepSekliAciklama");
-            //ViewBag.TalepSekliId = new SelectList(db.TalepSekli.Select(x => new { TalepSekliId = x.TalepSekliId, TalepSekliAciklama = x.TalepSekliAciklama }).ToList(), "TalepSekliId", "TalepSekliAciklama");
-        }
-
-        private IList<SelectListItem> ArizaListesi()
-        {
-            var listitem = new List<SelectListItem>();
-
-            var ariza = db.ArizaBildirim.ToList();
-
-            foreach (var item in ariza)
-            {
-                listitem.Add(new SelectListItem { Text = item.Name, Value = item.ArizaBildirimId.ToString() });
-            }
-            return listitem;
-        }
-        private IList<SelectListItem> TamirListesi()
-        {
-            var listitem = new List<SelectListItem>();
-
-            var tamir = db.TamirParca.ToList();
-
-            foreach (var item in tamir)
-            {
-                listitem.Add(new SelectListItem { Text = item.Name, Value = item.TamirParcaId.ToString() });
-            }
-            return listitem;
-        }
-
-        #region FileProcess
-
-        private static object ProcessFileInput(IEnumerable<HttpPostedFileBase> files)
-        {
-            List<object> processedFiles = new List<object>();
-            foreach (var file in files)
-            {
-                processedFiles.Add(new
-                {
-                    ContentType = file.ContentType,
-                    FileName = file.FileName,
-                    InputStream = ReadFully(file.InputStream),
-                    ContentLength = file.ContentLength
-                });
-            }
-            return processedFiles;
-        }
-
-        private static byte[] ReadFully(Stream input)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                input.CopyTo(ms);
-                return ms.ToArray();
-            }
-        }
-
-        #endregion
     }
 }
