@@ -108,8 +108,26 @@
                     scrollInput: false,
 					value: '@((Model !=null && Model.BildirimTarihi.HasValue) ? Model.BildirimTarihi.Value.Year +"/"+ Model.BildirimTarihi.Value.Month+"/"+ Model.BildirimTarihi.Value.Day +" "+ Model.BildirimTarihi.Value.Hour+":"+Model.BildirimTarihi.Value.Minute+"\'" : null)'
 				});
+        });
+    });
+
+    function onChangeBrands() {
+        debugger;
+		var url = '@Url.Action("GetBrandModels", "Ticket")';
+
+            $("#BrandModelsId").attr('disabled', 'disabled');
+
+            var BrandsId = $("#BrandsId").val();
+
+            $.getJSON(url, { BrandsId: BrandsId}, function (response) {
+                $("#BrandModelsId").empty();
+			$.each(response, function (index, item) {
+				var p = new Option(item.Text, item.Value);
+                $("#BrandModelsId").append(p);
+			});
+                $("#BrandModelsId").removeAttr('disabled', 'disabled');
 		});
-	});
+	}
 </script>
 
 
@@ -186,10 +204,19 @@
             <div class="w3-row">
                 <div class="w3-row w3-padding-left w3-padding-right">
                     <div class="w3-col s12 m3 l3 w3-padding">
-                        <label>Marka / Model</label>
-                        @Html.EditorFor(model => model.Marka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "Marka" } })
+                        <label>Marka</label>
+                        @Html.DropDownList("BrandName", (SelectList)ViewBag.Brands, "Marka Seçiniz", htmlAttributes: new
+                        {
+                            @class = "w3-select w3-border w3-round",
+                            @Id = "BrandsId", @onchange = "onChangeBrands();"})
+                        @*@Html.EditorFor(model => model.Marka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "Marka" } })*@
                     </div>
 
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Model</label>
+                        @Html.DropDownList("BrandModelName", Enumerable.Empty<SelectListItem>(), "Model Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "BrandModelsId" })
+                        @*@Html.EditorFor(model => model.Marka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "Marka" } })*@
+                    </div>
 
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Araç KM </label>

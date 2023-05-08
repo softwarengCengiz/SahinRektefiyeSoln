@@ -20,11 +20,11 @@ namespace SahinRektefiyeSoln.Models
             this.Talepler = new HashSet<Talepler>();
         }
     
-        public int TalepDosyaId { get; set; }
         public Nullable<int> TalepDosyaSekliId { get; set; }
         public string TalepDosyaUrl { get; set; }
         public string Creator { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+        public int TalepDosyaId { get; set; }
     
         public virtual TalepDosyaSekli TalepDosyaSekli { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

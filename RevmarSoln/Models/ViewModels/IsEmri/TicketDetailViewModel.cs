@@ -52,5 +52,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public HttpPostedFileBase[] FileInput { get; set; }
         public string FileInputView { get; set; }
         public int FlagSave { get; set; }
+        public string BrandName { get; set; }
+        public string BrandModelName { get; set; }
     }
 }

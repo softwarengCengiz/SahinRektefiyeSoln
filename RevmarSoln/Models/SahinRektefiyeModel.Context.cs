@@ -33,6 +33,8 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<AracGrubu> AracGrubu { get; set; }
         public virtual DbSet<AracTipi> AracTipi { get; set; }
         public virtual DbSet<ArizaBildirim> ArizaBildirim { get; set; }
+        public virtual DbSet<BrandModels> BrandModels { get; set; }
+        public virtual DbSet<Brands> Brands { get; set; }
         public virtual DbSet<ChangeRequest> ChangeRequest { get; set; }
         public virtual DbSet<ChangeRequestStatus> ChangeRequestStatus { get; set; }
         public virtual DbSet<Companies> Companies { get; set; }

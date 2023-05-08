@@ -384,6 +384,12 @@
     <Compile Include="Models\ArizaBildirim.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BrandModels.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Brands.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ChangeRequest.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>

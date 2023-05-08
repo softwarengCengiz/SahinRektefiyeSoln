@@ -109,6 +109,21 @@
           <Property Name="CreatedDate" Type="date" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="BrandModels">
+          <Key>
+            <PropertyRef Name="BrandModelId" />
+          </Key>
+          <Property Name="BrandModelId" Type="int" Nullable="false" />
+          <Property Name="BrandId" Type="int" />
+          <Property Name="BrandModelName" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Brands">
+          <Key>
+            <PropertyRef Name="BrandId" />
+          </Key>
+          <Property Name="BrandId" Type="int" Nullable="false" />
+          <Property Name="BrandName" Type="nvarchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="ChangeRequest">
           <Key>
             <PropertyRef Name="ChangeRequestId" />
@@ -2774,6 +2789,8 @@
           <EntitySet Name="AracGrubu" EntityType="Self.AracGrubu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AracTipi" EntityType="Self.AracTipi" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArizaBildirim" EntityType="Self.ArizaBildirim" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BrandModels" EntityType="Self.BrandModels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChangeRequest" EntityType="Self.ChangeRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChangeRequestStatus" EntityType="Self.ChangeRequestStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Companies" EntityType="Self.Companies" Schema="dbo" store:Type="Tables" />
@@ -3360,6 +3377,8 @@
           <EntitySet Name="AracGrubu" EntityType="SahinRektefiyeDbModel.AracGrubu" />
           <EntitySet Name="AracTipi" EntityType="SahinRektefiyeDbModel.AracTipi" />
           <EntitySet Name="ArizaBildirim" EntityType="SahinRektefiyeDbModel.ArizaBildirim" />
+          <EntitySet Name="BrandModels" EntityType="SahinRektefiyeDbModel.BrandModels" />
+          <EntitySet Name="Brands" EntityType="SahinRektefiyeDbModel.Brands" />
           <EntitySet Name="ChangeRequest" EntityType="SahinRektefiyeDbModel.ChangeRequest" />
           <EntitySet Name="ChangeRequestStatus" EntityType="SahinRektefiyeDbModel.ChangeRequestStatus" />
           <EntitySet Name="Companies" EntityType="SahinRektefiyeDbModel.Companies" />
@@ -3828,11 +3847,11 @@
             <End Role="Talepler" EntitySet="Talepler" />
             <End Role="TalepDetay" EntitySet="TalepDetay" />
           </AssociationSet>
-          <AssociationSet Name="FK__TalepDosy__Talep__3B95D2F1" Association="SahinRektefiyeDbModel.FK__TalepDosy__Talep__3B95D2F1">
+          <AssociationSet Name="FK_TalepDosya_TalepDosyaSekli" Association="SahinRektefiyeDbModel.FK_TalepDosya_TalepDosyaSekli">
             <End Role="TalepDosyaSekli" EntitySet="TalepDosyaSekli" />
             <End Role="TalepDosya" EntitySet="TalepDosya" />
           </AssociationSet>
-          <AssociationSet Name="FK__Talepler__TalepD__3C89F72A" Association="SahinRektefiyeDbModel.FK__Talepler__TalepD__3C89F72A">
+          <AssociationSet Name="FK_Talepler_TalepDosya_TalepDosyaId" Association="SahinRektefiyeDbModel.FK_Talepler_TalepDosya_TalepDosyaId">
             <End Role="TalepDosya" EntitySet="TalepDosya" />
             <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
@@ -4024,6 +4043,21 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
           <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BrandModels">
+          <Key>
+            <PropertyRef Name="BrandModelId" />
+          </Key>
+          <Property Name="BrandModelId" Type="Int32" Nullable="false" />
+          <Property Name="BrandId" Type="Int32" />
+          <Property Name="BrandModelName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Brands">
+          <Key>
+            <PropertyRef Name="BrandId" />
+          </Key>
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ChangeRequest">
           <Key>
@@ -5111,13 +5145,13 @@
           <Key>
             <PropertyRef Name="TalepDosyaId" />
           </Key>
-          <Property Name="TalepDosyaId" Type="Int32" Nullable="false" />
           <Property Name="TalepDosyaSekliId" Type="Int32" />
           <Property Name="TalepDosyaUrl" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Name="Creator" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="TalepDosyaSekli" Relationship="SahinRektefiyeDbModel.FK__TalepDosy__Talep__3B95D2F1" FromRole="TalepDosya" ToRole="TalepDosyaSekli" />
-          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK__Talepler__TalepD__3C89F72A" FromRole="TalepDosya" ToRole="Talepler" />
+          <Property Name="TalepDosyaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="TalepDosyaSekli" Relationship="SahinRektefiyeDbModel.FK_TalepDosya_TalepDosyaSekli" FromRole="TalepDosya" ToRole="TalepDosyaSekli" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK_Talepler_TalepDosya_TalepDosyaId" FromRole="TalepDosya" ToRole="Talepler" />
         </EntityType>
         <EntityType Name="TalepDosyaSekli">
           <Key>
@@ -5127,7 +5161,7 @@
           <Property Name="TalepDosyaSekliAciklama" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Creator" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="TalepDosya" Relationship="SahinRektefiyeDbModel.FK__TalepDosy__Talep__3B95D2F1" FromRole="TalepDosyaSekli" ToRole="TalepDosya" />
+          <NavigationProperty Name="TalepDosya" Relationship="SahinRektefiyeDbModel.FK_TalepDosya_TalepDosyaSekli" FromRole="TalepDosyaSekli" ToRole="TalepDosya" />
         </EntityType>
         <EntityType Name="Talepler">
           <Key>
@@ -5161,7 +5195,7 @@
           <NavigationProperty Name="Musteri" Relationship="SahinRektefiyeDbModel.FK_Talepler_Musteri" FromRole="Talepler" ToRole="Musteri" />
           <NavigationProperty Name="Parts" Relationship="SahinRektefiyeDbModel.FK_Talepler_Part" FromRole="Talepler" ToRole="Parts" />
           <NavigationProperty Name="TalepDetay" Relationship="SahinRektefiyeDbModel.FK_TalepId" FromRole="Talepler" ToRole="TalepDetay" />
-          <NavigationProperty Name="TalepDosya" Relationship="SahinRektefiyeDbModel.FK__Talepler__TalepD__3C89F72A" FromRole="Talepler" ToRole="TalepDosya" />
+          <NavigationProperty Name="TalepDosya" Relationship="SahinRektefiyeDbModel.FK_Talepler_TalepDosya_TalepDosyaId" FromRole="Talepler" ToRole="TalepDosya" />
           <NavigationProperty Name="TalepSekli" Relationship="SahinRektefiyeDbModel.FK_Talepler_TalepSekliId" FromRole="Talepler" ToRole="TalepSekli" />
           <NavigationProperty Name="Users" Relationship="SahinRektefiyeDbModel.FK_Talepler_Users" FromRole="Talepler" ToRole="Users" />
           <NavigationProperty Name="Vehicles" Relationship="SahinRektefiyeDbModel.FK_Talepler_Vehicle" FromRole="Talepler" ToRole="Vehicles" />
@@ -6656,7 +6690,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TalepDosy__Talep__3B95D2F1">
+        <Association Name="FK_TalepDosya_TalepDosyaSekli">
           <End Type="SahinRektefiyeDbModel.TalepDosyaSekli" Role="TalepDosyaSekli" Multiplicity="0..1" />
           <End Type="SahinRektefiyeDbModel.TalepDosya" Role="TalepDosya" Multiplicity="*" />
           <ReferentialConstraint>
@@ -6668,8 +6702,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Talepler__TalepD__3C89F72A">
-          <End Type="SahinRektefiyeDbModel.TalepDosya" Role="TalepDosya" Multiplicity="0..1" />
+        <Association Name="FK_Talepler_TalepDosya_TalepDosyaId">
+          <End Type="SahinRektefiyeDbModel.TalepDosya" Role="TalepDosya" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TalepDosya">
@@ -6990,6 +7026,23 @@
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ArizaBildirimId" ColumnName="ArizaBildirimId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BrandModels">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.BrandModels">
+              <MappingFragment StoreEntitySet="BrandModels">
+                <ScalarProperty Name="BrandModelName" ColumnName="BrandModelName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="BrandModelId" ColumnName="BrandModelId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Brands">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Brands">
+              <MappingFragment StoreEntitySet="Brands">
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -8000,11 +8053,11 @@
           <EntitySetMapping Name="TalepDosya">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.TalepDosya">
               <MappingFragment StoreEntitySet="TalepDosya">
+                <ScalarProperty Name="TalepDosyaId" ColumnName="TalepDosyaId" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
                 <ScalarProperty Name="TalepDosyaUrl" ColumnName="TalepDosyaUrl" />
                 <ScalarProperty Name="TalepDosyaSekliId" ColumnName="TalepDosyaSekliId" />
-                <ScalarProperty Name="TalepDosyaId" ColumnName="TalepDosyaId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
