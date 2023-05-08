@@ -1,4 +1,5 @@
 ﻿@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.TicketDetailViewModel
+@using System.Web
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -39,8 +40,17 @@
 
 <body>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-        <img src="@Url.Content("~/Images/GmyLogo.png")" style="margin-left: 30px; display: inline-block;" />
-        <h2 style="margin:0 0 30px 200px; display:inline-block;"><strong>Arıza Bildirim Formu</strong></h2>
+        @if (Model.IsLogoEnable == 1)
+        {
+            <img src="@Url.Content(Server.MapPath("~/Images/GmyLogo.png"))" style="display: inline-block; width:102px; height:92px;" />
+            <h2 style="margin:0 0 0 120px; display:inline-block;"><strong>Arıza Bildirim Formu</strong></h2>
+            <img src="@Url.Content(Server.MapPath("~/Images/StaticLogoShn1.png"))" style="display: inline-block; margin-left:50px;" />
+        }
+        else
+        {
+            <h2 style="margin:0 0 20px 220px; display:inline-block;"><strong>Arıza Bildirim Formu</strong></h2>
+            <img src="@Url.Content(Server.MapPath("~/Images/StaticLogoShn1.png"))" style="display: inline-block; margin-left:50px;" />
+        }
     </div>
 
     <table id="table-one" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:2px solid black;">
@@ -157,7 +167,7 @@
         <h5><strong>Arıza Bildirimleri</strong></h5>
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center;">
+    <div style="text-align:center;">
         @for (int i = 0; i < Model.Ariza.Count; i++)
         {
             <label style="display: inline-block; margin-right: 70px; vertical-align: top; text-align: center;">
@@ -165,7 +175,7 @@
                 {
                     <i class="fas fa-check-circle"></i>
                 }
-                @Model.Ariza[i].Text
+                <span>@Model.Ariza[i].Text</span>
             </label>
             if (i % 2 != 0)
             {
@@ -174,10 +184,11 @@
         }
     </div>
 
+
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
         <h5><strong>Müşteri Özel İstekleri</strong></h5>
     </div>
-    @Model.MusteriNot
+    <span>@Model.MusteriNot</span>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
         <h5><strong>Servisten Tamir İçin Alınan Parçalar</strong></h5>
     </div>
@@ -204,7 +215,7 @@
 
 
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: silver; text-align: center;">
-        <h4><strong>Onay</strong></h4>
+        <h5><strong>Onay</strong></h5>
     </div>
     <div style="display: table; width: 100%; table-layout: fixed;">
         <div style="display: table-row;">

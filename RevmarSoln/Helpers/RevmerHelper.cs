@@ -1,5 +1,4 @@
-﻿
-using SahinRektefiyeSoln.Helpers.LogHelper;
+﻿using SahinRektefiyeSoln.Helpers.LogHelper;
 using SahinRektefiyeSoln.Models;
 using SahinRektefiyeSoln.Models.HelperModels;
 using System;

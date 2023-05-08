@@ -1087,19 +1087,13 @@ namespace SahinRektefiyeSoln.Controllers
 
         public ActionResult CreatePdf(int id)
         {
-            // ViewModel'i oluştur
             var model = GetTicketDetails(id);
-
-            // Görünümü HTML kodlarına dönüştür
-            //string cshtmlPath = Server.MapPath("~/Views/Forms/ArizaBildirimFormu.cshtml");
             var htmlString = GeneratePdfFromView("~/Views/Forms/ArizaBildirimFormu.cshtml", model, ControllerContext);
 
-            // HTML kodlarını PDF'e dönüştür
             var htmlToPdfConverter = new NReco.PdfGenerator.HtmlToPdfConverter();
-            htmlToPdfConverter.CustomWkHtmlArgs = "--dpi 1200 --encoding utf-8";
+            htmlToPdfConverter.CustomWkHtmlArgs = "--dpi 1200 --encoding utf-8 --enable-local-file-access";
             var pdfBytes = htmlToPdfConverter.GeneratePdf(htmlString);
 
-            // PDF dosyasını kullanıcıya gönder
             return File(pdfBytes, "application/pdf", "ArizaBildirimFormu.pdf");
         }
 
