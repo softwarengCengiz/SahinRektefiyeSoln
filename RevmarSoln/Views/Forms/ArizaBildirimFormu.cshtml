@@ -1,11 +1,13 @@
 ﻿@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.TicketDetailViewModel
-@using System.Web
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-BHCtZXbuh0CzFwQYaEJ67tBikRCFMSDlrJfvj7y8hxJx+Sn6XIHGBh+UD5xgOovpKzgxUVVJ79q2hF3J9vQ5sA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
+        td {
+            text-align:left !important;
+        }
 
         #table-one th {
             font-size: 20px;
@@ -65,9 +67,9 @@
     </div>
     <table id="table-two" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:1px solid black;">
         <tr>
-            <th>Bildirim Tarihi:</th>
+            <th style="text-align:left;">Bildirim Tarihi:</th>
             <td>@Model.BildirimTarihi</td>
-            <th>Alınan İş:</th>
+            <th style="text-align:left;">Alınan İş:</th>
             <td>
                 @if (Model.AlınanIs == 0)
                 {
@@ -84,25 +86,25 @@
             </td>
         </tr>
         <tr>
-            <th>Servis Adı:</th>
+            <th style="text-align:left;">Servis Adı:</th>
             <td>@Model.ServisAdı</td>
-            <th>Plaka No:</th>
+            <th style="text-align:left;">Plaka No:</th>
             <td>@Model.Plaka</td>
         </tr>
         <tr>
-            <th>Marka/Model:</th>
+            <th style="text-align:left;">Marka/Model:</th>
             <td>@Model.BrandModelName</td>
-            <th>Araç KM:</th>
+            <th style="text-align:left;">Araç KM:</th>
             <td>@Model.KM</td>
         </tr>
         <tr>
-            <th>Motor Tipi:</th>
+            <th style="text-align:left;">Motor Tipi:</th>
             <td>@Model.MotorTipi</td>
-            <th>Şasi No:</th>
+            <th style="text-align:left;">Şasi No:</th>
             <td>@Model.VinNo</td>
         </tr>
         <tr>
-            <th>Yakıt Tipi:</th>
+            <th style="text-align:left;">Yakıt Tipi:</th>
             <td>
                 @if (Model.YakıtTipi == 0)
                 {
@@ -117,19 +119,19 @@
                     <span>Lpg</span>
                 }
             </td>
-            <th>Motor No:</th>
+            <th style="text-align:left;">Motor No:</th>
             <td>@Model.MotorNo</td>
         </tr>
         <tr>
-            <th>Silindir Sayısı:</th>
+            <th style="text-align:left;">Silindir Sayısı:</th>
             <td>@Model.SilindirSayisi</td>
-            <th>Supap Sayısı:</th>
+            <th style="text-align:left;">Supap Sayısı:</th>
             <td>@Model.SupapSayisi</td>
         </tr>
     </table>
     <table id="table-three" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:1px solid black;">
         <tr class="x">
-            <th>Araç Üretici Firma Garantisi Altında Mı?</th>
+            <th style="text-align:left;">Araç Üretici Firma Garantisi Altında Mı?</th>
             <td>
                 @if (Model.Garanti)
                 {
@@ -142,7 +144,7 @@
             </td>
         </tr>
         <tr class="x">
-            <th>Motorda Daha Önce Revizyon Yapılmış Mı?</th>
+            <th style="text-align:left;">Motorda Daha Önce Revizyon Yapılmış Mı?</th>
             <td>
                 @if (Model.Revizyon)
                 {
@@ -155,11 +157,11 @@
             </td>
         </tr>
         <tr class="x">
-            <th>Revizyon Yapılmış İse Açıklama</th>
+            <th style="text-align:left;">Revizyon Yapılmış İse Açıklama</th>
             <td>@Model.RevizyonAciklama</td>
         </tr>
         <tr class="x">
-            <th>Servis Tarafından Verilen İş Emri No (İKK)</th>
+            <th style="text-align:left;">Servis Tarafından Verilen İş Emri No (İKK)</th>
             <td>@Model.ServisNo</td>
         </tr>
     </table>
@@ -167,10 +169,10 @@
         <h5><strong>Arıza Bildirimleri</strong></h5>
     </div>
 
-    <div style="text-align:center;">
+    <div>
         @for (int i = 0; i < Model.Ariza.Count; i++)
         {
-            <label style="display: inline-block; margin-right: 70px; vertical-align: top; text-align: center;">
+            <label style="display: inline-block; margin-right: 200px; vertical-align: top; text-align: left;">
                 @if (Model.Ariza[i].Selected)
                 {
                     <i class="fas fa-check-circle"></i>
@@ -193,10 +195,10 @@
         <h5><strong>Servisten Tamir İçin Alınan Parçalar</strong></h5>
     </div>
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:center;">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         @for (var i = 0; i < Model.Parcalar.Count; i++)
         {
-            <div style="display: inline-block; margin-right: 70px; text-align: center;">
+            <div style="display: inline-block; margin-right: 200px; text-align: left;">
                 @if (Model.Parcalar[i].Selected)
                 {
                     <i class="fas fa-check-circle"></i>
