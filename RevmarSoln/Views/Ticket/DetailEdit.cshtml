@@ -49,15 +49,14 @@
 </style>
 
 <script>
-	$(document).ready(function () {
+    $(document).ready(function () {
+
+        console.log('@Model.BrandModelName');
+
 		$('#btnMusteriSec').click(function () {
-
 			$('#MusteriModalContent').load('@Url.Action("HizliMusteriSec","Musteri")');
-
 			document.getElementById('MusteriSecModal').style.display = 'block';
-
 			return false;
-
         });
 
         if ($('#gmyLogo').is(':checked')) {
@@ -112,7 +111,6 @@
     });
 
     function onChangeBrands() {
-        debugger;
 		var url = '@Url.Action("GetBrandModels", "Ticket")';
 
             $("#BrandModelsId").attr('disabled', 'disabled');
@@ -127,7 +125,7 @@
 			});
                 $("#BrandModelsId").removeAttr('disabled', 'disabled');
 		});
-	}
+    }
 </script>
 
 
@@ -208,13 +206,23 @@
                         @Html.DropDownList("BrandName", (SelectList)ViewBag.Brands, "Marka Seçiniz", htmlAttributes: new
                         {
                             @class = "w3-select w3-border w3-round",
-                            @Id = "BrandsId", @onchange = "onChangeBrands();"})
+                            @Id = "BrandsId",
+                            @onchange = "onChangeBrands();",
+                        })
                         @*@Html.EditorFor(model => model.Marka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "Marka" } })*@
                     </div>
 
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Model</label>
-                        @Html.DropDownList("BrandModelName", Enumerable.Empty<SelectListItem>(), "Model Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "BrandModelsId" })
+                        @if (ViewBag.BrandModels != null)
+                        {
+                            @Html.DropDownList("BrandModelName", (SelectList)ViewBag.BrandModels, "Model Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "BrandModelsId" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("BrandModelName", Enumerable.Empty<SelectListItem>(), "Model Seçiniz", htmlAttributes: new { @class = "w3-select w3-border w3-round", @Id = "BrandModelsId" })
+                        }
+
                         @*@Html.EditorFor(model => model.Marka, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "Marka" } })*@
                     </div>
 
@@ -232,12 +240,20 @@
                         @Html.EditorFor(model => model.VinNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "VinNo" } })
                     </div>
 
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Motor No </label>
+                        @Html.EditorFor(model => model.MotorNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "MotorNo" } })
+                    </div>
+
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Supap Sayısı </label>
+                        @Html.EditorFor(model => model.SupapSayisi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "SupapSayisi" } })
+                    </div>
                 </div>
             </div>
 
             <div class="w3-row">
                 <div class="w3-row w3-padding-left w3-padding-right">
-
                     <div class="w3-col s12 m3 l3 w3-padding">
                         <label>Yakıt Tipi</label>
                         <div class="w3-round">
@@ -267,7 +283,7 @@
                     </div>
 
 
-                    <div class="w3-col s12 m3 l3 w3-padding">
+                    <div class="w3-col s12 m3 l3 w3-padding" style="margin-left:100px;">
                         <label>Silindir Sayısı</label>
                         <div class="w3-round">
                             <table class="">
@@ -306,20 +322,8 @@
                             </table>
                         </div>
                     </div>
-
-                    <div class="w3-col s12 m3 l3 w3-padding">
-                        <label>Motor No </label>
-                        @Html.EditorFor(model => model.MotorNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "MotorNo" } })
-                    </div>
-
-                    <div class="w3-col s12 m3 l3 w3-padding">
-                        <label>Supap Sayısı </label>
-                        @Html.EditorFor(model => model.SupapSayisi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round ", maxlength = "120", autocomplete = "off", id = "SupapSayisi" } })
-                    </div>
-
                 </div>
             </div>
-
 
             <div class="w3-row">
                 <div class="w3-row w3-padding-left w3-padding-right">
@@ -476,7 +480,7 @@
                                 {
                                     <input type="text"
                                            name="ParcalarText"
-                                           value="@Model.ParcalarText[count]"
+                                           value="0"
                                            class="w3-border w3-round onlynumeric"
                                            style="float: right;text-align: right;"
                                            placeholder="adet / takım" />
@@ -592,7 +596,7 @@
 
 
 <div id="CheckDownloadPdfModal" class="w3-modal w3-animate-opacity">
-    <div class="w3-modal-content w3-card-4" style="width: 30%; height: 15%;">
+    <div class="w3-modal-content w3-card-4" style="width: 30%; height: 25%;">
         <header class="w3-container w3-teal">
             @*<span onclick="document.getElementById('MusteriSecModal').style.display = 'none';" class="w3-button w3-large w3-display-topright">&times;</span>*@
             <h5>Değişiklikler kaydedilecek ve Pdf indirilecek. Onaylıyor musunuz ?</h5>
@@ -611,6 +615,7 @@
 <script>
 
     $('#btnKaydet').on('click', function () {
+        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEdit", "Ticket")');
         $('#FlagSave').val(1);
         $('#btnKaydet').attr('type', 'submit');
         $('#formArizaBildirim').submit();
@@ -642,6 +647,7 @@
     });
 
     $(document).ready(function () {
+        $('#formArizaBildirim').attr('action', '@Url.Action("DetailEdit", "Ticket")');
         $('.remove-image').click(function () {
             $(this).parent().remove();
         });

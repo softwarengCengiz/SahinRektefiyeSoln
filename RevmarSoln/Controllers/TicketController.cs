@@ -215,6 +215,16 @@ namespace SahinRektefiyeSoln.Controllers
             model.Parcalar = tamir;
 
             ViewBag.Brands = new SelectList(db.Brands.ToList().OrderBy(x => x.BrandName), "BrandName", "BrandName");
+            if (model.BrandName != null)
+            {
+                var brandId = db.Brands.FirstOrDefault(x => x.BrandName == model.BrandName).BrandId;
+                ViewBag.BrandModels = new SelectList(db.BrandModels.Where(x => x.BrandId == brandId).ToList(), "BrandModelName", "BrandModelName");
+            }
+            else
+            {
+                ViewBag.BrandModels = null;
+            }
+            
             return View(model);
         }
 
@@ -660,8 +670,8 @@ namespace SahinRektefiyeSoln.Controllers
                         yeniTalep.KapakDolapNo = model.KapakDolapNo;
                         yeniTalep.BildirimTarihi = model.BildirimTarihi;
                         yeniTalep.ServisAdı = model.ServisAdı;
-                        yeniTalep.Marka = model.Marka;
-                        yeniTalep.Model = model.Model;
+                        yeniTalep.Marka = model.BrandName;
+                        yeniTalep.Model = model.BrandModelName;
                         yeniTalep.MotorTipi = model.MotorTipi;
                         yeniTalep.YakıtTipi = model.YakıtTipi;
                         yeniTalep.SilindirSayisi = model.SilindirSayisi;
@@ -698,8 +708,8 @@ namespace SahinRektefiyeSoln.Controllers
                 talepDetay.KapakDolapNo = model.KapakDolapNo;
                 talepDetay.BildirimTarihi = model.BildirimTarihi;
                 talepDetay.ServisAdı = model.ServisAdı;
-                talepDetay.Marka = model.Marka;
-                talepDetay.Model = model.Model;
+                talepDetay.Marka = model.BrandName;
+                talepDetay.Model = model.BrandModelName;
                 talepDetay.MotorTipi = model.MotorTipi;
                 talepDetay.YakıtTipi = model.YakıtTipi;
                 talepDetay.SilindirSayisi = model.SilindirSayisi;
