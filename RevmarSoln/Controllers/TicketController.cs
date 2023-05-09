@@ -106,9 +106,7 @@ namespace SahinRektefiyeSoln.Controllers
                 model.KM = talepler.Km.HasValue ? talepler.Km.Value : 0;
                 model.SaseNo = talepler.VinNo;
                 model.SoforUserName = talepler.AtananSofor;
-                model.PartId = (int)talepler.PartId;
-                model.VehicleId = talepler.VehicleId.HasValue ? talepler.VehicleId.Value : 0;
-                model.AracGrubuId = talepler.AracGrupId.HasValue ? talepler.AracGrupId.Value : 0;
+                model.PartId = talepler.PartId;
                 model.Id = talepler.TalepId;
                 model.TalepSekliId = talepler.TalepSekliId.HasValue ? talepler.TalepSekliId.Value : 0;
                 model.KargoyaVerilisTarihi = talepler.KargoyaVerilisTarihi;
@@ -164,6 +162,13 @@ namespace SahinRektefiyeSoln.Controllers
                 model.AlınanIs = talepDetay.AlınanIs.Value;
                 model.Plaka = talepDetay.Plaka;
                 model.KM = talepDetay.KM.Value;
+
+                //if (talepler.VehicleId != null)
+                //{​​
+                //model.Marka = talepler.Vehicles.Companies.Name;
+                //    model.Model = talepler.Vehicles.Name;
+                //}​​
+
                 model.VinNo = talepDetay.VinNo;
                 model.MotorNo = talepDetay.MotorNo;
                 model.SupapSayisi = talepDetay.SupapSayisi;
@@ -224,7 +229,7 @@ namespace SahinRektefiyeSoln.Controllers
             {
                 ViewBag.BrandModels = null;
             }
-            
+
             return View(model);
         }
 
@@ -502,16 +507,10 @@ namespace SahinRektefiyeSoln.Controllers
             yeniTalep.Creator = this.userName;
             yeniTalep.Modifier = null;
             yeniTalep.ModifiedDate = null;
-
-            //yeniTalep.PartId = model.PartId;
             if (model.TalepSekliId != 3 && model.TalepSekliId != 4)
             {
-                yeniTalep.PartId = 1;
+                yeniTalep.PartId = model.PartId;
             }
-
-            //Araç bilgileri taşınacak. Geçici olarak 1
-            yeniTalep.AracGrupId = 1;
-            yeniTalep.VehicleId = 1;
             //yeniTalep.AracGrupId = model.AracGrubuId;
             //yeniTalep.VehicleId = model.VehicleId;
             //yeniTalep.Km = model.KM;
@@ -554,19 +553,12 @@ namespace SahinRektefiyeSoln.Controllers
                     yeniTalep.Creator = this.userName;
                     yeniTalep.Modifier = null;
                     yeniTalep.ModifiedDate = null;
-                    //Araç bilgileri taşınacak. Geçici olarak 1
-                    yeniTalep.AracGrupId = 1;
-                    yeniTalep.VehicleId = 1;
                     //yeniTalep.AracGrupId = model.AracGrubuId;
                     //yeniTalep.VehicleId = model.VehicleId;
                     //yeniTalep.Km = model.KM;
                     //yeniTalep.VinNo = model.SaseNo;
                     //yeniTalep.Plate = model.Plate;
-                    if (model.TalepSekliId == 3 || model.TalepSekliId == 4)
-                    {
-                        yeniTalep.PartId = 1;
-                    }
-                    else
+                    if (model.TalepSekliId != 3 && model.TalepSekliId != 4)
                     {
                         yeniTalep.PartId = model.PartId;
                     }

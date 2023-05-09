@@ -20,7 +20,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public string Plate { get; set; }
         public int KM { get; set; }
 		public int AracGrubuId { get; set; }
-        public int PartId { get; set; }
+        public int? PartId { get; set; }
         public int VehicleId { get; set; }
         public int TalepSekliId { get; set; }
         public Nullable<System.DateTime> KayitTarihi { get; set; }
