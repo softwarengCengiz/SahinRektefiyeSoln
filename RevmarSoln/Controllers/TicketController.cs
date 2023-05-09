@@ -1136,8 +1136,8 @@ namespace SahinRektefiyeSoln.Controllers
             model.KM = talepler.Km ?? 0;
             model.VinNo = talepler.VinNo ?? "";
             model.Plaka = talepler.Plate ?? "";
-            model.Marka = talepler.Vehicles.Companies.Name;
-            model.Model = talepler.Vehicles.Name;
+            //model.Marka = talepler.Vehicles.Companies.Name;
+            //model.Model = talepler.Vehicles.Name;
 
             if (talepDetay != null)
             {
