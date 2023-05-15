@@ -33,7 +33,6 @@ namespace SahinRektefiyeSoln.Controllers
                 string UserName = Session["UserName"].ToString();
                 Roles role;
 
-
                 try
                 {
                     role = db.Roles.Where(x => x.RoleName == RoleName).FirstOrDefault(); // Kontrol edilmek istenen Role'ü bul Id'si ile kontrol etmek için
@@ -425,9 +424,10 @@ namespace SahinRektefiyeSoln.Controllers
         [HttpPost]
         public ActionResult CreateUser(CreateUserPageModel model)
         {
+            string UserName = Convert.ToString(Session["UserName"]);
             if (isLogin())
             {
-                if (CheckMyPermission("ADM_00"))
+                if (SFHelper.CheckMyRole(UserName, "ADMIN"))
                 {
                     try
                     {
