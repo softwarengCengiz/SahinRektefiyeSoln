@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SahinRektefiyeSoln.Models.UserMenus>
+@using SahinRektefiyeSoln.Helpers
+@{
+    ViewBag.Title = "GetMainMenu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string userName = Session["UserName"].ToString();
+    List<string> muhasebeList = new List<string>();
+    muhasebeList.Add("icolpan");
+    muhasebeList.Add("zkarakas");
+    muhasebeList.Add("muhasebe");
+    muhasebeList.Add("chasgul");
+    int i;
+}
+
+<script>
+    function myAccFuncMainMenu(index) {
+        debugger;
+        var x = document.getElementById(index);
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+            x.previousElementSibling.className += " w3-green";
+        } else {
+            x.className = x.className.replace(" w3-show", "");
+            x.previousElementSibling.className =
+                x.previousElementSibling.className.replace(" w3-green", "");
+        }
+    }
+</script>
+
+<div class="w3-bar-block w3-margin-bottom ">
+
+    @if (SFHelper.CheckMyRole(userName, "ADMIN") == true)
+    {
+
+        if (muhasebeList.Contains(userName))
+        {
+            if (ViewBag.Cat100Cnt > 0)
+            {
+                <a href="#" class="w3-bar-item w3-button" onclick="myAccFuncMainMenu('100k')"><i class="fa fa-money fa-fw"></i> Muhasebe İşlemleri</a>
+                <div id="100k" class="@(ViewBag.FordBayiMenuShow == true ? "w3-show" : "w3-hide")" style="padding-bottom: 64px!important;">
+                    @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 100))
+                    {
+                        <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
+                    }
+                </div>
+            }
+
+        }
+        else
+        {
+            if (ViewBag.Cat10Cnt > 0)
+            {
+                <a href="#" class="w3-bar-item w3-button" onclick="myAccFuncMainMenu('10k')"><i class="fa fa-users fa-fw"></i> Kullanıcı İşlemleri</a>
+                <div id="10k" class="w3-hide">
+                    @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 10))
+                    {
+                        <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
+                    }
+                </div>
+            }
+
+            if (ViewBag.Cat30Cnt > 0)
+            {
+                <a href="#" class="w3-bar-item w3-button" onclick="myAccFuncMainMenu('30k')"><i class="fa fa-pagelines fa-fw"></i>Form Tanımlama İşlemleri</a>
+                <div id="30k" class="w3-hide">
+                    @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 30).OrderBy(x => x.Menus.Title))
+                    {
+                        <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
+                    }
+                </div>
+            }
+
+
+            <a href="#" class="w3-bar-item w3-button" onclick="myAccFuncMainMenu('110k')"><i class="fa fa-car fa-fw"></i>Tanım İşlemleri</a>
+            <div id="110k" class="w3-hide" style="padding-bottom: 64px!important;">
+                @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 110))
+                {
+                    <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
+                }
+            </div>
+        }
+    }
+
+</div>

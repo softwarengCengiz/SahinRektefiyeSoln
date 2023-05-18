@@ -51,8 +51,6 @@
 <script>
     $(document).ready(function () {
 
-        console.log('@Model.BrandModelName');
-
 		$('#btnMusteriSec').click(function () {
 			$('#MusteriModalContent').load('@Url.Action("HizliMusteriSec","Musteri")');
 			document.getElementById('MusteriSecModal').style.display = 'block';
@@ -103,9 +101,9 @@
             jQuery('#BildirimTarihi').datetimepicker(
                 {
                     timepicker: true,
-                    format: 'd.m.Y',
-                    scrollInput: false,
-					value: '@((Model !=null && Model.BildirimTarihi.HasValue) ? Model.BildirimTarihi.Value.Year +"/"+ Model.BildirimTarihi.Value.Month+"/"+ Model.BildirimTarihi.Value.Day +" "+ Model.BildirimTarihi.Value.Hour+":"+Model.BildirimTarihi.Value.Minute+"\'" : null)'
+                    format: 'd.m.Y H:i',
+                    scrollInput: false
+					@*value: '@((Model !=null && Model.BildirimTarihi.HasValue) ? Model.BildirimTarihi.Value.Year +"/"+ Model.BildirimTarihi.Value.Month+"/"+ Model.BildirimTarihi.Value.Day +" "+ Model.BildirimTarihi.Value.Hour+":"+Model.BildirimTarihi.Value.Minute+"\'" : null)'*@
 				});
         });
     });
@@ -183,20 +181,20 @@
                                         <label>Motor</label>
                                     </td>
                                     <td>
-                                        @Html.RadioButtonFor(model => model.AlınanIs, 0, new { @id = "AlınanIsM", @class = " w3-radio  w3-margin-right", name = "AlınanIsM" })
+                                        @Html.CheckBoxFor(model => model.AlınanIsM, new { @id = "AlınanIsM", @class = "w3-check w3-border w3-round" })
                                     </td>
                                     <td>
                                         <label>Kapak</label>
                                     </td>
                                     <td>
-                                        @Html.RadioButtonFor(model => model.AlınanIs, 1, new { @id = "AlınanIsK", @class = " w3-radio  w3-margin-right", name = "AlınanIsK" })
+                                        @Html.CheckBoxFor(model => model.AlınanIsK, new { @id = "AlınanIsK", @class = "w3-check w3-border w3-round" })
                                     </td>
                                 </tr>
                             </table>
                         </div>
+
                     </div>
                 </div>
-
             </div>
 
             <div class="w3-row">
@@ -413,12 +411,12 @@
                         </div>
                     }
 
-                    <div class="w3-half w3-padding">
-                        @Html.CheckBox("0", new { @class = "w3-check w3-border w3-round" })
-                        <label>
-                            @Html.EditorFor(model => model.ArizaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
-                        </label>
-                    </div>
+                    @*<div class="w3-half w3-padding">
+                            @Html.CheckBox("0", new { @class = "w3-check w3-border w3-round" })
+                            <label>
+                                @Html.EditorFor(model => model.ArizaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
+                            </label>
+                        </div>*@
                 </div>
 
             </div>
@@ -445,7 +443,7 @@
                             {
                                 if (item.IsContainPiece != 1)
                                 {
-                                    <input type="text"
+                                    <input type="number"
                                            name="ParcalarText"
                                            value="@Model.ParcalarText[count]"
                                            class="w3-border w3-round onlynumeric"
@@ -455,7 +453,7 @@
                                 }
                                 else
                                 {
-                                    <input type="text"
+                                    <input type="number"
                                            name="ParcalarText"
                                            value="@Model.ParcalarText[count]"
                                            class="w3-border w3-round onlynumeric"
@@ -468,7 +466,7 @@
                             {
                                 if (item.IsContainPiece != 1)
                                 {
-                                    <input type="text"
+                                    <input type="number"
                                            name="ParcalarText"
                                            value="0"
                                            class="w3-border w3-round onlynumeric"
@@ -478,7 +476,7 @@
                                 }
                                 else
                                 {
-                                    <input type="text"
+                                    <input type="number"
                                            name="ParcalarText"
                                            value="0"
                                            class="w3-border w3-round onlynumeric"
@@ -500,13 +498,13 @@
 
                     }
 
-                    <div class="w3-half w3-padding">
-                        @Html.CheckBox("0", new { @class = "w3-check w3-border w3-round" })
-                        <label>
-                            @Html.EditorFor(model => model.ParcaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
-                            @Html.EditorFor(model => model.ParcaAdet, new { @class = "w3-border w3-round onlynumeric", style = "float: right;text-align: right;", placeholder = "adet / takım" })
-                        </label>
-                    </div>
+                    @*<div class="w3-half w3-padding">
+                            @Html.CheckBox("0", new { @class = "w3-check w3-border w3-round" })
+                            <label>
+                                @Html.EditorFor(model => model.ParcaDiger, new { @class = "w3-border w3-round", placeholder = "Diğer" })
+                                @Html.EditorFor(model => model.ParcaAdet, new { @class = "w3-border w3-round onlynumeric", style = "float: right;text-align: right;", placeholder = "adet / takım" })
+                            </label>
+                        </div>*@
                 </div>
             </div>
 
@@ -533,7 +531,7 @@
                                                     <img src="@Url.Content(imagePath)" alt="" onload="scaleImage(this)" style="margin-right: 10px !important; display: inline-block !important;" />
                                                 </a>
                                             </span>
-                                            <button type="button" class="w3-red deleteImage" data-id="@Model.TalepId" data-image-name="@imageName"><i class="fa fa-remove"></i></button>
+                                            <button type="button" class="w3-red deleteImage" data-id="@Model.TalepId" data-image-name="@imageName" onclick="if (!confirm('Silmek istediğinizden emin misiniz?')) return false;"><i class="fa fa-remove"></i></button>
                                         }
                                     }
                                 </div>
@@ -560,34 +558,24 @@
                 </div>
             </div>
 
+            <div class="w3-row">
 
-            if (SFHelper.CheckMyRole(UserName, "SOFOR") == true || SFHelper.CheckMyRole(UserName, "ADMIN") == true || SFHelper.CheckMyRole(UserName, "MOTORKABUL") == true)
-            {
-                <div class="w3-row">
-                    <div class="w3-quarter w3-padding w3-right">
-                        <input id="FlagSave" type="hidden" name="FlagSave" value="" />
-                        <button class="w3-btn w3-ripple w3-blue w3-right" type="button" id="btnKaydet">Kaydet</button>
-                    </div>
-                </div>
-            }
+                @if (SFHelper.CheckMyRole(UserName, "SOFOR") == true || SFHelper.CheckMyRole(UserName, "ADMIN") == true)
+                {
+                    <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur" style="margin-left:10px;">Onayla</button>
+                }
 
-            if (SFHelper.CheckMyRole(UserName, "SOFOR") == true || SFHelper.CheckMyRole(UserName, "ADMIN") == true)
-            {
-                <div class="w3-row">
-                    <div class="w3-quarter w3-padding w3-right">
-                        <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Onayla</button>
-                    </div>
-                </div>
-            }
+                @if ((SFHelper.CheckMyRole(UserName, "MOTORKABUL") == true) || SFHelper.CheckMyRole(UserName, "ADMIN") == true || SFHelper.CheckMyRole(UserName, "SOFOR") == true)
+                {
+                    <button class="w3-btn w3-ripple w3-blue-gray w3-right" type="button" id="btnDownloadPdf" style="margin-left:10px;">Pdf İndir</button>
+                }
 
-            if ((SFHelper.CheckMyRole(UserName, "MOTORKABUL") == true) || SFHelper.CheckMyRole(UserName, "ADMIN") == true || SFHelper.CheckMyRole(UserName, "SOFOR") == true)
-            {
-                <div class="w3-row">
-                    <div class="w3-quarter w3-padding w3-right">
-                        <button class="w3-btn w3-ripple w3-blue-gray w3-right" type="button" id="btnDownloadPdf">Pdf İndir</button>
-                    </div>
-                </div>
-            }
+                @if (SFHelper.CheckMyRole(UserName, "SOFOR") == true || SFHelper.CheckMyRole(UserName, "ADMIN") == true || SFHelper.CheckMyRole(UserName, "MOTORKABUL") == true)
+                {
+                    <input id="FlagSave" type="hidden" name="FlagSave" value="" />
+                    <button class="w3-btn w3-ripple w3-blue w3-right" type="button" id="btnKaydet" style="margin-left:10px;">Kaydet</button>
+                }
+            </div>
         }
 
         <hr />

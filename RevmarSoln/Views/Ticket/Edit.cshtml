@@ -118,6 +118,21 @@
                 scrollInput: false
             });
 
+            jQuery('#MusteriAramaTarihi').datetimepicker({
+                    timepicker: true,
+                    format: 'd.m.Y H:i:s',
+                    scrollInput: false
+					 @*value: '@((Model !=null && Model.MusteriAramaTarihi.HasValue) ? Model.MusteriAramaTarihi.Value.Year +"/"+ Model.MusteriAramaTarihi.Value.Month+"/"+ Model.MusteriAramaTarihi.Value.Day +" "+ Model.MusteriAramaTarihi.Value.Hour+":"+Model.MusteriAramaTarihi.Value.Minute+"\'" : null)'*@
+            });
+
+            jQuery('#KayitTarihi').datetimepicker({
+                timepicker: true,
+                format: 'd.m.Y H:i:s',
+                scrollInput: false
+					 @*value: '@((Model !=null  && Model.KayitTarihi.HasValue) ? Model.KayitTarihi.Value.Year +"/"+ Model.KayitTarihi.Value.Month+"/"+ Model.KayitTarihi.Value.Day +" "+ Model.KayitTarihi.Value.Hour+":"+Model.KayitTarihi.Value.Minute+"\'" : null)'*@
+			});
+
+
             $.datetimepicker.setLocale('tr');
         });
 
@@ -142,7 +157,7 @@
 
 		$('#VehicleId').select2();
 
-		jQuery(document).ready(function () {
+		@*jQuery(document).ready(function () {
 			'use strict';
 
 			jQuery('#MusteriAramaTarihi').datetimepicker(
@@ -154,7 +169,7 @@
 				{
 					 value: '@((Model !=null  && Model.KayitTarihi.HasValue) ? Model.KayitTarihi.Value.Year +"/"+ Model.KayitTarihi.Value.Month+"/"+ Model.KayitTarihi.Value.Day +" "+ Model.KayitTarihi.Value.Hour+":"+Model.KayitTarihi.Value.Minute+"\'" : null)'
 				});
-		});
+		});*@
 	});
 </script>
 @Html.Action("SetPageHeader", "Admin", new { pageTitle = "Talep Düzenle", pagePermission = "XXXXX" })
@@ -306,7 +321,7 @@
             {
                 <div class="w3-row">
                     <div class="w3-quarter w3-padding w3-right">
-                        <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Düzenle</button>
+                        <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Güncelle</button>
                     </div>
                 </div>
             }

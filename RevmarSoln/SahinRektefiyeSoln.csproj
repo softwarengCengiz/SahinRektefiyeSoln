@@ -1105,6 +1105,7 @@
     <Content Include="Views\Admin\EditArizaBildirim.cshtml" />
     <Content Include="Views\Musteri\_SearchCustomerByName.cshtml" />
     <Content Include="Views\Forms\ArizaBildirimFormu.cshtml" />
+    <Content Include="Views\Home\GetMainMenu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

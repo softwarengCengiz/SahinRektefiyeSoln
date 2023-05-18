@@ -48,7 +48,7 @@ namespace SahinRektefiyeSoln.Controllers
         [SessionAuthorization]
         public ActionResult Tickets()
         {
-            var talepler = db.Talepler.ToList().OrderByDescending(x => x.CreatedDate);
+            var talepler = db.Talepler.ToList().OrderByDescending(x => x.TalepId);
             var model = new List<TicketListModel>();
             var isSofor = SFHelper.CheckMyRole(currentUser, "SOFOR");
             ViewBag.MusteriKabul = SFHelper.CheckMyRole(currentUser, "MUSTERIKABUL");
@@ -121,6 +121,43 @@ namespace SahinRektefiyeSoln.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Edit(TicketOpenViewModel model)
+        {
+            Talepler yeniTalep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
+            var musteriModel = db.Musteri.Find(model.HizliIsEmriVehicleMusteriId);
+            //2. Bilet 
+            yeniTalep.MusteriId = musteriModel.MusteriId;
+            yeniTalep.ArayanKisi = model.ArayanKisiAdSoyad;
+            yeniTalep.MusteriAramaTarihi = model.MusteriAramaTarihi;
+            yeniTalep.Note = model.Not;
+            yeniTalep.AtananSofor = model.SoforUserName;
+            //yeniTalep.CreatedDate = model.KayitTarihi ?? System.DateTime.Now;
+            //yeniTalep.Creator = this.userName;
+            yeniTalep.Modifier = this.userName;
+            yeniTalep.ModifiedDate = model.KayitTarihi ?? System.DateTime.Now;
+            if (model.TalepSekliId != 3 && model.TalepSekliId != 4)
+            {
+                yeniTalep.PartId = model.PartId;
+            }
+            //yeniTalep.AracGrupId = model.AracGrubuId;
+            //yeniTalep.VehicleId = model.VehicleId;
+            //yeniTalep.Km = model.KM;
+            //yeniTalep.VinNo = model.SaseNo;
+            //yeniTalep.Plate = model.Plate;
+            yeniTalep.Durum = (int)TicketStatus.TicketOpened;
+            yeniTalep.TalepSekliId = model.TalepSekliId;
+            yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
+            yeniTalep.AramaTarihi = model.AramaTarihi;
+            yeniTalep.KargoFirmasi = model.KargoFirmasi;
+            yeniTalep.GönderiKodu = model.GönderiKodu;
+            yeniTalep.MusteriAtolyeGelisTarihi = model.MusteriAtolyeGelisTarihi;
+
+            db.SaveChanges();
+            FillIsEmriCombos();
+
+            return RedirectToAction("Tickets");
+        }
         public ActionResult DetailEdit(int id)
         {
             var talepler = db.Talepler.FirstOrDefault(x => x.TalepId == id);
@@ -162,6 +199,26 @@ namespace SahinRektefiyeSoln.Controllers
                 model.AlınanIs = talepDetay.AlınanIs.Value;
                 model.Plaka = talepDetay.Plaka;
                 model.KM = talepDetay.KM.Value;
+                if (talepDetay.AlınanIs == 0)
+                {
+                    model.AlınanIsM = false;
+                    model.AlınanIsK = false;
+                }
+                else if (talepDetay.AlınanIs == 1)
+                {
+                    model.AlınanIsM = true;
+                    model.AlınanIsK = false;
+                }
+                else if (talepDetay.AlınanIs == 2)
+                {
+                    model.AlınanIsM = false;
+                    model.AlınanIsK = true;
+                }
+                else
+                {
+                    model.AlınanIsM = true;
+                    model.AlınanIsK = true;
+                }
 
                 //if (talepler.VehicleId != null)
                 //{​​
@@ -230,6 +287,8 @@ namespace SahinRektefiyeSoln.Controllers
                 ViewBag.BrandModels = null;
             }
 
+            ViewBag.TalepStatu = talepler.Durum;
+
             return View(model);
         }
 
@@ -292,7 +351,22 @@ namespace SahinRektefiyeSoln.Controllers
                         yeniTalep.Revizyon = model.Revizyon == false ? 0 : 1;
                         yeniTalep.RevizyonAciklama = model.RevizyonAciklama;
                         yeniTalep.ServisNo = model.ServisNo;
-                        yeniTalep.AlınanIs = model.AlınanIs;
+                        if (!model.AlınanIsM && !model.AlınanIsK)
+                        {
+                            yeniTalep.AlınanIs = 0;
+                        }
+                        else if (model.AlınanIsM && !model.AlınanIsK)
+                        {
+                            yeniTalep.AlınanIs = 1;
+                        }
+                        else if (model.AlınanIsK && !model.AlınanIsM)
+                        {
+                            yeniTalep.AlınanIs = 2;
+                        }
+                        else
+                        {
+                            yeniTalep.AlınanIs = 3;
+                        }
                         yeniTalep.Plaka = model.Plaka;
                         yeniTalep.KM = model.KM;
                         yeniTalep.VinNo = model.VinNo;
@@ -330,7 +404,22 @@ namespace SahinRektefiyeSoln.Controllers
                 talepDetay.Revizyon = model.Revizyon == false ? 0 : 1;
                 talepDetay.RevizyonAciklama = model.RevizyonAciklama;
                 talepDetay.ServisNo = model.ServisNo;
-                talepDetay.AlınanIs = model.AlınanIs;
+                if (!model.AlınanIsM && !model.AlınanIsK)
+                {
+                    talepDetay.AlınanIs = 0;
+                }
+                else if (model.AlınanIsM && !model.AlınanIsK)
+                {
+                    talepDetay.AlınanIs = 1;
+                }
+                else if (model.AlınanIsK && !model.AlınanIsM)
+                {
+                    talepDetay.AlınanIs = 2;
+                }
+                else
+                {
+                    talepDetay.AlınanIs = 3;
+                }
                 talepDetay.Plaka = model.Plaka;
                 talepDetay.KM = model.KM;
                 talepDetay.VinNo = model.VinNo;
@@ -491,45 +580,6 @@ namespace SahinRektefiyeSoln.Controllers
             return report;
         }
 
-
-        [HttpPost]
-        public ActionResult Edit(TicketOpenViewModel model)
-        {
-            Talepler yeniTalep = db.Talepler.Where(x => x.TalepId == model.Id).FirstOrDefault();
-            var musteriModel = db.Musteri.Find(model.HizliIsEmriVehicleMusteriId);
-            //2. Bilet 
-            yeniTalep.MusteriId = musteriModel.MusteriId;
-            yeniTalep.ArayanKisi = model.ArayanKisiAdSoyad;
-            yeniTalep.MusteriAramaTarihi = model.MusteriAramaTarihi;
-            yeniTalep.Note = model.Not;
-            yeniTalep.AtananSofor = model.SoforUserName;
-            yeniTalep.CreatedDate = model.KayitTarihi ?? System.DateTime.Now;
-            yeniTalep.Creator = this.userName;
-            yeniTalep.Modifier = null;
-            yeniTalep.ModifiedDate = null;
-            if (model.TalepSekliId != 3 && model.TalepSekliId != 4)
-            {
-                yeniTalep.PartId = model.PartId;
-            }
-            //yeniTalep.AracGrupId = model.AracGrubuId;
-            //yeniTalep.VehicleId = model.VehicleId;
-            //yeniTalep.Km = model.KM;
-            //yeniTalep.VinNo = model.SaseNo;
-            //yeniTalep.Plate = model.Plate;
-            yeniTalep.Durum = (int)TicketStatus.TicketOpened;
-            yeniTalep.TalepSekliId = model.TalepSekliId;
-            yeniTalep.KargoyaVerilisTarihi = model.KargoyaVerilisTarihi;
-            yeniTalep.AramaTarihi = model.AramaTarihi;
-            yeniTalep.KargoFirmasi = model.KargoFirmasi;
-            yeniTalep.GönderiKodu = model.GönderiKodu;
-            yeniTalep.MusteriAtolyeGelisTarihi = model.MusteriAtolyeGelisTarihi;
-
-            db.SaveChanges();
-            FillIsEmriCombos();
-
-            return RedirectToAction("Tickets");
-        }
-
         [HttpPost]
         public ActionResult Open(TicketOpenViewModel model)
         {
@@ -671,7 +721,22 @@ namespace SahinRektefiyeSoln.Controllers
                         yeniTalep.Revizyon = model.Revizyon == false ? 0 : 1;
                         yeniTalep.RevizyonAciklama = model.RevizyonAciklama;
                         yeniTalep.ServisNo = model.ServisNo;
-                        yeniTalep.AlınanIs = model.AlınanIs;
+                        if (!model.AlınanIsM && !model.AlınanIsK)
+                        {
+                            yeniTalep.AlınanIs = 0;
+                        }
+                        else if (model.AlınanIsM && !model.AlınanIsK)
+                        {
+                            yeniTalep.AlınanIs = 1;
+                        }
+                        else if (model.AlınanIsK && !model.AlınanIsM)
+                        {
+                            yeniTalep.AlınanIs = 2;
+                        }
+                        else
+                        {
+                            yeniTalep.AlınanIs = 3;
+                        }
                         yeniTalep.Plaka = model.Plaka;
                         yeniTalep.KM = model.KM;
                         yeniTalep.VinNo = model.VinNo;
@@ -709,7 +774,22 @@ namespace SahinRektefiyeSoln.Controllers
                 talepDetay.Revizyon = model.Revizyon == false ? 0 : 1;
                 talepDetay.RevizyonAciklama = model.RevizyonAciklama;
                 talepDetay.ServisNo = model.ServisNo;
-                talepDetay.AlınanIs = model.AlınanIs;
+                if (!model.AlınanIsM && !model.AlınanIsK)
+                {
+                    talepDetay.AlınanIs = 0;
+                }
+                else if (model.AlınanIsM && !model.AlınanIsK)
+                {
+                    talepDetay.AlınanIs = 1;
+                }
+                else if (model.AlınanIsK && !model.AlınanIsM)
+                {
+                    talepDetay.AlınanIs = 2;
+                }
+                else
+                {
+                    talepDetay.AlınanIs = 3;
+                }
                 talepDetay.Plaka = model.Plaka;
                 talepDetay.KM = model.KM;
                 talepDetay.VinNo = model.VinNo;

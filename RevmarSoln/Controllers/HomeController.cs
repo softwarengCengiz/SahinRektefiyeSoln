@@ -460,5 +460,26 @@ namespace SahinRektefiyeSoln.Controllers
 			return View(model);
 		}
 
+		public ActionResult GetMainMenu()
+        {
+			string UserName = Session["UserName"] != null ? Session["UserName"].ToString() : "";
+			List<UserMenus> usermenus = db.UserMenus.Where(x => x.UserName == UserName).OrderByDescending(x => x.Menus.Rank).ToList();
+			ViewBag.Cat10Cnt = usermenus.Where(x => x.Menus.MenuRank == 10).Count();
+			ViewBag.Cat20Cnt = usermenus.Where(x => x.Menus.MenuRank == 20).Count();
+			ViewBag.Cat30Cnt = usermenus.Where(x => x.Menus.MenuRank == 30).Count();
+			ViewBag.Cat40Cnt = usermenus.Where(x => x.Menus.MenuRank == 40).Count();
+			ViewBag.Cat50Cnt = usermenus.Where(x => x.Menus.MenuRank == 50).Count();
+			ViewBag.Cat60Cnt = usermenus.Where(x => x.Menus.MenuRank == 60).Count();
+			ViewBag.Cat70Cnt = usermenus.Where(x => x.Menus.MenuRank == 70).Count();
+			ViewBag.Cat80Cnt = usermenus.Where(x => x.Menus.MenuRank == 80).Count();
+			ViewBag.Cat90Cnt = usermenus.Where(x => x.Menus.MenuRank == 90).Count();
+			ViewBag.Cat100Cnt = usermenus.Where(x => x.Menus.MenuRank == 100).Count();
+
+			ViewBag.isMuhasebeUser = false;
+			TempData["IsSofor"] = SFHelper.CheckMyRole(UserName, "SOFOR");
+
+			return View(usermenus);
+		}
+
 	}
 }

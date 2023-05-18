@@ -32,6 +32,8 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public string RevizyonAciklama { get; set; }
         public string ServisNo { get; set; }
         public int AlınanIs { get; set; }
+        public bool AlınanIsM { get; set; }
+        public bool AlınanIsK { get; set; }
 		public string Plaka { get; set; }
         public int KM { get; set; }
         public string VinNo { get; set; }
