@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -23,14 +24,19 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         public int? PartId { get; set; }
         public int VehicleId { get; set; }
         public int TalepSekliId { get; set; }
-        public Nullable<System.DateTime> KayitTarihi { get; set; }
-        public Nullable<System.DateTime> MusteriAramaTarihi { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
+		public Nullable<System.DateTime> KayitTarihi { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
+		public Nullable<System.DateTime> MusteriAramaTarihi { get; set; }
         public string Not { get; set; }
 		public string SoforUserName { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public Nullable<System.DateTime> KargoyaVerilisTarihi { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public Nullable<System.DateTime> AramaTarihi { get; set; }
 		public string KargoFirmasi { get; set; }
 		public string GönderiKodu { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
 		public Nullable<System.DateTime> MusteriAtolyeGelisTarihi { get; set; }
 	}
 }

@@ -65,16 +65,6 @@
                     }
                 </div>
             }
-            @*if (ViewBag.Cat20Cnt > 0)
-                {
-                    <a href="#" class="w3-bar-item w3-button" onclick="myAccFunc('20')"><i class="fa fa-industry fa-fw"></i> Firma ve Tedarikçi İşlemleri</a>
-                    <div id="20" class="w3-hide">
-                        @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 20))
-                        {
-                            <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
-                        }
-                    </div>
-                }*@
 
             if (ViewBag.Cat30Cnt > 0)
             {
@@ -86,18 +76,6 @@
                     }
                 </div>
             }
-
-
-            @*if (ViewBag.Cat80Cnt > 0)
-                {
-                    <a href="#" class="w3-bar-item w3-button" onclick="myAccFunc('80')"><i class="fa fa-car fa-fw"></i>Servis</a>
-                    <div id="80" class="w3-hide" style="padding-bottom: 64px!important;">
-                        @foreach (var menu in Model.Where(x => x.Menus.MenuRank == 80))
-                        {
-                            <a href="@menu.Menus.Url" class="w3-bar-item w3-button w3-margin-left"><i class="fa @menu.Menus.Icon fa-fw"></i> @menu.Menus.Title</a>
-                        }
-                    </div>
-                }*@
 
             <a href="#" class="w3-bar-item w3-button" onclick="myAccFunc('110')"><i class="fa fa-car fa-fw"></i>Tanım İşlemleri</a>
             <div id="110" class="w3-hide" style="padding-bottom: 64px!important;">

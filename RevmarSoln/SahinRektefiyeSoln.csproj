@@ -803,7 +803,9 @@
     <Compile Include="Models\ViewModels\Teklif\TeklifIsEmriDonusturPageModel.cs" />
     <Compile Include="Models\ViewModels\Teklif\TeklifOlusturPageModel.cs" />
     <Compile Include="Models\ViewModels\Teklif\TeklifSorgulaPageModel.cs" />
+    <Compile Include="Models\ViewModels\Ticket\EngineDimensionalControlViewModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\SelectListItemWithAttribute.cs" />
+    <Compile Include="Models\ViewModels\Ticket\ShowTicketDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleCreatePageModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleEditPageModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleSearchPageModel.cs" />
@@ -1106,6 +1108,8 @@
     <Content Include="Views\Musteri\_SearchCustomerByName.cshtml" />
     <Content Include="Views\Forms\ArizaBildirimFormu.cshtml" />
     <Content Include="Views\Home\GetMainMenu.cshtml" />
+    <Content Include="Views\Ticket\ShowTicketDetails.cshtml" />
+    <Content Include="Views\Ticket\EngineInputDimensionalControl.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

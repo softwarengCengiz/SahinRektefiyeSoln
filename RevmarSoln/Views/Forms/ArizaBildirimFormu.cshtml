@@ -1,9 +1,5 @@
 ﻿@model SahinRektefiyeSoln.Models.ViewModels.IsEmri.TicketDetailViewModel
 
-@{
-    int marginValue = 200;
-    string margin;
-}
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -52,10 +48,10 @@
             border-collapse: collapse;
         }
 
-        #tbl1, #tbl2 td {
-            text-align: left;
-            vertical-align: top;
-        }
+            #tbl1, #tbl2 td {
+                text-align: left;
+                vertical-align: top;
+            }
     </style>
 </head>
 
@@ -196,11 +192,11 @@
                     <td class="icon-cell">
                         @if (Model.Ariza[i].Selected)
                         {
-                            <i class="fas fa-check-square"></i>
+                            <i class="fas fa-check"></i>
                         }
                         else
                         {
-                            <i class="fas fa-square"></i>
+                            <i class="fas fa-square" style="visibility:hidden;"></i>
                         }
                     </td>
                     <td>@Model.Ariza[i].Text</td>
@@ -209,11 +205,11 @@
                         <td class="icon-cell">
                             @if (Model.Ariza[i + 1].Selected)
                             {
-                                <i class="fas fa-check-square"></i>
+                                <i class="fas fa-check"></i>
                             }
                             else
                             {
-                                <i class="fas fa-square"></i>
+                                <i class="fas fa-square" style="visibility:hidden;"></i>
                             }
                         </td>
                         <td>@Model.Ariza[i + 1].Text</td>
@@ -242,11 +238,11 @@
                         <div>
                             @if (Model.Parcalar[i].Selected)
                             {
-                                <i class="fas fa-check-square"></i>
+                                <i class="fas fa-check"></i>
                             }
                             else
                             {
-                                <i class="fas fa-square"></i>
+                                <i class="fas fa-square" style="visibility:hidden;"></i>
                             }
                             <span>@Model.Parcalar[i].Text</span>
                             @if (Model.ParcalarText != null && Model.ParcalarText.Count > 0 && Model.Parcalar[i].IsContainPiece == 1 && Model.ParcalarText[i] != "0")
@@ -261,11 +257,11 @@
                             <div>
                                 @if (Model.Parcalar[i + 1].Selected)
                                 {
-                                    <i class="fas fa-check-square"></i>
+                                    <i class="fas fa-check"></i>
                                 }
                                 else
                                 {
-                                    <i class="fas fa-square"></i>
+                                    <i class="fas fa-square" style="visibility:hidden;"></i>
                                 }
                                 <span>@Model.Parcalar[i + 1].Text</span>
                                 @if (Model.ParcalarText != null && Model.ParcalarText.Count > 0 && Model.Parcalar[i + 1].IsContainPiece == 1 && Model.ParcalarText[i + 1] != "0")
@@ -288,15 +284,22 @@
     <div style="display: table; width: 100%; table-layout: fixed;">
         <div style="display: table-row;">
             <div style="display: table-cell; width: 10%; vertical-align: bottom; border: 1px solid black; padding: 5px;">
-                <div style="writing-mode: vertical-rl; text-orientation: mixed;"><strong>Başlangıç</strong></div>
+                <div style="writing-mode: vertical-rl; text-orientation: upright;"><strong>Başlangıç</strong></div>
             </div>
             <div style="display: table-cell; width: 90%; vertical-align: bottom; border: 1px solid black; padding: 5px;">
                 <div style="display: flex; justify-content: space-between;">
-                    <div><strong>Servis Yetkilisi Ad-Soyad ve İmza:</strong></div>
-                    <div><strong>Teslim Alan Ad-Soyad ve İmza:</strong></div>
+                    <div>
+                        <strong>
+                            Servis Yetkilisi Ad-Soyad ve İmza:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            Teslim Alan Ad-Soyad ve İmza:
+                        </strong>
+                    </div>
+                    <div style="writing-mode: vertical-rl; text-orientation: mixed; margin-top:40px;"><strong>Teslim Alınma Tarihi:</strong></div>
                 </div>
-                <br />
-                <div style="writing-mode: vertical-rl; text-orientation: upright;"><strong>Teslim Alınma Tarihi:</strong></div>
             </div>
         </div>
 
@@ -306,11 +309,18 @@
             </div>
             <div style="display: table-cell; width: 90%; vertical-align: bottom; border: 1px solid black; padding: 5px;">
                 <div style="display: flex; justify-content: space-between;">
-                    <div><strong>Servis Yetkilisi Ad-Soyad ve İmza:</strong></div>
-                    <div><strong>Teslim Eden Ad-Soyad ve İmza:</strong></div>
+                    <div>
+                        <strong>
+                            Servis Yetkilisi Ad-Soyad ve İmza:
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            Teslim Eden Ad-Soyad ve İmza:
+                        </strong>
+                    </div>
+                    <div style="writing-mode: vertical-rl; text-orientation: mixed; margin-top:40px;"><strong>Teslim Edilme Tarihi:</strong></div>
                 </div>
-                <br />
-                <div style="writing-mode: vertical-rl; text-orientation: mixed;"><strong>Teslim Edilme Tarihi:</strong></div>
             </div>
         </div>
     </div>

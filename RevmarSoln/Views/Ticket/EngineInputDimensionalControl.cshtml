@@ -1,0 +1,147 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Ticket.EngineDimensionalControlViewModel
+@{
+    ViewBag.Title = "EngineInputDimensionalControl";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var rowCount = 3;
+    var columnCount = 12;
+}
+
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+
+<style>
+    .table-input {
+        border: none;
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #tableOne td,th {
+        border: 1px solid silver;
+    }
+
+    th {
+        text-align:center !important;
+    }
+</style>
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Motor Giriş Ölçüsel Kontrol", pagePermission = "XXXXX" })
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card w3-padding-top ">
+        @using (Html.BeginForm("EngineInputDimensionalControl", "Ticket", FormMethod.Post))
+        {
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m4 l4 w3-padding">
+                        <label>İş Emri No</label>
+                        @Html.EditorFor(model => model.TalepNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "TicketId", @disabled = "disabled" } })
+                    </div>
+                    <div class="w3-col s12 m4 l4  w3-padding">
+                        <label>Kapak Dolap No</label>
+                        @Html.EditorFor(model => model.TalepNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "KapakDolapNo" } })
+                    </div>
+                    <div class="w3-col s12 m4 l4  w3-padding">
+                        <label>Motor Dolap No</label>
+                        @Html.EditorFor(model => model.TalepNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "MotorDolapNo" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left  ">
+                    <h4>Blok Ölçüleri</h4>
+                </div>
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>İzin Verilen Maximum Eğrilik</label>
+                        @Html.EditorFor(model => model.TalepNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "BildirimTarihi", autocomplete = "off" } })
+                    </div>
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Tespit Edilen Eğrilik</label>
+                        @Html.EditorFor(model => model.TalepNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "ServisAdı" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left  ">
+                    <h4>Silindir Çapları</h4>
+                </div>
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Silindir Çapları Standart Değer</label>
+                        @Html.EditorFor(model => model.TalepNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "BildirimTarihi", autocomplete = "off" } })
+                    </div>
+                </div>
+            </div>
+
+            <table class="w3-table w3-bordered" id="tableOne" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        @for (var i = 1; i <= columnCount; i++)
+                        {
+                            <th>@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
+                        @for (var j = 1; j <= columnCount; j++)
+                        {
+                            <td>
+                                <input type="text" class="w3-input w3-border w3-round table-input" id="A1-@j" name="A1-@j" autocomplete="off" />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        @for (var j = 1; j <= columnCount; j++)
+                        {
+                            <td>
+                                <input type="text" class="w3-input w3-border w3-round table-input" id="A2-@j" name="A2-@j" autocomplete="off" />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        @for (var j = 1; j <= columnCount; j++)
+                        {
+                            <td>
+                                <input type="text" class="w3-input w3-border w3-round table-input" id="A3-@j" name="A3-@j" autocomplete="off" />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
+                        @for (var j = 1; j <= columnCount; j++)
+                        {
+                            <td>
+                                <input type="text" class="w3-input w3-border w3-round table-input" id="B1-@j" name="B1-@j" autocomplete="off" />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        @for (var j = 1; j <= columnCount; j++)
+                        {
+                            <td>
+                                <input type="text" class="w3-input w3-border w3-round table-input" id="B2-@j" name="B2-@j" autocomplete="off" />
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        @for (var j = 1; j <= columnCount; j++)
+                        {
+                            <td>
+                                <input type="text" class="w3-input w3-border w3-round table-input" id="B3-@j" name="B3-@j" autocomplete="off" />
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

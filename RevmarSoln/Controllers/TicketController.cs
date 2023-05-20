@@ -1308,5 +1308,60 @@ namespace SahinRektefiyeSoln.Controllers
             return Json(PList, JsonRequestBehavior.AllowGet);
         }
 
+
+        public ActionResult ShowTicketDetails(int id)
+        {
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+            var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
+            //var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talep.TalepDosyaId);
+
+            string hizmet = string.Empty;
+            if (talep.PartId != null)
+            {
+                hizmet = db.Parts.FirstOrDefault(x => x.PartId == talep.PartId).Name;
+            }
+            string musteri = string.Empty;
+            if (talep.Musteri.MusteriTipi == "B")
+            {
+                musteri = talep.Musteri.MusteriAdi + " " + talep.Musteri.MusteriSoyadi;
+            }
+            else if (talep.Musteri.MusteriTipi == "K")
+            {
+                musteri = talep.Musteri.KontakAdi + " " + talep.Musteri.KontakSoyadi;
+            }
+            string talepSekli = db.TalepSekli.FirstOrDefault(x => x.TalepSekliId == talep.TalepSekliId).TalepSekliAciklama;
+
+            var model = new ShowTicketDetailViewModel()
+            {
+                TalepNo = talep.TalepId,
+                TalepSekliId = talep.TalepSekliId,
+                TalepSekli = talepSekli,
+                TalepTarihi = talep.CreatedDate,
+                MusteriAramaTarihi = talep.MusteriAramaTarihi,
+                MusteriAtolyeGelisTarihi = talep.MusteriAtolyeGelisTarihi,
+                Sofor = talep.AtananSofor,
+                Hizmet = hizmet,
+                Notlar = talepDetay.MusteriNot,
+                Musteri = musteri,
+                MusteriTipi = talep.Musteri.MusteriTipi == "B" ? "Birey" : "Kurum",
+                Telefon = talep.Musteri.MusteriTelefon.Select(x => x.TelefonNumarasi).ToList(),
+                Email = talep.Musteri.MusteriMail.Select(x => x.MailAdresi).ToList(),
+                Adres = talep.Musteri.Adres,
+                MarkaModel = talepDetay.Model,
+                Plaka = talepDetay.Plaka,
+                KargoyaVerilisTarihi = talep.KargoyaVerilisTarihi,
+                AramaTarihi = talep.AramaTarihi,
+                KargoFirmasi = talep.KargoFirmasi,
+                GonderiKodu = talep.GönderiKodu
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult EngineInputDimensionalControl(int id)
+        {
+            return View();
+        }
     }
 }

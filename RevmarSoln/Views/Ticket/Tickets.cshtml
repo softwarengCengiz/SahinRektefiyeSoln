@@ -21,6 +21,25 @@
     }
 </style>
 
+<script>
+    //jQuery(document).ready(function () {
+    //    'use strict';
+    //    jQuery('#MusteriAramaTarihi').datetimepicker({
+    //        timepicker: true,
+    //        format: 'd.m.Y H:i',
+    //        scrollInput: false
+    //    });
+
+    //    jQuery('#MusteriAtolyeGelisTarihi').datetimepicker({
+    //        timepicker: true,
+    //        format: 'd.m.Y H:i',
+    //        scrollInput: false
+    //    });
+
+    //    $.datetimepicker.setLocale('tr');
+    //});
+</script>
+
 <link href="~/Styles/jquery-ui.css" rel="stylesheet" />
 <script src="~/Scripts/jquery-ui.js"></script>
 <link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
@@ -81,6 +100,8 @@
                                         {
                                             <a href="/Ticket/CreatePdf?id=@talep.TalepNo" title="Arıza Bildirim Formu İndir"><i class="fa fa-file-pdf-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
                                         }
+
+                                        <a href="/Ticket/ShowTicketDetails?id=@talep.TalepNo" title="Talep Detayı Görüntüle"><i class="fa fa-book w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
 
                                         @if (talep.Durum == "Talep Açıldı")
                                         {
