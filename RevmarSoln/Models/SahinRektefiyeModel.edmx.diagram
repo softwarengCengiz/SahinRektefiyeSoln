@@ -214,6 +214,12 @@
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_VehicleStoks_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WorkOrders_Vehicles" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK_WayBillParts_WayBills" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.EngineInformationDet" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.EngineInformationHdr" Width="1.5" PointX="0.75" PointY="1" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK__EngineInf__Engin__63A3C44B" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.MotorOlcuselKontrol" Width="1.5" PointX="9.75" PointY="36" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK__MotorOlcu__Talep__668030F6" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK__Talepler__MotorO__6774552F" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

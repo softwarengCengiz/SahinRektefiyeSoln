@@ -201,6 +201,25 @@
           <Property Name="Creator" Type="nvarchar" MaxLength="20" />
           <Property Name="CreatedDate" Type="date" />
         </EntityType>
+        <EntityType Name="EngineInformationDet">
+          <Key>
+            <PropertyRef Name="EngineInfoDetId" />
+          </Key>
+          <Property Name="EngineInfoDetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EngineInfoHdrId" Type="int" />
+          <Property Name="EngineInfoDetDesc" Type="varchar" MaxLength="500" />
+          <Property Name="Creator" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="EngineInformationHdr">
+          <Key>
+            <PropertyRef Name="EngineInfoHdrId" />
+          </Key>
+          <Property Name="EngineInfoHdrId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EngineInfoDesc" Type="varchar" MaxLength="500" />
+          <Property Name="Creator" Type="varchar" MaxLength="100" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Irsaliyeler">
           <Key>
             <PropertyRef Name="IrsaliyeId" />
@@ -612,6 +631,36 @@
           <Property Name="Message" Type="nvarchar" MaxLength="1024" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="SwRead" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MotorOlcuselKontrol">
+          <Key>
+            <PropertyRef Name="MotorOlcuselKontrolId" />
+          </Key>
+          <Property Name="MotorOlcuselKontrolId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TalepId" Type="int" />
+          <Property Name="KapakDolapNo" Type="varchar" MaxLength="50" />
+          <Property Name="MotorDolapNo" Type="varchar" MaxLength="50" />
+          <Property Name="IzinVerilenMaxEgrilik" Type="varchar" MaxLength="20" />
+          <Property Name="TespitEdilenEgrilik" Type="varchar" MaxLength="20" />
+          <Property Name="SilindirCaplariStdDeger" Type="varchar" MaxLength="20" />
+          <Property Name="SilindirCaplari" Type="varchar" MaxLength="3000" />
+          <Property Name="MaxAsinma" Type="varchar" MaxLength="20" />
+          <Property Name="MaxOvallik" Type="varchar" MaxLength="20" />
+          <Property Name="MaxKoniklik" Type="varchar" MaxLength="20" />
+          <Property Name="SilindirNo1" Type="varchar" MaxLength="20" />
+          <Property Name="SilindirNo2" Type="varchar" MaxLength="20" />
+          <Property Name="SilindirNo3" Type="varchar" MaxLength="20" />
+          <Property Name="GomlekFaturaStdDeger" Type="varchar" MaxLength="20" />
+          <Property Name="GomlekFaturaTasma" Type="varchar" MaxLength="2000" />
+          <Property Name="GomlekYuvaCapi" Type="varchar" MaxLength="3000" />
+          <Property Name="PistonCapiStdDeger" Type="varchar" MaxLength="20" />
+          <Property Name="PistonCapi" Type="varchar" MaxLength="2000" />
+          <Property Name="AnaMuyluStdDeger" Type="varchar" MaxLength="20" />
+          <Property Name="AnaMuylu" Type="varchar" MaxLength="2000" />
+          <Property Name="KolMuyluStdDeger" Type="varchar" MaxLength="20" />
+          <Property Name="KolMuylu" Type="varchar" MaxLength="2000" />
+          <Property Name="KrankMiliSalgiDegeri" Type="varchar" MaxLength="20" />
+          <Property Name="MotorIncelemeSonuc" Type="varchar" MaxLength="4000" />
         </EntityType>
         <EntityType Name="Musteri">
           <Key>
@@ -1109,6 +1158,7 @@
           <Property Name="GönderiKodu" Type="nvarchar" MaxLength="100" />
           <Property Name="MusteriAtolyeGelisTarihi" Type="datetime" />
           <Property Name="TalepDosyaId" Type="int" />
+          <Property Name="MotorOlcuselKontrolId" Type="int" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -1426,6 +1476,42 @@
           <Property Name="Modifier" Type="nvarchar" MaxLength="20" />
           <Property Name="ModifiedDate" Type="date" />
         </EntityType>
+        <Association Name="FK__EngineInf__Engin__63A3C44B">
+          <End Role="EngineInformationHdr" Type="Self.EngineInformationHdr" Multiplicity="0..1" />
+          <End Role="EngineInformationDet" Type="Self.EngineInformationDet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EngineInformationHdr">
+              <PropertyRef Name="EngineInfoHdrId" />
+            </Principal>
+            <Dependent Role="EngineInformationDet">
+              <PropertyRef Name="EngineInfoHdrId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__MotorOlcu__Talep__668030F6">
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="0..1" />
+          <End Role="MotorOlcuselKontrol" Type="Self.MotorOlcuselKontrol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="MotorOlcuselKontrol">
+              <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Talepler__MotorO__6774552F">
+          <End Role="MotorOlcuselKontrol" Type="Self.MotorOlcuselKontrol" Multiplicity="0..1" />
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MotorOlcuselKontrol">
+              <PropertyRef Name="MotorOlcuselKontrolId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="MotorOlcuselKontrolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Arac_AktarmaTipi">
           <End Role="AktarmaTipi" Type="Self.AktarmaTipi" Multiplicity="0..1" />
           <End Role="Arac" Type="Self.Arac" Multiplicity="*" />
@@ -2797,6 +2883,8 @@
           <EntitySet Name="Danismanlar" EntityType="Self.Danismanlar" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepoRafTanim" EntityType="Self.DepoRafTanim" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DpfRevisionTypes" EntityType="Self.DpfRevisionTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EngineInformationDet" EntityType="Self.EngineInformationDet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EngineInformationHdr" EntityType="Self.EngineInformationHdr" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Irsaliyeler" EntityType="Self.Irsaliyeler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Iscilikler" EntityType="Self.Iscilikler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IscilikTipleri" EntityType="Self.IscilikTipleri" Schema="dbo" store:Type="Tables" />
@@ -2824,6 +2912,7 @@
           <EntitySet Name="Menus" EntityType="Self.Menus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Meslekler" EntityType="Self.Meslekler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Messages" EntityType="Self.Messages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MotorOlcuselKontrol" EntityType="Self.MotorOlcuselKontrol" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Musteri" EntityType="Self.Musteri" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MusteriAraclari" EntityType="Self.MusteriAraclari" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MusteriMail" EntityType="Self.MusteriMail" Schema="dbo" store:Type="Tables" />
@@ -2883,6 +2972,18 @@
           <EntitySet Name="WebUsageLogs" EntityType="Self.WebUsageLogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkOrders" EntityType="Self.WorkOrders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YakitTipi" EntityType="Self.YakitTipi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__EngineInf__Engin__63A3C44B" Association="Self.FK__EngineInf__Engin__63A3C44B">
+            <End Role="EngineInformationHdr" EntitySet="EngineInformationHdr" />
+            <End Role="EngineInformationDet" EntitySet="EngineInformationDet" />
+          </AssociationSet>
+          <AssociationSet Name="FK__MotorOlcu__Talep__668030F6" Association="Self.FK__MotorOlcu__Talep__668030F6">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Talepler__MotorO__6774552F" Association="Self.FK__Talepler__MotorO__6774552F">
+            <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
           <AssociationSet Name="FK_Arac_AktarmaTipi" Association="Self.FK_Arac_AktarmaTipi">
             <End Role="AktarmaTipi" EntitySet="AktarmaTipi" />
             <End Role="Arac" EntitySet="Arac" />
@@ -3906,6 +4007,21 @@
           <AssociationSet Name="FK_WayBillParts_WayBills" Association="SahinRektefiyeDbModel.FK_WayBillParts_WayBills">
             <End Role="WayBills" EntitySet="WayBills" />
             <End Role="WayBillParts" EntitySet="WayBillParts" />
+          </AssociationSet>
+          <EntitySet Name="EngineInformationDet" EntityType="SahinRektefiyeDbModel.EngineInformationDet" />
+          <EntitySet Name="EngineInformationHdr" EntityType="SahinRektefiyeDbModel.EngineInformationHdr" />
+          <AssociationSet Name="FK__EngineInf__Engin__63A3C44B" Association="SahinRektefiyeDbModel.FK__EngineInf__Engin__63A3C44B">
+            <End Role="EngineInformationHdr" EntitySet="EngineInformationHdr" />
+            <End Role="EngineInformationDet" EntitySet="EngineInformationDet" />
+          </AssociationSet>
+          <EntitySet Name="MotorOlcuselKontrol" EntityType="SahinRektefiyeDbModel.MotorOlcuselKontrol" />
+          <AssociationSet Name="FK__MotorOlcu__Talep__668030F6" Association="SahinRektefiyeDbModel.FK__MotorOlcu__Talep__668030F6">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Talepler__MotorO__6774552F" Association="SahinRektefiyeDbModel.FK__Talepler__MotorO__6774552F">
+            <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
+            <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="EnCokSatilanParcalar_Result">
@@ -5199,6 +5315,9 @@
           <NavigationProperty Name="TalepSekli" Relationship="SahinRektefiyeDbModel.FK_Talepler_TalepSekliId" FromRole="Talepler" ToRole="TalepSekli" />
           <NavigationProperty Name="Users" Relationship="SahinRektefiyeDbModel.FK_Talepler_Users" FromRole="Talepler" ToRole="Users" />
           <NavigationProperty Name="Vehicles" Relationship="SahinRektefiyeDbModel.FK_Talepler_Vehicle" FromRole="Talepler" ToRole="Vehicles" />
+          <NavigationProperty Name="MotorOlcuselKontrol" Relationship="SahinRektefiyeDbModel.FK__MotorOlcu__Talep__668030F6" FromRole="Talepler" ToRole="MotorOlcuselKontrol" />
+          <Property Name="MotorOlcuselKontrolId" Type="Int32" />
+          <NavigationProperty Name="MotorOlcuselKontrol1" Relationship="SahinRektefiyeDbModel.FK__Talepler__MotorO__6774552F" FromRole="Talepler" ToRole="MotorOlcuselKontrol" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -6872,6 +6991,95 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EngineInformationDet">
+          <Key>
+            <PropertyRef Name="EngineInfoDetId" />
+          </Key>
+          <Property Name="EngineInfoDetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EngineInfoHdrId" Type="Int32" />
+          <Property Name="EngineInfoDetDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="EngineInformationHdr" Relationship="SahinRektefiyeDbModel.FK__EngineInf__Engin__63A3C44B" FromRole="EngineInformationDet" ToRole="EngineInformationHdr" />
+        </EntityType>
+        <EntityType Name="EngineInformationHdr">
+          <Key>
+            <PropertyRef Name="EngineInfoHdrId" />
+          </Key>
+          <Property Name="EngineInfoHdrId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EngineInfoDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Creator" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="EngineInformationDet" Relationship="SahinRektefiyeDbModel.FK__EngineInf__Engin__63A3C44B" FromRole="EngineInformationHdr" ToRole="EngineInformationDet" />
+        </EntityType>
+        <Association Name="FK__EngineInf__Engin__63A3C44B">
+          <End Type="SahinRektefiyeDbModel.EngineInformationHdr" Role="EngineInformationHdr" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.EngineInformationDet" Role="EngineInformationDet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EngineInformationHdr">
+              <PropertyRef Name="EngineInfoHdrId" />
+            </Principal>
+            <Dependent Role="EngineInformationDet">
+              <PropertyRef Name="EngineInfoHdrId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="MotorOlcuselKontrol">
+          <Key>
+            <PropertyRef Name="MotorOlcuselKontrolId" />
+          </Key>
+          <Property Name="MotorOlcuselKontrolId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TalepId" Type="Int32" />
+          <Property Name="KapakDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MotorDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IzinVerilenMaxEgrilik" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="TespitEdilenEgrilik" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SilindirCaplariStdDeger" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SilindirCaplari" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="MaxAsinma" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MaxOvallik" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MaxKoniklik" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SilindirNo1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SilindirNo2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="SilindirNo3" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="GomlekFaturaStdDeger" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="GomlekFaturaTasma" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="GomlekYuvaCapi" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="PistonCapiStdDeger" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PistonCapi" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="AnaMuyluStdDeger" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AnaMuylu" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="KolMuyluStdDeger" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="KolMuylu" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="KrankMiliSalgiDegeri" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MotorIncelemeSonuc" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK__MotorOlcu__Talep__668030F6" FromRole="MotorOlcuselKontrol" ToRole="Talepler" />
+          <NavigationProperty Name="Talepler1" Relationship="SahinRektefiyeDbModel.FK__Talepler__MotorO__6774552F" FromRole="MotorOlcuselKontrol" ToRole="Talepler" />
+        </EntityType>
+        <Association Name="FK__MotorOlcu__Talep__668030F6">
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.MotorOlcuselKontrol" Role="MotorOlcuselKontrol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="MotorOlcuselKontrol">
+              <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Talepler__MotorO__6774552F">
+          <End Type="SahinRektefiyeDbModel.MotorOlcuselKontrol" Role="MotorOlcuselKontrol" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MotorOlcuselKontrol">
+              <PropertyRef Name="MotorOlcuselKontrolId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="MotorOlcuselKontrolId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -8074,6 +8282,7 @@
           <EntitySetMapping Name="Talepler">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
               <MappingFragment StoreEntitySet="Talepler">
+                <ScalarProperty Name="MotorOlcuselKontrolId" ColumnName="MotorOlcuselKontrolId" />
                 <ScalarProperty Name="TalepDosyaId" ColumnName="TalepDosyaId" />
                 <ScalarProperty Name="MusteriAtolyeGelisTarihi" ColumnName="MusteriAtolyeGelisTarihi" />
                 <ScalarProperty Name="GönderiKodu" ColumnName="GönderiKodu" />
@@ -8437,6 +8646,58 @@
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
                 <ScalarProperty Name="Aciklamasi" ColumnName="Aciklamasi" />
                 <ScalarProperty Name="YakitTipId" ColumnName="YakitTipId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EngineInformationDet">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.EngineInformationDet">
+              <MappingFragment StoreEntitySet="EngineInformationDet">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="EngineInfoDetDesc" ColumnName="EngineInfoDetDesc" />
+                <ScalarProperty Name="EngineInfoHdrId" ColumnName="EngineInfoHdrId" />
+                <ScalarProperty Name="EngineInfoDetId" ColumnName="EngineInfoDetId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EngineInformationHdr">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.EngineInformationHdr">
+              <MappingFragment StoreEntitySet="EngineInformationHdr">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Creator" ColumnName="Creator" />
+                <ScalarProperty Name="EngineInfoDesc" ColumnName="EngineInfoDesc" />
+                <ScalarProperty Name="EngineInfoHdrId" ColumnName="EngineInfoHdrId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MotorOlcuselKontrol">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.MotorOlcuselKontrol">
+              <MappingFragment StoreEntitySet="MotorOlcuselKontrol">
+                <ScalarProperty Name="MotorIncelemeSonuc" ColumnName="MotorIncelemeSonuc" />
+                <ScalarProperty Name="KrankMiliSalgiDegeri" ColumnName="KrankMiliSalgiDegeri" />
+                <ScalarProperty Name="KolMuylu" ColumnName="KolMuylu" />
+                <ScalarProperty Name="KolMuyluStdDeger" ColumnName="KolMuyluStdDeger" />
+                <ScalarProperty Name="AnaMuylu" ColumnName="AnaMuylu" />
+                <ScalarProperty Name="AnaMuyluStdDeger" ColumnName="AnaMuyluStdDeger" />
+                <ScalarProperty Name="PistonCapi" ColumnName="PistonCapi" />
+                <ScalarProperty Name="PistonCapiStdDeger" ColumnName="PistonCapiStdDeger" />
+                <ScalarProperty Name="GomlekYuvaCapi" ColumnName="GomlekYuvaCapi" />
+                <ScalarProperty Name="GomlekFaturaTasma" ColumnName="GomlekFaturaTasma" />
+                <ScalarProperty Name="GomlekFaturaStdDeger" ColumnName="GomlekFaturaStdDeger" />
+                <ScalarProperty Name="SilindirNo3" ColumnName="SilindirNo3" />
+                <ScalarProperty Name="SilindirNo2" ColumnName="SilindirNo2" />
+                <ScalarProperty Name="SilindirNo1" ColumnName="SilindirNo1" />
+                <ScalarProperty Name="MaxKoniklik" ColumnName="MaxKoniklik" />
+                <ScalarProperty Name="MaxOvallik" ColumnName="MaxOvallik" />
+                <ScalarProperty Name="MaxAsinma" ColumnName="MaxAsinma" />
+                <ScalarProperty Name="SilindirCaplari" ColumnName="SilindirCaplari" />
+                <ScalarProperty Name="SilindirCaplariStdDeger" ColumnName="SilindirCaplariStdDeger" />
+                <ScalarProperty Name="TespitEdilenEgrilik" ColumnName="TespitEdilenEgrilik" />
+                <ScalarProperty Name="IzinVerilenMaxEgrilik" ColumnName="IzinVerilenMaxEgrilik" />
+                <ScalarProperty Name="MotorDolapNo" ColumnName="MotorDolapNo" />
+                <ScalarProperty Name="KapakDolapNo" ColumnName="KapakDolapNo" />
+                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
+                <ScalarProperty Name="MotorOlcuselKontrolId" ColumnName="MotorOlcuselKontrolId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

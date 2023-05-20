@@ -1139,6 +1139,19 @@ namespace SahinRektefiyeSoln.Controllers
             return listitem;
         }
 
+        private IList<SelectListItemWithAttribute> EngineInformationDet()
+        {
+            var listItem = new List<SelectListItemWithAttribute>();
+
+            var engineInformations = db.EngineInformationDet.ToList();
+
+            foreach (var item in engineInformations)
+            {
+                listItem.Add(new SelectListItemWithAttribute { Text = item.EngineInfoDetDesc, Value = item.EngineInfoDetId.ToString(), HdrId = item.EngineInfoHdrId });
+            }
+            return listItem;
+        }
+
         #region FileProcess
 
         private static object ProcessFileInput(IEnumerable<HttpPostedFileBase> files)
@@ -1361,7 +1374,130 @@ namespace SahinRektefiyeSoln.Controllers
         [HttpGet]
         public ActionResult EngineInputDimensionalControl(int id)
         {
-            return View();
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+            var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
+            var motorOlcuselKontrol = db.MotorOlcuselKontrol.FirstOrDefault(x => x.TalepId == id);
+
+            var model = new EngineDimensionalControlViewModel();
+
+            var engineInfoDet = EngineInformationDet();
+
+            model.EngineInfoDet = engineInfoDet;
+            model.TalepId = talep.TalepId;
+            model.MotorDolapNo = talepDetay.MotorDolapNo;
+            model.KapakDolapNo = talepDetay.KapakDolapNo;
+
+            if (motorOlcuselKontrol != null)
+            {
+                var engineInfoDetList = motorOlcuselKontrol.MotorIncelemeSonuc != null ? motorOlcuselKontrol.MotorIncelemeSonuc.Split(',') : null;
+                foreach (var item in engineInfoDet)
+                {
+                    if (engineInfoDetList != null)
+                    {
+                        foreach (var itemList in engineInfoDetList)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                model.IzinVerilenMaxEgrilik = motorOlcuselKontrol.IzinVerilenMaxEgrilik;
+                model.TespitEdilenEgrilik = motorOlcuselKontrol.TespitEdilenEgrilik;
+                model.SilindirCaplariStdDeger = motorOlcuselKontrol.SilindirCaplariStdDeger;
+                model.SilindirCaplari = motorOlcuselKontrol.SilindirCaplari; //değişecek
+                model.MaxAsinma = motorOlcuselKontrol.MaxAsinma;
+                model.MaxOvallik = motorOlcuselKontrol.MaxOvallik;
+                model.MaxKoniklik = motorOlcuselKontrol.MaxKoniklik;
+                model.SilindirNo1 = motorOlcuselKontrol.SilindirNo1;
+                model.SilindirNo2 = motorOlcuselKontrol.SilindirNo2;
+                model.SilindirNo3 = motorOlcuselKontrol.SilindirNo3;
+                model.GomlekFaturaStdDeger = motorOlcuselKontrol.GomlekFaturaStdDeger;
+                model.GomlekFaturaTasma = motorOlcuselKontrol.GomlekFaturaTasma; //değişecek
+                model.GomlekYuvaCapi = motorOlcuselKontrol.GomlekYuvaCapi; //değişecek
+                model.PistonCapiStdDeger = motorOlcuselKontrol.PistonCapiStdDeger;
+                model.PistonCapi = motorOlcuselKontrol.PistonCapi; //değişecek
+                model.AnaMuyluStdDeger = motorOlcuselKontrol.AnaMuyluStdDeger;
+                model.AnaMuylu = motorOlcuselKontrol.AnaMuylu; //değişecek
+                model.KolMuyluStdDeger = motorOlcuselKontrol.KolMuyluStdDeger;
+                model.KolMuylu = motorOlcuselKontrol.KolMuylu; //değişecek
+                model.KrankMiliSalgiDegeri = motorOlcuselKontrol.KrankMiliSalgiDegeri;
+                model.EngineInfoDet = engineInfoDet;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EngineInputDimensionalControl(EngineDimensionalControlViewModel model)
+        {
+            var motorOlcuselKontrol = db.MotorOlcuselKontrol.FirstOrDefault(x => x.TalepId == model.TalepId);
+
+            if (motorOlcuselKontrol == null)
+            {
+                using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+                {
+                    using (var transaction = context.Database.BeginTransaction())
+                    {
+                        MotorOlcuselKontrol yeniOlcuselKontrol = new MotorOlcuselKontrol()
+                        {
+                            TalepId = model.TalepId,
+                            IzinVerilenMaxEgrilik = model.IzinVerilenMaxEgrilik,
+                            TespitEdilenEgrilik = model.TespitEdilenEgrilik,
+                            SilindirCaplariStdDeger = model.SilindirCaplariStdDeger,
+                            SilindirCaplari = model.SilindirCaplari, //değişecek
+                            MaxAsinma = model.MaxAsinma,
+                            MaxOvallik = model.MaxOvallik,
+                            MaxKoniklik = model.MaxKoniklik,
+                            SilindirNo1 = model.SilindirNo1,
+                            SilindirNo2 = model.SilindirNo2,
+                            SilindirNo3 = model.SilindirNo3,
+                            GomlekFaturaStdDeger = model.GomlekFaturaStdDeger,
+                            GomlekFaturaTasma = model.GomlekFaturaTasma, //değişecek
+                            GomlekYuvaCapi = model.GomlekYuvaCapi, //değişecek
+                            PistonCapiStdDeger = model.PistonCapiStdDeger,
+                            PistonCapi = model.PistonCapi, //değişecek
+                            AnaMuyluStdDeger = model.AnaMuyluStdDeger,
+                            AnaMuylu = model.AnaMuylu, //değişecek
+                            KolMuyluStdDeger = model.KolMuyluStdDeger,
+                            KolMuylu = model.KolMuylu, //değişecek
+                            KrankMiliSalgiDegeri = model.KrankMiliSalgiDegeri,
+                            MotorIncelemeSonuc = string.Join(",", model.MotorIncelemeSonuc)
+                        };
+
+                        context.MotorOlcuselKontrol.Add(yeniOlcuselKontrol);
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                }
+            }
+            else
+            {
+                motorOlcuselKontrol.TalepId = model.TalepId;
+                motorOlcuselKontrol.IzinVerilenMaxEgrilik = model.IzinVerilenMaxEgrilik;
+                motorOlcuselKontrol.TespitEdilenEgrilik = model.TespitEdilenEgrilik;
+                motorOlcuselKontrol.SilindirCaplariStdDeger = model.SilindirCaplariStdDeger;
+                motorOlcuselKontrol.SilindirCaplari = model.SilindirCaplari; //değişecek
+                motorOlcuselKontrol.MaxAsinma = model.MaxAsinma;
+                motorOlcuselKontrol.MaxOvallik = model.MaxOvallik;
+                motorOlcuselKontrol.MaxKoniklik = model.MaxKoniklik;
+                motorOlcuselKontrol.SilindirNo1 = model.SilindirNo1;
+                motorOlcuselKontrol.SilindirNo2 = model.SilindirNo2;
+                motorOlcuselKontrol.SilindirNo3 = model.SilindirNo3;
+                motorOlcuselKontrol.GomlekFaturaStdDeger = model.GomlekFaturaStdDeger;
+                motorOlcuselKontrol.GomlekFaturaTasma = model.GomlekFaturaTasma; //değişecek
+                motorOlcuselKontrol.GomlekYuvaCapi = model.GomlekYuvaCapi; //değişecek
+                motorOlcuselKontrol.PistonCapiStdDeger = model.PistonCapiStdDeger;
+                motorOlcuselKontrol.PistonCapi = model.PistonCapi; //değişecek
+                motorOlcuselKontrol.AnaMuyluStdDeger = model.AnaMuyluStdDeger;
+                motorOlcuselKontrol.AnaMuylu = model.AnaMuylu; //değişecek
+                motorOlcuselKontrol.KolMuyluStdDeger = model.KolMuyluStdDeger;
+                motorOlcuselKontrol.KolMuylu = model.KolMuylu; //değişecek
+                motorOlcuselKontrol.KrankMiliSalgiDegeri = model.KrankMiliSalgiDegeri;
+                motorOlcuselKontrol.MotorIncelemeSonuc = string.Join(",", model.MotorIncelemeSonuc);
+                db.SaveChanges();
+            }
+            return RedirectToAction("EngineInputDimensionalControl", new { id = model.TalepId });
         }
     }
 }

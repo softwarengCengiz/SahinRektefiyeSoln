@@ -127,6 +127,9 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<WebUsageLogs> WebUsageLogs { get; set; }
         public virtual DbSet<WorkOrders> WorkOrders { get; set; }
         public virtual DbSet<YakitTipi> YakitTipi { get; set; }
+        public virtual DbSet<EngineInformationDet> EngineInformationDet { get; set; }
+        public virtual DbSet<EngineInformationHdr> EngineInformationHdr { get; set; }
+        public virtual DbSet<MotorOlcuselKontrol> MotorOlcuselKontrol { get; set; }
     
         public virtual int AutoCreateUserMenu(string userName)
         {

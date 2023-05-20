@@ -411,6 +411,12 @@
     <Compile Include="Models\EnCokSatilanParcalar_Result.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EngineInformationDet.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EngineInformationHdr.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ExcelModels\FordExcelPart.cs" />
     <Compile Include="Models\FiatPartCountByWorkType_Result.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
@@ -540,6 +546,9 @@
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Messages.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MotorOlcuselKontrol.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Musteri.cs">

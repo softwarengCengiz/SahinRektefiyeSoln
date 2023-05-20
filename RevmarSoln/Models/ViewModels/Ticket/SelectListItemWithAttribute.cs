@@ -9,5 +9,6 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
     public class SelectListItemWithAttribute : SelectListItem
     {
         public int? IsContainPiece { get; set; }
+        public int? HdrId { get; set; }
     }
 }
