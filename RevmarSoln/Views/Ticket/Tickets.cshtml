@@ -101,7 +101,10 @@
                                             <a href="/Ticket/CreatePdf?id=@talep.TalepNo" title="Arıza Bildirim Formu İndir"><i class="fa fa-file-pdf-o w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
                                         }
 
-                                        <a href="/Ticket/ShowTicketDetails?id=@talep.TalepNo" title="Talep Detayı Görüntüle"><i class="fa fa-book w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                        @if (SFHelper.CheckMyRole(UserName, "ADMIN"))
+                                        {
+                                            <a href="/Ticket/ShowTicketDetails?id=@talep.TalepNo" title="Talep Detayı Görüntüle"><i class="fa fa-book w3-hover-opacity" aria-hidden="true" style="padding:5px;"></i></a>
+                                        }
 
                                         @if (talep.Durum == "Talep Açıldı")
                                         {

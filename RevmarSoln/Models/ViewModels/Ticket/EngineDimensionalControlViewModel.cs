@@ -12,7 +12,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
         public string IzinVerilenMaxEgrilik { get; set; }
         public string TespitEdilenEgrilik { get; set; }
         public string SilindirCaplariStdDeger { get; set; }
-        public string SilindirCaplari { get; set; }
+        public List<List<string>> SilindirCaplari { get; set; }
         public string MaxAsinma { get; set; }
         public string MaxOvallik { get; set; }
         public string MaxKoniklik { get; set; }
@@ -20,14 +20,14 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
         public string SilindirNo2 { get; set; }
         public string SilindirNo3 { get; set; }
         public string GomlekFaturaStdDeger { get; set; }
-        public string GomlekFaturaTasma { get; set; }
-        public string GomlekYuvaCapi { get; set; }
+        public List<List<string>> GomlekFaturaTasma { get; set; }
+        public List<List<string>> GomlekYuvaCapi { get; set; }
         public string PistonCapiStdDeger { get; set; }
-        public string PistonCapi { get; set; }
+        public List<List<string>> PistonCapi { get; set; }
         public string AnaMuyluStdDeger { get; set; }
-        public string AnaMuylu { get; set; }
+        public List<List<string>> AnaMuylu { get; set; }
         public string KolMuyluStdDeger { get; set; }
-        public string KolMuylu { get; set; }
+        public List<List<string>> KolMuylu { get; set; }
         public string KrankMiliSalgiDegeri { get; set; }
         public IList<string> MotorIncelemeSonuc { get; set; }
         public IList<SelectListItemWithAttribute> EngineInfoDet { get; set; }

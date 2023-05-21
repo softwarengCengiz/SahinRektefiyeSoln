@@ -1,11 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using PagedList;
-using PdfSharp.Pdf.IO;
-using Remotion.Reflection;
+﻿using Newtonsoft.Json;
 using SahinRektefiyeSoln.Components;
 using SahinRektefiyeSoln.Helpers;
 using SahinRektefiyeSoln.Helpers.Enums;
@@ -19,9 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Services.Description;
-using static SahinRektefiyeSoln.Helpers.SFHelper;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace SahinRektefiyeSoln.Controllers
 {
@@ -1378,7 +1368,15 @@ namespace SahinRektefiyeSoln.Controllers
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
             var motorOlcuselKontrol = db.MotorOlcuselKontrol.FirstOrDefault(x => x.TalepId == id);
 
-            var model = new EngineDimensionalControlViewModel();
+            var model = new EngineDimensionalControlViewModel()
+            {
+                SilindirCaplari = new List<List<string>>(),
+                GomlekFaturaTasma = new List<List<string>>(),
+                GomlekYuvaCapi = new List<List<string>>(),
+                PistonCapi = new List<List<string>>(),
+                AnaMuylu = new List<List<string>>(),
+                KolMuylu = new List<List<string>>()
+            };
 
             var engineInfoDet = EngineInformationDet();
 
@@ -1405,7 +1403,6 @@ namespace SahinRektefiyeSoln.Controllers
                 model.IzinVerilenMaxEgrilik = motorOlcuselKontrol.IzinVerilenMaxEgrilik;
                 model.TespitEdilenEgrilik = motorOlcuselKontrol.TespitEdilenEgrilik;
                 model.SilindirCaplariStdDeger = motorOlcuselKontrol.SilindirCaplariStdDeger;
-                model.SilindirCaplari = motorOlcuselKontrol.SilindirCaplari; //değişecek
                 model.MaxAsinma = motorOlcuselKontrol.MaxAsinma;
                 model.MaxOvallik = motorOlcuselKontrol.MaxOvallik;
                 model.MaxKoniklik = motorOlcuselKontrol.MaxKoniklik;
@@ -1413,16 +1410,247 @@ namespace SahinRektefiyeSoln.Controllers
                 model.SilindirNo2 = motorOlcuselKontrol.SilindirNo2;
                 model.SilindirNo3 = motorOlcuselKontrol.SilindirNo3;
                 model.GomlekFaturaStdDeger = motorOlcuselKontrol.GomlekFaturaStdDeger;
-                model.GomlekFaturaTasma = motorOlcuselKontrol.GomlekFaturaTasma; //değişecek
-                model.GomlekYuvaCapi = motorOlcuselKontrol.GomlekYuvaCapi; //değişecek
                 model.PistonCapiStdDeger = motorOlcuselKontrol.PistonCapiStdDeger;
-                model.PistonCapi = motorOlcuselKontrol.PistonCapi; //değişecek
                 model.AnaMuyluStdDeger = motorOlcuselKontrol.AnaMuyluStdDeger;
-                model.AnaMuylu = motorOlcuselKontrol.AnaMuylu; //değişecek
                 model.KolMuyluStdDeger = motorOlcuselKontrol.KolMuyluStdDeger;
-                model.KolMuylu = motorOlcuselKontrol.KolMuylu; //değişecek
                 model.KrankMiliSalgiDegeri = motorOlcuselKontrol.KrankMiliSalgiDegeri;
                 model.EngineInfoDet = engineInfoDet;
+
+                #region SilindirÇapları
+                if (motorOlcuselKontrol.SilindirCaplari != null)
+                {
+                    string[] savedValues = motorOlcuselKontrol.SilindirCaplari.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 6; i++)
+                    {
+                        model.SilindirCaplari.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.SilindirCaplari[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        model.SilindirCaplari.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            model.SilindirCaplari[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Gömlek Fatura Taşma
+                if (motorOlcuselKontrol.GomlekFaturaTasma != null)
+                {
+                    string[] savedValues = motorOlcuselKontrol.GomlekFaturaTasma.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 1; i++)
+                    {
+                        model.GomlekFaturaTasma.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.GomlekFaturaTasma[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 1; i++)
+                    {
+                        model.GomlekFaturaTasma.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            model.GomlekFaturaTasma[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Gömlek Yuva Çapı
+                if (motorOlcuselKontrol.GomlekYuvaCapi != null)
+                {
+                    string[] savedValues = motorOlcuselKontrol.GomlekYuvaCapi.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.GomlekYuvaCapi.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.GomlekYuvaCapi[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.GomlekYuvaCapi.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            model.GomlekYuvaCapi[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Piston Çapı
+                if (motorOlcuselKontrol.PistonCapi != null)
+                {
+                    string[] savedValues = motorOlcuselKontrol.PistonCapi.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 1; i++)
+                    {
+                        model.PistonCapi.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.PistonCapi[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 1; i++)
+                    {
+                        model.PistonCapi.Add(new List<string>());
+
+                        for (int j = 0; j < 12; j++)
+                        {
+                            model.PistonCapi[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Ana Muylu
+                if (motorOlcuselKontrol.AnaMuylu != null)
+                {
+                    string[] savedValues = motorOlcuselKontrol.AnaMuylu.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.AnaMuylu.Add(new List<string>());
+
+                        for (int j = 0; j < 10; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.AnaMuylu[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.AnaMuylu.Add(new List<string>());
+
+                        for (int j = 0; j < 10; j++)
+                        {
+                            model.AnaMuylu[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Kol Muylu
+                if (motorOlcuselKontrol.KolMuylu != null)
+                {
+                    string[] savedValues = motorOlcuselKontrol.KolMuylu.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.KolMuylu.Add(new List<string>());
+
+                        for (int j = 0; j < 10; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.KolMuylu[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.KolMuylu.Add(new List<string>());
+
+                        for (int j = 0; j < 10; j++)
+                        {
+                            model.KolMuylu[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+            }
+            else
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    model.SilindirCaplari.Add(new List<string>());
+
+                    for (int j = 0; j < 12; j++)
+                    {
+                        model.SilindirCaplari[i].Add(string.Empty);
+                    }
+                }
+
+                for (int i = 0; i < 1; i++)
+                {
+                    model.GomlekFaturaTasma.Add(new List<string>());
+
+                    for (int j = 0; j < 12; j++)
+                    {
+                        model.GomlekFaturaTasma[i].Add(string.Empty);
+                    }
+                }
+
+                for (int i = 0; i < 2; i++)
+                {
+                    model.GomlekYuvaCapi.Add(new List<string>());
+
+                    for (int j = 0; j < 12; j++)
+                    {
+                        model.GomlekYuvaCapi[i].Add(string.Empty);
+                    }
+                }
+
+                for (int i = 0; i < 1; i++)
+                {
+                    model.PistonCapi.Add(new List<string>());
+
+                    for (int j = 0; j < 12; j++)
+                    {
+                        model.PistonCapi[i].Add(string.Empty);
+                    }
+                }
+
+                for (int i = 0; i < 2; i++)
+                {
+                    model.AnaMuylu.Add(new List<string>());
+
+                    for (int j = 0; j < 10; j++)
+                    {
+                        model.AnaMuylu[i].Add(string.Empty);
+                    }
+                }
+
+                for (int i = 0; i < 2; i++)
+                {
+                    model.KolMuylu.Add(new List<string>());
+
+                    for (int j = 0; j < 10; j++)
+                    {
+                        model.KolMuylu[i].Add(string.Empty);
+                    }
+                }
             }
 
             return View(model);
@@ -1432,6 +1660,114 @@ namespace SahinRektefiyeSoln.Controllers
         public ActionResult EngineInputDimensionalControl(EngineDimensionalControlViewModel model)
         {
             var motorOlcuselKontrol = db.MotorOlcuselKontrol.FirstOrDefault(x => x.TalepId == model.TalepId);
+
+            #region Silindir Çapları birleştirme
+            List<string> combinedSilindirCaplari = new List<string>();
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    string cellValue = model.SilindirCaplari[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedSilindirCaplari.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesSC = string.Join(";", combinedSilindirCaplari);
+            #endregion
+
+            #region Gömlek Fatura Taşma Birleştirme
+            List<string> combinedGomlekFaturaTasma = new List<string>();
+            for (int i = 0; i < 1; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    string cellValue = model.GomlekFaturaTasma[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedGomlekFaturaTasma.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesGFT = string.Join(";", combinedGomlekFaturaTasma);
+            #endregion
+
+            #region Gömlek Yuva Çapı Birleştirme
+            List<string> combinedGomlekYuvaCapi = new List<string>();
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    string cellValue = model.GomlekYuvaCapi[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedGomlekYuvaCapi.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesGYC = string.Join(";", combinedGomlekYuvaCapi);
+            #endregion
+
+            #region Piston Çapı Birleştirme
+            List<string> combinedPistonCapi = new List<string>();
+            for (int i = 0; i < 1; i++)
+            {
+                for (int j = 0; j < 12; j++)
+                {
+                    string cellValue = model.PistonCapi[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedPistonCapi.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesPC = string.Join(";", combinedPistonCapi);
+            #endregion
+
+            #region Ana Muylu Birleştirme
+            List<string> combinedAnaMuylu = new List<string>();
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    string cellValue = model.AnaMuylu[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedAnaMuylu.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesAMA = string.Join(";", combinedAnaMuylu);
+            #endregion
+
+            #region Kol Muylu Birleştirme
+            List<string> combinedKolMuylu = new List<string>();
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    string cellValue = model.KolMuylu[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedKolMuylu.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesKMA = string.Join(";", combinedKolMuylu);
+            #endregion
 
             if (motorOlcuselKontrol == null)
             {
@@ -1445,7 +1781,7 @@ namespace SahinRektefiyeSoln.Controllers
                             IzinVerilenMaxEgrilik = model.IzinVerilenMaxEgrilik,
                             TespitEdilenEgrilik = model.TespitEdilenEgrilik,
                             SilindirCaplariStdDeger = model.SilindirCaplariStdDeger,
-                            SilindirCaplari = model.SilindirCaplari, //değişecek
+                            SilindirCaplari = concatenatedValuesSC,
                             MaxAsinma = model.MaxAsinma,
                             MaxOvallik = model.MaxOvallik,
                             MaxKoniklik = model.MaxKoniklik,
@@ -1453,16 +1789,16 @@ namespace SahinRektefiyeSoln.Controllers
                             SilindirNo2 = model.SilindirNo2,
                             SilindirNo3 = model.SilindirNo3,
                             GomlekFaturaStdDeger = model.GomlekFaturaStdDeger,
-                            GomlekFaturaTasma = model.GomlekFaturaTasma, //değişecek
-                            GomlekYuvaCapi = model.GomlekYuvaCapi, //değişecek
+                            GomlekFaturaTasma = concatenatedValuesGFT,
+                            GomlekYuvaCapi = concatenatedValuesGYC,
                             PistonCapiStdDeger = model.PistonCapiStdDeger,
-                            PistonCapi = model.PistonCapi, //değişecek
+                            PistonCapi = concatenatedValuesPC,
                             AnaMuyluStdDeger = model.AnaMuyluStdDeger,
-                            AnaMuylu = model.AnaMuylu, //değişecek
+                            AnaMuylu = concatenatedValuesAMA,
                             KolMuyluStdDeger = model.KolMuyluStdDeger,
-                            KolMuylu = model.KolMuylu, //değişecek
+                            KolMuylu = concatenatedValuesKMA,
                             KrankMiliSalgiDegeri = model.KrankMiliSalgiDegeri,
-                            MotorIncelemeSonuc = string.Join(",", model.MotorIncelemeSonuc)
+                            MotorIncelemeSonuc = model.MotorIncelemeSonuc != null ? string.Join(",", model.MotorIncelemeSonuc) : null
                         };
 
                         context.MotorOlcuselKontrol.Add(yeniOlcuselKontrol);
@@ -1477,7 +1813,7 @@ namespace SahinRektefiyeSoln.Controllers
                 motorOlcuselKontrol.IzinVerilenMaxEgrilik = model.IzinVerilenMaxEgrilik;
                 motorOlcuselKontrol.TespitEdilenEgrilik = model.TespitEdilenEgrilik;
                 motorOlcuselKontrol.SilindirCaplariStdDeger = model.SilindirCaplariStdDeger;
-                motorOlcuselKontrol.SilindirCaplari = model.SilindirCaplari; //değişecek
+                motorOlcuselKontrol.SilindirCaplari = concatenatedValuesSC;
                 motorOlcuselKontrol.MaxAsinma = model.MaxAsinma;
                 motorOlcuselKontrol.MaxOvallik = model.MaxOvallik;
                 motorOlcuselKontrol.MaxKoniklik = model.MaxKoniklik;
@@ -1485,18 +1821,20 @@ namespace SahinRektefiyeSoln.Controllers
                 motorOlcuselKontrol.SilindirNo2 = model.SilindirNo2;
                 motorOlcuselKontrol.SilindirNo3 = model.SilindirNo3;
                 motorOlcuselKontrol.GomlekFaturaStdDeger = model.GomlekFaturaStdDeger;
-                motorOlcuselKontrol.GomlekFaturaTasma = model.GomlekFaturaTasma; //değişecek
-                motorOlcuselKontrol.GomlekYuvaCapi = model.GomlekYuvaCapi; //değişecek
+                motorOlcuselKontrol.GomlekFaturaTasma = concatenatedValuesGFT;
+                motorOlcuselKontrol.GomlekYuvaCapi = concatenatedValuesGYC;
                 motorOlcuselKontrol.PistonCapiStdDeger = model.PistonCapiStdDeger;
-                motorOlcuselKontrol.PistonCapi = model.PistonCapi; //değişecek
+                motorOlcuselKontrol.PistonCapi = concatenatedValuesPC;
                 motorOlcuselKontrol.AnaMuyluStdDeger = model.AnaMuyluStdDeger;
-                motorOlcuselKontrol.AnaMuylu = model.AnaMuylu; //değişecek
+                motorOlcuselKontrol.AnaMuylu = concatenatedValuesAMA;
                 motorOlcuselKontrol.KolMuyluStdDeger = model.KolMuyluStdDeger;
-                motorOlcuselKontrol.KolMuylu = model.KolMuylu; //değişecek
+                motorOlcuselKontrol.KolMuylu = concatenatedValuesKMA;
                 motorOlcuselKontrol.KrankMiliSalgiDegeri = model.KrankMiliSalgiDegeri;
-                motorOlcuselKontrol.MotorIncelemeSonuc = string.Join(",", model.MotorIncelemeSonuc);
+                motorOlcuselKontrol.MotorIncelemeSonuc = model.MotorIncelemeSonuc != null ? string.Join(",", model.MotorIncelemeSonuc) : null;
+
                 db.SaveChanges();
             }
+
             return RedirectToAction("EngineInputDimensionalControl", new { id = model.TalepId });
         }
     }

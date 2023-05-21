@@ -2,8 +2,6 @@
 @{
     ViewBag.Title = "Motor Giriş Ölçüsel Kontrol";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var rowCount = 3;
-    var columnCount = 12;
 }
 
 <link href="~/Styles/jquery-ui.css" rel="stylesheet" />
@@ -85,64 +83,32 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        @for (var i = 1; i <= columnCount; i++)
+                        @for (var i = 1; i <= 12; i++)
                         {
                             <th>@i</th>
                         }
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A1_@j" name="SilindirCaplariCells[0, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A2_@j" name="SilindirCaplariCells[1, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A3_@j" name="SilindirCaplariCells[2, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
-
-                    <tr>
-                        <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="B1_@j" name="SilindirCaplariCells[3, @j - 1]" autocomplete="off" />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="B2_@j" name="SilindirCaplariCells[4, @j - 1]" autocomplete="off" />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="B3_@j" name="SilindirCaplariCells[5, @j - 1]" autocomplete="off" />
-                            </td>
-                        }
-                    </tr>
+                    @for (var row = 0; row < 6; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
+                            }
+                            @if (row == 3)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
+                            }
+                            @for (var col = 0; col < 12; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="SilindirCaplari[@(row)][@(col)]" value="@Model.SilindirCaplari[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
 
@@ -194,22 +160,25 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        @for (var i = 1; i <= columnCount; i++)
+                        @for (var i = 1; i <= 12; i++)
                         {
                             <th>@i</th>
                         }
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A1_@j" name="GomlekFaturaTasmaCells[0, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
+                    @for (var row = 0; row < 1; row++)
+                    {
+                        <tr>
+                            <td></td>
+                            @for (var col = 0; col < 12; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="GomlekFaturaTasma[@(row)][@(col)]" value="@Model.GomlekFaturaTasma[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
 
@@ -223,31 +192,32 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        @for (var i = 1; i <= columnCount; i++)
+                        @for (var i = 1; i <= 12; i++)
                         {
                             <th>@i</th>
                         }
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A1_@j" name="GomlekYuvaCells[0, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="B1_@j" name="GomlekYuvaCells[1, @j - 1]" autocomplete="off" />
-                            </td>
-                        }
-                    </tr>
+                    @for (var row = 0; row < 2; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
+                            }
+                            @if (row == 3)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
+                            }
+                            @for (var col = 0; col < 12; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="GomlekYuvaCapi[@(row)][@(col)]" value="@Model.GomlekYuvaCapi[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
 
@@ -267,22 +237,25 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        @for (var i = 1; i <= columnCount; i++)
+                        @for (var i = 1; i <= 12; i++)
                         {
                             <th>@i</th>
                         }
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        @for (var j = 1; j <= columnCount; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A1_@j" name="PistonCapiCells[0, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
+                    @for (var row = 0; row < 1; row++)
+                    {
+                        <tr>
+                            <td></td>
+                            @for (var col = 0; col < 12; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="PistonCapi[@(row)][@(col)]" value="@Model.PistonCapi[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
 
@@ -313,24 +286,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
-                        @for (var j = 1; j <= 10; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A1_@j" name="KrankMiliCells[0, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
-                        @for (var j = 1; j <= 10; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="B1_@j" name="KrankMiliCells[1, @j - 1]" autocomplete="off" />
-                            </td>
-                        }
-                    </tr>
+                    @for (var row = 0; row < 2; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
+                            }
+                            @if (row == 3)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
+                            }
+                            @for (var col = 0; col < 10; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="AnaMuylu[@(row)][@(col)]" value="@Model.AnaMuylu[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
 
@@ -352,24 +326,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
-                        @for (var j = 1; j <= 10; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="A1_@j" name="KrankMiliCells[0, @j - 1]" />
-                            </td>
-                        }
-                    </tr>
-                    <tr>
-                        <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
-                        @for (var j = 1; j <= 10; j++)
-                        {
-                            <td>
-                                <input type="text" class="w3-input w3-border w3-round table-input" id="B1_@j" name="KrankMiliCells[1, @j - 1]" autocomplete="off" />
-                            </td>
-                        }
-                    </tr>
+                    @for (var row = 0; row < 2; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
+                            }
+                            @if (row == 3)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
+                            }
+                            @for (var col = 0; col < 10; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="KolMuylu[@(row)][@(col)]" value="@Model.KolMuylu[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
 
