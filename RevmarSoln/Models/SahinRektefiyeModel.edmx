@@ -220,6 +220,39 @@
           <Property Name="Creator" Type="varchar" MaxLength="100" />
           <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="EngineOutputQuality">
+          <Key>
+            <PropertyRef Name="MotorCikisKaliteId" />
+          </Key>
+          <Property Name="MotorCikisKaliteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TalepId" Type="int" />
+          <Property Name="KapakDolapNo" Type="varchar" MaxLength="50" />
+          <Property Name="MotorDolapNo" Type="varchar" MaxLength="50" />
+          <Property Name="BlokKrankKolIsleri" Type="varchar" MaxLength="100" />
+          <Property Name="OzelIslemler" Type="varchar" MaxLength="100" />
+          <Property Name="OzelUretimler" Type="varchar" MaxLength="100" />
+          <Property Name="GerekliParca" Type="varchar" MaxLength="100" />
+          <Property Name="GerekliParcaOlcu" Type="varchar" MaxLength="100" />
+          <Property Name="TeslimAlinanYedekParcalar" Type="varchar" MaxLength="3000" />
+          <Property Name="AlinanDigerParcalar" Type="varchar" MaxLength="100" />
+          <Property Name="ParcaGirisSaati" Type="datetime" />
+          <Property Name="TeslimAlan" Type="varchar" MaxLength="100" />
+          <Property Name="SilindirCaplariStdDeger" Type="varchar" MaxLength="100" />
+          <Property Name="SilindirCaplari" Type="varchar" MaxLength="3000" />
+          <Property Name="GomlekYuksekligiStdDeger" Type="varchar" MaxLength="100" />
+          <Property Name="GomlekBlokYukseklikleri" Type="varchar" MaxLength="3000" />
+          <Property Name="AnaMuyluDetay" Type="varchar" MaxLength="3000" />
+          <Property Name="KolMuyluDetay" Type="varchar" MaxLength="3000" />
+          <Property Name="PistonYukseklikleri" Type="varchar" MaxLength="3000" />
+          <Property Name="BlokYuzeyiTaslamaMiktari" Type="varchar" MaxLength="100" />
+          <Property Name="AnaMuyluStdDeger" Type="varchar" MaxLength="100" />
+          <Property Name="KolMuyluStdDeger" Type="varchar" MaxLength="100" />
+          <Property Name="KrankMiliGezintiDegeri" Type="varchar" MaxLength="100" />
+          <Property Name="KrankMiliStdDeger" Type="varchar" MaxLength="100" />
+          <Property Name="PistonYuksekligiStdDeger" Type="varchar" MaxLength="100" />
+          <Property Name="ContaTipi" Type="varchar" MaxLength="100" />
+          <Property Name="Aciklama" Type="varchar" MaxLength="1000" />
+        </EntityType>
         <EntityType Name="Irsaliyeler">
           <Key>
             <PropertyRef Name="IrsaliyeId" />
@@ -1159,6 +1192,7 @@
           <Property Name="MusteriAtolyeGelisTarihi" Type="datetime" />
           <Property Name="TalepDosyaId" Type="int" />
           <Property Name="MotorOlcuselKontrolId" Type="int" />
+          <Property Name="MotorCikisKaliteId" Type="int" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -1488,6 +1522,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__EngineOut__Talep__6A50C1DA">
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="0..1" />
+          <End Role="EngineOutputQuality" Type="Self.EngineOutputQuality" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="EngineOutputQuality">
+              <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__MotorOlcu__Talep__668030F6">
           <End Role="Talepler" Type="Self.Talepler" Multiplicity="0..1" />
           <End Role="MotorOlcuselKontrol" Type="Self.MotorOlcuselKontrol" Multiplicity="*" />
@@ -1497,6 +1543,18 @@
             </Principal>
             <Dependent Role="MotorOlcuselKontrol">
               <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Talepler__MotorC__6B44E613">
+          <End Role="EngineOutputQuality" Type="Self.EngineOutputQuality" Multiplicity="0..1" />
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EngineOutputQuality">
+              <PropertyRef Name="MotorCikisKaliteId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="MotorCikisKaliteId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2885,6 +2943,7 @@
           <EntitySet Name="DpfRevisionTypes" EntityType="Self.DpfRevisionTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EngineInformationDet" EntityType="Self.EngineInformationDet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EngineInformationHdr" EntityType="Self.EngineInformationHdr" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EngineOutputQuality" EntityType="Self.EngineOutputQuality" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Irsaliyeler" EntityType="Self.Irsaliyeler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Iscilikler" EntityType="Self.Iscilikler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IscilikTipleri" EntityType="Self.IscilikTipleri" Schema="dbo" store:Type="Tables" />
@@ -2976,9 +3035,17 @@
             <End Role="EngineInformationHdr" EntitySet="EngineInformationHdr" />
             <End Role="EngineInformationDet" EntitySet="EngineInformationDet" />
           </AssociationSet>
+          <AssociationSet Name="FK__EngineOut__Talep__6A50C1DA" Association="Self.FK__EngineOut__Talep__6A50C1DA">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="EngineOutputQuality" EntitySet="EngineOutputQuality" />
+          </AssociationSet>
           <AssociationSet Name="FK__MotorOlcu__Talep__668030F6" Association="Self.FK__MotorOlcu__Talep__668030F6">
             <End Role="Talepler" EntitySet="Talepler" />
             <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Talepler__MotorC__6B44E613" Association="Self.FK__Talepler__MotorC__6B44E613">
+            <End Role="EngineOutputQuality" EntitySet="EngineOutputQuality" />
+            <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           <AssociationSet Name="FK__Talepler__MotorO__6774552F" Association="Self.FK__Talepler__MotorO__6774552F">
             <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
@@ -4021,6 +4088,15 @@
           </AssociationSet>
           <AssociationSet Name="FK__Talepler__MotorO__6774552F" Association="SahinRektefiyeDbModel.FK__Talepler__MotorO__6774552F">
             <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <EntitySet Name="EngineOutputQuality" EntityType="SahinRektefiyeDbModel.EngineOutputQuality" />
+          <AssociationSet Name="FK__EngineOut__Talep__6A50C1DA" Association="SahinRektefiyeDbModel.FK__EngineOut__Talep__6A50C1DA">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="EngineOutputQuality" EntitySet="EngineOutputQuality" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Talepler__MotorC__6B44E613" Association="SahinRektefiyeDbModel.FK__Talepler__MotorC__6B44E613">
+            <End Role="EngineOutputQuality" EntitySet="EngineOutputQuality" />
             <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           </EntityContainer>
@@ -5318,6 +5394,9 @@
           <NavigationProperty Name="MotorOlcuselKontrol" Relationship="SahinRektefiyeDbModel.FK__MotorOlcu__Talep__668030F6" FromRole="Talepler" ToRole="MotorOlcuselKontrol" />
           <Property Name="MotorOlcuselKontrolId" Type="Int32" />
           <NavigationProperty Name="MotorOlcuselKontrol1" Relationship="SahinRektefiyeDbModel.FK__Talepler__MotorO__6774552F" FromRole="Talepler" ToRole="MotorOlcuselKontrol" />
+          <Property Name="MotorCikisKaliteId" Type="Int32" />
+          <NavigationProperty Name="EngineOutputQuality" Relationship="SahinRektefiyeDbModel.FK__EngineOut__Talep__6A50C1DA" FromRole="Talepler" ToRole="EngineOutputQuality" />
+          <NavigationProperty Name="EngineOutputQuality1" Relationship="SahinRektefiyeDbModel.FK__Talepler__MotorC__6B44E613" FromRole="Talepler" ToRole="EngineOutputQuality" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -7080,6 +7159,65 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EngineOutputQuality">
+          <Key>
+            <PropertyRef Name="MotorCikisKaliteId" />
+          </Key>
+          <Property Name="MotorCikisKaliteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TalepId" Type="Int32" />
+          <Property Name="KapakDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MotorDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BlokKrankKolIsleri" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OzelIslemler" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OzelUretimler" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="GerekliParca" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="GerekliParcaOlcu" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TeslimAlinanYedekParcalar" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="AlinanDigerParcalar" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaGirisSaati" Type="DateTime" Precision="3" />
+          <Property Name="TeslimAlan" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SilindirCaplariStdDeger" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="SilindirCaplari" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="GomlekYuksekligiStdDeger" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="GomlekBlokYukseklikleri" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="AnaMuyluDetay" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="KolMuyluDetay" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="PistonYukseklikleri" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="BlokYuzeyiTaslamaMiktari" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AnaMuyluStdDeger" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="KolMuyluStdDeger" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="KrankMiliGezintiDegeri" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="KrankMiliStdDeger" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PistonYuksekligiStdDeger" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ContaTipi" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Aciklama" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK__EngineOut__Talep__6A50C1DA" FromRole="EngineOutputQuality" ToRole="Talepler" />
+          <NavigationProperty Name="Talepler1" Relationship="SahinRektefiyeDbModel.FK__Talepler__MotorC__6B44E613" FromRole="EngineOutputQuality" ToRole="Talepler" />
+        </EntityType>
+        <Association Name="FK__EngineOut__Talep__6A50C1DA">
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.EngineOutputQuality" Role="EngineOutputQuality" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="EngineOutputQuality">
+              <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Talepler__MotorC__6B44E613">
+          <End Type="SahinRektefiyeDbModel.EngineOutputQuality" Role="EngineOutputQuality" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EngineOutputQuality">
+              <PropertyRef Name="MotorCikisKaliteId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="MotorCikisKaliteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -8282,6 +8420,7 @@
           <EntitySetMapping Name="Talepler">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
               <MappingFragment StoreEntitySet="Talepler">
+                <ScalarProperty Name="MotorCikisKaliteId" ColumnName="MotorCikisKaliteId" />
                 <ScalarProperty Name="MotorOlcuselKontrolId" ColumnName="MotorOlcuselKontrolId" />
                 <ScalarProperty Name="TalepDosyaId" ColumnName="TalepDosyaId" />
                 <ScalarProperty Name="MusteriAtolyeGelisTarihi" ColumnName="MusteriAtolyeGelisTarihi" />
@@ -8698,6 +8837,40 @@
                 <ScalarProperty Name="KapakDolapNo" ColumnName="KapakDolapNo" />
                 <ScalarProperty Name="TalepId" ColumnName="TalepId" />
                 <ScalarProperty Name="MotorOlcuselKontrolId" ColumnName="MotorOlcuselKontrolId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EngineOutputQuality">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.EngineOutputQuality">
+              <MappingFragment StoreEntitySet="EngineOutputQuality">
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+                <ScalarProperty Name="ContaTipi" ColumnName="ContaTipi" />
+                <ScalarProperty Name="PistonYuksekligiStdDeger" ColumnName="PistonYuksekligiStdDeger" />
+                <ScalarProperty Name="KrankMiliStdDeger" ColumnName="KrankMiliStdDeger" />
+                <ScalarProperty Name="KrankMiliGezintiDegeri" ColumnName="KrankMiliGezintiDegeri" />
+                <ScalarProperty Name="KolMuyluStdDeger" ColumnName="KolMuyluStdDeger" />
+                <ScalarProperty Name="AnaMuyluStdDeger" ColumnName="AnaMuyluStdDeger" />
+                <ScalarProperty Name="BlokYuzeyiTaslamaMiktari" ColumnName="BlokYuzeyiTaslamaMiktari" />
+                <ScalarProperty Name="PistonYukseklikleri" ColumnName="PistonYukseklikleri" />
+                <ScalarProperty Name="KolMuyluDetay" ColumnName="KolMuyluDetay" />
+                <ScalarProperty Name="AnaMuyluDetay" ColumnName="AnaMuyluDetay" />
+                <ScalarProperty Name="GomlekBlokYukseklikleri" ColumnName="GomlekBlokYukseklikleri" />
+                <ScalarProperty Name="GomlekYuksekligiStdDeger" ColumnName="GomlekYuksekligiStdDeger" />
+                <ScalarProperty Name="SilindirCaplari" ColumnName="SilindirCaplari" />
+                <ScalarProperty Name="SilindirCaplariStdDeger" ColumnName="SilindirCaplariStdDeger" />
+                <ScalarProperty Name="TeslimAlan" ColumnName="TeslimAlan" />
+                <ScalarProperty Name="ParcaGirisSaati" ColumnName="ParcaGirisSaati" />
+                <ScalarProperty Name="AlinanDigerParcalar" ColumnName="AlinanDigerParcalar" />
+                <ScalarProperty Name="TeslimAlinanYedekParcalar" ColumnName="TeslimAlinanYedekParcalar" />
+                <ScalarProperty Name="GerekliParcaOlcu" ColumnName="GerekliParcaOlcu" />
+                <ScalarProperty Name="GerekliParca" ColumnName="GerekliParca" />
+                <ScalarProperty Name="OzelUretimler" ColumnName="OzelUretimler" />
+                <ScalarProperty Name="OzelIslemler" ColumnName="OzelIslemler" />
+                <ScalarProperty Name="BlokKrankKolIsleri" ColumnName="BlokKrankKolIsleri" />
+                <ScalarProperty Name="MotorDolapNo" ColumnName="MotorDolapNo" />
+                <ScalarProperty Name="KapakDolapNo" ColumnName="KapakDolapNo" />
+                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
+                <ScalarProperty Name="MotorCikisKaliteId" ColumnName="MotorCikisKaliteId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

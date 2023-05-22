@@ -417,6 +417,9 @@
     <Compile Include="Models\EngineInformationHdr.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EngineOutputQuality.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ExcelModels\FordExcelPart.cs" />
     <Compile Include="Models\FiatPartCountByWorkType_Result.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
@@ -813,6 +816,7 @@
     <Compile Include="Models\ViewModels\Teklif\TeklifOlusturPageModel.cs" />
     <Compile Include="Models\ViewModels\Teklif\TeklifSorgulaPageModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\EngineDimensionalControlViewModel.cs" />
+    <Compile Include="Models\ViewModels\Ticket\EngineOutputQualityViewModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\SelectListItemWithAttribute.cs" />
     <Compile Include="Models\ViewModels\Ticket\ShowTicketDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleCreatePageModel.cs" />
@@ -1119,6 +1123,7 @@
     <Content Include="Views\Home\GetMainMenu.cshtml" />
     <Content Include="Views\Ticket\ShowTicketDetails.cshtml" />
     <Content Include="Views\Ticket\EngineInputDimensionalControl.cshtml" />
+    <Content Include="Views\Ticket\EngineOutputQuality.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

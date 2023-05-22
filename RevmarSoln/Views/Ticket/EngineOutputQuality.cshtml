@@ -1,0 +1,420 @@
+﻿@model SahinRektefiyeSoln.Models.ViewModels.Ticket.EngineOutputQualityViewModel
+@{
+    ViewBag.Title = "Motor Çıkış Kalite Formu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui.js"></script>
+<link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+
+<script>
+    jQuery(document).ready(function () {
+        'use strict';
+        jQuery('#parcaGirisTarihi').datetimepicker(
+            {
+                timepicker: true,
+                format: 'd.m.Y H:i',
+                scrollInput: false
+            });
+    });
+</script>
+
+<style>
+    .table-input {
+        border: none;
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #tableOne td, th {
+        border: 1px solid silver;
+    }
+
+    th {
+        text-align: center !important;
+    }
+</style>
+
+@Html.Action("SetPageHeader", "Admin", new { pageTitle = "Motor Çıkış Kalite Formu", pagePermission = "XXXXX" })
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card w3-padding-top ">
+        @using (Html.BeginForm("EngineOutputQuality", "Ticket", FormMethod.Post))
+        {
+            @Html.HiddenFor(x => x.MotorCikisKaliteId);
+            @Html.HiddenFor(x => x.TalepId);
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m4 l4 w3-padding">
+                        <label>İş Emri No</label>
+                        @Html.EditorFor(model => model.TalepId, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "TicketId", @disabled = "disabled" } })
+                    </div>
+                    <div class="w3-col s12 m4 l4  w3-padding">
+                        <label>Kapak Dolap No</label>
+                        @Html.EditorFor(model => model.KapakDolapNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "KapakDolapNo", @disabled = "disabled" } })
+                    </div>
+                    <div class="w3-col s12 m4 l4  w3-padding">
+                        <label>Motor Dolap No</label>
+                        @Html.EditorFor(model => model.MotorDolapNo, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "105", autocomplete = "off", id = "MotorDolapNo", @disabled = "disabled" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="w3-row" style="text-align:center; background-color:silver; margin-top:20px; margin-bottom:20px;">
+                <h3>Yapılacak İşlemler</h3>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left  ">
+                    <h4>Blok-Krank ve Kol İşleri</h4>
+                    @foreach (var item in Model.EngineInfoDet.Where(x => x.HdrId == 4).ToList())
+                    {
+                        <div class="w3-half w3-padding">
+                            <input type="checkbox"
+                                   name="BlokKrankKolIsleri"
+                                   value="@item.Value"
+                                   class="w3-check"
+                                   @if (item.Selected) { <text> checked </text> } />
+                            <label>@item.Text</label>
+
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="w3-row" style="text-align:center; background-color:silver; margin-top:20px; margin-bottom:20px;">
+                <h3>Gerekli Parça Listesi</h3>
+            </div>
+
+            <div class="w3-row" style="text-align:center; background-color:silver; margin-top:20px; margin-bottom:20px;">
+                <h3>Teslim Alınan Yedek Parçalar</h3>
+            </div>
+
+            <table class="w3-table w3-bordered" id="tableOne" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Piston</th>
+                        <th>Segman</th>
+                        <th>Gömlek</th>
+                        <th>Yataklar</th>
+                        <th>Kol Burcu</th>
+                        <th>Eksantrik</th>
+                        <th>Balans Yatakları</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var row = 0; row < 2; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Marka</strong></td>
+                            }
+                            @if (row == 1)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Ölçü</strong></td>
+                            }
+                            @for (var col = 0; col < 7; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="TeslimAlinanYedekParcalar[@(row)][@(col)]" value="@Model.TeslimAlinanYedekParcalar[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="w3-col s12 m12 l12 w3-padding">
+                <label>Alınan Diğer Parçalar</label>
+                @Html.EditorFor(model => model.AlinanDigerParcalar, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @type = "text" } })
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-col s12 m6 l6 w3-padding">
+                    <label>Parça Giriş Tarihi ve Saati</label>
+                    @Html.EditorFor(model => model.ParcaGirisSaati, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "parcaGirisTarihi", @type = "date" } })
+                </div>
+                <div class="w3-col s12 m6 l6 w3-padding">
+                    <label>İlgili Yedek Parçaları Eksiksiz Teslim Alan ve Kontrol Eden</label>
+                    @Html.EditorFor(model => model.TeslimAlan, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @type = "text", autocomplete = "off" } })
+                </div>
+            </div>
+
+            <div class="w3-row" style="text-align:center; background-color:silver; margin-top:20px; margin-bottom:20px;">
+                <h3>Montaj Değerleri</h3>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left  ">
+                    <h4>Silindir Çapları</h4>
+                </div>
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Silindir Çapları Standart Değer</label>
+                        @Html.EditorFor(model => model.SilindirCaplariStdDeger, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off" } })
+                    </div>
+                </div>
+            </div>
+
+            <table class="w3-table w3-bordered" id="tableOne" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        @for (var i = 1; i <= 12; i++)
+                        {
+                            <th>@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var row = 0; row < 6; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>A</strong></td>
+                            }
+                            @if (row == 3)
+                            {
+                                <td rowspan="3" style="text-align: center; vertical-align: middle;"><strong>B</strong></td>
+                            }
+                            @for (var col = 0; col < 12; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="SilindirCaplari[@(row)][@(col)]" value="@Model.SilindirCaplari[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left  ">
+                    <h4>Gömlek Blok Yükseklikleri</h4>
+                </div>
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Gömlek Yüksekliği Standart Değer</label>
+                        @Html.EditorFor(model => model.GomlekYuksekligiStdDeger, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off" } })
+                    </div>
+                </div>
+            </div>
+
+
+            <table class="w3-table w3-bordered" id="tableOne" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        @for (var i = 1; i <= 12; i++)
+                        {
+                            <th>@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var row = 0; row < 1; row++)
+                    {
+                        <tr>
+                            <td></td>
+                            @for (var col = 0; col < 12; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="GomlekBlokYukseklikleri[@(row)][@(col)]" value="@Model.GomlekBlokYukseklikleri[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="w3-row w3-padding-left w3-padding-right" style="margin-top:20px;">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label>Blok Yüzeyinden Gerçekleştirilen Taşlama Miktarı</label>
+                    @Html.EditorFor(model => model.BlokYuzeyiTaslamaMiktari, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", autocomplete = "off" } })
+                </div>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left">
+                    <h4>Krank Mili</h4>
+                </div>
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Ana Muylu Standart Değeri</label>
+                        @Html.EditorFor(model => model.AnaMuyluStdDeger, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "BildirimTarihi", autocomplete = "off" } })
+                    </div>
+
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Kol Muylu Standart Değeri</label>
+                        @Html.EditorFor(model => model.KolMuyluStdDeger, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "BildirimTarihi", autocomplete = "off" } })
+                    </div>
+                </div>
+            </div>
+
+            <table class="w3-table w3-bordered" id="tableOne" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th>Ana Muylular</th>
+                        @for (var i = 1; i <= 10; i++)
+                        {
+                            <th>@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var row = 0; row < 3; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Ana Muylu Çapı</strong></td>
+                            }
+                            @if (row == 1)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Yağ Boşluğu</strong></td>
+                            }
+                            @if (row == 2)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Tork Değerleri (NM)</strong></td>
+                            }
+                            @for (var col = 0; col < 10; col++)
+                            {
+                                if ((row == 2) && (col % 2 == 0))
+                                {
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <span>@((col / 2) + 1).Sıkma</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <input type="text" class="w3-input w3-border w3-round table-input" name="AnaMuyluDetay[@(row)][@(col)]" value="@Model.AnaMuyluDetay[row][col]" />
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <table class="w3-table w3-bordered" id="tableOne">
+                <thead>
+                    <tr>
+                        <th>Kol Muylular</th>
+                        @for (var i = 1; i <= 10; i++)
+                        {
+                            <th>@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var row = 0; row < 3; row++)
+                    {
+                        <tr>
+                            @if (row == 0)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Kol Muylu Çapı</strong></td>
+                            }
+                            @if (row == 1)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Yağ Boşluğu</strong></td>
+                            }
+                            @if (row == 2)
+                            {
+                                <td rowspan="1" style="text-align: center; vertical-align: middle;"><strong>Tork Değerleri (NM)</strong></td>
+                            }
+                            @for (var col = 0; col < 10; col++)
+                            {
+                                if ((row == 2) && (col % 2 == 0))
+                                {
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <span>@((col / 2) + 1).Sıkma</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <input type="text" class="w3-input w3-border w3-round table-input" name="KolMuyluDetay[@(row)][@(col)]" value="@Model.KolMuyluDetay[row][col]" />
+                                    </td>
+                                }
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="w3-row w3-padding-left w3-padding-right" style="margin-top:20px;">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label>Krank Mili Gezinti Değeri</label>
+                    @Html.EditorFor(model => model.KrankMiliGezintiDegeri, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "BildirimTarihi", autocomplete = "off" } })
+                </div>
+
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label>Krank Mili Gezinti Standart Değeri</label>
+                    @Html.EditorFor(model => model.KrankMiliStdDeger, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "BildirimTarihi", autocomplete = "off" } })
+                </div>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left">
+                    <h4>Piston Yükseklikleri</h4>
+                </div>
+                <div class="w3-row w3-padding-left w3-padding-right">
+                    <div class="w3-col s12 m3 l3 w3-padding">
+                        <label>Piston Yükseklikleri Standart Değeri</label>
+                        @Html.EditorFor(model => model.PistonYuksekligiStdDeger, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", id = "BildirimTarihi", autocomplete = "off" } })
+                    </div>
+                </div>
+            </div>
+
+            <table class="w3-table w3-bordered" id="tableOne" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        @for (var i = 1; i <= 12; i++)
+                        {
+                            <th>@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var row = 0; row < 1; row++)
+                    {
+                        <tr>
+                            <td></td>
+                            @for (var col = 0; col < 12; col++)
+                            {
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="PistonYukseklikleri[@(row)][@(col)]" value="@Model.PistonYukseklikleri[row][col]" />
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="w3-row w3-padding-left w3-padding-right" style="margin-top:20px;">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label>Kullanılması Önerilen Conta Tipi</label>
+                    @Html.EditorFor(model => model.ContaTipi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", type = "text", autocomplete = "off" } })
+                </div>
+                <div class="w3-col s12 m9 l9 w3-padding">
+                    <label>Açıklama</label>
+                    @Html.EditorFor(model => model.Aciklama, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", type = "text", autocomplete = "off" } })
+                </div>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-quarter w3-padding w3-right">
+                    <button class="w3-btn w3-ripple w3-green w3-right" type="submit" id="btnOlustur">Oluştur</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

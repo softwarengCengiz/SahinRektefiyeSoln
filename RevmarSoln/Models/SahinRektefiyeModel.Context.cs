@@ -130,6 +130,7 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<EngineInformationDet> EngineInformationDet { get; set; }
         public virtual DbSet<EngineInformationHdr> EngineInformationHdr { get; set; }
         public virtual DbSet<MotorOlcuselKontrol> MotorOlcuselKontrol { get; set; }
+        public virtual DbSet<EngineOutputQuality> EngineOutputQuality { get; set; }
     
         public virtual int AutoCreateUserMenu(string userName)
         {
