@@ -1384,9 +1384,11 @@ namespace SahinRektefiyeSoln.Controllers
 
             model.EngineInfoDet = engineInfoDet;
             model.TalepId = talep.TalepId;
-            model.MotorDolapNo = talepDetay.MotorDolapNo;
-            model.KapakDolapNo = talepDetay.KapakDolapNo;
-
+            if (talepDetay != null)
+            {
+                model.MotorDolapNo = talepDetay.MotorDolapNo;
+                model.KapakDolapNo = talepDetay.KapakDolapNo;
+            }
             if (motorOlcuselKontrol != null)
             {
                 var engineInfoDetList = motorOlcuselKontrol.MotorIncelemeSonuc != null ? motorOlcuselKontrol.MotorIncelemeSonuc.Split(',') : null;
@@ -1839,7 +1841,7 @@ namespace SahinRektefiyeSoln.Controllers
             }
 
             var newRecord = db.MotorOlcuselKontrol.FirstOrDefault(x => x.TalepId == model.TalepId);
-            talep.MotorCikisKaliteId = newRecord.MotorOlcuselKontrolId;
+            talep.MotorOlcuselKontrolId = newRecord.MotorOlcuselKontrolId;
             db.SaveChanges();
 
             return RedirectToAction("EngineInputDimensionalControl", new { id = model.TalepId });
@@ -1867,8 +1869,11 @@ namespace SahinRektefiyeSoln.Controllers
 
             model.EngineInfoDet = engineInfoDet;
             model.TalepId = talep.TalepId;
-            model.MotorDolapNo = talepDetay.MotorDolapNo;
-            model.KapakDolapNo = talepDetay.KapakDolapNo;
+            if (talepDetay != null)
+            {
+                model.MotorDolapNo = talepDetay.MotorDolapNo;
+                model.KapakDolapNo = talepDetay.KapakDolapNo;
+            }
 
             if (motorCikisKalite != null)
             {
