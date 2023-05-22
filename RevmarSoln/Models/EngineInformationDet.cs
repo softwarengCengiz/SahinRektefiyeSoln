@@ -19,6 +19,7 @@ namespace SahinRektefiyeSoln.Models
         public string EngineInfoDetDesc { get; set; }
         public string Creator { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> IsContainPiece { get; set; }
     
         public virtual EngineInformationHdr EngineInformationHdr { get; set; }
     }

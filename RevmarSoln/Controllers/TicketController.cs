@@ -1137,7 +1137,7 @@ namespace SahinRektefiyeSoln.Controllers
 
             foreach (var item in engineInformations)
             {
-                listItem.Add(new SelectListItemWithAttribute { Text = item.EngineInfoDetDesc, Value = item.EngineInfoDetId.ToString(), HdrId = item.EngineInfoHdrId });
+                listItem.Add(new SelectListItemWithAttribute { Text = item.EngineInfoDetDesc, Value = item.EngineInfoDetId.ToString(), HdrId = item.EngineInfoHdrId, IsContainPiece = item.IsContainPiece });
             }
             return listItem;
         }
@@ -1838,7 +1838,8 @@ namespace SahinRektefiyeSoln.Controllers
                 db.SaveChanges();
             }
 
-            talep.MotorOlcuselKontrolId = model.MotorOlcuselKontrolId;
+            var newRecord = db.MotorOlcuselKontrol.FirstOrDefault(x => x.TalepId == model.TalepId);
+            talep.MotorCikisKaliteId = newRecord.MotorOlcuselKontrolId;
             db.SaveChanges();
 
             return RedirectToAction("EngineInputDimensionalControl", new { id = model.TalepId });
@@ -1858,7 +1859,8 @@ namespace SahinRektefiyeSoln.Controllers
                 GomlekBlokYukseklikleri = new List<List<string>>(),
                 AnaMuyluDetay = new List<List<string>>(),
                 KolMuyluDetay = new List<List<string>>(),
-                PistonYukseklikleri = new List<List<string>>()
+                PistonYukseklikleri = new List<List<string>>(),
+                GerekliParcaOlcu = new List<string>()
             };
 
             var engineInfoDet = EngineInformationDet();
@@ -1871,7 +1873,7 @@ namespace SahinRektefiyeSoln.Controllers
             if (motorCikisKalite != null)
             {
                 var engineInfoDetList = motorCikisKalite.BlokKrankKolIsleri != null ? motorCikisKalite.BlokKrankKolIsleri.Split(',') : null;
-                foreach (var item in engineInfoDet)
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList()) 
                 {
                     if (engineInfoDetList != null)
                     {
@@ -1883,8 +1885,54 @@ namespace SahinRektefiyeSoln.Controllers
                     }
                 }
 
-                model.GerekliParca = motorCikisKalite.GerekliParca;
-                model.GerekliParcaOlcu = motorCikisKalite.GerekliParcaOlcu;
+                var engineInfoDetList2 = motorCikisKalite.OzelIslemler != null ? motorCikisKalite.OzelIslemler.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 5).ToList())
+                {
+                    if (engineInfoDetList2 != null)
+                    {
+                        foreach (var itemList in engineInfoDetList2)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var engineInfoDetList3 = motorCikisKalite.OzelUretimler != null ? motorCikisKalite.OzelUretimler.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 6).ToList())
+                {
+                    if (engineInfoDetList3 != null)
+                    {
+                        foreach (var itemList in engineInfoDetList3)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var adetList = motorCikisKalite.GerekliParcaOlcu.Split(';');
+                var gerekliParca = motorCikisKalite.GerekliParca != null ? motorCikisKalite.GerekliParca.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 7).ToList()) 
+                {
+                    if (gerekliParca != null)
+                    {
+                        foreach (var itemList in gerekliParca)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+
+                    if (adetList.Any(x => x.Split('-')[0] == item.Value))
+                        model.GerekliParcaOlcu.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
+                    else
+                        model.GerekliParcaOlcu.Add("");
+                }
+
+
+                //model.GerekliParca = ;
+                //model.GerekliParcaOlcu = motorCikisKalite.GerekliParcaOlcu;
                 model.AlinanDigerParcalar = motorCikisKalite.AlinanDigerParcalar;
                 model.ParcaGirisSaati = motorCikisKalite.ParcaGirisSaati;
                 model.TeslimAlan = motorCikisKalite.TeslimAlan;
@@ -2147,6 +2195,20 @@ namespace SahinRektefiyeSoln.Controllers
             var motorCikisKalite = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == model.TalepId);
             var talep = db.Talepler.FirstOrDefault(x => x.TalepId == model.TalepId);
 
+            string parcaTextMap = "";
+            if (model.GerekliParcaOlcu.Count > 0)
+            {
+                model.GerekliParcaOlcu = model.GerekliParcaOlcu.Where(x => x != "").ToList();
+                for (int i = 0; i < model.GerekliParcaOlcu.Count; i++)
+                {
+                    if (model.GerekliParcaOlcu[i] != "")
+                    {
+                        parcaTextMap = parcaTextMap + model.GerekliParca[i] + "-" + model.GerekliParcaOlcu[i] + ";";
+                    }
+                }
+            }
+            //if (model.GerekliParca != null) 
+
             #region Teslim Alinan Yedek Parcalar Birleştirme
             List<string> combinedTeslimAlinanYedekParcalar = new List<string>();
             for (int i = 0; i < 2; i++)
@@ -2265,10 +2327,10 @@ namespace SahinRektefiyeSoln.Controllers
                         {
                             TalepId = model.TalepId,
                             BlokKrankKolIsleri = model.BlokKrankKolIsleri != null ? string.Join(",", model.BlokKrankKolIsleri) : null,
-                            OzelIslemler = model.OzelIslemler,
-                            OzelUretimler = model.OzelUretimler,
-                            GerekliParca = model.GerekliParca,
-                            GerekliParcaOlcu = model.GerekliParcaOlcu,
+                            OzelIslemler = model.OzelIslemler != null ? string.Join(",", model.OzelIslemler) : null,
+                            OzelUretimler = model.OzelIslemler != null ? string.Join(",", model.OzelIslemler) : null,
+                            GerekliParca = model.GerekliParca != null ? string.Join(",", model.GerekliParca) : null,
+                            GerekliParcaOlcu = parcaTextMap,
                             TeslimAlinanYedekParcalar = concatenatedValuesTAYP,
                             AlinanDigerParcalar = model.AlinanDigerParcalar,
                             ParcaGirisSaati = model.ParcaGirisSaati,
@@ -2299,11 +2361,11 @@ namespace SahinRektefiyeSoln.Controllers
             else
             {
                 motorCikisKalite.TalepId = model.TalepId;
-                motorCikisKalite.BlokKrankKolIsleri = model.BlokKrankKolIsleri;
-                motorCikisKalite.OzelIslemler = model.OzelIslemler;
-                motorCikisKalite.OzelUretimler = model.OzelUretimler;
-                motorCikisKalite.GerekliParca = model.GerekliParca;
-                motorCikisKalite.GerekliParcaOlcu = model.GerekliParcaOlcu;
+                motorCikisKalite.BlokKrankKolIsleri = model.BlokKrankKolIsleri != null ? string.Join(",", model.BlokKrankKolIsleri) : null;
+                motorCikisKalite.OzelIslemler = model.OzelIslemler != null ? string.Join(",", model.OzelIslemler) : null;
+                motorCikisKalite.OzelUretimler = model.OzelUretimler != null ? string.Join(",", model.OzelUretimler) : null;
+                motorCikisKalite.GerekliParca = model.GerekliParca != null ? string.Join(",", model.GerekliParca) : null;
+                motorCikisKalite.GerekliParcaOlcu = parcaTextMap;
                 motorCikisKalite.TeslimAlinanYedekParcalar = concatenatedValuesTAYP;
                 motorCikisKalite.AlinanDigerParcalar = model.AlinanDigerParcalar;
                 motorCikisKalite.ParcaGirisSaati = model.ParcaGirisSaati;
@@ -2327,7 +2389,8 @@ namespace SahinRektefiyeSoln.Controllers
                 db.SaveChanges();
             }
 
-            talep.MotorCikisKaliteId = model.MotorCikisKaliteId;
+            var newRecord = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == model.TalepId);
+            talep.MotorCikisKaliteId = newRecord.MotorCikisKaliteId;
             db.SaveChanges();
 
             return RedirectToAction("EngineOutputQuality", new { id = model.TalepId });

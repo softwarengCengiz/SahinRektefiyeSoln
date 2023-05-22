@@ -124,9 +124,9 @@
 
             <div class="w3-row">
                 <div class="w3-row w3-padding-left  ">
-                    <div class="w3-half w3-padding">
-                        @foreach (var item in Model.EngineInfoDet.Where(x => x.HdrId == 7).ToList())
-                        {
+                    @foreach (var item in Model.EngineInfoDet.Where(x => x.HdrId == 7).ToList())
+                    {
+                        <div class="w3-half w3-padding">
                             <input type="checkbox"
                                    name="GerekliParca"
                                    value="@item.Value"
@@ -135,28 +135,55 @@
                             <label>@item.Text</label>
 
 
-                            @*if (item.IsContainPiece != 1)
+                            @if (Model.GerekliParcaOlcu != null && Model.GerekliParcaOlcu.Count > 0)
                             {
-                                <input type="number"
-                                       name="ParcalarText"
-                                       value="@item[count]"
-                                       class="w3-border w3-round onlynumeric"
-                                       style="float: right;text-align: right;"
-                                       placeholder="adet / takım"
-                                       hidden />
+                                if (item.IsContainPiece != 1)
+                                {
+                                    <input type="text"
+                                           name="GerekliParcaOlcu"
+                                           value="@Model.GerekliParcaOlcu[count]"
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="Ölçü"
+                                           hidden />
+                                }
+                                else
+                                {
+                                    <input type="text"
+                                           name="GerekliParcaOlcu"
+                                           value="@Model.GerekliParcaOlcu[count]"
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="Ölçü" />
+                                }
                             }
                             else
                             {
-                                <input type="number"
-                                       name="ParcalarText"
-                                       value="@item[count]"
-                                       class="w3-border w3-round onlynumeric"
-                                       style="float: right;text-align: right;"
-                                       placeholder="adet / takım" />
-                            }*@
+                                if (item.IsContainPiece != 1)
+                                {
+                                    <input type="text"
+                                           name="GerekliParcaOlcu"
+                                           value=""
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="Ölçü"
+                                           hidden />
+                                }
+                                else
+                                {
+                                    <input type="text"
+                                           name="GerekliParcaOlcu"
+                                           value=""
+                                           class="w3-border w3-round onlynumeric"
+                                           style="float: right;text-align: right;"
+                                           placeholder="Ölçü" />
+                                }
+                            }
 
-                        }
-                    </div>
+                        </div>
+                        count++;
+                    }
+
                 </div>
             </div>
 
@@ -356,18 +383,18 @@
                             }
                             @for (var col = 0; col < 10; col++)
                             {
-                                if ((row == 2) && (col % 2 == 0))
+                                @*if ((row == 2) && (col % 2 == 0))
                                 {
                                     <td style="text-align: center; vertical-align: middle;">
                                         <span>@((col / 2) + 1).Sıkma</span>
                                     </td>
                                 }
                                 else
-                                {
+                                {*@
                                     <td>
                                         <input type="text" class="w3-input w3-border w3-round table-input" name="AnaMuyluDetay[@(row)][@(col)]" value="@Model.AnaMuyluDetay[row][col]" />
                                     </td>
-                                }
+                                @*}*@
                             }
                         </tr>
                     }
@@ -402,18 +429,18 @@
                             }
                             @for (var col = 0; col < 10; col++)
                             {
-                                if ((row == 2) && (col % 2 == 0))
+                                @*if ((row == 2) && (col % 2 == 0))
                                 {
                                     <td style="text-align: center; vertical-align: middle;">
-                                        <span>@((col / 2) + 1).Sıkma</span>
+                                        <span>@((col / 2) + 1).Sıkma</span>                            
                                     </td>
                                 }
                                 else
-                                {
+                                {*@
                                     <td>
                                         <input type="text" class="w3-input w3-border w3-round table-input" name="KolMuyluDetay[@(row)][@(col)]" value="@Model.KolMuyluDetay[row][col]" />
                                     </td>
-                                }
+                                @*}*@
                             }
                         </tr>
                     }

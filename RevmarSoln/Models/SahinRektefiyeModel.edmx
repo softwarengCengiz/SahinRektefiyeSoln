@@ -210,6 +210,7 @@
           <Property Name="EngineInfoDetDesc" Type="varchar" MaxLength="500" />
           <Property Name="Creator" Type="varchar" MaxLength="100" />
           <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="IsContainPiece" Type="int" />
         </EntityType>
         <EntityType Name="EngineInformationHdr">
           <Key>
@@ -7080,6 +7081,7 @@
           <Property Name="Creator" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="EngineInformationHdr" Relationship="SahinRektefiyeDbModel.FK__EngineInf__Engin__63A3C44B" FromRole="EngineInformationDet" ToRole="EngineInformationHdr" />
+          <Property Name="IsContainPiece" Type="Int32" />
         </EntityType>
         <EntityType Name="EngineInformationHdr">
           <Key>
@@ -8791,6 +8793,7 @@
           <EntitySetMapping Name="EngineInformationDet">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.EngineInformationDet">
               <MappingFragment StoreEntitySet="EngineInformationDet">
+                <ScalarProperty Name="IsContainPiece" ColumnName="IsContainPiece" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Creator" ColumnName="Creator" />
                 <ScalarProperty Name="EngineInfoDetDesc" ColumnName="EngineInfoDetDesc" />

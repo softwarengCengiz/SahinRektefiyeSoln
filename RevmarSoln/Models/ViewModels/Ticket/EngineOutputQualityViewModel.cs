@@ -9,11 +9,11 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
         public int TalepId { get; set; }
         public string KapakDolapNo { get; set; }
         public string MotorDolapNo { get; set; }
-        public string BlokKrankKolIsleri { get; set; }
-        public string OzelIslemler { get; set; }
-        public string OzelUretimler { get; set; }
-        public string GerekliParca { get; set; }
-        public string GerekliParcaOlcu { get; set; }
+        public IList<string> BlokKrankKolIsleri { get; set; }
+        public IList<string> OzelIslemler { get; set; }
+        public IList<string> OzelUretimler { get; set; }
+        public IList<string> GerekliParca { get; set; }
+        public IList<string> GerekliParcaOlcu { get; set; }
         public List<List<string>> TeslimAlinanYedekParcalar { get; set; }
         public string AlinanDigerParcalar { get; set; }
         public DateTime? ParcaGirisSaati { get; set; }
@@ -33,6 +33,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
         public string PistonYuksekligiStdDeger { get; set; }
         public string ContaTipi { get; set; }
         public string Aciklama { get; set; }
+        //public IList<string> GerekliParcaText { get; set; }
         public IList<SelectListItemWithAttribute> EngineInfoDet { get; set; }
     }
 }
