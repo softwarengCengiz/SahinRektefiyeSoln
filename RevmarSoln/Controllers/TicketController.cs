@@ -1334,29 +1334,31 @@ namespace SahinRektefiyeSoln.Controllers
             }
             string talepSekli = db.TalepSekli.FirstOrDefault(x => x.TalepSekliId == talep.TalepSekliId).TalepSekliAciklama;
 
-            var model = new ShowTicketDetailViewModel()
+            var model = new ShowTicketDetailViewModel();
+
+            model.TalepNo = talep.TalepId;
+            model.TalepSekliId = talep.TalepSekliId;
+            model.TalepSekli = talepSekli;
+            model.TalepTarihi = talep.CreatedDate;
+            model.MusteriAramaTarihi = talep.MusteriAramaTarihi;
+            model.MusteriAtolyeGelisTarihi = talep.MusteriAtolyeGelisTarihi;
+            model.Sofor = talep.AtananSofor;
+            model.Hizmet = hizmet;
+            model.Musteri = musteri;
+            model.MusteriTipi = talep.Musteri.MusteriTipi == "B" ? "Birey" : "Kurum";
+            model.Telefon = talep.Musteri.MusteriTelefon.Select(x => x.TelefonNumarasi).ToList();
+            model.Email = talep.Musteri.MusteriMail.Select(x => x.MailAdresi).ToList();
+            model.Adres = talep.Musteri.Adres;
+            if (talepDetay != null)
             {
-                TalepNo = talep.TalepId,
-                TalepSekliId = talep.TalepSekliId,
-                TalepSekli = talepSekli,
-                TalepTarihi = talep.CreatedDate,
-                MusteriAramaTarihi = talep.MusteriAramaTarihi,
-                MusteriAtolyeGelisTarihi = talep.MusteriAtolyeGelisTarihi,
-                Sofor = talep.AtananSofor,
-                Hizmet = hizmet,
-                Notlar = talepDetay.MusteriNot,
-                Musteri = musteri,
-                MusteriTipi = talep.Musteri.MusteriTipi == "B" ? "Birey" : "Kurum",
-                Telefon = talep.Musteri.MusteriTelefon.Select(x => x.TelefonNumarasi).ToList(),
-                Email = talep.Musteri.MusteriMail.Select(x => x.MailAdresi).ToList(),
-                Adres = talep.Musteri.Adres,
-                MarkaModel = talepDetay.Model,
-                Plaka = talepDetay.Plaka,
-                KargoyaVerilisTarihi = talep.KargoyaVerilisTarihi,
-                AramaTarihi = talep.AramaTarihi,
-                KargoFirmasi = talep.KargoFirmasi,
-                GonderiKodu = talep.GönderiKodu
-            };
+                model.Notlar = talepDetay.MusteriNot != null ? talepDetay.MusteriNot : null;
+                model.MarkaModel = talepDetay.Model != null ? talepDetay.Model : null;
+                model.Plaka = talepDetay.Plaka != null ? talepDetay.Plaka : null;
+            }
+            model.KargoyaVerilisTarihi = talep.KargoyaVerilisTarihi;
+            model.AramaTarihi = talep.AramaTarihi;
+            model.KargoFirmasi = talep.KargoFirmasi;
+            model.GonderiKodu = talep.GönderiKodu;
 
             return View(model);
         }
@@ -1660,6 +1662,7 @@ namespace SahinRektefiyeSoln.Controllers
         public ActionResult EngineInputDimensionalControl(EngineDimensionalControlViewModel model)
         {
             var motorOlcuselKontrol = db.MotorOlcuselKontrol.FirstOrDefault(x => x.TalepId == model.TalepId);
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == model.TalepId);
 
             #region Silindir Çapları birleştirme
             List<string> combinedSilindirCaplari = new List<string>();
@@ -1834,6 +1837,9 @@ namespace SahinRektefiyeSoln.Controllers
 
                 db.SaveChanges();
             }
+
+            talep.MotorOlcuselKontrolId = model.MotorOlcuselKontrolId;
+            db.SaveChanges();
 
             return RedirectToAction("EngineInputDimensionalControl", new { id = model.TalepId });
         }
@@ -2139,6 +2145,7 @@ namespace SahinRektefiyeSoln.Controllers
         public ActionResult EngineOutputQuality(EngineOutputQualityViewModel model)
         {
             var motorCikisKalite = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == model.TalepId);
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == model.TalepId);
 
             #region Teslim Alinan Yedek Parcalar Birleştirme
             List<string> combinedTeslimAlinanYedekParcalar = new List<string>();
@@ -2319,6 +2326,9 @@ namespace SahinRektefiyeSoln.Controllers
 
                 db.SaveChanges();
             }
+
+            talep.MotorCikisKaliteId = model.MotorCikisKaliteId;
+            db.SaveChanges();
 
             return RedirectToAction("EngineOutputQuality", new { id = model.TalepId });
         }

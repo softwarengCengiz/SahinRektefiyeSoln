@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Motor Çıkış Kalite Formu";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var count = 0;
 }
 
 <link href="~/Styles/jquery-ui.css" rel="stylesheet" />
@@ -82,11 +83,81 @@
 
                         </div>
                     }
+
+                    <div class="w3-row">
+                        <h3>Özel İşlemler</h3>
+                        @foreach (var item in Model.EngineInfoDet.Where(x => x.HdrId == 5).ToList())
+                        {
+                            <div class="w3-half w3-padding">
+                                <input type="checkbox"
+                                       name="OzelIslemler"
+                                       value="@item.Value"
+                                       class="w3-check"
+                                       @if (item.Selected) { <text> checked </text> } />
+                                <label>@item.Text</label>
+
+                            </div>
+                        }
+                    </div>
+
+                    <div class="w3-row">
+                        <h3>Özel Üretimler</h3>
+                        @foreach (var item in Model.EngineInfoDet.Where(x => x.HdrId == 6).ToList())
+                        {
+                            <div class="w3-half w3-padding">
+                                <input type="checkbox"
+                                       name="OzelUretimler"
+                                       value="@item.Value"
+                                       class="w3-check"
+                                       @if (item.Selected) { <text> checked </text> } />
+                                <label>@item.Text</label>
+
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
 
             <div class="w3-row" style="text-align:center; background-color:silver; margin-top:20px; margin-bottom:20px;">
                 <h3>Gerekli Parça Listesi</h3>
+            </div>
+
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left  ">
+                    <div class="w3-half w3-padding">
+                        @foreach (var item in Model.EngineInfoDet.Where(x => x.HdrId == 7).ToList())
+                        {
+                            <input type="checkbox"
+                                   name="GerekliParca"
+                                   value="@item.Value"
+                                   class="w3-check"
+                                   @if (item.Selected) { <text> checked </text> } />
+                            <label>@item.Text</label>
+
+
+                            @*if (item.IsContainPiece != 1)
+                            {
+                                <input type="number"
+                                       name="ParcalarText"
+                                       value="@item[count]"
+                                       class="w3-border w3-round onlynumeric"
+                                       style="float: right;text-align: right;"
+                                       placeholder="adet / takım"
+                                       hidden />
+                            }
+                            else
+                            {
+                                <input type="number"
+                                       name="ParcalarText"
+                                       value="@item[count]"
+                                       class="w3-border w3-round onlynumeric"
+                                       style="float: right;text-align: right;"
+                                       placeholder="adet / takım" />
+                            }*@
+
+                        }
+                    </div>
+                </div>
             </div>
 
             <div class="w3-row" style="text-align:center; background-color:silver; margin-top:20px; margin-bottom:20px;">
