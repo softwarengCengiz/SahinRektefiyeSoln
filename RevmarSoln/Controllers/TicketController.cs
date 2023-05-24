@@ -1847,7 +1847,7 @@ namespace SahinRektefiyeSoln.Controllers
             return RedirectToAction("EngineInputDimensionalControl", new { id = model.TalepId });
         }
 
-        [HttpGet]
+        [HttpGet] 
         public ActionResult EngineOutputQuality(int id)
         {
             var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);

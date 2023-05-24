@@ -67,18 +67,26 @@
             <div class="w3-col s12 m3 l3 w3-padding">
                 <label>
                     <strong>Telefon:</strong>
-                    @foreach (var telefon in Model.Telefon)
+                    @if (Model.Telefon.Count > 0)
                     {
-                        @telefon
+                        foreach (var telefon in Model.Telefon)
+                        {
+                            <label>@telefon</label>
+                            <br />
+                        }
                     }
                 </label>
             </div>
             <div class="w3-col s12 m3 l3 w3-padding">
                 <label>
                     <strong>Email:</strong>
-                    @foreach (var email in Model.Email)
+                    @if (Model.Email.Count > 0)
                     {
-                        @email
+                        foreach (var email in Model.Email)
+                        {
+                            <label>@email</label>
+                            <br />
+                        }
                     }
                 </label>
             </div>

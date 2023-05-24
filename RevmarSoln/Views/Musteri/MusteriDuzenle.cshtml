@@ -588,17 +588,20 @@ new SelectListItem{ Text="Erkek", Value = "E" },
                                 <div class="w3-third w3-padding-right ">
                                     <label>Telefon Numarası</label>
                                     <button type="button" class="w3-green" style="border-radius:50%;" id="addPhoneNumber"><i class="fa fa-plus"></i></button>
-                                    @if (Model.Telefon.Count > 0)
+                                    @if (Model.Telefon != null)
                                     {
                                         for (var i = 0; i < Model.Telefon.Count; i++)
                                         {
                                             <div class="input-with-close">
                                                 @Html.EditorFor(model => model.Telefon[i], new { htmlAttributes = new { @class = "w3-input w3-border w3-round phone", maxlength = "24", autocomplete = "off", required = "required", style = "margin-top:5px;" } })
-                                                <button type="button" class="close-button" data-id="@Model.musteri.MusteriId" data-phone-number="@Model.Telefon[i]">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
-                                                        <path fill="none" stroke="#000" stroke-width="2" d="M1 1l12 12M1 13L13 1" />
-                                                    </svg>
-                                                </button>
+                                                @if (Model.Telefon.Count > 1)
+                                                {
+                                                    <button type="button" class="close-button" data-id="@Model.musteri.MusteriId" data-phone-number="@Model.Telefon[i]">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
+                                                            <path fill="none" stroke="#000" stroke-width="2" d="M1 1l12 12M1 13L13 1" />
+                                                        </svg>
+                                                    </button>
+                                                }
                                             </div>
                                         }
                                     }
@@ -609,17 +612,20 @@ new SelectListItem{ Text="Erkek", Value = "E" },
                                 <div class="w3-twothird">
                                     <label>Mail Adresi</label>
                                     <button type="button" class="w3-green" style="border-radius:50%;" id="addMail"><i class="fa fa-plus"></i></button>
-                                    @if (Model.Mail.Count > 0)
+                                    @if (Model.Mail != null)
                                     {
                                         for (var i = 0; i < Model.Mail.Count; i++)
                                         {
                                             <div class="input-with-close">
                                                 @Html.EditorFor(model => model.Mail[i], new { htmlAttributes = new { @class = "w3-input w3-border w3-round email", maxlength = "124", autocomplete = "off", required = "required", style = "margin-top:5px;" } })
-                                                <button type="button" class="close-button" data-id="@Model.musteri.MusteriId" data-mail="@Model.Mail[i]">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
-                                                        <path fill="none" stroke="#000" stroke-width="2" d="M1 1l12 12M1 13L13 1" />
-                                                    </svg>
-                                                </button>
+                                                @if (Model.Mail.Count > 1)
+                                                {
+                                                    <button type="button" class="close-button" data-id="@Model.musteri.MusteriId" data-mail="@Model.Mail[i]">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
+                                                            <path fill="none" stroke="#000" stroke-width="2" d="M1 1l12 12M1 13L13 1" />
+                                                        </svg>
+                                                    </button>
+                                                }
                                             </div>
                                         }
                                     }
