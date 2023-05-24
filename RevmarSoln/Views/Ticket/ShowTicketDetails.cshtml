@@ -181,53 +181,59 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Parcalar.Where(x => x.Selected).ToList())
+                @if (Model.Parcalar != null)
                 {
-                    <tr>
-                        <td>
-                            <input class="w3-check" type="checkbox" @if (item.Selected) { <text> checked </text> } />
-                        </td>
-                        <td>
-                            <label>@item.Text</label>
-                        </td>
-                        <td>
-                            <input class="w3-input w3-border w3-round inpAdetParca" type="number" />
-                        </td>
-                        <td>
-                            <input class="w3-input w3-border w3-round inpBirimFiyatParca" type="number" />
-                        </td>
-                        <td>
-                            <input class="w3-input w3-border w3-round inpIskontoParca" type="number" />
-                        </td>
-                        <td>
-                            <input class="w3-input w3-border w3-round inpToplamFiyatParca" type="number" disabled />
-                        </td>
-                    </tr>
+                    foreach (var item in Model.Parcalar.Where(x => x.Selected).ToList())
+                    {
+                        <tr>
+                            <td>
+                                <input class="w3-check" type="checkbox" @if (item.Selected) { <text> checked </text> } />
+                            </td>
+                            <td>
+                                <label>@item.Text</label>
+                            </td>
+                            <td>
+                                <input class="w3-input w3-border w3-round inpAdetParca" type="number" />
+                            </td>
+                            <td>
+                                <input class="w3-input w3-border w3-round inpBirimFiyatParca" type="number" />
+                            </td>
+                            <td>
+                                <input class="w3-input w3-border w3-round inpIskontoParca" type="number" />
+                            </td>
+                            <td>
+                                <input class="w3-input w3-border w3-round inpToplamFiyatParca" type="number" disabled />
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
-        <div class="w3-row" style="margin-top:30px;">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Toplam:</strong></label>
+        @if (Model.Parcalar != null)
+        {
+            <div class="w3-row" style="margin-top:30px;">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>Toplam:</strong></label>
+                </div>
             </div>
-        </div>
-        <div class="w3-row">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Genel İskonto</strong></label>
-                <input class="w3-input w3-border w3-round" type="number" />
+            <div class="w3-row">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>Genel İskonto</strong></label>
+                    <input class="w3-input w3-border w3-round" type="number" />
+                </div>
             </div>
-        </div>
-        <div class="w3-row">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>KDV</strong></label>
-                <input class="w3-input w3-border w3-round" type="number" />
+            <div class="w3-row">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>KDV</strong></label>
+                    <input class="w3-input w3-border w3-round" type="number" />
+                </div>
             </div>
-        </div>
-        <div class="w3-row">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Genel Toplam:</strong></label>
+            <div class="w3-row">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>Genel Toplam:</strong></label>
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
@@ -246,50 +252,56 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Iscilikler.Where(x => x.Selected).ToList())
+                @if (Model.Iscilikler != null)
                 {
-                    <tr>
-                        <td>
-                            <input class="w3-check" type="checkbox" @if (item.Selected) { <text> checked </text> } />
-                        </td>
-                        <td>
-                            <label>@item.Text</label>
-                        </td>
-                        <td>
-                            <input class="w3-input w3-border w3-round inpBirimFiyatIscilik" type="number" />
-                        </td>
-                        <td>
-                            <input class="w3-input w3-border w3-round inpIskontoIscilik" type="number" />
-                        </td>
-                        <td>
-                            <input class="w3-input w3-border w3-round inpToplamFiyatIscilik" type="number" disabled />
-                        </td>
-                    </tr>
+                    foreach (var item in Model.Iscilikler.Where(x => x.Selected).ToList())
+                    {
+                        <tr>
+                            <td>
+                                <input class="w3-check" type="checkbox" @if (item.Selected) { <text> checked </text> } />
+                            </td>
+                            <td>
+                                <label>@item.Text</label>
+                            </td>
+                            <td>
+                                <input class="w3-input w3-border w3-round inpBirimFiyatIscilik" type="number" />
+                            </td>
+                            <td>
+                                <input class="w3-input w3-border w3-round inpIskontoIscilik" type="number" />
+                            </td>
+                            <td>
+                                <input class="w3-input w3-border w3-round inpToplamFiyatIscilik" type="number" disabled />
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
-        <div class="w3-row" style="margin-top:30px;">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Toplam:</strong></label>
+        @if (Model.Iscilikler != null)
+        {
+            <div class="w3-row" style="margin-top:30px;">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>Toplam:</strong></label>
+                </div>
             </div>
-        </div>
-        <div class="w3-row">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Genel İskonto</strong></label>
-                <input class="w3-input w3-border w3-round" type="number" />
+            <div class="w3-row">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>Genel İskonto</strong></label>
+                    <input class="w3-input w3-border w3-round" type="number" />
+                </div>
             </div>
-        </div>
-        <div class="w3-row">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>KDV</strong></label>
-                <input class="w3-input w3-border w3-round" type="number" />
+            <div class="w3-row">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>KDV</strong></label>
+                    <input class="w3-input w3-border w3-round" type="number" />
+                </div>
             </div>
-        </div>
-        <div class="w3-row">
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Genel Toplam:</strong></label>
+            <div class="w3-row">
+                <div class="w3-col s12 m3 l3 w3-padding">
+                    <label><strong>Genel Toplam:</strong></label>
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 

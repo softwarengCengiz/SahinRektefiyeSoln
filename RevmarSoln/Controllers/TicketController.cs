@@ -1391,10 +1391,10 @@ namespace SahinRektefiyeSoln.Controllers
             model.Parcalar = parcaList;
 
             var engineInfoDet = EngineInformationDet();
-            var motorCıkısKaliteIscilik = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == id).BlokKrankKolIsleri;
+            var motorCıkısKaliteIscilik = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == id);
             if (motorCıkısKaliteIscilik != null)
             {
-                var iscilikMotorCıkısKalite = motorCıkısKaliteIscilik.Split(',');
+                var iscilikMotorCıkısKalite = motorCıkısKaliteIscilik.BlokKrankKolIsleri.Split(',');
                 foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList())
                 {
                     if (iscilikMotorCıkısKalite != null)
