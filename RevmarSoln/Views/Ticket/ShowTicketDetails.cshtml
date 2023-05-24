@@ -4,6 +4,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    table {
+        margin: 0 auto;
+        border-collapse: collapse;
+        width: 80%;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+
+
 <div class="w3-row" style="text-align:center; margin-top:20px;">
     <a href="@Url.Action("DetailEdit","Ticket",new {id = Model.TalepNo })" class="w3-btn w3-ripple w3-green">Arıza Bildirim Formu</a>
     <a href="@Url.Action("EngineInputDimensionalControl","Ticket",new {id = Model.TalepNo })" class="w3-btn w3-ripple w3-green">Motor Giriş Kontrol Formu</a>
@@ -11,132 +29,443 @@
     <a href="" class="w3-btn w3-ripple w3-green">Kapak Giriş Kalite Formu</a>
 </div>
 
-<div class="w3-panel">
-    <div class="w3-row-padding w3-card w3-padding-top ">
-        <div class="w3-row">
+<div class="w3-container">
+    <div class="w3-panel w3-third">
+        <div class="w3-row-padding w3-card w3-padding-top" style="height:337px;">
             <div class="w3-row w3-padding-left">
-                <h4>Talep Şekli</h4>
+                <h4>Talep Bilgisi</h4>
             </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Talep No:</strong> @Model.TalepNo</label>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Talep Şekli:</strong> @Model.TalepSekli</label>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Talep Tarihi:</strong> @Model.TalepTarihi</label>
-            </div>
-            @if (Model.TalepSekliId == 1 || Model.TalepSekliId == 2)
-            {
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Müşteri Arama Tarihi:</strong> @Model.MusteriAramaTarihi</label>
+            <div class="w3-row">
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Talep No:</strong> @Model.TalepNo</label>
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Şoför:</strong> @Model.Sofor</label>
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Talep Şekli:</strong> @Model.TalepSekli</label>
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Hizmet:</strong> @Model.Hizmet</label>
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Talep Tarihi:</strong> @Model.TalepTarihi</label>
                 </div>
-            }
-            @if (Model.TalepSekliId == 3)
-            {
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Müşteri Atölye Geliş Tarihi:</strong> @Model.MusteriAtolyeGelisTarihi</label>
-                </div>
-            }
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Notlar:</strong> @Model.Notlar</label>
+                @if (Model.TalepSekliId == 1 || Model.TalepSekliId == 2)
+                {
+                    <div class="w3-col s12 w3-padding">
+                        <label><strong>Müşteri Arama Tarihi:</strong> @Model.MusteriAramaTarihi</label>
+                    </div>
+                    <div class="w3-col s12 w3-padding">
+                        <label><strong>Şoför:</strong> @Model.Sofor</label>
+                    </div>
+                    <div class="w3-col s12 w3-padding">
+                        <label><strong>Hizmet:</strong> @Model.Hizmet</label>
+                    </div>
+                }
+                @if (Model.TalepSekliId == 3)
+                {
+                    <div class="w3-col s12 w3-padding">
+                        <label><strong>Müşteri Atölye Geliş Tarihi:</strong> @Model.MusteriAtolyeGelisTarihi</label>
+                    </div>
+                }
             </div>
+            <hr />
         </div>
-        <hr />
     </div>
-</div>
 
-<div class="w3-panel">
-    <div class="w3-row-padding w3-card w3-padding-top ">
-        <div class="w3-row">
-            <div class="w3-row w3-padding-left  ">
+    <div class="w3-panel w3-third">
+        <div class="w3-row-padding w3-card w3-padding-top">
+            <div class="w3-row w3-padding-left">
                 <h4>Müşteri Bilgisi</h4>
             </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Müşteri:</strong> @Model.Musteri</label>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Müşteri Tipi:</strong> @Model.MusteriTipi</label>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label>
-                    <strong>Telefon:</strong>
-                    @if (Model.Telefon.Count > 0)
-                    {
-                        foreach (var telefon in Model.Telefon)
-                        {
-                            <label>@telefon</label>
-                            <br />
-                        }
-                    }
-                </label>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label>
-                    <strong>Email:</strong>
-                    @if (Model.Email.Count > 0)
-                    {
-                        foreach (var email in Model.Email)
-                        {
-                            <label>@email</label>
-                            <br />
-                        }
-                    }
-                </label>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Adres:</strong> @Model.Adres</label>
-            </div>
-        </div>
-        <hr />
-    </div>
-</div>
-
-<div class="w3-panel">
-    <div class="w3-row-padding w3-card w3-padding-top ">
-        <div class="w3-row">
-            <div class="w3-row w3-padding-left  ">
-                <h4>Araç Bilgisi</h4>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Marka/Model:</strong> @Model.MarkaModel</label>
-            </div>
-            <div class="w3-col s12 m3 l3 w3-padding">
-                <label><strong>Plaka:</strong> @Model.Plaka</label>
-            </div>
-        </div>
-        <hr />
-    </div>
-</div>
-
-@if (Model.TalepSekliId == 4)
-{
-    <div class="w3-panel">
-        <div class="w3-row-padding w3-card w3-padding-top ">
             <div class="w3-row">
-                <div class="w3-row w3-padding-left  ">
-                    <h4>Kargo Bilgisi</h4>
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Müşteri:</strong> @Model.Musteri</label>
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Kargo Veriliş Tarihi:</strong> @Model.KargoyaVerilisTarihi</label>
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Müşteri Tipi:</strong> @Model.MusteriTipi</label>
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Arama Tarihi:</strong> @Model.AramaTarihi</label>
+                <div class="w3-col s12 w3-padding">
+                    <label>
+                        <strong>Telefon:</strong>
+                        @if (Model.Telefon.Count > 0)
+                        {
+                            foreach (var telefon in Model.Telefon)
+                            {
+                                <label>@telefon</label>
+                                <br />
+                            }
+                        }
+                    </label>
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Kargo Firması:</strong> @Model.KargoFirmasi</label>
+                <div class="w3-col s12 w3-padding">
+                    <label>
+                        <strong>Email:</strong>
+                        @if (Model.Email.Count > 0)
+                        {
+                            foreach (var email in Model.Email)
+                            {
+                                <label>@email</label>
+                                <br />
+                            }
+                        }
+                    </label>
                 </div>
-                <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Gönderi Kodu:</strong> @Model.GonderiKodu</label>
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Adres:</strong> @Model.Adres</label>
                 </div>
             </div>
             <hr />
         </div>
     </div>
-}
+
+    <div class="w3-panel w3-third">
+        <div class="w3-row-padding w3-card w3-padding-top" style="height:337px;">
+            <div class="w3-row w3-padding-left">
+                <h4>Araç Bilgisi</h4>
+            </div>
+            <div class="w3-row">
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Marka/Model:</strong> @Model.MarkaModel</label>
+                </div>
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Plaka:</strong> @Model.Plaka</label>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+
+    @if (Model.TalepSekliId == 4)
+    {
+        <div class="w3-panel">
+            <div class="w3-row-padding w3-card w3-padding-top">
+                <div class="w3-row w3-padding-left">
+                    <h4>Kargo Bilgisi</h4>
+                </div>
+                <div class="w3-row">
+                    <div class="w3-col s4 w3-padding">
+                        <label><strong>Kargo Veriliş Tarihi:</strong> @Model.KargoyaVerilisTarihi</label>
+                    </div>
+                    <div class="w3-col s4 w3-padding">
+                        <label><strong>Arama Tarihi:</strong> @Model.AramaTarihi</label>
+                    </div>
+                    <div class="w3-col s4 w3-padding">
+                        <label><strong>Kargo Firması:</strong> @Model.KargoFirmasi</label>
+                    </div>
+                    <div class="w3-col s4 w3-padding">
+                        <label><strong>Gönderi Kodu:</strong> @Model.GonderiKodu</label>
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+    }
+</div>
+
+
+
+<div class="w3-row" style="text-align:center !important;">
+    <a class="w3-btn w3-ripple w3-green" id="" style="margin-left:10px;">Teklif</a>
+    <button class="w3-btn w3-ripple w3-blue" id="btnIscilikEkle" style="margin-left:10px;">İşçilik Ekle</button>
+    <a class="w3-btn w3-ripple w3-blue-gray" id="" style="margin-left:10px;">Parça Ekle</a>
+</div>
+
+
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card w3-padding-top ">
+        <table id="calculate">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Parçalar</th>
+                    <th>Adet</th>
+                    <th>Birim Fiyat</th>
+                    <th>İskonto</th>
+                    <th>Toplam Fiyat</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Parcalar.Where(x => x.Selected).ToList())
+                {
+                    <tr>
+                        <td>
+                            <input class="w3-check" type="checkbox" @if (item.Selected) { <text> checked </text> } />
+                        </td>
+                        <td>
+                            <label>@item.Text</label>
+                        </td>
+                        <td>
+                            <input class="w3-input w3-border w3-round inpAdetParca" type="number" />
+                        </td>
+                        <td>
+                            <input class="w3-input w3-border w3-round inpBirimFiyatParca" type="number" />
+                        </td>
+                        <td>
+                            <input class="w3-input w3-border w3-round inpIskontoParca" type="number" />
+                        </td>
+                        <td>
+                            <input class="w3-input w3-border w3-round inpToplamFiyatParca" type="number" disabled />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="w3-row" style="margin-top:30px;">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>Toplam:</strong></label>
+            </div>
+        </div>
+        <div class="w3-row">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>Genel İskonto</strong></label>
+                <input class="w3-input w3-border w3-round" type="number" />
+            </div>
+        </div>
+        <div class="w3-row">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>KDV</strong></label>
+                <input class="w3-input w3-border w3-round" type="number" />
+            </div>
+        </div>
+        <div class="w3-row">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>Genel Toplam:</strong></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card w3-padding-top ">
+        <table id="calculate">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>İşçilik</th>
+                    <th>Birim Fiyat</th>
+                    <th>İskonto</th>
+                    <th>Toplam Fiyat</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Iscilikler.Where(x => x.Selected).ToList())
+                {
+                    <tr>
+                        <td>
+                            <input class="w3-check" type="checkbox" @if (item.Selected) { <text> checked </text> } />
+                        </td>
+                        <td>
+                            <label>@item.Text</label>
+                        </td>
+                        <td>
+                            <input class="w3-input w3-border w3-round inpBirimFiyatIscilik" type="number" />
+                        </td>
+                        <td>
+                            <input class="w3-input w3-border w3-round inpIskontoIscilik" type="number" />
+                        </td>
+                        <td>
+                            <input class="w3-input w3-border w3-round inpToplamFiyatIscilik" type="number" disabled />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="w3-row" style="margin-top:30px;">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>Toplam:</strong></label>
+            </div>
+        </div>
+        <div class="w3-row">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>Genel İskonto</strong></label>
+                <input class="w3-input w3-border w3-round" type="number" />
+            </div>
+        </div>
+        <div class="w3-row">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>KDV</strong></label>
+                <input class="w3-input w3-border w3-round" type="number" />
+            </div>
+        </div>
+        <div class="w3-row">
+            <div class="w3-col s12 m3 l3 w3-padding">
+                <label><strong>Genel Toplam:</strong></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="w3-row w3-margin-top w3-margin-bottom">
+    <button class="btn-login w3-green w3-btn w3-round w3-block">Kaydet</button>
+</div>
+
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card w3-padding-top">
+        <div class="w3-row">
+            <div class="w3-row w3-padding-left">
+                <h4>Notlar</h4>
+            </div>
+            <label>@Model.Notlar</label>
+        </div>
+        <hr />
+    </div>
+</div>
+
+<div class="w3-panel">
+    <div class="w3-row-padding w3-card w3-padding-top">
+        <div class="w3-row">
+            <div class="w3-row w3-padding-left">
+                <h4>Arıza Bildirimleri</h4>
+            </div>
+            <ul>
+                @foreach (var item in Model.ArizaBildirim.Where(x => x.Selected).ToList())
+                {
+                    <li>@item.Text</li>
+                }
+            </ul>
+        </div>
+        <hr />
+    </div>
+</div>
+
+
+<div id="modalIscilikEkle" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4">
+        <header class="w3-container w3-teal">
+            <h5>İşçilik Ekle</h5>
+        </header>
+        <div class="w3-row w3-margin" id="">
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <div class="w3-row-padding w3-padding-top ">
+                    <button type="button" class="w3-green" id="addNewWorkship"><i class="fa fa-plus"></i></button>
+                    <table id="tableDYI">
+                        <thead>
+                            <tr>
+                                <th>DYI</th>
+                                <th>DYI Maliyeti</th>
+                                <th>Adet</th>
+                                <th>Tutar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYI" type="text" />
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYIMaliyet" type="number" />
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYIAdet" type="number" />
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYITutar" type="number" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="w3-row w3-margin" id="">
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <div class="w3-row-padding w3-padding-top ">
+                    <button type="button" class="w3-green" id="addNewWorkship"><i class="fa fa-plus"></i></button>
+                    <table id="tableDYI">
+                        <thead>
+                            <tr>
+                                <th>DYI</th>
+                                <th>DYI Maliyeti</th>
+                                <th>Adet</th>
+                                <th>Tutar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYI" type="text" />
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYIMaliyet" type="number" />
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYIAdet" type="number" />
+                                </td>
+                                <td>
+                                    <input class="w3-input w3-border w3-round DYITutar" type="number" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="w3-row w3-right" style="margin-bottom:20px;">
+        <button id="btnOnaylaIscilik" class="w3-btn w3-ripple w3-green">Onayla</button>
+        <button id="btnVazgecIscilik" class="w3-btn w3-ripple w3-red">Vazgeç</button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.inpAdetParca, .inpBirimFiyatParca, .inpIskontoParca').on('input', function () {
+            var satir = $(this).closest('tr');
+            var adet = parseFloat(satir.find('.inpAdetParca').val());
+            var birimFiyat = parseFloat(satir.find('.inpBirimFiyatParca').val());
+            var iskonto = parseFloat(satir.find('.inpIskontoParca').val());
+
+            // İskonto kontrolü
+            if (isNaN(iskonto)) {
+                iskonto = 0;
+            }
+
+            var toplamFiyat = (adet * birimFiyat) - ((adet * birimFiyat) * iskonto / 100);
+            satir.find('.inpToplamFiyatParca').val(toplamFiyat);
+        });
+
+
+        $('.inpBirimFiyatIscilik, .inpIskontoIscilik').on('input', function () {
+            var satir = $(this).closest('tr');
+            var birimFiyat = parseFloat(satir.find('.inpBirimFiyatIscilik').val());
+            var iskonto = parseFloat(satir.find('.inpIskontoIscilik').val());
+
+            // İskonto kontrolü
+            if (isNaN(iskonto)) {
+                iskonto = 0;
+            }
+
+            var toplamFiyat = birimFiyat - (birimFiyat * iskonto / 100);
+            satir.find('.inpToplamFiyatIscilik').val(toplamFiyat);
+        });
+    });
+
+    $('#btnIscilikEkle').on('click', function () {
+        document.getElementById("modalIscilikEkle").style.display = "block";
+    });
+
+    $('#btnVazgecIscilik').on('click', function () {
+        document.getElementById("modalIscilikEkle").style.display = "none";
+    });
+
+    $('#addNewWorkship').click(function () {
+        var newRow = '<tr>' +
+            '<td><input class="w3-input w3-border w3-round DYI" type="text" /></td>' +
+            '<td><input class="w3-input w3-border w3-round DYIMaliyet" type="number" /></td>' +
+            '<td><input class="w3-input w3-border w3-round DYIAdet" type="number" /></td>' +
+            '<td><input class="w3-input w3-border w3-round DYITutar" type="number" /></td>' +
+            '</tr>';
+
+        $('#tableDYI tbody').append(newRow);
+    });
+
+    $('.DYIMaliyet, .DYIAdet').on('input', function () {
+        var satir = $(this).closest('tr');
+        var maliyet = parseFloat(satir.find('.DYIMaliyet').val());
+        var adet = parseFloat(satir.find('.DYIAdet').val());
+
+        var toplamFiyat = maliyet * adet;
+        satir.find('.DYITutar').val(toplamFiyat);
+    });
+</script>
+

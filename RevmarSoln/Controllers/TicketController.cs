@@ -1360,6 +1360,55 @@ namespace SahinRektefiyeSoln.Controllers
             model.KargoFirmasi = talep.KargoFirmasi;
             model.GonderiKodu = talep.GönderiKodu;
 
+            var arizalar = ArizaListesi();
+            var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
+            foreach (var item in arizalar)
+            {
+                if (arizalist != null)
+                {
+                    foreach (var itemList in arizalist)
+                    {
+                        if (item.Value == itemList)
+                            item.Selected = true;
+                    }
+                }
+            }
+            model.ArizaBildirim = arizalar;
+
+            var parcaList = TamirListesi();
+            var parcalar = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
+            foreach (var item in parcaList)
+            {
+                if (parcalar != null)
+                {
+                    foreach (var itemList in parcalar)
+                    {
+                        if (item.Value == itemList)
+                            item.Selected = true;
+                    }
+                }
+            }
+            model.Parcalar = parcaList;
+
+            var engineInfoDet = EngineInformationDet();
+            var motorCıkısKaliteIscilik = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == id).BlokKrankKolIsleri;
+            if (motorCıkısKaliteIscilik != null)
+            {
+                var iscilikMotorCıkısKalite = motorCıkısKaliteIscilik.Split(',');
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList())
+                {
+                    if (iscilikMotorCıkısKalite != null)
+                    {
+                        foreach (var itemList in iscilikMotorCıkısKalite)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+                model.Iscilikler = engineInfoDet;
+            }
+
             return View(model);
         }
 

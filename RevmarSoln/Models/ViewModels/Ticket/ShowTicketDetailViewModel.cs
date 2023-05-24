@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
 {
@@ -40,6 +41,18 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
 
         #region Ekler
 
+        #endregion
+
+        #region Parçalar
+        public IList<SelectListItemWithAttribute> Parcalar { get; set; }
+        #endregion
+
+        #region İşçilikler
+        public IList<SelectListItemWithAttribute> Iscilikler { get; set; }
+        #endregion
+
+        #region Arızalar
+        public IList<SelectListItem> ArizaBildirim { get; set; }
         #endregion
     }
 }
