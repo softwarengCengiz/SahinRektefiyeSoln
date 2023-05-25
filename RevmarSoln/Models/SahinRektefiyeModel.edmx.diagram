@@ -223,6 +223,9 @@
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.EngineOutputQuality" Width="1.5" PointX="9.75" PointY="70.125" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK__EngineOut__Talep__6A50C1DA" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK__Talepler__MotorC__6B44E613" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.CapInputQuality" Width="1.5" PointX="9.75" PointY="77.75" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK__CapInputQ__Talep__70099B30" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK__Talepler__KapakG__70FDBF69" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

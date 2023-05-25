@@ -390,6 +390,9 @@
     <Compile Include="Models\Brands.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CapInputQuality.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ChangeRequest.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
@@ -815,6 +818,7 @@
     <Compile Include="Models\ViewModels\Teklif\TeklifIsEmriDonusturPageModel.cs" />
     <Compile Include="Models\ViewModels\Teklif\TeklifOlusturPageModel.cs" />
     <Compile Include="Models\ViewModels\Teklif\TeklifSorgulaPageModel.cs" />
+    <Compile Include="Models\ViewModels\Ticket\CapInputQualityViewModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\EngineDimensionalControlViewModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\EngineOutputQualityViewModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\SelectListItemWithAttribute.cs" />
@@ -1124,6 +1128,7 @@
     <Content Include="Views\Ticket\ShowTicketDetails.cshtml" />
     <Content Include="Views\Ticket\EngineInputDimensionalControl.cshtml" />
     <Content Include="Views\Ticket\EngineOutputQuality.cshtml" />
+    <Content Include="Views\Ticket\CapInputQuality.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

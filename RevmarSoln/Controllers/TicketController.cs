@@ -244,7 +244,7 @@ namespace SahinRektefiyeSoln.Controllers
                         }
                     }
                 }
-                var adetList = talepDetay.ParcaListAdet.Split(';');
+                var adetList = talepDetay.ParcaListAdet != null ? talepDetay.ParcaListAdet.Split(';') : null;
                 foreach (var item in tamir)
                 {
                     if (tamirList != null)
@@ -255,11 +255,13 @@ namespace SahinRektefiyeSoln.Controllers
                                 item.Selected = true;
                         }
                     }
-
-                    if (adetList.Any(x => x.Split('-')[0] == item.Value))
-                        model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
-                    else
-                        model.ParcalarText.Add("0");
+                    if (adetList != null)
+                    {
+                        if (adetList.Any(x => x.Split('-')[0] == item.Value))
+                            model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
+                        else
+                            model.ParcalarText.Add("0");
+                    }
                 }
             }
 
@@ -292,6 +294,7 @@ namespace SahinRektefiyeSoln.Controllers
 
                 var json = JsonConvert.SerializeObject(new
                 {
+
                     FileInput = processedFileInput,
                     TalepId = model.TalepId
                 });
@@ -433,7 +436,7 @@ namespace SahinRektefiyeSoln.Controllers
             }
             else
             {
-                return RedirectToAction("Tickets");
+                return RedirectToAction("DetailEdit",new {id = model.TalepId });
             }
 
         }
@@ -1268,7 +1271,7 @@ namespace SahinRektefiyeSoln.Controllers
                         }
                     }
                 }
-                var adetList = talepDetay.ParcaListAdet.Split(';');
+                var adetList = talepDetay.ParcaListAdet != null ? talepDetay.ParcaListAdet.Split(';') : null;
                 foreach (var item in tamir)
                 {
                     if (tamirList != null)
@@ -1280,10 +1283,13 @@ namespace SahinRektefiyeSoln.Controllers
                         }
                     }
 
-                    if (adetList.Any(x => x.Split('-')[0] == item.Value))
-                        model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
-                    else
-                        model.ParcalarText.Add("0");
+                    if (adetList != null)
+                    {
+                        if (adetList.Any(x => x.Split('-')[0] == item.Value))
+                            model.ParcalarText.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
+                        else
+                            model.ParcalarText.Add("0");
+                    }
                 }
             }
 
@@ -1361,40 +1367,43 @@ namespace SahinRektefiyeSoln.Controllers
             model.GonderiKodu = talep.GönderiKodu;
 
             var arizalar = ArizaListesi();
-            var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
-            foreach (var item in arizalar)
+            if (talepDetay != null)
             {
-                if (arizalist != null)
+                var arizalist = talepDetay.ArizaList != null ? talepDetay.ArizaList.Split(',') : null;
+                foreach (var item in arizalar)
                 {
-                    foreach (var itemList in arizalist)
+                    if (arizalist != null)
                     {
-                        if (item.Value == itemList)
-                            item.Selected = true;
+                        foreach (var itemList in arizalist)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
                     }
                 }
-            }
-            model.ArizaBildirim = arizalar;
+                model.ArizaBildirim = arizalar;
 
-            var parcaList = TamirListesi();
-            var parcalar = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
-            foreach (var item in parcaList)
-            {
-                if (parcalar != null)
+                var parcaList = TamirListesi();
+                var parcalar = talepDetay.ParcaList != null ? talepDetay.ParcaList.Split(',') : null;
+                foreach (var item in parcaList)
                 {
-                    foreach (var itemList in parcalar)
+                    if (parcalar != null)
                     {
-                        if (item.Value == itemList)
-                            item.Selected = true;
+                        foreach (var itemList in parcalar)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
                     }
                 }
+                model.Parcalar = parcaList;
             }
-            model.Parcalar = parcaList;
 
             var engineInfoDet = EngineInformationDet();
             var motorCıkısKaliteIscilik = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == id);
             if (motorCıkısKaliteIscilik != null)
             {
-                var iscilikMotorCıkısKalite = motorCıkısKaliteIscilik.BlokKrankKolIsleri.Split(',');
+                var iscilikMotorCıkısKalite = motorCıkısKaliteIscilik.BlokKrankKolIsleri != null ? motorCıkısKaliteIscilik.BlokKrankKolIsleri.Split(',') : null;
                 foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList())
                 {
                     if (iscilikMotorCıkısKalite != null)
@@ -1896,7 +1905,7 @@ namespace SahinRektefiyeSoln.Controllers
             return RedirectToAction("EngineInputDimensionalControl", new { id = model.TalepId });
         }
 
-        [HttpGet] 
+        [HttpGet]
         public ActionResult EngineOutputQuality(int id)
         {
             var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
@@ -1927,7 +1936,7 @@ namespace SahinRektefiyeSoln.Controllers
             if (motorCikisKalite != null)
             {
                 var engineInfoDetList = motorCikisKalite.BlokKrankKolIsleri != null ? motorCikisKalite.BlokKrankKolIsleri.Split(',') : null;
-                foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList()) 
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList())
                 {
                     if (engineInfoDetList != null)
                     {
@@ -1965,9 +1974,9 @@ namespace SahinRektefiyeSoln.Controllers
                     }
                 }
 
-                var adetList = motorCikisKalite.GerekliParcaOlcu.Split(';');
+                var adetList = motorCikisKalite.GerekliParcaOlcu != null ? motorCikisKalite.GerekliParcaOlcu.Split(';') : null;
                 var gerekliParca = motorCikisKalite.GerekliParca != null ? motorCikisKalite.GerekliParca.Split(',') : null;
-                foreach (var item in engineInfoDet.Where(x => x.HdrId == 7).ToList()) 
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 7).ToList())
                 {
                     if (gerekliParca != null)
                     {
@@ -1978,15 +1987,15 @@ namespace SahinRektefiyeSoln.Controllers
                         }
                     }
 
-                    if (adetList.Any(x => x.Split('-')[0] == item.Value))
-                        model.GerekliParcaOlcu.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
-                    else
-                        model.GerekliParcaOlcu.Add("");
+                    if (adetList != null)
+                    {
+                        if (adetList.Any(x => x.Split('-')[0] == item.Value))
+                            model.GerekliParcaOlcu.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
+                        else
+                            model.GerekliParcaOlcu.Add("");
+                    }
                 }
 
-
-                //model.GerekliParca = ;
-                //model.GerekliParcaOlcu = motorCikisKalite.GerekliParcaOlcu;
                 model.AlinanDigerParcalar = motorCikisKalite.AlinanDigerParcalar;
                 model.ParcaGirisSaati = motorCikisKalite.ParcaGirisSaati;
                 model.TeslimAlan = motorCikisKalite.TeslimAlan;
@@ -2252,7 +2261,10 @@ namespace SahinRektefiyeSoln.Controllers
             string parcaTextMap = "";
             if (model.GerekliParcaOlcu.Count > 0)
             {
-                model.GerekliParcaOlcu = model.GerekliParcaOlcu.Where(x => x != "").ToList();
+                if (model.GerekliParca.Count < model.GerekliParcaOlcu.Count)
+                {
+                    model.GerekliParcaOlcu = model.GerekliParcaOlcu.Where(x => x != "").ToList();
+                }
                 for (int i = 0; i < model.GerekliParcaOlcu.Count; i++)
                 {
                     if (model.GerekliParcaOlcu[i] != "")
@@ -2448,6 +2460,377 @@ namespace SahinRektefiyeSoln.Controllers
             db.SaveChanges();
 
             return RedirectToAction("EngineOutputQuality", new { id = model.TalepId });
+        }
+
+
+
+        [HttpGet]
+        public ActionResult CapInputQuality(int id)
+        {
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
+            var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
+            var kapakGirisKalite = db.CapInputQuality.FirstOrDefault(x => x.TalepId == id);
+
+            var model = new CapInputQualityViewModel()
+            {
+                YedekParcaGirisKontrol = new List<List<string>>(),
+                SupapDusukluguYuksekligi = new List<List<string>>(),
+                GerekliParcaAdet = new List<string>()
+            };
+
+            var engineInfoDet = EngineInformationDet();
+
+            model.EngineInfoDet = engineInfoDet;
+            model.TalepId = talep.TalepId;
+            if (talepDetay != null)
+            {
+                model.MotorDolapNo = talepDetay.MotorDolapNo;
+                model.KapakDolapNo = talepDetay.KapakDolapNo;
+            }
+
+            if (kapakGirisKalite != null)
+            {
+                var engineInfoDetList = kapakGirisKalite.IncelemeSonuclari != null ? kapakGirisKalite.IncelemeSonuclari.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 8).ToList())
+                {
+                    if (engineInfoDetList != null)
+                    {
+                        foreach (var itemList in engineInfoDetList)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var engineInfoDetList2 = kapakGirisKalite.OzelIslemler != null ? kapakGirisKalite.OzelIslemler.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 10).ToList())
+                {
+                    if (engineInfoDetList2 != null)
+                    {
+                        foreach (var itemList in engineInfoDetList2)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var engineInfoDetList3 = kapakGirisKalite.OzelUretimler != null ? kapakGirisKalite.OzelUretimler.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 11).ToList())
+                {
+                    if (engineInfoDetList3 != null)
+                    {
+                        foreach (var itemList in engineInfoDetList3)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var engineInfoDetList4 = kapakGirisKalite.YapilacakIslemler != null ? kapakGirisKalite.YapilacakIslemler.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 9).ToList())
+                {
+                    if (engineInfoDetList4 != null)
+                    {
+                        foreach (var itemList in engineInfoDetList4)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var engineInfoDetList5 = kapakGirisKalite.YapilanIsler != null ? kapakGirisKalite.YapilanIsler.Split(',') : null;
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 13).ToList())
+                {
+                    if (engineInfoDetList5 != null)
+                    {
+                        foreach (var itemList in engineInfoDetList5)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var adetList = kapakGirisKalite.GerekliParcaAdet != null ? kapakGirisKalite.GerekliParcaAdet.Split(';') : null;
+                var engineInfoDetList6 = kapakGirisKalite.GerekliParcalar != null ? kapakGirisKalite.GerekliParcalar.Split(',') : null;
+
+                foreach (var item in engineInfoDet.Where(x => x.HdrId == 12).ToList())
+                {
+                    if (engineInfoDetList6 != null)
+                    {
+                        foreach (var itemList in engineInfoDetList6)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+
+                    if (adetList != null)
+                    {
+                        if (adetList.Any(x => x.Split('-')[0] == item.Value))
+                            model.GerekliParcaAdet.Add(adetList.Where(x => x.Split('-')[0] == item.Value).FirstOrDefault().Split('-')[1]);
+                        else
+                            model.GerekliParcaAdet.Add("");
+                    }
+                }
+
+                model.IzınVerilenMinKapakKalinligi = kapakGirisKalite.IzinVerilenMinKapakKalinligi;
+                model.IzınVerilenMaxKapakEgriligi = kapakGirisKalite.IzinVerilenMaxKapakEgriligi;
+                model.OlculenKapakKalinligi = kapakGirisKalite.OlculenKapakKalinligi;
+                model.OlculenKapakEgriligi = kapakGirisKalite.OlculenKapakEgriligi;
+                model.GerekliParcaYorumlar = kapakGirisKalite.GerekliParcaYorumlar;
+                model.ParcaGirisTarihi = kapakGirisKalite.ParcaGirisTarihi;
+                model.TeslimAlan = kapakGirisKalite.TeslimAlan;
+                model.GerceklestirilenTasmaMiktari = kapakGirisKalite.GerceklestirilenTasmaMiktari;
+                model.RevizyonSonrasiKapakKalinligi = kapakGirisKalite.RevizyonSonrasiKapakKalinligi;
+                model.SupapAyariEmme = kapakGirisKalite.SupapAyariEmme;
+                model.SupapAyariEgzoz = kapakGirisKalite.SupapAyariEgzoz;
+                model.YatakSikmaTorku1 = kapakGirisKalite.YatakSikmaTorku1;
+                model.YatakSikmaTorku2 = kapakGirisKalite.YatakSikmaTorku2;
+                model.YatakSikmaTorku3 = kapakGirisKalite.YatakSikmaTorku3;
+                model.YatakSikmaTorku4 = kapakGirisKalite.YatakSikmaTorku4;
+                model.KapakSikmaTorku1 = kapakGirisKalite.KapakSikmaTorku1;
+                model.KapakSikmaTorku2 = kapakGirisKalite.KapakSikmaTorku2;
+                model.KapakSikmaTorku3 = kapakGirisKalite.KapakSikmaTorku3;
+                model.KapakSikmaTorku4 = kapakGirisKalite.KapakSikmaTorku4;
+                model.Aciklama = kapakGirisKalite.Aciklama;
+                model.EngineInfoDet = engineInfoDet;
+
+                #region Yedek Parça Giriş Kontrol
+                if (kapakGirisKalite.YedekParcaGirisKontrol != null)
+                {
+                    string[] savedValues = kapakGirisKalite.YedekParcaGirisKontrol.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.YedekParcaGirisKontrol.Add(new List<string>());
+
+                        for (int j = 0; j < 6; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.YedekParcaGirisKontrol[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        model.YedekParcaGirisKontrol.Add(new List<string>());
+
+                        for (int j = 0; j < 6; j++)
+                        {
+                            model.YedekParcaGirisKontrol[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Supap Düşüklüğü Yüksekliği
+                if (kapakGirisKalite.SupapDusukluguYuksekligi != null)
+                {
+                    string[] savedValues = kapakGirisKalite.SupapDusukluguYuksekligi.Split(new[] { "-;" }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        model.SupapDusukluguYuksekligi.Add(new List<string>());
+
+                        for (int j = 0; j < 8; j++)
+                        {
+                            string cellValue = savedValues.FirstOrDefault(v => v.StartsWith($"-{i + 1}-{j + 1}-"))?.Split('-')[3] ?? string.Empty;
+                            model.SupapDusukluguYuksekligi[i].Add(cellValue);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        model.SupapDusukluguYuksekligi.Add(new List<string>());
+
+                        for (int j = 0; j < 8; j++)
+                        {
+                            model.SupapDusukluguYuksekligi[i].Add(string.Empty);
+                        }
+                    }
+                }
+                #endregion
+            }
+            else
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    model.YedekParcaGirisKontrol.Add(new List<string>());
+
+                    for (int j = 0; j < 6; j++)
+                    {
+                        model.YedekParcaGirisKontrol[i].Add(string.Empty);
+                    }
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    model.SupapDusukluguYuksekligi.Add(new List<string>());
+
+                    for (int j = 0; j < 8; j++)
+                    {
+                        model.SupapDusukluguYuksekligi[i].Add(string.Empty);
+                    }
+                }
+            }
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult CapInputQuality(CapInputQualityViewModel model)
+        {
+            var kapakGirisKalite = db.CapInputQuality.FirstOrDefault(x => x.TalepId == model.TalepId);
+            var talep = db.Talepler.FirstOrDefault(x => x.TalepId == model.TalepId);
+
+            string parcaTextMap = "";
+            if (model.GerekliParcaAdet.Count > 0)
+            {
+                if (model.GerekliParcalar.Count < model.GerekliParcaAdet.Count)
+                {
+                    model.GerekliParcaAdet = model.GerekliParcaAdet.Where(x => x != "").ToList();
+                }
+
+                for (int i = 0; i < model.GerekliParcaAdet.Count; i++)
+                {
+                    if (model.GerekliParcaAdet[i] != "")
+                    {
+                        parcaTextMap = parcaTextMap + model.GerekliParcalar[i] + "-" + model.GerekliParcaAdet[i] + ";";
+                    }
+                }
+            }
+
+            #region Yedek Parca Giris Kontrol Birleştirme
+            List<string> combinedYedekParcaGirisKontrol = new List<string>();
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    string cellValue = model.YedekParcaGirisKontrol[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedYedekParcaGirisKontrol.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesYPGK = string.Join(";", combinedYedekParcaGirisKontrol);
+            #endregion
+
+            #region Supap Dusuklugu Yuksekligi Birleştirme
+            List<string> combinedSupapDusukluguYuksekligi = new List<string>();
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    string cellValue = model.SupapDusukluguYuksekligi[i][j];
+                    if (!string.IsNullOrEmpty(cellValue))
+                    {
+                        string combinedCell = $"-{i + 1}-{j + 1}-{cellValue}-";
+                        combinedSupapDusukluguYuksekligi.Add(combinedCell);
+                    }
+                }
+            }
+
+            string concatenatedValuesSDY = string.Join(";", combinedSupapDusukluguYuksekligi);
+            #endregion
+
+            if (kapakGirisKalite == null)
+            {
+                using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+                {
+                    using (var transaction = context.Database.BeginTransaction())
+                    {
+                        CapInputQuality yeniKapakGirisKalite = new CapInputQuality()
+                        {
+                            TalepId = model.TalepId,
+                            IzinVerilenMinKapakKalinligi = model.IzınVerilenMinKapakKalinligi,
+                            IzinVerilenMaxKapakEgriligi = model.IzınVerilenMaxKapakEgriligi,
+                            OlculenKapakKalinligi = model.OlculenKapakKalinligi,
+                            OlculenKapakEgriligi = model.OlculenKapakEgriligi,
+                            IncelemeSonuclari = model.IncelemeSonuclari != null ? string.Join(",", model.IncelemeSonuclari) : null,
+                            YapilacakIslemler = model.YapilacakIslemler != null ? string.Join(",", model.YapilacakIslemler) : null,
+                            OzelIslemler = model.OzelIslemler != null ? string.Join(",", model.OzelIslemler) : null,
+                            OzelUretimler = model.OzelUretimler != null ? string.Join(",", model.OzelUretimler) : null,
+                            GerekliParcalar = model.GerekliParcalar != null ? string.Join(",", model.GerekliParcalar) : null,
+                            GerekliParcaYorumlar = model.GerekliParcaYorumlar,
+                            GerekliParcaAdet = parcaTextMap,
+                            YedekParcaGirisKontrol = concatenatedValuesYPGK,
+                            ParcaGirisTarihi = model.ParcaGirisTarihi,
+                            TeslimAlan = model.TeslimAlan,
+                            SupapDusukluguYuksekligi = concatenatedValuesSDY,
+                            GerceklestirilenTasmaMiktari = model.GerceklestirilenTasmaMiktari,
+                            RevizyonSonrasiKapakKalinligi = model.RevizyonSonrasiKapakKalinligi,
+                            SupapAyariEmme = model.SupapAyariEmme,
+                            SupapAyariEgzoz = model.SupapAyariEgzoz,
+                            YatakSikmaTorku1 = model.YatakSikmaTorku1,
+                            YatakSikmaTorku2 = model.YatakSikmaTorku2,
+                            YatakSikmaTorku3 = model.YatakSikmaTorku3,
+                            YatakSikmaTorku4 = model.YatakSikmaTorku4,
+                            KapakSikmaTorku1 = model.KapakSikmaTorku1,
+                            KapakSikmaTorku2 = model.KapakSikmaTorku2,
+                            KapakSikmaTorku3 = model.KapakSikmaTorku3,
+                            KapakSikmaTorku4 = model.KapakSikmaTorku4,
+                            YapilanIsler = model.YapilanIsler != null ? string.Join(",", model.YapilanIsler) : null,
+                            Aciklama = model.Aciklama
+                        };
+
+                        context.CapInputQuality.Add(yeniKapakGirisKalite);
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                }
+            }
+            else
+            {
+                kapakGirisKalite.TalepId = model.TalepId;
+                kapakGirisKalite.IzinVerilenMinKapakKalinligi = model.IzınVerilenMinKapakKalinligi;
+                kapakGirisKalite.IzinVerilenMaxKapakEgriligi = model.IzınVerilenMaxKapakEgriligi;
+                kapakGirisKalite.OlculenKapakKalinligi = model.OlculenKapakKalinligi;
+                kapakGirisKalite.OlculenKapakEgriligi = model.OlculenKapakEgriligi;
+                kapakGirisKalite.IncelemeSonuclari = model.IncelemeSonuclari != null ? string.Join(",", model.IncelemeSonuclari) : null;
+                kapakGirisKalite.YapilacakIslemler = model.YapilacakIslemler != null ? string.Join(",", model.YapilacakIslemler) : null;
+                kapakGirisKalite.OzelIslemler = model.OzelIslemler != null ? string.Join(",", model.OzelIslemler) : null;
+                kapakGirisKalite.OzelUretimler = model.OzelUretimler != null ? string.Join(",", model.OzelUretimler) : null;
+                kapakGirisKalite.GerekliParcalar = model.GerekliParcalar != null ? string.Join(",", model.GerekliParcalar) : null;
+                kapakGirisKalite.GerekliParcaYorumlar = model.GerekliParcaYorumlar;
+                kapakGirisKalite.GerekliParcaAdet = parcaTextMap;
+                kapakGirisKalite.YedekParcaGirisKontrol = concatenatedValuesYPGK;
+                kapakGirisKalite.ParcaGirisTarihi = model.ParcaGirisTarihi;
+                kapakGirisKalite.TeslimAlan = model.TeslimAlan;
+                kapakGirisKalite.SupapDusukluguYuksekligi = concatenatedValuesSDY;
+                kapakGirisKalite.GerceklestirilenTasmaMiktari = model.GerceklestirilenTasmaMiktari;
+                kapakGirisKalite.RevizyonSonrasiKapakKalinligi = model.RevizyonSonrasiKapakKalinligi;
+                kapakGirisKalite.SupapAyariEmme = model.SupapAyariEmme;
+                kapakGirisKalite.SupapAyariEgzoz = model.SupapAyariEgzoz;
+                kapakGirisKalite.YatakSikmaTorku1 = model.YatakSikmaTorku1;
+                kapakGirisKalite.YatakSikmaTorku2 = model.YatakSikmaTorku2;
+                kapakGirisKalite.YatakSikmaTorku3 = model.YatakSikmaTorku3;
+                kapakGirisKalite.YatakSikmaTorku4 = model.YatakSikmaTorku4;
+                kapakGirisKalite.KapakSikmaTorku1 = model.KapakSikmaTorku1;
+                kapakGirisKalite.KapakSikmaTorku2 = model.KapakSikmaTorku2;
+                kapakGirisKalite.KapakSikmaTorku3 = model.KapakSikmaTorku3;
+                kapakGirisKalite.KapakSikmaTorku4 = model.KapakSikmaTorku4;
+                kapakGirisKalite.YapilanIsler = model.YapilanIsler != null ? string.Join(",", model.YapilanIsler) : null;
+                kapakGirisKalite.Aciklama = model.Aciklama;
+
+                db.SaveChanges();
+            }
+
+            var newRecord = db.CapInputQuality.FirstOrDefault(x => x.TalepId == model.TalepId);
+            talep.KapakGirisKaliteId = newRecord.KapakGirisKaliteId;
+            db.SaveChanges();
+
+            return RedirectToAction("CapInputQuality", new { id = model.TalepId });
         }
     }
 }

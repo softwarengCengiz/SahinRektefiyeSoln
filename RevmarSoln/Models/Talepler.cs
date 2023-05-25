@@ -20,6 +20,7 @@ namespace SahinRektefiyeSoln.Models
             this.TalepDetay = new HashSet<TalepDetay>();
             this.MotorOlcuselKontrol = new HashSet<MotorOlcuselKontrol>();
             this.EngineOutputQuality = new HashSet<EngineOutputQuality>();
+            this.CapInputQuality = new HashSet<CapInputQuality>();
         }
     
         public int TalepId { get; set; }
@@ -48,6 +49,7 @@ namespace SahinRektefiyeSoln.Models
         public Nullable<int> TalepDosyaId { get; set; }
         public Nullable<int> MotorOlcuselKontrolId { get; set; }
         public Nullable<int> MotorCikisKaliteId { get; set; }
+        public Nullable<int> KapakGirisKaliteId { get; set; }
     
         public virtual AracGrubu AracGrubu { get; set; }
         public virtual Musteri Musteri { get; set; }
@@ -64,5 +66,8 @@ namespace SahinRektefiyeSoln.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EngineOutputQuality> EngineOutputQuality { get; set; }
         public virtual EngineOutputQuality EngineOutputQuality1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CapInputQuality> CapInputQuality { get; set; }
+        public virtual CapInputQuality CapInputQuality1 { get; set; }
     }
 }

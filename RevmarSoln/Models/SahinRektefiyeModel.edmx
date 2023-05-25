@@ -124,6 +124,46 @@
           <Property Name="BrandId" Type="int" Nullable="false" />
           <Property Name="BrandName" Type="nvarchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="CapInputQuality">
+          <Key>
+            <PropertyRef Name="KapakGirisKaliteId" />
+          </Key>
+          <Property Name="KapakGirisKaliteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TalepId" Type="int" />
+          <Property Name="KapakDolapNo" Type="varchar" MaxLength="50" />
+          <Property Name="MotorDolapNo" Type="varchar" MaxLength="50" />
+          <Property Name="IzinVerilenMinKapakKalinligi" Type="varchar" MaxLength="50" />
+          <Property Name="IzinVerilenMaxKapakEgriligi" Type="varchar" MaxLength="50" />
+          <Property Name="OlculenKapakKalinligi" Type="varchar" MaxLength="50" />
+          <Property Name="OlculenKapakEgriligi" Type="varchar" MaxLength="50" />
+          <Property Name="IncelemeSonuclari" Type="varchar" MaxLength="3000" />
+          <Property Name="YapilacakIslemler" Type="varchar" MaxLength="3000" />
+          <Property Name="OzelIslemler" Type="varchar" MaxLength="3000" />
+          <Property Name="OzelUretimler" Type="varchar" MaxLength="3000" />
+          <Property Name="YedekParcaGirisKontrol" Type="varchar" MaxLength="2000" />
+          <Property Name="ParcaGirisTarihi" Type="datetime" />
+          <Property Name="TeslimAlan" Type="varchar" MaxLength="50" />
+          <Property Name="SupapDusukluguYuksekligi" Type="varchar" MaxLength="2000" />
+          <Property Name="GerceklestirilenTasmaMiktari" Type="varchar" MaxLength="50" />
+          <Property Name="RevizyonSonrasiKapakKalinligi" Type="varchar" MaxLength="50" />
+          <Property Name="SupapAyariEmme" Type="varchar" MaxLength="50" />
+          <Property Name="SupapAyariEgzoz" Type="varchar" MaxLength="50" />
+          <Property Name="YatakSikmaTorku1" Type="varchar" MaxLength="50" />
+          <Property Name="YatakSikmaTorku2" Type="varchar" MaxLength="50" />
+          <Property Name="YatakSikmaTorku3" Type="varchar" MaxLength="50" />
+          <Property Name="YatakSikmaTorku4" Type="varchar" MaxLength="50" />
+          <Property Name="KapakSikmaTorku1" Type="varchar" MaxLength="50" />
+          <Property Name="KapakSikmaTorku2" Type="varchar" MaxLength="50" />
+          <Property Name="KapakSikmaTorku3" Type="varchar" MaxLength="50" />
+          <Property Name="KapakSikmaTorku4" Type="varchar" MaxLength="50" />
+          <Property Name="YapilanIsler" Type="varchar" MaxLength="3000" />
+          <Property Name="Aciklama" Type="varchar" MaxLength="1000" />
+          <Property Name="Olusturan" Type="varchar" MaxLength="100" />
+          <Property Name="OlusturmaTarihi" Type="datetime" />
+          <Property Name="GerekliParcalar" Type="varchar" MaxLength="3000" />
+          <Property Name="GerekliParcaAdet" Type="varchar" MaxLength="3000" />
+          <Property Name="GerekliParcaYorumlar" Type="varchar" MaxLength="3000" />
+        </EntityType>
         <EntityType Name="ChangeRequest">
           <Key>
             <PropertyRef Name="ChangeRequestId" />
@@ -1194,6 +1234,7 @@
           <Property Name="TalepDosyaId" Type="int" />
           <Property Name="MotorOlcuselKontrolId" Type="int" />
           <Property Name="MotorCikisKaliteId" Type="int" />
+          <Property Name="KapakGirisKaliteId" Type="int" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -1511,6 +1552,18 @@
           <Property Name="Modifier" Type="nvarchar" MaxLength="20" />
           <Property Name="ModifiedDate" Type="date" />
         </EntityType>
+        <Association Name="FK__CapInputQ__Talep__70099B30">
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="0..1" />
+          <End Role="CapInputQuality" Type="Self.CapInputQuality" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="CapInputQuality">
+              <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__EngineInf__Engin__63A3C44B">
           <End Role="EngineInformationHdr" Type="Self.EngineInformationHdr" Multiplicity="0..1" />
           <End Role="EngineInformationDet" Type="Self.EngineInformationDet" Multiplicity="*" />
@@ -1544,6 +1597,18 @@
             </Principal>
             <Dependent Role="MotorOlcuselKontrol">
               <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Talepler__KapakG__70FDBF69">
+          <End Role="CapInputQuality" Type="Self.CapInputQuality" Multiplicity="0..1" />
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CapInputQuality">
+              <PropertyRef Name="KapakGirisKaliteId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="KapakGirisKaliteId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2936,6 +3001,7 @@
           <EntitySet Name="ArizaBildirim" EntityType="Self.ArizaBildirim" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BrandModels" EntityType="Self.BrandModels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CapInputQuality" EntityType="Self.CapInputQuality" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChangeRequest" EntityType="Self.ChangeRequest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChangeRequestStatus" EntityType="Self.ChangeRequestStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Companies" EntityType="Self.Companies" Schema="dbo" store:Type="Tables" />
@@ -3032,6 +3098,10 @@
           <EntitySet Name="WebUsageLogs" EntityType="Self.WebUsageLogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkOrders" EntityType="Self.WorkOrders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="YakitTipi" EntityType="Self.YakitTipi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CapInputQ__Talep__70099B30" Association="Self.FK__CapInputQ__Talep__70099B30">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="CapInputQuality" EntitySet="CapInputQuality" />
+          </AssociationSet>
           <AssociationSet Name="FK__EngineInf__Engin__63A3C44B" Association="Self.FK__EngineInf__Engin__63A3C44B">
             <End Role="EngineInformationHdr" EntitySet="EngineInformationHdr" />
             <End Role="EngineInformationDet" EntitySet="EngineInformationDet" />
@@ -3043,6 +3113,10 @@
           <AssociationSet Name="FK__MotorOlcu__Talep__668030F6" Association="Self.FK__MotorOlcu__Talep__668030F6">
             <End Role="Talepler" EntitySet="Talepler" />
             <End Role="MotorOlcuselKontrol" EntitySet="MotorOlcuselKontrol" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Talepler__KapakG__70FDBF69" Association="Self.FK__Talepler__KapakG__70FDBF69">
+            <End Role="CapInputQuality" EntitySet="CapInputQuality" />
+            <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           <AssociationSet Name="FK__Talepler__MotorC__6B44E613" Association="Self.FK__Talepler__MotorC__6B44E613">
             <End Role="EngineOutputQuality" EntitySet="EngineOutputQuality" />
@@ -4098,6 +4172,15 @@
           </AssociationSet>
           <AssociationSet Name="FK__Talepler__MotorC__6B44E613" Association="SahinRektefiyeDbModel.FK__Talepler__MotorC__6B44E613">
             <End Role="EngineOutputQuality" EntitySet="EngineOutputQuality" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <EntitySet Name="CapInputQuality" EntityType="SahinRektefiyeDbModel.CapInputQuality" />
+          <AssociationSet Name="FK__CapInputQ__Talep__70099B30" Association="SahinRektefiyeDbModel.FK__CapInputQ__Talep__70099B30">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="CapInputQuality" EntitySet="CapInputQuality" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Talepler__KapakG__70FDBF69" Association="SahinRektefiyeDbModel.FK__Talepler__KapakG__70FDBF69">
+            <End Role="CapInputQuality" EntitySet="CapInputQuality" />
             <End Role="Talepler" EntitySet="Talepler" />
           </AssociationSet>
           </EntityContainer>
@@ -5398,6 +5481,9 @@
           <Property Name="MotorCikisKaliteId" Type="Int32" />
           <NavigationProperty Name="EngineOutputQuality" Relationship="SahinRektefiyeDbModel.FK__EngineOut__Talep__6A50C1DA" FromRole="Talepler" ToRole="EngineOutputQuality" />
           <NavigationProperty Name="EngineOutputQuality1" Relationship="SahinRektefiyeDbModel.FK__Talepler__MotorC__6B44E613" FromRole="Talepler" ToRole="EngineOutputQuality" />
+          <Property Name="KapakGirisKaliteId" Type="Int32" />
+          <NavigationProperty Name="CapInputQuality" Relationship="SahinRektefiyeDbModel.FK__CapInputQ__Talep__70099B30" FromRole="Talepler" ToRole="CapInputQuality" />
+          <NavigationProperty Name="CapInputQuality1" Relationship="SahinRektefiyeDbModel.FK__Talepler__KapakG__70FDBF69" FromRole="Talepler" ToRole="CapInputQuality" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -7220,6 +7306,72 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CapInputQuality">
+          <Key>
+            <PropertyRef Name="KapakGirisKaliteId" />
+          </Key>
+          <Property Name="KapakGirisKaliteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TalepId" Type="Int32" />
+          <Property Name="KapakDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MotorDolapNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IzinVerilenMinKapakKalinligi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IzinVerilenMaxKapakEgriligi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OlculenKapakKalinligi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OlculenKapakEgriligi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IncelemeSonuclari" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="YapilacakIslemler" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="OzelIslemler" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="OzelUretimler" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="YedekParcaGirisKontrol" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaGirisTarihi" Type="DateTime" Precision="3" />
+          <Property Name="TeslimAlan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SupapDusukluguYuksekligi" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="GerceklestirilenTasmaMiktari" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RevizyonSonrasiKapakKalinligi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SupapAyariEmme" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SupapAyariEgzoz" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YatakSikmaTorku1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YatakSikmaTorku2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YatakSikmaTorku3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YatakSikmaTorku4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KapakSikmaTorku1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KapakSikmaTorku2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KapakSikmaTorku3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="KapakSikmaTorku4" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YapilanIsler" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="Aciklama" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Olusturan" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OlusturmaTarihi" Type="DateTime" Precision="3" />
+          <Property Name="GerekliParcalar" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="GerekliParcaAdet" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <Property Name="GerekliParcaYorumlar" Type="String" MaxLength="3000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK__CapInputQ__Talep__70099B30" FromRole="CapInputQuality" ToRole="Talepler" />
+          <NavigationProperty Name="Talepler1" Relationship="SahinRektefiyeDbModel.FK__Talepler__KapakG__70FDBF69" FromRole="CapInputQuality" ToRole="Talepler" />
+        </EntityType>
+        <Association Name="FK__CapInputQ__Talep__70099B30">
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.CapInputQuality" Role="CapInputQuality" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="CapInputQuality">
+              <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Talepler__KapakG__70FDBF69">
+          <End Type="SahinRektefiyeDbModel.CapInputQuality" Role="CapInputQuality" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CapInputQuality">
+              <PropertyRef Name="KapakGirisKaliteId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="KapakGirisKaliteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -8422,6 +8574,7 @@
           <EntitySetMapping Name="Talepler">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
               <MappingFragment StoreEntitySet="Talepler">
+                <ScalarProperty Name="KapakGirisKaliteId" ColumnName="KapakGirisKaliteId" />
                 <ScalarProperty Name="MotorCikisKaliteId" ColumnName="MotorCikisKaliteId" />
                 <ScalarProperty Name="MotorOlcuselKontrolId" ColumnName="MotorOlcuselKontrolId" />
                 <ScalarProperty Name="TalepDosyaId" ColumnName="TalepDosyaId" />
@@ -8874,6 +9027,47 @@
                 <ScalarProperty Name="KapakDolapNo" ColumnName="KapakDolapNo" />
                 <ScalarProperty Name="TalepId" ColumnName="TalepId" />
                 <ScalarProperty Name="MotorCikisKaliteId" ColumnName="MotorCikisKaliteId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CapInputQuality">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.CapInputQuality">
+              <MappingFragment StoreEntitySet="CapInputQuality">
+                <ScalarProperty Name="GerekliParcaYorumlar" ColumnName="GerekliParcaYorumlar" />
+                <ScalarProperty Name="GerekliParcaAdet" ColumnName="GerekliParcaAdet" />
+                <ScalarProperty Name="GerekliParcalar" ColumnName="GerekliParcalar" />
+                <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+                <ScalarProperty Name="Olusturan" ColumnName="Olusturan" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+                <ScalarProperty Name="YapilanIsler" ColumnName="YapilanIsler" />
+                <ScalarProperty Name="KapakSikmaTorku4" ColumnName="KapakSikmaTorku4" />
+                <ScalarProperty Name="KapakSikmaTorku3" ColumnName="KapakSikmaTorku3" />
+                <ScalarProperty Name="KapakSikmaTorku2" ColumnName="KapakSikmaTorku2" />
+                <ScalarProperty Name="KapakSikmaTorku1" ColumnName="KapakSikmaTorku1" />
+                <ScalarProperty Name="YatakSikmaTorku4" ColumnName="YatakSikmaTorku4" />
+                <ScalarProperty Name="YatakSikmaTorku3" ColumnName="YatakSikmaTorku3" />
+                <ScalarProperty Name="YatakSikmaTorku2" ColumnName="YatakSikmaTorku2" />
+                <ScalarProperty Name="YatakSikmaTorku1" ColumnName="YatakSikmaTorku1" />
+                <ScalarProperty Name="SupapAyariEgzoz" ColumnName="SupapAyariEgzoz" />
+                <ScalarProperty Name="SupapAyariEmme" ColumnName="SupapAyariEmme" />
+                <ScalarProperty Name="RevizyonSonrasiKapakKalinligi" ColumnName="RevizyonSonrasiKapakKalinligi" />
+                <ScalarProperty Name="GerceklestirilenTasmaMiktari" ColumnName="GerceklestirilenTasmaMiktari" />
+                <ScalarProperty Name="SupapDusukluguYuksekligi" ColumnName="SupapDusukluguYuksekligi" />
+                <ScalarProperty Name="TeslimAlan" ColumnName="TeslimAlan" />
+                <ScalarProperty Name="ParcaGirisTarihi" ColumnName="ParcaGirisTarihi" />
+                <ScalarProperty Name="YedekParcaGirisKontrol" ColumnName="YedekParcaGirisKontrol" />
+                <ScalarProperty Name="OzelUretimler" ColumnName="OzelUretimler" />
+                <ScalarProperty Name="OzelIslemler" ColumnName="OzelIslemler" />
+                <ScalarProperty Name="YapilacakIslemler" ColumnName="YapilacakIslemler" />
+                <ScalarProperty Name="IncelemeSonuclari" ColumnName="IncelemeSonuclari" />
+                <ScalarProperty Name="OlculenKapakEgriligi" ColumnName="OlculenKapakEgriligi" />
+                <ScalarProperty Name="OlculenKapakKalinligi" ColumnName="OlculenKapakKalinligi" />
+                <ScalarProperty Name="IzinVerilenMaxKapakEgriligi" ColumnName="IzinVerilenMaxKapakEgriligi" />
+                <ScalarProperty Name="IzinVerilenMinKapakKalinligi" ColumnName="IzinVerilenMinKapakKalinligi" />
+                <ScalarProperty Name="MotorDolapNo" ColumnName="MotorDolapNo" />
+                <ScalarProperty Name="KapakDolapNo" ColumnName="KapakDolapNo" />
+                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
+                <ScalarProperty Name="KapakGirisKaliteId" ColumnName="KapakGirisKaliteId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
