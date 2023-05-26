@@ -49,6 +49,14 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
 
         #region İşçilikler
         public IList<SelectListItemWithAttribute> Iscilikler { get; set; }
+        public List<string> Iscilik { get; set; }
+        public List<string> BirimFiyat { get; set; }
+        public List<string> ParcaIskonto { get; set; }
+        public string GenelIskonto { get; set; }
+        public List<string> BirimToplamFiyat { get; set; }
+        public string ToplamFiyat { get; set; }
+        public string KDV { get; set; }
+        public string GenelToplam { get; set; }
         #endregion
 
         #region Arızalar

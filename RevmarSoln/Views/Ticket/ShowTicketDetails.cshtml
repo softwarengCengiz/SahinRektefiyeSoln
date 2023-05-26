@@ -166,24 +166,24 @@
     <a class="w3-btn w3-ripple w3-blue-gray" id="" style="margin-left:10px;">Parça Ekle</a>
 </div>
 
+@if (Model.Parcalar != null && Model.Parcalar.Any(x => x.Selected))
+{
+    <div class="w3-panel">
+        <div class="w3-row-padding w3-card w3-padding-top ">
+            <table id="calculate">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Parçalar</th>
+                        <th>Adet</th>
+                        <th>Birim Fiyat</th>
+                        <th>İskonto</th>
+                        <th>Toplam Fiyat</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-<div class="w3-panel">
-    <div class="w3-row-padding w3-card w3-padding-top ">
-        <table id="calculate">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Parçalar</th>
-                    <th>Adet</th>
-                    <th>Birim Fiyat</th>
-                    <th>İskonto</th>
-                    <th>Toplam Fiyat</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Parcalar != null)
-                {
-                    foreach (var item in Model.Parcalar.Where(x => x.Selected).ToList())
+                    @foreach (var item in Model.Parcalar.Where(x => x.Selected).ToList())
                     {
                         <tr>
                             <td>
@@ -206,11 +206,10 @@
                             </td>
                         </tr>
                     }
-                }
-            </tbody>
-        </table>
-        @if (Model.Parcalar != null)
-        {
+
+                </tbody>
+            </table>
+
             <div class="w3-row" style="margin-top:30px;">
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label><strong>Toplam:</strong></label>
@@ -233,114 +232,124 @@
                     <label><strong>Genel Toplam:</strong></label>
                 </div>
             </div>
-        }
+
+        </div>
     </div>
-</div>
+}
 
 
+@if (Model.Iscilikler != null && Model.Iscilikler.Any(x => x.Selected))
+{
+    <div class="w3-panel">
+        <div class="w3-row-padding w3-card w3-padding-top ">
+            <table id="calculate">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>İşçilik</th>
+                        <th>Birim Fiyat</th>
+                        <th>İskonto</th>
+                        <th>Toplam Fiyat</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-<div class="w3-panel">
-    <div class="w3-row-padding w3-card w3-padding-top ">
-        <table id="calculate">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>İşçilik</th>
-                    <th>Birim Fiyat</th>
-                    <th>İskonto</th>
-                    <th>Toplam Fiyat</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Iscilikler != null)
-                {
-                    foreach (var item in Model.Iscilikler.Where(x => x.Selected).ToList())
+                    @foreach (var item in Model.Iscilikler.Where(x => x.Selected).ToList())
                     {
                         <tr>
                             <td>
-                                <input class="w3-check" type="checkbox" @if (item.Selected) { <text> checked </text> } />
+                                <input class="w3-check chkIscilik" data-value="@item.Value" type="checkbox" @if (item.Selected) { <text> checked </text> } />
                             </td>
                             <td>
                                 <label>@item.Text</label>
                             </td>
                             <td>
-                                <input class="w3-input w3-border w3-round inpBirimFiyatIscilik" type="number" />
+                                <input class="w3-input w3-border w3-round inpBirimFiyatIscilik" data-value="@item.Value" type="number" value="@item.BirimFiyat" />
                             </td>
                             <td>
-                                <input class="w3-input w3-border w3-round inpIskontoIscilik" type="number" />
+                                <input class="w3-input w3-border w3-round inpIskontoIscilik" data-value="@item.Value" type="number" value="@item.ParcaIskonto" />
                             </td>
                             <td>
-                                <input class="w3-input w3-border w3-round inpToplamFiyatIscilik" type="number" disabled />
+                                <input class="w3-input w3-border w3-round inpToplamFiyatIscilik" data-value="@item.Value" type="number" value="@item.BirimToplamFiyat" disabled />
                             </td>
                         </tr>
                     }
-                }
-            </tbody>
-        </table>
-        @if (Model.Iscilikler != null)
-        {
+
+                </tbody>
+            </table>
             <div class="w3-row" style="margin-top:30px;">
-                <div class="w3-col s12 m3 l3 w3-padding">
+                <div class="w3-row w3-col s12 m3 l3 w3-padding">
                     <label><strong>Toplam:</strong></label>
+                    <label id="toplamIscilik">@Model.ToplamFiyat</label>
                 </div>
             </div>
             <div class="w3-row">
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label><strong>Genel İskonto</strong></label>
-                    <input class="w3-input w3-border w3-round" type="number" />
+                    <input class="w3-input w3-border w3-round" type="number" id="iscilikGenelIskonto" value="@Model.GenelIskonto" />
                 </div>
             </div>
             <div class="w3-row">
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label><strong>KDV</strong></label>
-                    <input class="w3-input w3-border w3-round" type="number" />
+                    <input class="w3-input w3-border w3-round" type="number" id="iscilikKDV" value="@Model.KDV" />
                 </div>
             </div>
             <div class="w3-row">
-                <div class="w3-col s12 m3 l3 w3-padding">
+                <div class="w3-row w3-col s12 m3 l3 w3-padding">
                     <label><strong>Genel Toplam:</strong></label>
+                    <label id="genelToplamIscilik">@Model.GenelToplam</label>
                 </div>
             </div>
-        }
-    </div>
-</div>
 
-<div class="w3-row w3-margin-top w3-margin-bottom">
-    <button class="btn-login w3-green w3-btn w3-round w3-block">Kaydet</button>
-</div>
-
-<div class="w3-panel">
-    <div class="w3-row-padding w3-card w3-padding-top">
-        <div class="w3-row">
-            <div class="w3-row w3-padding-left">
-                <h4>Notlar</h4>
-            </div>
-            <label>@Model.Notlar</label>
         </div>
-        <hr />
     </div>
-</div>
+}
 
-<div class="w3-panel">
-    <div class="w3-row-padding w3-card w3-padding-top">
-        <div class="w3-row">
-            <div class="w3-row w3-padding-left">
-                <h4>Arıza Bildirimleri</h4>
+@if ((Model.Iscilikler != null && Model.Iscilikler.Any(x => x.Selected)) || (Model.Parcalar != null && Model.Parcalar.Any(x => x.Selected)))
+{
+    <div class="w3-row w3-margin-top w3-margin-bottom">
+        <button class="btn-login w3-green w3-btn w3-round w3-block" id="btnKaydetForm">Kaydet</button>
+    </div>
+}
+
+@if (Model.Notlar != null)
+{
+    <div class="w3-panel">
+        <div class="w3-row-padding w3-card w3-padding-top">
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left">
+                    <h4>Notlar</h4>
+                </div>
+                <label>@Model.Notlar</label>
             </div>
-            @if (Model.ArizaBildirim != null)
-            {
-                <ul>
-                    @foreach (var item in Model.ArizaBildirim.Where(x => x.Selected).ToList())
-                    {
-                        <li>@item.Text</li>
-                    }
-                </ul>
-            }
+            <hr />
         </div>
-        <hr />
     </div>
-</div>
+}
 
+@if (Model.ArizaBildirim.Count > 0 && Model.ArizaBildirim.Any(x => x.Selected)) 
+{
+    <div class="w3-panel">
+        <div class="w3-row-padding w3-card w3-padding-top">
+            <div class="w3-row">
+                <div class="w3-row w3-padding-left">
+                    <h4>Arıza Bildirimleri</h4>
+                </div>
+                @if (Model.ArizaBildirim != null)
+                {
+                    <ul>
+                        @foreach (var item in Model.ArizaBildirim.Where(x => x.Selected).ToList())
+                        {
+                            <li>@item.Text</li>
+                        }
+                    </ul>
+                }
+            </div>
+            <hr />
+        </div>
+    </div>
+}
 
 <div id="modalIscilikEkle" class="w3-modal w3-animate-opacity">
     <div class="w3-modal-content w3-card-4">
@@ -424,6 +433,7 @@
 
 <script>
     $(document).ready(function () {
+        //-------------------------------------------------Parça
         $('.inpAdetParca, .inpBirimFiyatParca, .inpIskontoParca').on('input', function () {
             var satir = $(this).closest('tr');
             var adet = parseFloat(satir.find('.inpAdetParca').val());
@@ -438,8 +448,8 @@
             var toplamFiyat = (adet * birimFiyat) - ((adet * birimFiyat) * iskonto / 100);
             satir.find('.inpToplamFiyatParca').val(toplamFiyat);
         });
-
-
+        //-------------------------------------------------
+        //-------------------------------------------------İşçilik
         $('.inpBirimFiyatIscilik, .inpIskontoIscilik').on('input', function () {
             var satir = $(this).closest('tr');
             var birimFiyat = parseFloat(satir.find('.inpBirimFiyatIscilik').val());
@@ -453,6 +463,60 @@
             var toplamFiyat = birimFiyat - (birimFiyat * iskonto / 100);
             satir.find('.inpToplamFiyatIscilik').val(toplamFiyat);
         });
+
+        function HesaplaToplamIscilik() {
+            var toplam = 0;
+            $('.inpToplamFiyatIscilik').each(function () {
+                var deger = $(this).val();
+                if (deger) {
+                    toplam += parseFloat(deger);
+                }
+            });
+            $('#toplamIscilik').text(toplam.toFixed(2));
+        }
+
+        // Input değerleri değiştiğinde hesaplamayı yap
+        $('.inpBirimFiyatIscilik, .inpIskontoIscilik, .inpToplamFiyatIscilik').on('input', function () {
+            HesaplaToplamIscilik();
+        });
+
+        //Genel İşçilik İskonto
+        $('#iscilikGenelIskonto').on('input', function () {
+            var iskontoDegeri = $(this).val();
+            $('.chkIscilik:checked').each(function () {
+                var tr = $(this).closest('tr');
+                var birimFiyatInput = tr.find('.inpBirimFiyatIscilik');
+                var iskontoInput = tr.find('.inpIskontoIscilik');
+                if (birimFiyatInput.val() !== '') {
+                    iskontoInput.val(iskontoDegeri);
+                    var satir = tr;
+                    var birimFiyat = parseFloat(birimFiyatInput.val());
+                    var iskonto = parseFloat(iskontoDegeri);
+
+                    // İskonto kontrolü
+                    if (isNaN(iskonto)) {
+                        iskonto = 0;
+                    }
+
+                    var toplamFiyat = birimFiyat - (birimFiyat * iskonto / 100);
+                    satir.find('.inpToplamFiyatIscilik').val(toplamFiyat);
+                }
+            });
+
+            HesaplaToplamIscilik();
+        });
+
+        //İşçilik KDV
+        $('#iscilikKDV').on('input', function () {
+            var iscilikKDV = $(this).val();
+            var toplamIscilik = parseFloat($('#toplamIscilik').text());
+
+            if (!isNaN(iscilikKDV) && !isNaN(toplamIscilik)) {
+                var genelToplamIscilik = toplamIscilik + (toplamIscilik * iscilikKDV / 100);
+                $('#genelToplamIscilik').text(genelToplamIscilik.toFixed(2));
+            }
+        });
+        //-------------------------------------------------
     });
 
     $('#btnIscilikEkle').on('click', function () {
@@ -482,5 +546,35 @@
         var toplamFiyat = maliyet * adet;
         satir.find('.DYITutar').val(toplamFiyat);
     });
+
+    $('#btnKaydetForm').on('click', function () {
+        var model = {
+            TalepId: @Model.TalepNo,
+            Iscilik: $('.chkIscilik:checked').map(function () { return $(this).data('value'); }).get().join(','),
+            BirimFiyat: $('.chkIscilik:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpBirimFiyatIscilik').val(); }).get().join(';'),
+            ParcaIskonto: $('.chkIscilik:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpIskontoIscilik').val(); }).get().join(';'),
+            GenelIskonto: $('#iscilikGenelIskonto').val(),
+            BirimToplamFiyat: $('.chkIscilik:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpToplamFiyatIscilik').val(); }).get().join(';'),
+            ToplamFiyat: $('#toplamIscilik').text(),
+            KDV: $('#iscilikKDV').val(),
+            GenelToplam: $('#genelToplamIscilik').text()
+        };
+
+    $.ajax({
+        url: '@Url.Action("ShowTicketDetailSave","Ticket")',
+        method: 'POST',
+        data: { model: model },
+        success: function (response) {
+            debugger;
+            if (response) {
+                location.reload();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log(xhr.responseText);
+        }
+    });
+});
+
 </script>
 

@@ -716,6 +716,9 @@
     <Compile Include="Models\TeklifStatu.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TicketWorkmanship.cs">
+      <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TurboRevisionTypes.cs">
       <DependentUpon>SahinRektefiyeModel.tt</DependentUpon>
     </Compile>
@@ -822,6 +825,7 @@
     <Compile Include="Models\ViewModels\Ticket\EngineDimensionalControlViewModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\EngineOutputQualityViewModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\SelectListItemWithAttribute.cs" />
+    <Compile Include="Models\ViewModels\Ticket\ShowTicketDetailSaveModel.cs" />
     <Compile Include="Models\ViewModels\Ticket\ShowTicketDetailViewModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleCreatePageModel.cs" />
     <Compile Include="Models\ViewModels\Vehicle\VehicleEditPageModel.cs" />

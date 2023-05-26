@@ -179,7 +179,11 @@ namespace SahinRektefiyeSoln.Controllers
 
             MusteriSearchPageModel model = new MusteriSearchPageModel();
 
-            model.musteriler = db.Musteri.OrderByDescending(m => m.CreatedDate).ToPagedList<Musteri>(currentPageIndex, aracSorgulamaPageCount);
+            model.musteriler = db.Musteri.OrderBy(m => m.KontakAdi + m.MusteriAdi).ToPagedList<Musteri>(currentPageIndex, 50);
+
+
+
+            //model.musteriler = db.Musteri.OrderByDescending(m => m.CreatedDate).ToPagedList<Musteri>(currentPageIndex, aracSorgulamaPageCount);
 
             return View(model);
         }

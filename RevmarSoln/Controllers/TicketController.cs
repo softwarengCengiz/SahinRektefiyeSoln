@@ -436,7 +436,7 @@ namespace SahinRektefiyeSoln.Controllers
             }
             else
             {
-                return RedirectToAction("DetailEdit",new {id = model.TalepId });
+                return RedirectToAction("DetailEdit", new { id = model.TalepId });
             }
 
         }
@@ -1401,22 +1401,100 @@ namespace SahinRektefiyeSoln.Controllers
 
             var engineInfoDet = EngineInformationDet();
             var motorCıkısKaliteIscilik = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == id);
-            if (motorCıkısKaliteIscilik != null)
+            var talepIscilik = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == id);
+            if (motorCıkısKaliteIscilik != null) 
             {
-                var iscilikMotorCıkısKalite = motorCıkısKaliteIscilik.BlokKrankKolIsleri != null ? motorCıkısKaliteIscilik.BlokKrankKolIsleri.Split(',') : null;
-                foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList())
+                if (talepIscilik != null)
                 {
-                    if (iscilikMotorCıkısKalite != null)
+                    var Iscilikler = talepIscilik.Iscilik != null ? talepIscilik.Iscilik.Split(',') : null;
+                    foreach (var item in engineInfoDet.Where(x => x.HdrId == 4 || x.HdrId == 9).ToList())
                     {
-                        foreach (var itemList in iscilikMotorCıkısKalite)
+                        if (Iscilikler != null)
                         {
-                            if (item.Value == itemList)
-                                item.Selected = true;
+                            foreach (var itemList in Iscilikler)
+                            {
+                                if (item.Value == itemList)
+                                    item.Selected = true;
+                            }
+                        }
+                    }
+                }
+
+                else
+                {
+                    var iscilikMotorCıkısKalite = motorCıkısKaliteIscilik.BlokKrankKolIsleri != null ? motorCıkısKaliteIscilik.BlokKrankKolIsleri.Split(',') : null;
+                    foreach (var item in engineInfoDet.Where(x => x.HdrId == 4 || x.HdrId == 9).ToList())
+                    {
+                        if (iscilikMotorCıkısKalite != null)
+                        {
+                            foreach (var itemList in iscilikMotorCıkısKalite)
+                            {
+                                if (item.Value == itemList)
+                                    item.Selected = true;
+                            }
                         }
                     }
                 }
                 model.Iscilikler = engineInfoDet;
             }
+
+            #region İşçilikler
+            if (talepIscilik != null)
+            {
+                var BirimFiyatlar = talepIscilik.BirimFiyat != null ? talepIscilik.BirimFiyat.Split(';') : null;
+                if (BirimFiyatlar != null)
+                {
+                    foreach (var item in engineInfoDet.Where(x => x.HdrId == 4 || x.HdrId == 9).ToList())
+                    {
+                        foreach (var itemBirimFiyat in BirimFiyatlar)
+                        {
+                            var splittedBirimFiyat = itemBirimFiyat.Split('-');
+                            if (item.Value == splittedBirimFiyat[0])
+                            {
+                                item.BirimFiyat = splittedBirimFiyat[1];
+                            }
+                        }
+                    }
+                }
+
+                var ParcaIskontolar = talepIscilik.ParcaIskonto != null ? talepIscilik.ParcaIskonto.Split(';') : null;
+                if (ParcaIskontolar != null)
+                {
+                    foreach (var item in engineInfoDet.Where(x => x.HdrId == 4 || x.HdrId == 9).ToList())
+                    {
+                        foreach (var itemParcaIskonto in ParcaIskontolar)
+                        {
+                            var splittedParcaIskonto = itemParcaIskonto.Split('-');
+                            if (item.Value == splittedParcaIskonto[0])
+                            {
+                                item.ParcaIskonto = splittedParcaIskonto[1];
+                            }
+                        }
+                    }
+                }
+
+                var BirimToplamFiyatlar = talepIscilik.BirimToplamFiyat != null ? talepIscilik.BirimToplamFiyat.Split(';') : null;
+                if (BirimToplamFiyatlar != null)
+                {
+                    foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList())
+                    {
+                        foreach (var itemBirimToplamFiyat in BirimToplamFiyatlar)
+                        {
+                            var splittedBirimToplamFiyat = itemBirimToplamFiyat.Split('-');
+                            if (item.Value == splittedBirimToplamFiyat[0])
+                            {
+                                item.BirimToplamFiyat = splittedBirimToplamFiyat[1];
+                            }
+                        }
+                    }
+                }
+
+                model.ToplamFiyat = talepIscilik.ToplamFiyat != null ? talepIscilik.ToplamFiyat : null;
+                model.GenelIskonto = talepIscilik.GenelIskonto != null ? talepIscilik.GenelIskonto : null;
+                model.KDV = talepIscilik.KDV != null ? talepIscilik.KDV : null;
+                model.GenelToplam = talepIscilik.GenelToplam != null ? talepIscilik.GenelToplam : null;
+            }
+            #endregion
 
             return View(model);
         }
@@ -2831,6 +2909,59 @@ namespace SahinRektefiyeSoln.Controllers
             db.SaveChanges();
 
             return RedirectToAction("CapInputQuality", new { id = model.TalepId });
+        }
+
+        [HttpPost]
+        public ActionResult ShowTicketDetailSave(ShowTicketDetailSaveModel model)
+        {
+            var Talep = db.Talepler.FirstOrDefault(x => x.TalepId == model.TalepId);
+            var Iscilik = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == model.TalepId);
+
+            if (Iscilik == null)
+            {
+                using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+                {
+                    using (var transaction = context.Database.BeginTransaction())
+                    {
+                        TicketWorkmanship yeniIscilik = new TicketWorkmanship()
+                        {
+                            TalepId = model.TalepId,
+                            Iscilik = model.Iscilik,
+                            BirimFiyat = model.BirimFiyat,
+                            ParcaIskonto = model.ParcaIskonto,
+                            GenelIskonto = model.GenelIskonto,
+                            BirimToplamFiyat = model.BirimToplamFiyat,
+                            ToplamFiyat = model.ToplamFiyat,
+                            KDV = model.KDV,
+                            GenelToplam = model.GenelToplam
+                        };
+
+                        context.TicketWorkmanship.Add(yeniIscilik);
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                }
+            }
+            else
+            {
+                Iscilik.TalepId = model.TalepId;
+                Iscilik.Iscilik = model.Iscilik;
+                Iscilik.BirimFiyat = model.BirimFiyat;
+                Iscilik.ParcaIskonto = model.ParcaIskonto;
+                Iscilik.GenelIskonto = model.GenelIskonto;
+                Iscilik.BirimToplamFiyat = model.BirimToplamFiyat;
+                Iscilik.ToplamFiyat = model.ToplamFiyat;
+                Iscilik.KDV = model.KDV;
+                Iscilik.GenelToplam = model.GenelToplam;
+                db.SaveChanges();
+            }
+
+
+            var newRecord = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == model.TalepId);
+            Talep.TalepIscilikId = newRecord.TalepIscilikId;
+            db.SaveChanges();
+
+            return Json(true);
         }
     }
 }
