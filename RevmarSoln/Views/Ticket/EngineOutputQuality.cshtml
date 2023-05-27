@@ -10,16 +10,21 @@
 <link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
 <script>
-    jQuery(document).ready(function () {
-        'use strict';
-        jQuery('#parcaGirisTarihi').datetimepicker(
-            {
-                timepicker: true,
-                format: 'd.m.Y H:i',
-                scrollInput: false
-            });
+    $(document).ready(function () {
+        jQuery(document).ready(function () {
+            'use strict';
+            jQuery('#parcaGirisTarihi').datetimepicker(
+                {
+                    timepicker: true,
+                    format: 'd.m.Y H:i',
+                    scrollInput: false
+                });
+            $.datetimepicker.setLocale('tr');
+        });
     });
 </script>
 
@@ -235,7 +240,7 @@
             <div class="w3-row">
                 <div class="w3-col s12 m6 l6 w3-padding">
                     <label>Parça Giriş Tarihi ve Saati</label>
-                    @Html.EditorFor(model => model.ParcaGirisSaati, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "parcaGirisTarihi", @type = "date" } })
+                    @Html.EditorFor(model => model.ParcaGirisSaati, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "parcaGirisTarihi" } })
                 </div>
                 <div class="w3-col s12 m6 l6 w3-padding">
                     <label>İlgili Yedek Parçaları Eksiksiz Teslim Alan ve Kontrol Eden</label>
@@ -384,16 +389,16 @@
                             @for (var col = 0; col < 10; col++)
                             {
                                 @*if ((row == 2) && (col % 2 == 0))
-                                {
-                                    <td style="text-align: center; vertical-align: middle;">
-                                        <span>@((col / 2) + 1).Sıkma</span>
-                                    </td>
-                                }
-                                else
-                                {*@
-                                    <td>
-                                        <input type="text" class="w3-input w3-border w3-round table-input" name="AnaMuyluDetay[@(row)][@(col)]" value="@Model.AnaMuyluDetay[row][col]" />
-                                    </td>
+                                    {
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <span>@((col / 2) + 1).Sıkma</span>
+                                        </td>
+                                    }
+                                    else
+                                    {*@
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="AnaMuyluDetay[@(row)][@(col)]" value="@Model.AnaMuyluDetay[row][col]" />
+                                </td>
                                 @*}*@
                             }
                         </tr>
@@ -430,16 +435,16 @@
                             @for (var col = 0; col < 10; col++)
                             {
                                 @*if ((row == 2) && (col % 2 == 0))
-                                {
-                                    <td style="text-align: center; vertical-align: middle;">
-                                        <span>@((col / 2) + 1).Sıkma</span>                            
-                                    </td>
-                                }
-                                else
-                                {*@
-                                    <td>
-                                        <input type="text" class="w3-input w3-border w3-round table-input" name="KolMuyluDetay[@(row)][@(col)]" value="@Model.KolMuyluDetay[row][col]" />
-                                    </td>
+                                    {
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <span>@((col / 2) + 1).Sıkma</span>
+                                        </td>
+                                    }
+                                    else
+                                    {*@
+                                <td>
+                                    <input type="text" class="w3-input w3-border w3-round table-input" name="KolMuyluDetay[@(row)][@(col)]" value="@Model.KolMuyluDetay[row][col]" />
+                                </td>
                                 @*}*@
                             }
                         </tr>

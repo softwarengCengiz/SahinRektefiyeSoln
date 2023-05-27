@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
 {
@@ -21,7 +22,8 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
         public IList<string> GerekliParcaAdet { get; set; }
         public string GerekliParcaYorumlar { get; set; }
         public List<List<string>> YedekParcaGirisKontrol { get; set; }
-        public DateTime? ParcaGirisTarihi { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
+        public Nullable<System.DateTime> ParcaGirisTarihi { get; set; }
         public string TeslimAlan { get; set; }
         public List<List<string>> SupapDusukluguYuksekligi { get; set; }
         public string GerceklestirilenTasmaMiktari { get; set; }

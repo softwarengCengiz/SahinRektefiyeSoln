@@ -2452,7 +2452,7 @@ namespace SahinRektefiyeSoln.Controllers
             string parcaTextMap = "";
             if (model.GerekliParcaOlcu.Count > 0)
             {
-                if (model.GerekliParca.Count < model.GerekliParcaOlcu.Count)
+                if (model.GerekliParca != null && model.GerekliParcaOlcu != null && (model.GerekliParca.Count < model.GerekliParcaOlcu.Count))
                 {
                     model.GerekliParcaOlcu = model.GerekliParcaOlcu.Where(x => x != "").ToList();
                 }
@@ -2885,7 +2885,7 @@ namespace SahinRektefiyeSoln.Controllers
             string parcaTextMap = "";
             if (model.GerekliParcaAdet.Count > 0)
             {
-                if (model.GerekliParcalar.Count < model.GerekliParcaAdet.Count)
+                if (model.GerekliParcalar != null && model.GerekliParcaAdet != null && (model.GerekliParcalar.Count < model.GerekliParcaAdet.Count)) 
                 {
                     model.GerekliParcaAdet = model.GerekliParcaAdet.Where(x => x != "").ToList();
                 }

@@ -11,6 +11,23 @@
 <link href="~/Scripts/DatetimePicker/jquery.datetimepicker.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        jQuery(document).ready(function () {
+            'use strict';
+            jQuery('#parcaGirisTarihi').datetimepicker(
+                {
+                    timepicker: true,
+                    format: 'd.m.Y H:i',
+                    scrollInput: false
+                });
+            $.datetimepicker.setLocale('tr');
+        });
+    });
+</script>
 
 <style>
     .table-input {
@@ -61,7 +78,7 @@
             <div class="w3-row">
                 <div class="w3-col s12 m6 l6 w3-padding">
                     <label>İzin Verilen Min Kapak Kalınlığı</label>
-                    @Html.EditorFor(model => model.IzınVerilenMinKapakKalinligi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "parcaGirisTarihi" } })
+                    @Html.EditorFor(model => model.IzınVerilenMinKapakKalinligi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round" } })
                 </div>
                 <div class="w3-col s12 m6 l6 w3-padding">
                     <label>İzin Verilen Max Kapak Eğriliği</label>
@@ -321,7 +338,7 @@
             <div class="w3-row">
                 <div class="w3-col s12 m6 l6 w3-padding">
                     <label>Gerçekleştirilen Taşma Miktarı</label>
-                    @Html.EditorFor(model => model.GerceklestirilenTasmaMiktari, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "parcaGirisTarihi" } })
+                    @Html.EditorFor(model => model.GerceklestirilenTasmaMiktari, new { htmlAttributes = new { @class = "w3-input w3-border w3-round" } })
                 </div>
                 <div class="w3-col s12 m6 l6 w3-padding">
                     <label>Revizyon Sonrası Kapak Kalınlığı</label>
@@ -335,7 +352,7 @@
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label>1. Sıkma</label>
-                    @Html.EditorFor(model => model.YatakSikmaTorku1, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "parcaGirisTarihi" } })
+                    @Html.EditorFor(model => model.YatakSikmaTorku1, new { htmlAttributes = new { @class = "w3-input w3-border w3-round"} })
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label>2. Sıkma</label>
@@ -343,7 +360,7 @@
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label>3. Sıkma</label>
-                    @Html.EditorFor(model => model.YatakSikmaTorku3, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", @id = "parcaGirisTarihi" } })
+                    @Html.EditorFor(model => model.YatakSikmaTorku3, new { htmlAttributes = new { @class = "w3-input w3-border w3-round"} })
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label>4. Sıkma</label>
