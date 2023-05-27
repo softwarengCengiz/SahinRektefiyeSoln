@@ -1236,6 +1236,7 @@
           <Property Name="MotorCikisKaliteId" Type="int" />
           <Property Name="KapakGirisKaliteId" Type="int" />
           <Property Name="TalepIscilikId" Type="int" />
+          <Property Name="TalepParcaId" Type="int" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -1317,6 +1318,24 @@
           <Property Name="Aciklamasi" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Creator" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="CreatedDate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TicketParts">
+          <Key>
+            <PropertyRef Name="TalepParcaId" />
+          </Key>
+          <Property Name="TalepParcaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TalepId" Type="int" />
+          <Property Name="Parca" Type="varchar" MaxLength="2000" />
+          <Property Name="Adet" Type="varchar" MaxLength="2000" />
+          <Property Name="BirimFiyat" Type="varchar" MaxLength="2000" />
+          <Property Name="ParcaIskonto" Type="varchar" MaxLength="2000" />
+          <Property Name="BirimToplamFiyat" Type="varchar" MaxLength="2000" />
+          <Property Name="ToplamFiyat" Type="varchar" MaxLength="2000" />
+          <Property Name="KDV" Type="varchar" MaxLength="2000" />
+          <Property Name="GenelToplam" Type="varchar" MaxLength="2000" />
+          <Property Name="GenelIskonto" Type="varchar" MaxLength="2000" />
+          <Property Name="Olusturan" Type="varchar" MaxLength="100" />
+          <Property Name="OlusturmaTarihi" Type="datetime" />
         </EntityType>
         <EntityType Name="TicketWorkmanship">
           <Key>
@@ -1663,6 +1682,30 @@
             </Principal>
             <Dependent Role="Talepler">
               <PropertyRef Name="TalepIscilikId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Talepler__TalepP__789EE131">
+          <End Role="TicketParts" Type="Self.TicketParts" Multiplicity="0..1" />
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TicketParts">
+              <PropertyRef Name="TalepParcaId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="TalepParcaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TicketPar__Talep__77AABCF8">
+          <End Role="Talepler" Type="Self.Talepler" Multiplicity="0..1" />
+          <End Role="TicketParts" Type="Self.TicketParts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="TicketParts">
+              <PropertyRef Name="TalepId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3123,6 +3166,7 @@
           <EntitySet Name="TeklifKalemleri" EntityType="Self.TeklifKalemleri" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Teklifler" EntityType="Self.Teklifler" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TeklifStatu" EntityType="Self.TeklifStatu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketParts" EntityType="Self.TicketParts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketWorkmanship" EntityType="Self.TicketWorkmanship" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TurboRevisionTypes" EntityType="Self.TurboRevisionTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TurboSarjFixing" EntityType="Self.TurboSarjFixing" Schema="dbo" store:Type="Tables" />
@@ -3172,6 +3216,14 @@
           <AssociationSet Name="FK__Talepler__TalepI__74CE504D" Association="Self.FK__Talepler__TalepI__74CE504D">
             <End Role="TicketWorkmanship" EntitySet="TicketWorkmanship" />
             <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Talepler__TalepP__789EE131" Association="Self.FK__Talepler__TalepP__789EE131">
+            <End Role="TicketParts" EntitySet="TicketParts" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TicketPar__Talep__77AABCF8" Association="Self.FK__TicketPar__Talep__77AABCF8">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="TicketParts" EntitySet="TicketParts" />
           </AssociationSet>
           <AssociationSet Name="FK__TicketWor__Olust__73DA2C14" Association="Self.FK__TicketWor__Olust__73DA2C14">
             <End Role="Talepler" EntitySet="Talepler" />
@@ -4242,6 +4294,15 @@
           <AssociationSet Name="FK__TicketWor__Olust__73DA2C14" Association="SahinRektefiyeDbModel.FK__TicketWor__Olust__73DA2C14">
             <End Role="Talepler" EntitySet="Talepler" />
             <End Role="TicketWorkmanship" EntitySet="TicketWorkmanship" />
+          </AssociationSet>
+          <EntitySet Name="TicketParts" EntityType="SahinRektefiyeDbModel.TicketParts" />
+          <AssociationSet Name="FK__Talepler__TalepP__789EE131" Association="SahinRektefiyeDbModel.FK__Talepler__TalepP__789EE131">
+            <End Role="TicketParts" EntitySet="TicketParts" />
+            <End Role="Talepler" EntitySet="Talepler" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TicketPar__Talep__77AABCF8" Association="SahinRektefiyeDbModel.FK__TicketPar__Talep__77AABCF8">
+            <End Role="Talepler" EntitySet="Talepler" />
+            <End Role="TicketParts" EntitySet="TicketParts" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="EnCokSatilanParcalar_Result">
@@ -5547,6 +5608,9 @@
           <Property Name="TalepIscilikId" Type="Int32" />
           <NavigationProperty Name="TicketWorkmanship" Relationship="SahinRektefiyeDbModel.FK__Talepler__TalepI__74CE504D" FromRole="Talepler" ToRole="TicketWorkmanship" />
           <NavigationProperty Name="TicketWorkmanship1" Relationship="SahinRektefiyeDbModel.FK__TicketWor__Olust__73DA2C14" FromRole="Talepler" ToRole="TicketWorkmanship" />
+          <Property Name="TalepParcaId" Type="Int32" />
+          <NavigationProperty Name="TicketParts" Relationship="SahinRektefiyeDbModel.FK__Talepler__TalepP__789EE131" FromRole="Talepler" ToRole="TicketParts" />
+          <NavigationProperty Name="TicketParts1" Relationship="SahinRektefiyeDbModel.FK__TicketPar__Talep__77AABCF8" FromRole="Talepler" ToRole="TicketParts" />
         </EntityType>
         <EntityType Name="TalepSekli">
           <Key>
@@ -7478,6 +7542,50 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="TicketParts">
+          <Key>
+            <PropertyRef Name="TalepParcaId" />
+          </Key>
+          <Property Name="TalepParcaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TalepId" Type="Int32" />
+          <Property Name="Parca" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="Adet" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="BirimFiyat" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="ParcaIskonto" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="BirimToplamFiyat" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="ToplamFiyat" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="KDV" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="GenelToplam" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="GenelIskonto" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="Olusturan" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="OlusturmaTarihi" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Talepler" Relationship="SahinRektefiyeDbModel.FK__Talepler__TalepP__789EE131" FromRole="TicketParts" ToRole="Talepler" />
+          <NavigationProperty Name="Talepler1" Relationship="SahinRektefiyeDbModel.FK__TicketPar__Talep__77AABCF8" FromRole="TicketParts" ToRole="Talepler" />
+        </EntityType>
+        <Association Name="FK__Talepler__TalepP__789EE131">
+          <End Type="SahinRektefiyeDbModel.TicketParts" Role="TicketParts" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TicketParts">
+              <PropertyRef Name="TalepParcaId" />
+            </Principal>
+            <Dependent Role="Talepler">
+              <PropertyRef Name="TalepParcaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TicketPar__Talep__77AABCF8">
+          <End Type="SahinRektefiyeDbModel.Talepler" Role="Talepler" Multiplicity="0..1" />
+          <End Type="SahinRektefiyeDbModel.TicketParts" Role="TicketParts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Talepler">
+              <PropertyRef Name="TalepId" />
+            </Principal>
+            <Dependent Role="TicketParts">
+              <PropertyRef Name="TalepId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -8680,6 +8788,7 @@
           <EntitySetMapping Name="Talepler">
             <EntityTypeMapping TypeName="SahinRektefiyeDbModel.Talepler">
               <MappingFragment StoreEntitySet="Talepler">
+                <ScalarProperty Name="TalepParcaId" ColumnName="TalepParcaId" />
                 <ScalarProperty Name="TalepIscilikId" ColumnName="TalepIscilikId" />
                 <ScalarProperty Name="KapakGirisKaliteId" ColumnName="KapakGirisKaliteId" />
                 <ScalarProperty Name="MotorCikisKaliteId" ColumnName="MotorCikisKaliteId" />
@@ -9193,6 +9302,25 @@
                 <ScalarProperty Name="Iscilik" ColumnName="Iscilik" />
                 <ScalarProperty Name="TalepId" ColumnName="TalepId" />
                 <ScalarProperty Name="TalepIscilikId" ColumnName="TalepIscilikId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TicketParts">
+            <EntityTypeMapping TypeName="SahinRektefiyeDbModel.TicketParts">
+              <MappingFragment StoreEntitySet="TicketParts">
+                <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+                <ScalarProperty Name="Olusturan" ColumnName="Olusturan" />
+                <ScalarProperty Name="GenelIskonto" ColumnName="GenelIskonto" />
+                <ScalarProperty Name="GenelToplam" ColumnName="GenelToplam" />
+                <ScalarProperty Name="KDV" ColumnName="KDV" />
+                <ScalarProperty Name="ToplamFiyat" ColumnName="ToplamFiyat" />
+                <ScalarProperty Name="BirimToplamFiyat" ColumnName="BirimToplamFiyat" />
+                <ScalarProperty Name="ParcaIskonto" ColumnName="ParcaIskonto" />
+                <ScalarProperty Name="BirimFiyat" ColumnName="BirimFiyat" />
+                <ScalarProperty Name="Adet" ColumnName="Adet" />
+                <ScalarProperty Name="Parca" ColumnName="Parca" />
+                <ScalarProperty Name="TalepId" ColumnName="TalepId" />
+                <ScalarProperty Name="TalepParcaId" ColumnName="TalepParcaId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

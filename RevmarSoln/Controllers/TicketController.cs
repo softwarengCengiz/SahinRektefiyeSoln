@@ -1402,7 +1402,7 @@ namespace SahinRektefiyeSoln.Controllers
             var engineInfoDet = EngineInformationDet();
             var motorCıkısKaliteIscilik = db.EngineOutputQuality.FirstOrDefault(x => x.TalepId == id);
             var talepIscilik = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == id);
-            if (motorCıkısKaliteIscilik != null) 
+            if (motorCıkısKaliteIscilik != null)
             {
                 if (talepIscilik != null)
                 {
@@ -1437,6 +1437,118 @@ namespace SahinRektefiyeSoln.Controllers
                 }
                 model.Iscilikler = engineInfoDet;
             }
+
+            #region Parçalar
+
+            var talepParca = db.TicketParts.FirstOrDefault(x => x.TalepId == id);
+            var arizaBildirim = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
+            var TamirParca = TamirListesi();
+            model.Parcalar = TamirParca;
+
+            if (talepParca != null)
+            {
+                var Parcalar = talepParca.Parca != null ? talepParca.Parca.Split(',') : null;
+                foreach (var item in TamirParca.ToList())
+                {
+                    if (Parcalar != null)
+                    {
+                        foreach (var itemList in Parcalar)
+                        {
+                            if (item.Value == itemList)
+                                item.Selected = true;
+                        }
+                    }
+                }
+
+                var Adetler = talepParca.Adet != null ? talepParca.Adet.Split(';') : null;
+                if (Adetler != null)
+                {
+                    foreach (var item in TamirParca.ToList())
+                    {
+                        foreach (var itemAdet in Adetler)
+                        {
+                            var splittedAdet = itemAdet.Split('-');
+                            if (item.Value == splittedAdet[0])
+                            {
+                                item.Adet = splittedAdet[1];
+                            }
+                        }
+                    }
+                }
+
+                var BirimFiyatlar = talepParca.BirimFiyat != null ? talepParca.BirimFiyat.Split(';') : null;
+                if (BirimFiyatlar != null)
+                {
+                    foreach (var item in TamirParca.ToList())
+                    {
+                        foreach (var itemBirimFiyat in BirimFiyatlar)
+                        {
+                            var splittedBirimFiyat = itemBirimFiyat.Split('-');
+                            if (item.Value == splittedBirimFiyat[0])
+                            {
+                                item.BirimFiyatParca = splittedBirimFiyat[1];
+                            }
+                        }
+                    }
+                }
+
+                var ParcaIskontolar = talepParca.ParcaIskonto != null ? talepParca.ParcaIskonto.Split(';') : null;
+                if (ParcaIskontolar != null)
+                {
+                    foreach (var item in TamirParca.ToList())
+                    {
+                        foreach (var itemParcaIskonto in ParcaIskontolar)
+                        {
+                            var splittedParcaIskonto = itemParcaIskonto.Split('-');
+                            if (item.Value == splittedParcaIskonto[0])
+                            {
+                                item.ParcaIskontoParca = splittedParcaIskonto[1];
+                            }
+                        }
+                    }
+                }
+
+                var BirimToplamFiyatlar = talepParca.BirimToplamFiyat != null ? talepParca.BirimToplamFiyat.Split(';') : null;
+                if (BirimToplamFiyatlar != null)
+                {
+                    foreach (var item in TamirParca.ToList())
+                    {
+                        foreach (var itemBirimToplamFiyat in BirimToplamFiyatlar)
+                        {
+                            var splittedBirimToplamFiyat = itemBirimToplamFiyat.Split('-');
+                            if (item.Value == splittedBirimToplamFiyat[0])
+                            {
+                                item.BirimToplamFiyatParca = splittedBirimToplamFiyat[1];
+                            }
+                        }
+                    }
+                }
+
+                model.ToplamFiyatParca = talepParca.ToplamFiyat != null ? talepParca.ToplamFiyat : null;
+                model.GenelIskontoParca = talepParca.GenelIskonto != null ? talepParca.GenelIskonto : null;
+                model.KDVParca = talepParca.KDV != null ? talepParca.KDV : null;
+                model.GenelToplamParca = talepParca.GenelToplam != null ? talepParca.GenelToplam : null;
+            }
+            else
+            {
+                if (arizaBildirim != null)
+                {
+                    var arizaBildirimParcalari = arizaBildirim.ParcaList != null ? arizaBildirim.ParcaList.Split(',') : null;
+
+                    foreach (var item in TamirParca)
+                    {
+                        if (arizaBildirimParcalari != null)
+                        {
+                            foreach (var itemList in arizaBildirimParcalari)
+                            {
+                                if (item.Value == itemList)
+                                    item.Selected = true;
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
 
             #region İşçilikler
             if (talepIscilik != null)
@@ -1476,7 +1588,7 @@ namespace SahinRektefiyeSoln.Controllers
                 var BirimToplamFiyatlar = talepIscilik.BirimToplamFiyat != null ? talepIscilik.BirimToplamFiyat.Split(';') : null;
                 if (BirimToplamFiyatlar != null)
                 {
-                    foreach (var item in engineInfoDet.Where(x => x.HdrId == 4).ToList())
+                    foreach (var item in engineInfoDet.Where(x => x.HdrId == 4 || x.HdrId == 9).ToList())
                     {
                         foreach (var itemBirimToplamFiyat in BirimToplamFiyatlar)
                         {
@@ -1495,6 +1607,7 @@ namespace SahinRektefiyeSoln.Controllers
                 model.GenelToplam = talepIscilik.GenelToplam != null ? talepIscilik.GenelToplam : null;
             }
             #endregion
+
 
             return View(model);
         }
@@ -2912,54 +3025,105 @@ namespace SahinRektefiyeSoln.Controllers
         }
 
         [HttpPost]
-        public ActionResult ShowTicketDetailSave(ShowTicketDetailSaveModel model)
+        public ActionResult ShowTicketDetailSave(ShowTicketDetailIscilikSaveModel iscilikModel, ShowTicketDetailParcaSaveModel parcaModel)
         {
-            var Talep = db.Talepler.FirstOrDefault(x => x.TalepId == model.TalepId);
-            var Iscilik = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == model.TalepId);
+            var Talep = db.Talepler.FirstOrDefault(x => x.TalepId == iscilikModel.TalepId);
+            var Iscilik = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == iscilikModel.TalepId);
+            var Parca = db.TicketParts.FirstOrDefault(x => x.TalepId == parcaModel.TalepId);
 
-            if (Iscilik == null)
+            if (iscilikModel != null && iscilikModel.Iscilik != null)
             {
-                using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+                if (Iscilik == null)
                 {
-                    using (var transaction = context.Database.BeginTransaction())
+                    using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
                     {
-                        TicketWorkmanship yeniIscilik = new TicketWorkmanship()
+                        using (var transaction = context.Database.BeginTransaction())
                         {
-                            TalepId = model.TalepId,
-                            Iscilik = model.Iscilik,
-                            BirimFiyat = model.BirimFiyat,
-                            ParcaIskonto = model.ParcaIskonto,
-                            GenelIskonto = model.GenelIskonto,
-                            BirimToplamFiyat = model.BirimToplamFiyat,
-                            ToplamFiyat = model.ToplamFiyat,
-                            KDV = model.KDV,
-                            GenelToplam = model.GenelToplam
-                        };
 
-                        context.TicketWorkmanship.Add(yeniIscilik);
-                        context.SaveChanges();
-                        transaction.Commit();
+                            TicketWorkmanship yeniIscilik = new TicketWorkmanship()
+                            {
+                                TalepId = iscilikModel.TalepId,
+                                Iscilik = iscilikModel.Iscilik,
+                                BirimFiyat = iscilikModel.BirimFiyat,
+                                ParcaIskonto = iscilikModel.ParcaIskonto,
+                                GenelIskonto = iscilikModel.GenelIskonto,
+                                BirimToplamFiyat = iscilikModel.BirimToplamFiyat,
+                                ToplamFiyat = iscilikModel.ToplamFiyat,
+                                KDV = iscilikModel.KDV,
+                                GenelToplam = iscilikModel.GenelToplam
+                            };
+
+                            context.TicketWorkmanship.Add(yeniIscilik);
+                            context.SaveChanges();
+                            transaction.Commit();
+                        }
                     }
                 }
-            }
-            else
-            {
-                Iscilik.TalepId = model.TalepId;
-                Iscilik.Iscilik = model.Iscilik;
-                Iscilik.BirimFiyat = model.BirimFiyat;
-                Iscilik.ParcaIskonto = model.ParcaIskonto;
-                Iscilik.GenelIskonto = model.GenelIskonto;
-                Iscilik.BirimToplamFiyat = model.BirimToplamFiyat;
-                Iscilik.ToplamFiyat = model.ToplamFiyat;
-                Iscilik.KDV = model.KDV;
-                Iscilik.GenelToplam = model.GenelToplam;
+                else
+                {
+                    Iscilik.TalepId = iscilikModel.TalepId;
+                    Iscilik.Iscilik = iscilikModel.Iscilik;
+                    Iscilik.BirimFiyat = iscilikModel.BirimFiyat;
+                    Iscilik.ParcaIskonto = iscilikModel.ParcaIskonto;
+                    Iscilik.GenelIskonto = iscilikModel.GenelIskonto;
+                    Iscilik.BirimToplamFiyat = iscilikModel.BirimToplamFiyat;
+                    Iscilik.ToplamFiyat = iscilikModel.ToplamFiyat;
+                    Iscilik.KDV = iscilikModel.KDV;
+                    Iscilik.GenelToplam = iscilikModel.GenelToplam;
+                    db.SaveChanges();
+                }
+
+                var newRecord = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == iscilikModel.TalepId);
+                Talep.TalepIscilikId = newRecord.TalepIscilikId;
                 db.SaveChanges();
             }
 
+            if (parcaModel != null && parcaModel.Parca != null)
+            {
+                if (Parca == null)
+                {
+                    using (SahinRektefiyeDbEntities context = new SahinRektefiyeDbEntities())
+                    {
+                        using (var transaction = context.Database.BeginTransaction())
+                        {
+                            TicketParts yeniParca = new TicketParts()
+                            {
+                                TalepId = parcaModel.TalepId,
+                                Adet = parcaModel.Adet,
+                                Parca = parcaModel.Parca,
+                                BirimFiyat = parcaModel.BirimFiyat,
+                                ParcaIskonto = parcaModel.ParcaIskonto,
+                                GenelIskonto = parcaModel.GenelIskonto,
+                                BirimToplamFiyat = parcaModel.BirimToplamFiyat,
+                                ToplamFiyat = parcaModel.ToplamFiyat,
+                                KDV = parcaModel.KDV,
+                                GenelToplam = parcaModel.GenelToplam
+                            };
 
-            var newRecord = db.TicketWorkmanship.FirstOrDefault(x => x.TalepId == model.TalepId);
-            Talep.TalepIscilikId = newRecord.TalepIscilikId;
-            db.SaveChanges();
+                            context.TicketParts.Add(yeniParca);
+                            context.SaveChanges();
+                            transaction.Commit();
+                        }
+                    }
+                }
+                else
+                {
+                    Parca.TalepId = parcaModel.TalepId;
+                    Parca.Adet = parcaModel.Adet;
+                    Parca.Parca = parcaModel.Parca;
+                    Parca.BirimFiyat = parcaModel.BirimFiyat;
+                    Parca.ParcaIskonto = parcaModel.ParcaIskonto;
+                    Parca.GenelIskonto = parcaModel.GenelIskonto;
+                    Parca.BirimToplamFiyat = parcaModel.BirimToplamFiyat;
+                    Parca.ToplamFiyat = parcaModel.ToplamFiyat;
+                    Parca.KDV = parcaModel.KDV;
+                    Parca.GenelToplam = parcaModel.GenelToplam;
+                    db.SaveChanges();
+                }
+                var newRecord = db.TicketParts.FirstOrDefault(x => x.TalepId == parcaModel.TalepId);
+                Talep.TalepParcaId = newRecord.TalepParcaId;
+                db.SaveChanges();
+            }
 
             return Json(true);
         }

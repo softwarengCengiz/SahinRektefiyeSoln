@@ -229,6 +229,9 @@
         <EntityTypeShape EntityType="SahinRektefiyeDbModel.TicketWorkmanship" Width="1.5" PointX="9.75" PointY="87.25" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK__Talepler__TalepI__74CE504D" />
         <AssociationConnector Association="SahinRektefiyeDbModel.FK__TicketWor__Olust__73DA2C14" />
+        <EntityTypeShape EntityType="SahinRektefiyeDbModel.TicketParts" Width="1.5" PointX="9.75" PointY="92.5" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK__Talepler__TalepP__789EE131" />
+        <AssociationConnector Association="SahinRektefiyeDbModel.FK__TicketPar__Talep__77AABCF8" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

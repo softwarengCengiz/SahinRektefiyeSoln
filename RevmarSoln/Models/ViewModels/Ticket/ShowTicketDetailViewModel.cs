@@ -45,6 +45,15 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
 
         #region Parçalar
         public IList<SelectListItemWithAttribute> Parcalar { get; set; }
+        public List<string> Parca { get; set; }
+        public List<string> Adet { get; set; }
+        public List<string> BirimFiyatParca { get; set; }
+        public List<string> ParcaIskontoParca { get; set; }
+        public string GenelIskontoParca { get; set; }
+        public List<string> BirimToplamFiyatParca { get; set; }
+        public string ToplamFiyatParca { get; set; }
+        public string KDVParca { get; set; }
+        public string GenelToplamParca { get; set; }
         #endregion
 
         #region İşçilikler

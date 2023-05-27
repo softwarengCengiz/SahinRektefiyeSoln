@@ -133,6 +133,7 @@ namespace SahinRektefiyeSoln.Models
         public virtual DbSet<EngineOutputQuality> EngineOutputQuality { get; set; }
         public virtual DbSet<CapInputQuality> CapInputQuality { get; set; }
         public virtual DbSet<TicketWorkmanship> TicketWorkmanship { get; set; }
+        public virtual DbSet<TicketParts> TicketParts { get; set; }
     
         public virtual int AutoCreateUserMenu(string userName)
         {
