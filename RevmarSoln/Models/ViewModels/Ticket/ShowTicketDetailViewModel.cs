@@ -30,6 +30,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
         public string AracGrubu { get; set; }
         public string MarkaModel { get; set; }
         public string  Plaka{ get; set; }
+        public string  Vin{ get; set; }
         #endregion
 
         #region Kargo Bilgileri

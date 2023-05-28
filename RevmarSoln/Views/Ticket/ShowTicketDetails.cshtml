@@ -126,6 +126,9 @@
                 <div class="w3-col s12 w3-padding">
                     <label><strong>Plaka:</strong> @Model.Plaka</label>
                 </div>
+                <div class="w3-col s12 w3-padding">
+                    <label><strong>Şasi No:</strong> @Model.Vin</label>
+                </div>
             </div>
             <hr />
         </div>
@@ -193,16 +196,16 @@
                                 <label>@item.Text</label>
                             </td>
                             <td>
-                                <input class="w3-input w3-border w3-round inpAdetParca" type="number" value="@item.Adet"/>
+                                <input class="w3-input w3-border w3-round inpAdetParca" type="number" value="@item.Adet" />
                             </td>
                             <td>
-                                <input class="w3-input w3-border w3-round inpBirimFiyatParca" type="number" value="@item.BirimToplamFiyatParca"/>
+                                <input class="w3-input w3-border w3-round inpBirimFiyatParca" type="number" value="@item.BirimToplamFiyatParca" />
                             </td>
                             <td>
-                                <input class="w3-input w3-border w3-round inpIskontoParca" type="number" value="@item.ParcaIskontoParca"/>
+                                <input class="w3-input w3-border w3-round inpIskontoParca" type="number" value="@item.ParcaIskontoParca" />
                             </td>
                             <td>
-                                <input class="w3-input w3-border w3-round inpToplamFiyatParca" type="number" disabled value="@item.BirimToplamFiyatParca"/>
+                                <input class="w3-input w3-border w3-round inpToplamFiyatParca" type="number" disabled value="@item.BirimToplamFiyatParca" />
                             </td>
                         </tr>
                     }
@@ -210,31 +213,26 @@
                 </tbody>
             </table>
 
-            <div class="w3-row" style="margin-top:30px;">
+            <div class="w3-row" style="text-align:center; margin-top:30px; margin-left:120px;">
                 <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Toplam:</strong></label>
-                    <label id="toplamFiyatParca">@Model.ToplamFiyatParca</label>
+                    <label><strong>Toplam</strong></label>
+                    <input class="w3-input w3-border w3-round" type="number" id="toplamFiyatParca" value="@Model.ToplamFiyatParca" readonly disabled />
+                    @*<label id="toplamFiyatParca"></label>*@
                 </div>
-            </div>
-            <div class="w3-row">
-                <div class="w3-col s12 m3 l3 w3-padding">
+                <div class="w3-col s12 m2 l2 w3-padding">
                     <label><strong>Genel İskonto</strong></label>
-                    <input class="w3-input w3-border w3-round" type="number" id="genelIskontoParca" value="@Model.GenelIskontoParca"/>
+                    <input class="w3-input w3-border w3-round" type="number" id="genelIskontoParca" value="@Model.GenelIskontoParca" />
                 </div>
-            </div>
-            <div class="w3-row">
-                <div class="w3-col s12 m3 l3 w3-padding">
+                <div class="w3-col s12 m2 l2 w3-padding">
                     <label><strong>KDV</strong></label>
-                    <input class="w3-input w3-border w3-round" type="number" id="KDVParca" value="@Model.KDVParca"/>
+                    <input class="w3-input w3-border w3-round" type="number" id="KDVParca" value="@Model.KDVParca" />
                 </div>
-            </div>
-            <div class="w3-row">
                 <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Genel Toplam:</strong></label>
-                    <label id="genelToplamParca">@Model.GenelToplamParca</label>
+                    <label><strong>Genel Toplam</strong></label>
+                    <input class="w3-input w3-border w3-round" type="number" id="genelToplamParca" value="@Model.GenelToplamParca" readonly disabled />
+                    @*<label id="genelToplamParca">@Model.GenelToplamParca</label>*@
                 </div>
             </div>
-
         </div>
     </div>
 }
@@ -279,31 +277,27 @@
 
                 </tbody>
             </table>
-            <div class="w3-row" style="margin-top:30px;">
+
+            <div class="w3-row" style="text-align:center; margin-top:30px; margin-left:120px;">
                 <div class="w3-row w3-col s12 m3 l3 w3-padding">
                     <label><strong>Toplam:</strong></label>
-                    <label id="toplamIscilik">@Model.ToplamFiyat</label>
+                    <input class="w3-input w3-border w3-round" type="number" id="toplamIscilik" value="@Model.ToplamFiyat" readonly disabled />
+                    @*<label id="toplamIscilik">@Model.ToplamFiyat</label>*@
                 </div>
-            </div>
-            <div class="w3-row">
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label><strong>Genel İskonto</strong></label>
                     <input class="w3-input w3-border w3-round" type="number" id="iscilikGenelIskonto" value="@Model.GenelIskonto" />
                 </div>
-            </div>
-            <div class="w3-row">
                 <div class="w3-col s12 m3 l3 w3-padding">
                     <label><strong>KDV</strong></label>
                     <input class="w3-input w3-border w3-round" type="number" id="iscilikKDV" value="@Model.KDV" />
                 </div>
-            </div>
-            <div class="w3-row">
                 <div class="w3-row w3-col s12 m3 l3 w3-padding">
                     <label><strong>Genel Toplam:</strong></label>
-                    <label id="genelToplamIscilik">@Model.GenelToplam</label>
+                    <input class="w3-input w3-border w3-round" type="number" id="genelToplamIscilik" value="@Model.GenelToplam" readonly disabled />
+                    @*<label id="genelToplamIscilik">@Model.GenelToplam</label>*@
                 </div>
             </div>
-
         </div>
     </div>
 }
@@ -390,128 +384,91 @@
                     </table>
                 </div>
             </div>
-        </div>
-
-        <div class="w3-row w3-margin" id="">
-            <div style="display: flex; justify-content: center; gap: 10px;">
-                <div class="w3-row-padding w3-padding-top ">
-                    <button type="button" class="w3-green" id="addNewWorkship"><i class="fa fa-plus"></i></button>
-                    <table id="tableDYI">
-                        <thead>
-                            <tr>
-                                <th>DYI</th>
-                                <th>DYI Maliyeti</th>
-                                <th>Adet</th>
-                                <th>Tutar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <input class="w3-input w3-border w3-round DYI" type="text" />
-                                </td>
-                                <td>
-                                    <input class="w3-input w3-border w3-round DYIMaliyet" type="number" />
-                                </td>
-                                <td>
-                                    <input class="w3-input w3-border w3-round DYIAdet" type="number" />
-                                </td>
-                                <td>
-                                    <input class="w3-input w3-border w3-round DYITutar" type="number" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="w3-row w3-right" style="margin-bottom:20px;">
+                <button id="btnOnaylaIscilik" class="w3-btn w3-ripple w3-green">Onayla</button>
+                <button id="btnVazgecIscilik" class="w3-btn w3-ripple w3-red">Vazgeç</button>
             </div>
         </div>
-
-    </div>
-    <div class="w3-row w3-right" style="margin-bottom:20px;">
-        <button id="btnOnaylaIscilik" class="w3-btn w3-ripple w3-green">Onayla</button>
-        <button id="btnVazgecIscilik" class="w3-btn w3-ripple w3-red">Vazgeç</button>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
         //-------------------------------------------------Parça
-        $(document).ready(function () {
-            // Her bir parça için hesaplama yap
-            $('.inpAdetParca, .inpBirimFiyatParca, .inpIskontoParca').on('input', function () {
-                var satir = $(this).closest('tr');
-                var adet = parseFloat(satir.find('.inpAdetParca').val());
-                var birimFiyat = parseFloat(satir.find('.inpBirimFiyatParca').val());
-                var iskonto = parseFloat(satir.find('.inpIskontoParca').val());
+        $('.inpAdetParca, .inpBirimFiyatParca, .inpIskontoParca').on('input', function () {
+            var satir = $(this).closest('tr');
+            var adet = parseFloat(satir.find('.inpAdetParca').val());
+            var birimFiyat = parseFloat(satir.find('.inpBirimFiyatParca').val());
+            var iskonto = parseFloat(satir.find('.inpIskontoParca').val());
 
-                // İskonto kontrolü
-                if (isNaN(iskonto)) {
-                    iskonto = 0;
+            // İskonto kontrolü
+            if (isNaN(iskonto)) {
+                iskonto = 0;
+            }
+
+            var toplamFiyat = adet * birimFiyat - (adet * birimFiyat * iskonto / 100);
+            satir.find('.inpToplamFiyatParca').val(toplamFiyat);
+            HesaplaToplamParca();
+            HesaplaGenelToplamParca();
+        });
+
+        function HesaplaToplamParca() {
+            var toplam = 0;
+            $('.inpToplamFiyatParca').each(function () {
+                var deger = parseFloat($(this).val());
+                if (!isNaN(deger)) {
+                    toplam += deger;
                 }
-
-                var toplamFiyat = adet * birimFiyat - (adet * birimFiyat * iskonto / 100);
-                satir.find('.inpToplamFiyatParca').val(toplamFiyat);
-                HesaplaToplamParca();
-                HesaplaGenelToplamParca();
             });
+            $('#toplamFiyatParca').val(toplam.toFixed(2));
+        }
 
-            function HesaplaToplamParca() {
-                var toplam = 0;
-                $('.inpToplamFiyatParca').each(function () {
-                    var deger = parseFloat($(this).val());
-                    if (!isNaN(deger)) {
-                        toplam += deger;
+        function HesaplaGenelToplamParca() {
+            var toplamParca = parseFloat($('#toplamFiyatParca').val());
+            var kdvParca = parseFloat($('#KDVParca').val());
+            var genelToplamParca = toplamParca + (toplamParca * kdvParca / 100);
+            $('#genelToplamParca').val(genelToplamParca.toFixed(2));
+        }
+
+        //Genel İşçilik İskonto
+        $('#genelIskontoParca').on('input', function () {
+            var iskontoDegeri = parseFloat($(this).val());
+            if (!isNaN(iskontoDegeri)) {
+                $('.chcParca:checked').each(function () {
+                    var tr = $(this).closest('tr');
+                    var birimFiyatInput = tr.find('.inpBirimFiyatParca');
+                    var iskontoInput = tr.find('.inpIskontoParca');
+                    if (birimFiyatInput.val() !== '') {
+                        iskontoInput.val(iskontoDegeri);
+                        var satir = tr;
+                        var birimFiyat = parseFloat(birimFiyatInput.val());
+                        var iskonto = parseFloat(iskontoDegeri);
+
+                        // İskonto kontrolü
+                        if (isNaN(iskonto)) {
+                            iskonto = 0;
+                        }
+
+                        var toplamFiyat = birimFiyat - (birimFiyat * iskonto / 100);
+                        satir.find('.inpToplamFiyatParca').val(toplamFiyat);
                     }
                 });
-                $('#toplamFiyatParca').text(toplam.toFixed(2));
+
+                HesaplaToplamParca();
+                HesaplaGenelToplamParca();
             }
-
-            function HesaplaGenelToplamParca() {
-                var toplamParca = parseFloat($('#toplamFiyatParca').text());
-                var kdvParca = parseFloat($('#KDVParca').val());
-                var genelToplamParca = toplamParca + (toplamParca * kdvParca / 100);
-                $('#genelToplamParca').text(genelToplamParca.toFixed(2));
-            }
-
-            //Genel İşçilik İskonto
-            $('#genelIskontoParca').on('input', function () {
-                var iskontoDegeri = parseFloat($(this).val());
-                if (!isNaN(iskontoDegeri)) {
-                    $('.chcParca:checked').each(function () {
-                        var tr = $(this).closest('tr');
-                        var birimFiyatInput = tr.find('.inpBirimFiyatParca');
-                        var iskontoInput = tr.find('.inpIskontoParca');
-                        if (birimFiyatInput.val() !== '') {
-                            iskontoInput.val(iskontoDegeri);
-                            var satir = tr;
-                            var birimFiyat = parseFloat(birimFiyatInput.val());
-                            var iskonto = parseFloat(iskontoDegeri);
-
-                            // İskonto kontrolü
-                            if (isNaN(iskonto)) {
-                                iskonto = 0;
-                            }
-
-                            var toplamFiyat = birimFiyat - (birimFiyat * iskonto / 100);
-                            satir.find('.inpToplamFiyatParca').val(toplamFiyat);
-                        }
-                    });
-
-                    HesaplaToplamParca();
-                    HesaplaGenelToplamParca();
-                }
-            });
-
-            //Parca KDV
-            $('#KDVParca').on('input', function () {
-                var parcaKDV = parseFloat($(this).val());
-                var toplamParca = parseFloat($('#toplamFiyatParca').text());
-
-                if (!isNaN(parcaKDV) && !isNaN(toplamParca)) {
-                    HesaplaGenelToplamParca();
-                }
-            });
         });
+
+        //Parca KDV
+        $('#KDVParca').on('input', function () {
+            var parcaKDV = parseFloat($(this).val());
+            var toplamParca = parseFloat($('#toplamFiyatParca').val());
+
+            if (!isNaN(parcaKDV) && !isNaN(toplamParca)) {
+                HesaplaGenelToplamParca();
+            }
+        });
+
 
         //-------------------------------------------------
         //-------------------------------------------------İşçilik
@@ -537,7 +494,7 @@
                     toplam += parseFloat(deger);
                 }
             });
-            $('#toplamIscilik').text(toplam.toFixed(2));
+            $('#toplamIscilik').val(toplam.toFixed(2));
         }
 
         // Input değerleri değiştiğinde hesaplamayı yap
@@ -574,13 +531,14 @@
         //İşçilik KDV
         $('#iscilikKDV').on('input', function () {
             var iscilikKDV = $(this).val();
-            var toplamIscilik = parseFloat($('#toplamIscilik').text());
+            var toplamIscilik = parseFloat($('#toplamIscilik').val());
 
             if (!isNaN(iscilikKDV) && !isNaN(toplamIscilik)) {
                 var genelToplamIscilik = toplamIscilik + (toplamIscilik * iscilikKDV / 100);
-                $('#genelToplamIscilik').text(genelToplamIscilik.toFixed(2));
+                $('#genelToplamIscilik').val(genelToplamIscilik.toFixed(2));
             }
         });
+
         //-------------------------------------------------
     });
 
@@ -620,34 +578,38 @@
             ParcaIskonto: $('.chkIscilik:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpIskontoIscilik').val(); }).get().join(';'),
             GenelIskonto: $('#iscilikGenelIskonto').val(),
             BirimToplamFiyat: $('.chkIscilik:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpToplamFiyatIscilik').val(); }).get().join(';'),
-            ToplamFiyat: $('#toplamIscilik').text(),
+            ToplamFiyat: $('#toplamIscilik').val(),
             KDV: $('#iscilikKDV').val(),
-            GenelToplam: $('#genelToplamIscilik').text()
+            GenelToplam: $('#genelToplamIscilik').val()
         };
 
        var parcaModel = {
-            TalepId: @Model.TalepNo,
-            Parca: $('.chcParca:checked').map(function () { return $(this).data('value'); }).get().join(','),
-            Adet: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpAdetParca').val(); }).get().join(';'),
-            BirimFiyat: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpBirimFiyatParca').val(); }).get().join(';'),
-            ParcaIskonto: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpIskontoParca').val(); }).get().join(';'),
-            BirimToplamFiyat: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpBirimFiyatParca').val(); }).get().join(';'),
-            ToplamFiyat: $('#toplamFiyatParca').text(),
-            GenelIskonto: $('#genelIskontoParca').text(),
-            KDV: $('#KDVParca').val(),
-            GenelToplam: $('#genelToplamParca').text()
+           TalepId: @Model.TalepNo,
+           Parca: $('.chcParca:checked').map(function () { return $(this).data('value'); }).get().join(','),
+           Adet: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpAdetParca').val(); }).get().join(';'),
+           BirimFiyat: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpBirimFiyatParca').val(); }).get().join(';'),
+           ParcaIskonto: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpIskontoParca').val(); }).get().join(';'),
+           BirimToplamFiyat: $('.chcParca:checked').map(function () { return $(this).data('value') + '-' + $(this).closest('tr').find('.inpBirimFiyatParca').val(); }).get().join(';'),
+           ToplamFiyat: $('#toplamFiyatParca').val(),
+           GenelIskonto: $('#genelIskontoParca').val(),
+           KDV: $('#KDVParca').val(),
+           GenelToplam: $('#genelToplamParca').val()
        };
 
+        $.blockUI();
     $.ajax({
         url: '@Url.Action("ShowTicketDetailSave","Ticket")',
         method: 'POST',
         data: { iscilikModel: iscilikModel, parcaModel: parcaModel },
         success: function (response) {
+
+            $.unblockUI();
             if (response) {
                 location.reload();
             }
         },
         error: function (xhr, status, error) {
+            $.unblockUI();
             console.log(xhr.responseText);
         }
     });
