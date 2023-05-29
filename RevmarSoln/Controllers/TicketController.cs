@@ -62,7 +62,8 @@ namespace SahinRektefiyeSoln.Controllers
                     TalepNo = item.TalepId,
                     Durum = item.Durum != null ? ((TicketStatus)item.Durum).GetTicketStatusText() : TicketStatus.TicketOpened.GetTicketStatusText(),
                     IsDetailAvailable = tempBool,
-                    MusteriAtolyeGelisTarihi = item.MusteriAtolyeGelisTarihi
+                    MusteriAtolyeGelisTarihi = item.MusteriAtolyeGelisTarihi,
+                    Sube = item.Musteri.Sube
                 });
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");
@@ -1326,7 +1327,7 @@ namespace SahinRektefiyeSoln.Controllers
         {
             var talep = db.Talepler.FirstOrDefault(x => x.TalepId == id);
             var talepDetay = db.TalepDetay.FirstOrDefault(x => x.TalepId == id);
-            //var talepDosya = db.TalepDosya.FirstOrDefault(x => x.TalepDosyaId == talep.TalepDosyaId);
+            var talepMusteri = db.Musteri.FirstOrDefault(x => x.MusteriId == talep.MusteriId);
 
             string hizmet = string.Empty;
             if (talep.PartId != null)
@@ -1365,6 +1366,10 @@ namespace SahinRektefiyeSoln.Controllers
                 model.MarkaModel = talepDetay.Model != null ? talepDetay.Model : null;
                 model.Plaka = talepDetay.Plaka != null ? talepDetay.Plaka : null;
                 model.Vin = talepDetay.VinNo != null ? talepDetay.VinNo : null;
+            }
+            if (talepMusteri != null)
+            {
+                model.Sube = talepMusteri.Sube;
             }
             model.KargoyaVerilisTarihi = talep.KargoyaVerilisTarihi;
             model.AramaTarihi = talep.AramaTarihi;

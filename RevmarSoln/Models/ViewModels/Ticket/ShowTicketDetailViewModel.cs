@@ -24,6 +24,7 @@ namespace SahinRektefiyeSoln.Models.ViewModels.Ticket
         public List<string> Telefon { get; set; }
         public List<string> Email { get; set; }
         public string Adres { get; set; }
+        public string Sube { get; set; }
         #endregion
 
         #region Araç Bilgisi
