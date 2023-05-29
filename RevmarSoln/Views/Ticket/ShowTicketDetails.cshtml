@@ -305,11 +305,14 @@
     </div>
 }
 
-@if ((Model.Iscilikler != null && Model.Iscilikler.Any(x => x.Selected)) || (Model.Parcalar != null && Model.Parcalar.Any(x => x.Selected)))
+@if (Model.Iscilikler != null || Model.Parcalar != null)
 {
-    <div class="w3-row w3-margin-top w3-margin-bottom">
-        <button class="btn-login w3-green w3-btn w3-round w3-block" id="btnKaydetForm">Kaydet</button>
-    </div>
+    if (Model.Iscilikler.Any(x => x.Selected) || Model.Parcalar.Any(x => x.Selected))
+    {
+        <div class="w3-row w3-margin-top w3-margin-bottom">
+            <button class="btn-login w3-green w3-btn w3-round w3-block" id="btnKaydetForm">Kaydet</button>
+        </div>
+    }
 }
 
 @if (Model.Notlar != null)
@@ -327,27 +330,30 @@
     </div>
 }
 
-@if (Model.ArizaBildirim.Count > 0 && Model.ArizaBildirim.Any(x => x.Selected))
+@if (Model.ArizaBildirim != null)
 {
-    <div class="w3-panel">
-        <div class="w3-row-padding w3-card w3-padding-top">
-            <div class="w3-row">
-                <div class="w3-row w3-padding-left">
-                    <h4>Arıza Bildirimleri</h4>
+    if (Model.ArizaBildirim.Any(x => x.Selected))
+    {
+        <div class="w3-panel">
+            <div class="w3-row-padding w3-card w3-padding-top">
+                <div class="w3-row">
+                    <div class="w3-row w3-padding-left">
+                        <h4>Arıza Bildirimleri</h4>
+                    </div>
+                    @if (Model.ArizaBildirim != null)
+                    {
+                        <ul>
+                            @foreach (var item in Model.ArizaBildirim.Where(x => x.Selected).ToList())
+                            {
+                                <li>@item.Text</li>
+                            }
+                        </ul>
+                    }
                 </div>
-                @if (Model.ArizaBildirim != null)
-                {
-                    <ul>
-                        @foreach (var item in Model.ArizaBildirim.Where(x => x.Selected).ToList())
-                        {
-                            <li>@item.Text</li>
-                        }
-                    </ul>
-                }
+                <hr />
             </div>
-            <hr />
         </div>
-    </div>
+    }
 }
 
 <div id="modalIscilikEkle" class="w3-modal w3-animate-opacity">
