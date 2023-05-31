@@ -63,7 +63,8 @@ namespace SahinRektefiyeSoln.Controllers
                     Durum = item.Durum != null ? ((TicketStatus)item.Durum).GetTicketStatusText() : TicketStatus.TicketOpened.GetTicketStatusText(),
                     IsDetailAvailable = tempBool,
                     MusteriAtolyeGelisTarihi = item.MusteriAtolyeGelisTarihi,
-                    Sube = item.Musteri.Sube
+                    Sube = item.Musteri.Sube,
+                    Hizmet = item.PartId != null ? item.Parts.Name : null
                 });
             }
             ViewBag.CanEdit = SFHelper.CheckMyRole(currentUser, "ADMIN");

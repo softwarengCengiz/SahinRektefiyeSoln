@@ -21,5 +21,6 @@ namespace SahinRektefiyeSoln.Models.ViewModels.IsEmri
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? MusteriAtolyeGelisTarihi { get; set; }
         public string Sube { get; set; }
+        public string Hizmet { get; set; }
     }
 }

@@ -14,16 +14,16 @@
             <div class="w3-row">
                 <div class="w3-quarter w3-padding">
                     <label>
-                        Kurum Adı, Müşteri veya İlgili Adı
+                        Kurum/Müşteri Adı
                     </label>
                     @Html.EditorFor(model => model.filter.MusteriAdi, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "50", autocomplete = "off", id = "MusteriAdi" } })
                 </div>
-                <div class="w3-quarter w3-padding">
+                @*<div class="w3-quarter w3-padding">
                     <label>
                         Tc veya Vergi Kimlik No
                     </label>
                     @Html.EditorFor(model => model.filter.TCKN, new { htmlAttributes = new { @class = "w3-input w3-border w3-round", maxlength = "11", autocomplete = "off", id = "TCKN" } })
-                </div>
+                </div>*@
                 <div class="w3-quarter w3-padding">
 
                     <div class="w3-half">	<br /><button class="w3-btn w3-ripple w3-blue w3-left w3-round">Sorgula</button></div>

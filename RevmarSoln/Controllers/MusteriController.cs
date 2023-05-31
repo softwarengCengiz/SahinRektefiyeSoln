@@ -176,15 +176,8 @@ namespace SahinRektefiyeSoln.Controllers
         public ActionResult MusteriAra(int? page)
         {
             int currentPageIndex = page.HasValue ? page.Value - 1 : 0;
-
             MusteriSearchPageModel model = new MusteriSearchPageModel();
-
-            model.musteriler = db.Musteri.OrderBy(m => m.KontakAdi + m.MusteriAdi).ToPagedList<Musteri>(currentPageIndex, 50);
-
-
-
-            //model.musteriler = db.Musteri.OrderByDescending(m => m.CreatedDate).ToPagedList<Musteri>(currentPageIndex, aracSorgulamaPageCount);
-
+            model.musteriler = db.Musteri.OrderBy(m => m.KurumAdi + m.MusteriAdi).ToPagedList<Musteri>(currentPageIndex, 50);
             return View(model);
         }
 
@@ -199,64 +192,31 @@ namespace SahinRektefiyeSoln.Controllers
 
             List<Musteri> result = new List<Musteri>();
 
+            if (string.IsNullOrEmpty(model.filter.MusteriAdi))
+            {
+                model.musteriler = db.Musteri.OrderBy(m => m.KurumAdi + m.MusteriAdi).ToPagedList<Musteri>(_sayfaNo, 50);
+            }
+
 
             if (!string.IsNullOrEmpty(model.filter.MusteriAdi))
             {
+                var filter = model.filter.MusteriAdi.ToUpper();
                 List<Musteri> kurumlar = new List<Musteri>();
-                //kurumlar = musteriler.Where(x=>x.KurumAdi.ToUpper().Contains(model.filter.MusteriAdi.ToUpper())).ToList();
-                kurumlar = musteriler.Where(x => model.filter.MusteriAdi == null ||
-                                    (x.KurumAdi != null && x.KurumAdi.Contains(model.filter.MusteriAdi))).ToList();
+                kurumlar = musteriler.Where(x=>x.KurumAdi != null && x.KurumAdi.ToUpper().Contains(filter)).ToList();
 
                 List<Musteri> musteriAdi = new List<Musteri>();
-                var filterMusteriAdi = model.filter.MusteriAdi.Trim();
-                if (filterMusteriAdi.Contains(" "))
-                {
-                    filterMusteriAdi = filterMusteriAdi.Replace(" ", "");
-                }
-                //var x = musteriler[1].MusteriAdi + musteriler[1].MusteriSoyadi;
-                //musteriAdi = musteriler.Where(x => (x.MusteriAdi != null ? x.MusteriAdi.ToUpper() : "" + x.MusteriSoyadi != null ? x.MusteriSoyadi.ToUpper() : "").Contains(model.filter.MusteriAdi.ToUpper())).ToList();
-                musteriAdi = musteriler.Where(x => (x.MusteriAdi + x.MusteriSoyadi)
-                .Contains(filterMusteriAdi != null ? filterMusteriAdi : "")).ToList();
+                //var filterMusteriAdi = model.filter.MusteriAdi.ToUpper();
+                //if (filterMusteriAdi.Contains(" "))
+                //{
+                //    filterMusteriAdi = filterMusteriAdi.Replace(" ", "");
+                //}
+                var k = musteriler.Select(x => x.MusteriAdi.ToUpper()).ToList();
+                
+                musteriAdi = musteriler.Where(x => (x.MusteriAdi + " "+ x.MusteriSoyadi).ToUpper().Contains(filter)).ToList();
+                result = kurumlar.Concat(musteriAdi).ToList();
 
-                List<Musteri> kontakAdi = new List<Musteri>();
-
-                //kontakAdi = musteriler.Where(x=>(x.KontakAdi != null ? x.KontakAdi.ToUpper() : " " ).Contains(model.filter.MusteriAdi.ToUpper())).ToList();
-                kontakAdi = musteriler.Where(x => (x.KontakAdi != null ? x.KontakAdi : " ")
-                .Contains(model.filter.MusteriAdi != null ? model.filter.MusteriAdi : " ")).ToList();
-
-                result = kurumlar.Concat(musteriAdi).Concat(kontakAdi).ToList();
-
-                //myList1 = myList1.Concat(myList2).ToList();
-                //musteriler = musteriler.Where(x => x.KurumAdi.ToUpper().Contains(model.filter.MusteriAdi.ToUpper()) ||
-                //								   (x.MusteriAdi != null ? x.MusteriAdi.ToUpper() : "" + x.MusteriSoyadi != null ? x.MusteriSoyadi.ToUpper() : "").Contains(model.filter.MusteriAdi.ToUpper()) ||
-                //								   (x.KontakAdi != null ? x.KontakAdi.ToUpper() : "" + x.KontakSoyadi != null ? x.KontakSoyadi.ToUpper() : "").Contains(model.filter.MusteriAdi.ToUpper()
-
-                //								   );
-
-                //)
-                //.ToList();
+                model.musteriler = result.OrderByDescending(m => m.CreatedDate).ToPagedList<Musteri>(_sayfaNo, 50);
             }
-
-
-
-
-            if (!string.IsNullOrEmpty(model.filter.TCKN))
-            {
-                List<Musteri> tcVergiNo = new List<Musteri>();
-                tcVergiNo = musteriler.Where(x => (model.filter.TCKN == null || (x.TCKN != null && x.TCKN.Contains(model.filter.TCKN.Trim())))).ToList();
-
-                if (tcVergiNo.Count == 0)
-                {
-                    model.filter.VergiNo = model.filter.TCKN;
-                    tcVergiNo = musteriler.Where(x => (model.filter.VergiNo == null || (x.VergiNo != null && x.VergiNo.Contains(model.filter.VergiNo.Trim())))).ToList();
-                }
-
-                result = result.Concat(tcVergiNo).ToList();
-            }
-
-
-
-            model.musteriler = result.OrderByDescending(m => m.CreatedDate).ToPagedList<Musteri>(_sayfaNo, aracSorgulamaPageCount);
 
             return View(model);
         }

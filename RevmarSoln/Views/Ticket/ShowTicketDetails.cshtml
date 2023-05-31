@@ -183,7 +183,7 @@
                         <th>Parçalar</th>
                         <th>Adet</th>
                         <th>Birim Fiyat</th>
-                        <th>İskonto</th>
+                        <th>İskonto (%)</th>
                         <th>Toplam Fiyat</th>
                     </tr>
                 </thead>
@@ -223,11 +223,11 @@
                     @*<label id="toplamFiyatParca"></label>*@
                 </div>
                 <div class="w3-col s12 m2 l2 w3-padding">
-                    <label><strong>Genel İskonto</strong></label>
+                    <label><strong>Genel İskonto (%)</strong></label>
                     <input class="w3-input w3-border w3-round" type="number" id="genelIskontoParca" value="@Model.GenelIskontoParca" />
                 </div>
                 <div class="w3-col s12 m2 l2 w3-padding">
-                    <label><strong>KDV</strong></label>
+                    <label><strong>KDV (%)</strong></label>
                     <input class="w3-input w3-border w3-round" type="number" id="KDVParca" value="@Model.KDVParca" />
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
@@ -251,7 +251,7 @@
                         <th></th>
                         <th>İşçilik</th>
                         <th>Birim Fiyat</th>
-                        <th>İskonto</th>
+                        <th>İskonto (%)</th>
                         <th>Toplam Fiyat</th>
                     </tr>
                 </thead>
@@ -288,11 +288,11 @@
                     @*<label id="toplamIscilik">@Model.ToplamFiyat</label>*@
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>Genel İskonto</strong></label>
+                    <label><strong>Genel İskonto (%)</strong></label>
                     <input class="w3-input w3-border w3-round" type="number" id="iscilikGenelIskonto" value="@Model.GenelIskonto" />
                 </div>
                 <div class="w3-col s12 m3 l3 w3-padding">
-                    <label><strong>KDV</strong></label>
+                    <label><strong>KDV (%)</strong></label>
                     <input class="w3-input w3-border w3-round" type="number" id="iscilikKDV" value="@Model.KDV" />
                 </div>
                 <div class="w3-row w3-col s12 m3 l3 w3-padding">
